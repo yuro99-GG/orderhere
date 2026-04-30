@@ -614,13 +614,13 @@
   <div class="marquee-wrap">
     <div class="marquee-inner">
       <span>⭐ BAZAR SEKOLAH 22 MEI ⭐</span>
-      <span>🍫 Bola Susu Femboy ⭐</span>
-      <span>🧀  MAC  AND CHEESE ⭐</span>
+      <span> Bola Susu Femboy ⭐</span>
+      <span>  MAC  AND CHEESE ⭐</span>
       <span>💰 HARGA TERJANGKAU ⭐</span>
       <span> PRE-ORDER SEKARANG ⭐</span>
       <span>⭐ BAZAR SEKOLAH 22 MEI ⭐</span>
-      <span>🍫 Bola Susu Femboy ⭐</span>
-      <span>🧀  MAC  AND CHEESE ⭐</span>
+      <span> Bola Susu Femboy ⭐</span>
+      <span>  MAC  AND CHEESE ⭐</span>
       <span>💰 HARGA TERJANGKAU ⭐</span>
       <span> PRE-ORDER SEKARANG ⭐</span>
     </div>
@@ -1045,12 +1045,12 @@
 <div class="slide" id="slide2">
   <div class="marquee-wrap" style="background:var(--c3)">
     <div class="marquee-inner" style="animation-direction:reverse;">
-      <span>🍫 Bola Susu Femboy - Rp8.000 ●</span>
-      <span>🧀 MAC  AND CHEESE - Rp10.000 ●</span>
+      <span> Bola Susu Femboy - Rp8.000 ●</span>
+      <span> MAC  AND CHEESE - Rp10.000 ●</span>
       <span>🎪 BAZAR 22 MEI ●</span>
       <span>📲 PRE-ORDER VIA WA ●</span>
-      <span>🍫 Bola Susu Femboy - Rp8.000 ●</span>
-      <span>🧀 MAC  AND CHEESE - Rp10.000 ●</span>
+      <span> Bola Susu Femboy - Rp8.000 ●</span>
+      <span> MAC  AND CHEESE - Rp10.000 ●</span>
       <span>🎪 BAZAR 22 MEI ●</span>
       <span>📲 PRE-ORDER VIA WA ●</span>
     </div>
@@ -1087,7 +1087,7 @@
           <rect x="92" y="8" width="16" height="4" fill="#FFD93D"/>
         </svg>
       </div>
-      <div class="menu-item-name">🍫 Bola Susu Femboy<br></div>
+      <div class="menu-item-name"> Bola Susu Femboy<br></div>
       <div class="menu-item-price">Rp 8.000</div>
       <div class="qty-control">
         <button class="qty-btn minus" onclick="changeQty('oreo', -1)">−</button>
@@ -1122,7 +1122,7 @@
           <rect x="72" y="16" width="4" height="16" fill="white" opacity="0.5"/>
         </svg>
       </div>
-      <div class="menu-item-name">🧀  MAC  AND CHEESE<br></div>
+      <div class="menu-item-name">  MAC  AND CHEESE<br></div>
       <div class="menu-item-price">Rp 10.000</div>
       <div class="qty-control">
         <button class="qty-btn minus" onclick="changeQty(' MAC ', -1)">−</button>
@@ -1166,8 +1166,8 @@
     </div>
 
     <div class="form-group">
-      <label class="form-label">💳 METODE PEMBAYARAN</label>
-      <div class="payment-badge">💵 CASH ONLY</div>
+      <label class="form-label"> METODE PEMBAYARAN</label>
+      <div class="payment-badge"> CASH ONLY</div>
     </div>
 
     <div style="text-align:center;margin-top:24px">
@@ -1325,10 +1325,10 @@
 
     let itemsHtml='';
     if(qty.oreo>0){
-      itemsHtml+=`<div class="summary-row"><span>🍫 Bola Susu Femboy x${qty.oreo}</span><span>Rp ${(qty.oreo*8000).toLocaleString('id-ID')}</span></div>`;
+      itemsHtml+=`<div class="summary-row"><span> Bola Susu Femboy x${qty.oreo}</span><span>Rp ${(qty.oreo*8000).toLocaleString('id-ID')}</span></div>`;
     }
     if(qty. MAC >0){
-      itemsHtml+=`<div class="summary-row"><span>🧀  MAC  & Cheese x${qty. MAC }</span><span>Rp ${(qty. MAC *10000).toLocaleString('id-ID')}</span></div>`;
+      itemsHtml+=`<div class="summary-row"><span>  MAC  & Cheese x${qty. MAC }</span><span>Rp ${(qty. MAC *10000).toLocaleString('id-ID')}</span></div>`;
     }
     document.getElementById('sum-items').innerHTML=itemsHtml;
 
@@ -1353,8 +1353,8 @@
 
   function sendToWhatsApp(nama,kelas,hp,total){
     let items=[];
-    if(qty.oreo>0) items.push(`🍫 Bola Susu Femboy x${qty.oreo} = Rp${(qty.oreo*8000).toLocaleString('id-ID')}`);
-    if(qty. MAC >0) items.push(`🧀  MAC  & Cheese x${qty. MAC } = Rp${(qty. MAC *10000).toLocaleString('id-ID')}`);
+    if(qty.oreo>0) items.push(` Bola Susu Femboy x${qty.oreo} = Rp${(qty.oreo*8000).toLocaleString('id-ID')}`);
+    if(qty. MAC >0) items.push(`  MAC  & Cheese x${qty. MAC } = Rp${(qty. MAC *10000).toLocaleString('id-ID')}`);
 
     const msg=
 `*[PRE-ORDER BAZAR 22 MEI]*
@@ -1367,7 +1367,7 @@
 ${items.join('\n')}
 ━━━━━━━━━━━━━━━
 💰 TOTAL  : Rp ${total.toLocaleString('id-ID')}
-💳 Bayar  : Cash Only
+ Bayar  : Cash Only
 ━━━━━━━━━━━━━━━
 Pesanan kamu telah diterima, nanti admin segera mengonfirmasi. 🎉`;
 
@@ -1957,13 +1957,13 @@ Pesanan kamu telah diterima, nanti admin segera mengonfirmasi. 🎉`;
   <div class="marquee-wrap">
     <div class="marquee-inner">
       <span>⭐ BAZAR SEKOLAH 22 MEI ⭐</span>
-      <span>🍫 Bola Susu Femboy ⭐</span>
-      <span>🧀 MAC  AND CHEESE ⭐</span>
+      <span> Bola Susu Femboy ⭐</span>
+      <span> MAC  AND CHEESE ⭐</span>
       <span>💰 HARGA TERJANGKAU ⭐</span>
       <span> PRE-ORDER SEKARANG ⭐</span>
       <span>⭐ BAZAR SEKOLAH 22 MEI ⭐</span>
-      <span>🍫 Bola Susu Femboy ⭐</span>
-      <span>🧀 MAC  AND CHEESE ⭐</span>
+      <span> Bola Susu Femboy ⭐</span>
+      <span> MAC  AND CHEESE ⭐</span>
       <span>💰 HARGA TERJANGKAU ⭐</span>
       <span> PRE-ORDER SEKARANG ⭐</span>
     </div>
@@ -2388,12 +2388,12 @@ Pesanan kamu telah diterima, nanti admin segera mengonfirmasi. 🎉`;
 <div class="slide" id="slide2">
   <div class="marquee-wrap" style="background:var(--c3)">
     <div class="marquee-inner" style="animation-direction:reverse;">
-      <span>🍫 Bola Susu Femboy - Rp8.000 ●</span>
-      <span>🧀 MAC  AND CHEESE - Rp10.000 ●</span>
+      <span> Bola Susu Femboy - Rp8.000 ●</span>
+      <span> MAC  AND CHEESE - Rp10.000 ●</span>
       <span>🎪 BAZAR 22 MEI ●</span>
       <span>📲 PRE-ORDER VIA WA ●</span>
-      <span>🍫 Bola Susu Femboy - Rp8.000 ●</span>
-      <span>🧀  MAC  AND CHEESE - Rp10.000 ●</span>
+      <span> Bola Susu Femboy - Rp8.000 ●</span>
+      <span>  MAC  AND CHEESE - Rp10.000 ●</span>
       <span>🎪 BAZAR 22 MEI ●</span>
       <span>📲 PRE-ORDER VIA WA ●</span>
     </div>
@@ -2430,7 +2430,7 @@ Pesanan kamu telah diterima, nanti admin segera mengonfirmasi. 🎉`;
           <rect x="92" y="8" width="16" height="4" fill="#FFD93D"/>
         </svg>
       </div>
-      <div class="menu-item-name">🍫 bola OREO<br>SUSU</div>
+      <div class="menu-item-name"> bola OREO<br>SUSU</div>
       <div class="menu-item-price">Rp 8.000</div>
       <div class="qty-control">
         <button class="qty-btn minus" onclick="changeQty('oreo', -1)">−</button>
@@ -2465,7 +2465,7 @@ Pesanan kamu telah diterima, nanti admin segera mengonfirmasi. 🎉`;
           <rect x="72" y="16" width="4" height="16" fill="white" opacity="0.5"/>
         </svg>
       </div>
-      <div class="menu-item-name">🧀  MAC  AND<br>CHEESE</div>
+      <div class="menu-item-name">  MAC  AND<br>CHEESE</div>
       <div class="menu-item-price">Rp 10.000</div>
       <div class="qty-control">
         <button class="qty-btn minus" onclick="changeQty(' MAC ', -1)">−</button>
@@ -2509,8 +2509,8 @@ Pesanan kamu telah diterima, nanti admin segera mengonfirmasi. 🎉`;
     </div>
 
     <div class="form-group">
-      <label class="form-label">💳 METODE PEMBAYARAN</label>
-      <div class="payment-badge">💵 CASH ONLY</div>
+      <label class="form-label"> METODE PEMBAYARAN</label>
+      <div class="payment-badge"> CASH ONLY</div>
     </div>
 
     <div style="text-align:center;margin-top:24px">
@@ -2668,10 +2668,10 @@ Pesanan kamu telah diterima, nanti admin segera mengonfirmasi. 🎉`;
 
     let itemsHtml='';
     if(qty.oreo>0){
-      itemsHtml+=`<div class="summary-row"><span>🍫 Bola Susu Femboy x${qty.oreo}</span><span>Rp ${(qty.oreo*8000).toLocaleString('id-ID')}</span></div>`;
+      itemsHtml+=`<div class="summary-row"><span> Bola Susu Femboy x${qty.oreo}</span><span>Rp ${(qty.oreo*8000).toLocaleString('id-ID')}</span></div>`;
     }
     if(qty. MAC >0){
-      itemsHtml+=`<div class="summary-row"><span>🧀 MAC  & Cheese x${qty. MAC }</span><span>Rp ${(qty. MAC *10000).toLocaleString('id-ID')}</span></div>`;
+      itemsHtml+=`<div class="summary-row"><span> MAC  & Cheese x${qty. MAC }</span><span>Rp ${(qty. MAC *10000).toLocaleString('id-ID')}</span></div>`;
     }
     document.getElementById('sum-items').innerHTML=itemsHtml;
 
@@ -2696,8 +2696,8 @@ Pesanan kamu telah diterima, nanti admin segera mengonfirmasi. 🎉`;
 
   function sendToWhatsApp(nama,kelas,hp,total){
     let items=[];
-    if(qty.oreo>0) items.push(`🍫 Bola Susu Femboy x${qty.oreo} = Rp${(qty.oreo*8000).toLocaleString('id-ID')}`);
-    if(qty. MAC >0) items.push(`🧀 MAC  & Cheese x${qty. MAC } = Rp${(qty. MAC *10000).toLocaleString('id-ID')}`);
+    if(qty.oreo>0) items.push(` Bola Susu Femboy x${qty.oreo} = Rp${(qty.oreo*8000).toLocaleString('id-ID')}`);
+    if(qty. MAC >0) items.push(` MAC  & Cheese x${qty. MAC } = Rp${(qty. MAC *10000).toLocaleString('id-ID')}`);
 
     const msg=
 `*[PRE-ORDER BAZAR 22 MEI]*
