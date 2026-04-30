@@ -1,1125 +1,1380 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pre-Order Bazar 22 Mei 🎉</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet"/>
 <style>
-:root{
-  --primary:#FF6B35;
-  --secondary:#FFD23F;
-  --accent:#EE4B6A;
-  --dark:#1A0A00;
-  --pink:#FF85A1;
-  --purple:#7B2FBE;
-  --teal:#00C9A7;
-  --light:#FFF8F0;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{font-family:'Nunito',sans-serif;background:var(--light);overflow-x:hidden;}
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap');
 
-/* SCROLLBAR */
-::-webkit-scrollbar{width:6px;}
-::-webkit-scrollbar-track{background:#f0e8e0;}
-::-webkit-scrollbar-thumb{background:var(--primary);border-radius:3px;}
+  :root {
+    --px: 4px;
+    --c1: #FF6B9D;
+    --c2: #FFD93D;
+    --c3: #6BCB77;
+    --c4: #4D96FF;
+    --c5: #FF6B35;
+    --c6: #A855F7;
+    --dark: #1a0a2e;
+    --dark2: #16213e;
+    --dark3: #0f3460;
+    --light: #fff9f0;
+    --pixel-border: 4px solid;
+  }
 
-/* ── NAV ── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  display:flex;justify-content:space-between;align-items:center;
-  padding:14px 28px;
-  background:rgba(26,10,0,0.88);
-  backdrop-filter:blur(14px);
-  border-bottom:1px solid rgba(255,255,255,0.06);
-}
-.nav-logo{
-  font-family:'Fredoka One',cursive;font-size:1.35rem;
-  color:var(--secondary);text-decoration:none;letter-spacing:.5px;
-}
-.nav-links a{
-  color:rgba(255,255,255,.85);text-decoration:none;
-  margin-left:22px;font-weight:700;font-size:.88rem;
-  transition:color .25s;
-}
-.nav-links a:hover{color:var(--secondary);}
+  * { box-sizing: border-box; margin: 0; padding: 0; image-rendering: pixelated; }
 
-/* ── HERO SECTION ── */
-#hero{
-  min-height:100vh;
-  background:linear-gradient(135deg,#0d0500 0%,#2d1200 35%,#5a2200 65%,#cc4400 85%,#FF6B35 100%);
-  position:relative;display:flex;align-items:center;justify-content:center;
-  overflow:hidden;
-}
-/* BG blobs */
-.blob{
-  position:absolute;border-radius:50%;filter:blur(70px);
-  animation:blobFloat 7s ease-in-out infinite;
-  pointer-events:none;
-}
-@keyframes blobFloat{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-25px) scale(1.06);}}
+  body {
+    font-family: 'Press Start 2P', monospace;
+    background: var(--dark);
+    color: var(--light);
+    overflow-x: hidden;
+  }
 
-/* Particle dots */
-.particle{
-  position:absolute;border-radius:50%;
-  animation:particleDrift linear infinite;
-  pointer-events:none;opacity:.6;
-}
-@keyframes particleDrift{
-  0%{transform:translateY(0) translateX(0) rotate(0deg);opacity:.6;}
-  100%{transform:translateY(-120vh) translateX(40px) rotate(720deg);opacity:0;}
-}
+  /* ===================== PIXEL STARS BG ===================== */
+  .stars-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    width: 4px; height: 4px;
+    background: white;
+    animation: twinkle 2s infinite;
+  }
 
-.hero-content{
-  text-align:center;z-index:3;
-  padding:100px 24px 60px;
-  max-width:800px;margin:0 auto;
-}
-.hero-badge{
-  display:inline-block;
-  background:linear-gradient(135deg,var(--secondary),#ffb347);
-  color:var(--dark);
-  font-weight:900;font-size:.82rem;
-  padding:7px 20px;border-radius:999px;
-  margin-bottom:22px;text-transform:uppercase;letter-spacing:2px;
-  animation:badgePulse 2.5s ease-in-out infinite;
-  box-shadow:0 4px 20px rgba(255,210,63,.5);
-}
-@keyframes badgePulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+  @keyframes twinkle {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
 
-.hero-title{
-  font-family:'Fredoka One',cursive;
-  font-size:clamp(2.6rem,8vw,5.2rem);
-  color:#fff;line-height:1.05;margin-bottom:10px;
-}
-.hero-title .highlight{
-  display:block;
-  background:linear-gradient(90deg,var(--secondary),#ff8c42,var(--pink));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-}
-.hero-sub{
-  color:rgba(255,255,255,.78);
-  font-size:clamp(.95rem,2.5vw,1.2rem);
-  font-weight:600;margin-bottom:32px;
-  line-height:1.6;
-}
+  /* ===================== SLIDE SYSTEM ===================== */
+  .slide {
+    display: none;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+  .slide.active { display: block; }
 
-.hero-date-chip{
-  display:inline-flex;align-items:center;gap:10px;
-  background:rgba(255,255,255,.1);
-  border:1.5px solid rgba(255,255,255,.2);
-  backdrop-filter:blur(12px);
-  border-radius:18px;padding:13px 26px;
-  color:#fff;font-weight:800;font-size:1rem;
-  margin-bottom:36px;
-}
-.live-dot{
-  width:10px;height:10px;background:var(--secondary);
-  border-radius:50%;box-shadow:0 0 0 0 rgba(255,210,63,.6);
-  animation:livePing 1.5s ease-in-out infinite;
-}
-@keyframes livePing{0%{box-shadow:0 0 0 0 rgba(255,210,63,.6);}70%{box-shadow:0 0 0 10px rgba(255,210,63,0);}100%{box-shadow:0 0 0 0 rgba(255,210,63,0);}}
+  /* ===================== PIXEL BUTTON ===================== */
+  .pixel-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    padding: 14px 20px;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform 0.1s;
+    image-rendering: pixelated;
+  }
+  .pixel-btn:active { transform: translate(4px,4px); }
 
-.hero-cta{
-  display:inline-block;
-  background:linear-gradient(135deg,var(--accent),var(--primary));
-  color:#fff;text-decoration:none;
-  font-weight:900;font-size:1.1rem;
-  padding:17px 44px;border-radius:999px;
-  box-shadow:0 10px 35px rgba(255,107,53,.55);
-  transition:all .3s;position:relative;overflow:hidden;
-  letter-spacing:.3px;
-}
-.hero-cta::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
-  transform:translateX(-100%);
-  transition:transform .6s;
-}
-.hero-cta:hover::after{transform:translateX(100%);}
-.hero-cta:hover{transform:translateY(-4px);box-shadow:0 16px 45px rgba(255,107,53,.65);}
+  .btn-pink {
+    background: var(--c1);
+    color: white;
+    box-shadow: 4px 4px 0 #a3305a, 8px 8px 0 #5a1830;
+  }
+  .btn-pink:active { box-shadow: 0 0 0 #a3305a; }
 
-/* Preview cards */
-.hero-food-row{
-  display:flex;justify-content:center;gap:18px;
-  margin-top:52px;flex-wrap:wrap;
-}
-.hero-food-chip{
-  background:rgba(255,255,255,.1);
-  border:1.5px solid rgba(255,255,255,.18);
-  backdrop-filter:blur(12px);
-  border-radius:22px;padding:18px 22px;
-  color:#fff;text-align:center;
-  animation:chipFloat 4.5s ease-in-out infinite;
-  transition:transform .3s;cursor:default;
-  min-width:140px;
-}
-.hero-food-chip:nth-child(2){animation-delay:-2.2s;}
-.hero-food-chip:hover{transform:scale(1.05);}
-@keyframes chipFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
-.chip-emoji{font-size:2.2rem;display:block;margin-bottom:8px;}
-.chip-name{font-weight:800;font-size:.95rem;margin-bottom:4px;}
-.chip-price{color:var(--secondary);font-weight:800;font-size:.9rem;}
+  .btn-yellow {
+    background: var(--c2);
+    color: var(--dark);
+    box-shadow: 4px 4px 0 #b89100, 8px 8px 0 #5a4800;
+  }
+  .btn-yellow:active { box-shadow: 0 0 0; }
 
-/* Scroll indicator */
-.scroll-hint{
-  position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  color:rgba(255,255,255,.5);font-size:.78rem;font-weight:700;
-  animation:scrollBounce 2s ease-in-out infinite;
-}
-@keyframes scrollBounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(10px);}}
+  .btn-green {
+    background: var(--c3);
+    color: var(--dark);
+    box-shadow: 4px 4px 0 #2d8b3a, 8px 8px 0 #0d4015;
+  }
+  .btn-green:active { box-shadow: 0 0 0; }
 
-/* ── MENU SECTION ── */
-#menu{
-  min-height:100vh;
-  background:linear-gradient(180deg,#fff8f0 0%,#fff2e2 60%,#ffe8cc 100%);
-  padding:100px 24px 90px;
-  position:relative;
-}
-/* top wave */
-#menu::before{
-  content:'';display:block;
-  position:absolute;top:-2px;left:0;right:0;height:80px;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80'%3E%3Cpath fill='%23FF6B35' fill-opacity='0.07' d='M0,40 C360,80 1080,0 1440,40 L1440,0 L0,0 Z'/%3E%3C/svg%3E") no-repeat center/cover;
-}
+  .btn-purple {
+    background: var(--c6);
+    color: white;
+    box-shadow: 4px 4px 0 #7b2fc7, 8px 8px 0 #3d1870;
+  }
+  .btn-purple:active { box-shadow: 0 0 0; }
 
-.section-header{text-align:center;margin-bottom:56px;}
-.section-label{
-  display:block;font-size:.82rem;font-weight:900;
-  letter-spacing:3px;text-transform:uppercase;
-  color:var(--primary);margin-bottom:10px;
-}
-.section-title{
-  font-family:'Fredoka One',cursive;
-  font-size:clamp(2rem,5vw,3rem);
-  color:var(--dark);margin-bottom:10px;
-}
-.section-sub{color:#888;font-size:.95rem;max-width:380px;margin:0 auto;}
+  /* ===================== MARQUEE ===================== */
+  .marquee-wrap {
+    overflow: hidden;
+    background: var(--c1);
+    padding: 8px 0;
+    border-top: 4px solid var(--dark);
+    border-bottom: 4px solid var(--dark);
+  }
+  .marquee-inner {
+    display: flex;
+    gap: 32px;
+    white-space: nowrap;
+    animation: marquee 18s linear infinite;
+    font-size: 9px;
+    color: white;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
 
-/* MENU CARDS */
-.menu-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-  gap:28px;max-width:820px;margin:0 auto 52px;
-}
-.menu-card{
-  background:#fff;border-radius:30px;
-  padding:28px 26px 24px;
-  box-shadow:0 8px 36px rgba(0,0,0,.07);
-  transition:all .4s cubic-bezier(.25,.8,.25,1);
-  position:relative;overflow:hidden;
-  border:2.5px solid transparent;
-}
-.menu-card::after{
-  content:'';position:absolute;inset:0;border-radius:30px;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  opacity:0;transition:opacity .3s;
-  z-index:0;
-}
-.menu-card>*{position:relative;z-index:1;}
-.menu-card:hover{
-  transform:translateY(-10px);
-  box-shadow:0 22px 60px rgba(255,107,53,.18);
-  border-color:var(--primary);
-}
+  /* ===================== SLIDE 1: HERO ===================== */
+  #slide1 {
+    background: linear-gradient(180deg, #1a0a2e 0%, #0f3460 40%, #16213e 100%);
+    padding: 0 0 40px;
+  }
 
-/* top corner badge */
-.card-badge{
-  position:absolute;top:16px;right:16px;
-  font-size:.7rem;font-weight:900;
-  padding:5px 12px;border-radius:999px;
-  text-transform:uppercase;letter-spacing:.5px;
-}
-.badge-hot{background:linear-gradient(135deg,var(--accent),#ff4d6d);color:#fff;}
-.badge-creamy{background:linear-gradient(135deg,var(--secondary),#ff9800);color:#1a0a00;}
+  .hero-header {
+    text-align: center;
+    padding: 32px 20px 16px;
+  }
 
-/* SVG food area */
-.food-art{
-  width:170px;height:148px;
-  display:block;margin:0 auto 18px;
-  filter:drop-shadow(0 6px 12px rgba(0,0,0,.15));
-}
+  .hero-title {
+    font-size: clamp(14px, 4vw, 24px);
+    color: var(--c2);
+    text-shadow: 4px 4px 0 var(--c5), 8px 8px 0 #5a2200;
+    animation: titlePop 1s ease-out;
+    line-height: 1.6;
+  }
 
-.card-name{
-  font-family:'Fredoka One',cursive;
-  font-size:1.45rem;color:var(--dark);margin-bottom:5px;
-}
-.card-desc{font-size:.84rem;color:#999;line-height:1.55;margin-bottom:18px;}
+  @keyframes titlePop {
+    0% { transform: scale(0.5); opacity: 0; }
+    80% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+  }
 
-/* FOOTER ROW — price + qty side by side */
-.card-footer{
-  display:flex;align-items:center;
-  justify-content:space-between;gap:12px;
-  flex-wrap:nowrap;
-}
-.card-price{
-  font-family:'Fredoka One',cursive;
-  font-size:1.5rem;color:var(--primary);
-  white-space:nowrap;
-}
-/* QTY CONTROL */
-.qty-wrap{
-  display:flex;align-items:center;gap:8px;
-  background:#f5f5f5;border-radius:999px;
-  padding:5px 10px;flex-shrink:0;
-}
-.qty-btn{
-  width:32px;height:32px;border-radius:50%;border:none;
-  cursor:pointer;font-size:1.2rem;font-weight:900;
-  display:flex;align-items:center;justify-content:center;
-  transition:all .18s;line-height:1;
-}
-.qty-btn.m{background:#e8e8e8;color:#555;}
-.qty-btn.p{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;
-  box-shadow:0 3px 10px rgba(255,107,53,.35);}
-.qty-btn:active{transform:scale(.9);}
-.qty-num{
-  font-weight:900;font-size:1.1rem;
-  min-width:24px;text-align:center;color:var(--dark);
-}
+  .hero-subtitle {
+    font-size: 8px;
+    color: var(--c4);
+    margin-top: 12px;
+    animation: blink 1.5s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
 
-/* TOTAL BAR */
-.total-bar{
-  background:linear-gradient(135deg,#1a0a00,#330a1a,#1a0a33);
-  border-radius:26px;
-  padding:22px 32px;
-  max-width:820px;margin:0 auto 30px;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:14px;
-  box-shadow:0 10px 40px rgba(26,10,0,.3);
-}
-.total-left .lbl{color:rgba(255,255,255,.65);font-size:.9rem;font-weight:600;}
-.total-left .summary-txt{
-  color:rgba(255,255,255,.85);font-weight:700;font-size:.88rem;margin-top:4px;
-}
-.total-amount{
-  font-family:'Fredoka One',cursive;
-  font-size:2.1rem;color:var(--secondary);
-  transition:transform .3s;
-}
-.total-amount.bump{transform:scale(1.15);}
+  .date-badge {
+    display: inline-block;
+    background: var(--c1);
+    color: white;
+    font-size: 8px;
+    padding: 8px 16px;
+    margin-top: 16px;
+    box-shadow: 4px 4px 0 #7a1c42;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
 
-.btn-order{
-  display:block;max-width:440px;margin:0 auto;width:100%;
-  background:linear-gradient(135deg,var(--accent),var(--primary));
-  color:#fff;border:none;padding:18px 40px;
-  border-radius:999px;
-  font-family:'Fredoka One',cursive;font-size:1.3rem;
-  cursor:pointer;
-  box-shadow:0 8px 30px rgba(255,107,53,.4);
-  transition:all .3s;
-  position:relative;overflow:hidden;
-}
-.btn-order::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
-  transform:translateX(-100%);transition:transform .6s;
-}
-.btn-order:hover::after{transform:translateX(100%);}
-.btn-order:hover{transform:translateY(-4px);box-shadow:0 14px 44px rgba(255,107,53,.55);}
-.btn-order:disabled{opacity:.45;cursor:not-allowed;transform:none !important;}
+  /* PIXEL ART SCENE */
+  .pixel-scene {
+    width: 100%;
+    max-width: 700px;
+    margin: 24px auto 0;
+    padding: 0 16px;
+  }
 
-/* ── FORM SECTION ── */
-#form-section{
-  min-height:100vh;
-  background:linear-gradient(135deg,#0d0500 0%,#2d0a18 45%,#0d0a30 100%);
-  padding:100px 24px 80px;
-  display:flex;align-items:center;
-  position:relative;overflow:hidden;
-}
-/* form bg blobs */
-#form-section .fbg{
-  position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;
-}
-.form-wrap{max-width:600px;margin:0 auto;width:100%;}
+  .scene-canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+    image-rendering: pixelated;
+  }
 
-.form-card{
-  background:rgba(255,255,255,.05);
-  border:1.5px solid rgba(255,255,255,.1);
-  backdrop-filter:blur(22px);
-  border-radius:34px;padding:44px 40px;
-}
-.form-section-hdr{text-align:center;margin-bottom:32px;}
-.form-section-hdr .section-title{color:#fff;}
-.form-section-hdr .section-label{color:var(--secondary);}
+  /* OREO BALLS */
+  .oreo-section {
+    display: flex;
+    justify-content: center;
+    gap: clamp(8px, 3vw, 24px);
+    margin: 24px auto;
+    padding: 0 16px;
+    flex-wrap: wrap;
+    max-width: 500px;
+  }
 
-/* mini order review */
-.order-review{
-  background:rgba(255,210,63,.08);
-  border:1.5px solid rgba(255,210,63,.25);
-  border-radius:18px;padding:16px 20px;margin-bottom:28px;
-}
-.order-review .rev-title{
-  color:var(--secondary);font-weight:800;font-size:.9rem;margin-bottom:10px;
-}
-.order-review .rev-line{
-  color:rgba(255,255,255,.85);font-size:.88rem;
-  padding:3px 0;display:none;
-}
-.order-review .rev-total{
-  color:var(--secondary);font-weight:900;
-  font-size:1.05rem;margin-top:10px;border-top:1px dashed rgba(255,210,63,.25);padding-top:10px;
-}
+  .oreo-ball {
+    width: clamp(48px, 10vw, 72px);
+    height: clamp(48px, 10vw, 72px);
+    position: relative;
+    animation: oreoFloat 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  .oreo-ball:nth-child(2) { animation-delay: 0.2s; }
+  .oreo-ball:nth-child(3) { animation-delay: 0.4s; }
+  .oreo-ball:nth-child(4) { animation-delay: 0.6s; }
+  .oreo-ball:nth-child(5) { animation-delay: 0.8s; }
 
-/* form fields */
-.fgrp{margin-bottom:18px;}
-.fgrp label{
-  display:block;color:rgba(255,255,255,.88);
-  font-weight:700;font-size:.88rem;margin-bottom:8px;
-}
-.fgrp input,.fgrp select{
-  width:100%;padding:14px 18px;
-  background:rgba(255,255,255,.08);
-  border:1.5px solid rgba(255,255,255,.12);
-  border-radius:14px;
-  color:#fff;font-family:'Nunito',sans-serif;font-size:.98rem;
-  outline:none;transition:all .3s;
-}
-.fgrp input::placeholder{color:rgba(255,255,255,.35);}
-.fgrp input:focus,.fgrp select:focus{
-  border-color:var(--secondary);
-  background:rgba(255,255,255,.12);
-  box-shadow:0 0 0 3px rgba(255,210,63,.15);
-}
-.fgrp select option{background:#1a0a00;color:#fff;}
+  @keyframes oreoFloat {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+  }
 
-.cash-info{
-  display:flex;align-items:center;gap:13px;
-  background:rgba(0,201,167,.1);
-  border:1.5px solid rgba(0,201,167,.3);
-  border-radius:14px;padding:14px 18px;margin-bottom:28px;
-}
-.cash-info .ci-icon{font-size:1.6rem;}
-.cash-info p{color:rgba(255,255,255,.78);font-size:.88rem;line-height:1.5;}
-.cash-info strong{color:var(--teal);}
+  .hero-cta {
+    text-align: center;
+    margin-top: 32px;
+    padding: 0 16px;
+  }
 
-.btn-submit{
-  width:100%;
-  background:linear-gradient(135deg,var(--secondary),var(--primary));
-  color:var(--dark);border:none;padding:18px;
-  border-radius:999px;
-  font-family:'Fredoka One',cursive;font-size:1.3rem;
-  cursor:pointer;
-  box-shadow:0 8px 30px rgba(255,210,63,.3);
-  transition:all .3s;
-}
-.btn-submit:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(255,210,63,.45);}
+  /* Ground */
+  .ground {
+    height: 20px;
+    background: repeating-linear-gradient(90deg, #2d5a1b 0px, #2d5a1b 16px, #3d7a25 16px, #3d7a25 32px);
+    border-top: 4px solid #1a3a0f;
+    margin-top: 16px;
+  }
 
-/* ── POPUPS ── */
-.overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.72);
-  backdrop-filter:blur(10px);
-  z-index:800;
-  display:flex;align-items:center;justify-content:center;
-  padding:20px;
-  opacity:0;pointer-events:none;
-  transition:opacity .35s;
-}
-.overlay.on{opacity:1;pointer-events:all;}
+  /* ===================== SLIDE 2: MENU & FORM ===================== */
+  #slide2 {
+    background: var(--dark2);
+    padding: 0 0 60px;
+  }
 
-.pop-box{
-  background:#fff;border-radius:30px;
-  padding:44px 36px;max-width:480px;width:100%;
-  text-align:center;
-  transform:scale(.78) translateY(24px);
-  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
-  position:relative;overflow:hidden;
-}
-.overlay.on .pop-box{transform:scale(1) translateY(0);}
+  .slide2-header {
+    background: var(--dark3);
+    padding: 24px 20px;
+    text-align: center;
+    border-bottom: 4px solid var(--c2);
+  }
 
-/* loader */
-.spin-ring{
-  width:76px;height:76px;
-  border:5px solid #f0f0f0;
-  border-top-color:var(--primary);
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-  margin:0 auto 24px;
-}
-@keyframes spin{to{transform:rotate(360deg);}}
+  .menu-title {
+    font-size: clamp(10px, 3vw, 16px);
+    color: var(--c2);
+    text-shadow: 3px 3px 0 var(--c5);
+  }
 
-.pop-title{font-family:'Fredoka One',cursive;font-size:1.6rem;color:var(--dark);margin-bottom:7px;}
-.pop-sub{color:#999;font-size:.88rem;line-height:1.5;}
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    max-width: 780px;
+    margin: 32px auto;
+    padding: 0 20px;
+  }
 
-/* detail popup */
-.dp-header{text-align:center;margin-bottom:22px;}
-.dp-emoji{font-size:2.8rem;display:block;margin-bottom:8px;}
-.dp-title{font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--dark);}
-.info-box{
-  background:#f9f9f9;border-radius:16px;
-  padding:18px;margin-bottom:18px;text-align:left;
-}
-.info-row{
-  display:flex;justify-content:space-between;
-  padding:8px 0;border-bottom:1px dashed #ebebeb;
-  font-size:.88rem;
-}
-.info-row:last-child{border-bottom:none;}
-.info-row .k{color:#888;font-weight:600;}
-.info-row .v{color:var(--dark);font-weight:800;}
+  .menu-card {
+    background: var(--dark3);
+    border: 4px solid var(--c2);
+    box-shadow: 8px 8px 0 #0a0a1a;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
 
-.items-title{font-weight:800;color:#333;font-size:.9rem;margin-bottom:8px;text-align:left;}
-.item-row{
-  display:flex;justify-content:space-between;
-  font-size:.88rem;color:var(--dark);
-  padding:7px 0;border-bottom:1px dashed #f0f0f0;
-}
-.item-row:last-child{border-bottom:none;}
+  .menu-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 4px;
+    background: repeating-linear-gradient(90deg, var(--c1) 0, var(--c1) 8px, var(--c4) 8px, var(--c4) 16px);
+  }
 
-.total-row{
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  border-radius:13px;padding:13px 18px;
-  display:flex;justify-content:space-between;
-  color:#fff;font-weight:900;font-size:1.05rem;
-  margin:14px 0 10px;
-}
-.confirm-note{font-size:.8rem;color:#aaa;text-align:center;margin-bottom:16px;line-height:1.5;}
+  .menu-item-art {
+    text-align: center;
+    margin: 8px 0 16px;
+  }
 
-/* countdown bar */
-.cd-bar{width:100%;height:5px;background:#eee;border-radius:999px;overflow:hidden;margin-bottom:8px;}
-.cd-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--primary));
-  border-radius:999px;transition:width 1s linear;width:100%;}
-.cd-txt{font-size:.78rem;color:#aaa;text-align:center;margin-bottom:16px;}
+  .menu-item-name {
+    font-size: clamp(8px, 2vw, 12px);
+    color: var(--c3);
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
 
-.btn-wa{
-  width:100%;
-  background:linear-gradient(135deg,#25D366,#128C7E);
-  color:#fff;border:none;padding:15px;
-  border-radius:999px;
-  font-family:'Fredoka One',cursive;font-size:1.08rem;
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  transition:all .3s;
-  box-shadow:0 6px 20px rgba(37,211,102,.35);
-}
-.btn-wa:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,211,102,.5);}
+  .menu-item-price {
+    font-size: clamp(14px, 3.5vw, 20px);
+    color: var(--c2);
+    text-shadow: 3px 3px 0 var(--c5);
+    margin-bottom: 16px;
+  }
 
-/* ── WAITING SCREEN ── */
-#waiting{
-  position:fixed;inset:0;z-index:700;
-  background:linear-gradient(135deg,#0d0500,#2d0a18,#0d0a30);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:24px;
-  opacity:0;pointer-events:none;
-  transition:opacity .5s;
-}
-#waiting.on{opacity:1;pointer-events:all;}
+  .qty-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 12px;
+  }
 
-.w-icon{font-size:4.5rem;display:block;margin-bottom:18px;animation:wBounce 1s ease-in-out infinite;}
-@keyframes wBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-16px);}}
-.w-title{
-  font-family:'Fredoka One',cursive;
-  font-size:clamp(1.9rem,5vw,2.8rem);
-  color:#fff;margin-bottom:12px;
-}
-.w-sub{
-  color:rgba(255,255,255,.7);font-size:1rem;
-  max-width:380px;margin:0 auto 36px;line-height:1.6;
-}
-.w-sub strong{color:var(--secondary);}
+  .qty-btn {
+    font-family: 'Press Start 2P', monospace;
+    width: 40px; height: 40px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.1s;
+    box-shadow: 3px 3px 0 #000;
+    flex-shrink: 0;
+  }
+  .qty-btn:active { transform: translate(3px,3px); box-shadow: 0 0 0; }
+  .qty-btn.minus { background: var(--c1); color: white; }
+  .qty-btn.plus { background: var(--c3); color: var(--dark); }
 
-/* countdown ring */
-.ring-wrap{
-  width:110px;height:110px;position:relative;
-  margin:0 auto 20px;
-}
-.ring-wrap svg{transform:rotate(-90deg);}
-.ring-bg{fill:none;stroke:rgba(255,255,255,.1);stroke-width:9;}
-.ring-fg{
-  fill:none;stroke:var(--secondary);stroke-width:9;
-  stroke-linecap:round;
-  stroke-dasharray:282.6;stroke-dashoffset:0;
-  transition:stroke-dashoffset 1s linear;
-}
-.ring-num{
-  position:absolute;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Fredoka One',cursive;font-size:2.5rem;color:var(--secondary);
-}
-.w-redirect-txt{color:rgba(255,255,255,.5);font-size:.88rem;margin-top:10px;}
+  .qty-display {
+    font-size: 18px;
+    color: white;
+    min-width: 32px;
+    text-align: center;
+  }
 
-/* Confetti */
-.cf-container{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:699;}
-.cf{
-  position:absolute;
-  animation:cfFall linear forwards;
-}
-@keyframes cfFall{
-  0%{transform:translateY(-80px) rotate(0);opacity:1;}
-  100%{transform:translateY(110vh) rotate(900deg);opacity:0;}
-}
+  .total-box {
+    background: var(--dark);
+    border: 4px solid var(--c3);
+    max-width: 400px;
+    margin: 0 auto 32px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 8px 8px 0 #0a0a1a;
+  }
 
-/* hidden */
-.hi{display:none!important;}
+  .total-label {
+    font-size: 8px;
+    color: var(--c4);
+    margin-bottom: 8px;
+  }
 
-/* ── RESPONSIVE ── */
-@media(max-width:600px){
-  .nav-links{display:none;}
-  .form-card{padding:28px 20px;}
-  .total-bar{flex-direction:column;text-align:center;}
-  .menu-grid{grid-template-columns:1fr;}
-}
+  .total-amount {
+    font-size: clamp(18px, 5vw, 28px);
+    color: var(--c2);
+    text-shadow: 3px 3px 0 var(--c5);
+  }
+
+  /* FORM */
+  .order-form {
+    display: none;
+    background: var(--dark);
+    border: 4px solid var(--c1);
+    max-width: 500px;
+    margin: 0 auto 32px;
+    padding: 24px 20px;
+    box-shadow: 8px 8px 0 #0a0a1a;
+  }
+  .order-form.show { display: block; }
+
+  .form-title {
+    font-size: 10px;
+    color: var(--c1);
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 8px;
+    color: var(--c4);
+    margin-bottom: 8px;
+  }
+
+  .form-input {
+    width: 100%;
+    background: var(--dark3);
+    border: 3px solid var(--c4);
+    color: white;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    padding: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus { border-color: var(--c2); }
+
+  .payment-badge {
+    background: var(--c3);
+    color: var(--dark);
+    font-size: 9px;
+    padding: 12px;
+    text-align: center;
+    border: 3px solid #2d8b3a;
+  }
+
+  /* ===================== SLIDE 3: REDIRECT ===================== */
+  #slide3 {
+    background: var(--dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .thankyou-box {
+    border: 4px solid var(--c3);
+    padding: 32px 24px;
+    max-width: 480px;
+    width: 100%;
+    background: var(--dark2);
+    box-shadow: 8px 8px 0 #0a0a1a;
+    margin-bottom: 24px;
+  }
+
+  .pixel-loader {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 24px 0;
+  }
+
+  .pixel-dot {
+    width: 16px; height: 16px;
+    background: var(--c2);
+    animation: dotBounce 0.6s ease-in-out infinite;
+  }
+  .pixel-dot:nth-child(2) { background: var(--c1); animation-delay: 0.15s; }
+  .pixel-dot:nth-child(3) { background: var(--c3); animation-delay: 0.3s; }
+  .pixel-dot:nth-child(4) { background: var(--c4); animation-delay: 0.45s; }
+
+  @keyframes dotBounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-16px); }
+  }
+
+  .order-summary-pop {
+    display: none;
+    background: var(--dark3);
+    border: 4px solid var(--c2);
+    max-width: 480px;
+    width: 100%;
+    padding: 24px 20px;
+    box-shadow: 8px 8px 0 #0a0a1a;
+    text-align: left;
+    margin-bottom: 24px;
+  }
+  .order-summary-pop.show { display: block; }
+
+  .summary-title {
+    font-size: 10px;
+    color: var(--c2);
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 0 var(--c5);
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 7px;
+    color: var(--c4);
+    margin-bottom: 10px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .summary-row span:last-child { color: white; text-align: right; flex: 1; min-width: 100px; }
+
+  .summary-divider {
+    border: none;
+    border-top: 2px solid var(--c4);
+    margin: 12px 0;
+    opacity: 0.4;
+  }
+
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--c3);
+    margin-top: 12px;
+  }
+
+  .confirm-msg {
+    font-size: 7px;
+    color: var(--c1);
+    text-align: center;
+    margin-top: 16px;
+    line-height: 1.8;
+  }
+
+  .redirect-msg {
+    display: none;
+    font-size: 8px;
+    color: var(--c3);
+    text-align: center;
+    line-height: 2;
+    max-width: 400px;
+    margin-bottom: 16px;
+    padding: 0 16px;
+  }
+  .redirect-msg.show { display: block; }
+
+  .countdown-bar {
+    display: none;
+    width: 200px;
+    height: 16px;
+    background: var(--dark3);
+    border: 3px solid var(--c4);
+    margin: 12px auto;
+    overflow: hidden;
+  }
+  .countdown-bar.show { display: block; }
+  .countdown-fill {
+    height: 100%;
+    background: repeating-linear-gradient(90deg, var(--c3) 0, var(--c3) 8px, var(--c4) 8px, var(--c4) 16px);
+    width: 100%;
+    animation: shrink 3s linear forwards;
+  }
+  @keyframes shrink { to { width: 0%; } }
+
+  /* NAV */
+  .nav-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--dark);
+    border-top: 4px solid var(--c2);
+    display: flex;
+    z-index: 100;
+    height: 52px;
+  }
+  .nav-item {
+    flex: 1;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.4);
+    cursor: pointer;
+    padding: 8px 4px;
+    transition: all 0.2s;
+    border-right: 2px solid var(--dark3);
+  }
+  .nav-item.active { color: var(--c2); background: var(--dark3); }
+  .nav-item:last-child { border-right: none; }
+
+  /* PIXEL ART SVG helpers */
+  .pixel-art { image-rendering: pixelated; }
+
+  /* ===================== POPUP OVERLAY ===================== */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .overlay.show { display: flex; }
+
+  .popup-box {
+    background: var(--dark2);
+    border: 4px solid var(--c3);
+    padding: 32px 24px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 8px 8px 0 #0a0a1a;
+  }
+
+  .popup-icon {
+    font-size: 40px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .popup-title {
+    font-size: 10px;
+    color: var(--c3);
+    margin-bottom: 16px;
+    line-height: 1.8;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .menu-grid { padding: 0 12px; gap: 16px; }
+    .oreo-section { gap: 8px; }
+  }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a class="nav-logo" href="#hero">🎪 BazarFest</a>
-  <div class="nav-links">
-    <a href="#hero">Home</a>
-    <a href="#menu">Menu</a>
-    <a href="#form-section">Order</a>
-  </div>
+<!-- STARS BACKGROUND -->
+<div class="stars-bg" id="starsContainer"></div>
+
+<!-- NAV BAR -->
+<nav class="nav-bar">
+  <button class="nav-item active" onclick="goSlide(1)" id="nav1">🏠 HOME</button>
+  <button class="nav-item" onclick="goSlide(2)" id="nav2">🛒 ORDER</button>
+  <button class="nav-item" onclick="goSlide(3)" id="nav3">✅ DONE</button>
 </nav>
 
-<!-- ═══ SLIDE 1 · HERO ═══ -->
-<section id="hero">
-  <!-- bg blobs -->
-  <div class="blob" style="width:500px;height:500px;background:rgba(238,75,106,.25);top:-160px;right:-160px;animation-delay:0s;"></div>
-  <div class="blob" style="width:320px;height:320px;background:rgba(255,210,63,.18);bottom:-80px;left:-80px;animation-delay:-3.5s;"></div>
-  <div class="blob" style="width:200px;height:200px;background:rgba(0,201,167,.18);top:38%;left:4%;animation-delay:-1.8s;"></div>
-  <!-- particles -->
-  <div class="particle" style="width:8px;height:8px;background:var(--secondary);left:12%;top:100%;animation-duration:8s;animation-delay:0s;"></div>
-  <div class="particle" style="width:5px;height:5px;background:var(--pink);left:35%;top:100%;animation-duration:10s;animation-delay:-2s;"></div>
-  <div class="particle" style="width:6px;height:6px;background:var(--teal);left:60%;top:100%;animation-duration:9s;animation-delay:-4s;"></div>
-  <div class="particle" style="width:9px;height:9px;background:var(--accent);left:80%;top:100%;animation-duration:7s;animation-delay:-1s;"></div>
-
-  <div class="hero-content">
-    <div class="hero-badge">🎉 Pre-Order Dibuka Sekarang!</div>
-    <h1 class="hero-title">
-      Bazar Makanan<br>
-      <span class="highlight">22 Mei 2025</span>
-    </h1>
-    <p class="hero-sub">
-      Pesan duluan, bayar di tempat.<br>
-      Lebih hemat, lebih praktis, gak perlu antri lama!
-    </p>
-
-    <div class="hero-date-chip">
-      <div class="live-dot"></div>
-      📅 Kamis, 22 Mei 2025 · Bazar Sekolah
-    </div>
-
-    <br>
-    <a class="hero-cta" href="#menu">🛒 Pesan Sekarang</a>
-
-    <div class="hero-food-row">
-      <div class="hero-food-chip">
-        <span class="chip-emoji">⚫🖤</span>
-        <div class="chip-name">Bola Oreo Susu</div>
-        <div class="chip-price">Rp 8.000 / 5pcs</div>
-      </div>
-      <div class="hero-food-chip">
-        <span class="chip-emoji">🧀🍝</span>
-        <div class="chip-name">Mac and Cheese</div>
-        <div class="chip-price">Rp 10.000</div>
-      </div>
+<!-- ==================== SLIDE 1: HERO ==================== -->
+<div class="slide active" id="slide1">
+  <div class="marquee-wrap">
+    <div class="marquee-inner">
+      <span>⭐ BAZAR SEKOLAH 22 MEI ⭐</span>
+      <span>🍫 BOLA OREO SUSU ⭐</span>
+      <span>🧀 MAC AND CHEESE ⭐</span>
+      <span>💰 HARGA TERJANGKAU ⭐</span>
+      <span>📱 PRE-ORDER SEKARANG ⭐</span>
+      <span>⭐ BAZAR SEKOLAH 22 MEI ⭐</span>
+      <span>🍫 BOLA OREO SUSU ⭐</span>
+      <span>🧀 MAC AND CHEESE ⭐</span>
+      <span>💰 HARGA TERJANGKAU ⭐</span>
+      <span>📱 PRE-ORDER SEKARANG ⭐</span>
     </div>
   </div>
 
-  <div class="scroll-hint">
-    <span>Scroll ke bawah</span>
-    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-      <path d="M7 10l5 5 5-5"/>
+  <div class="hero-header">
+    <div class="hero-title">🎪 BAZAR SERU<br>22 MEI! 🎪</div>
+    <div class="hero-subtitle">▶ PRE-ORDER DIBUKA SEKARANG ◀</div>
+    <div class="date-badge">📅 RABU, 22 MEI 2024</div>
+  </div>
+
+  <!-- PIXEL ART SCENE: 4 Characters + Oreo illustration -->
+  <div class="pixel-scene">
+    <svg class="scene-canvas" viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
+      <!-- SKY / BACKGROUND -->
+      <rect width="480" height="200" fill="#0f3460"/>
+      <!-- Stars -->
+      <rect x="20" y="15" width="4" height="4" fill="#FFD93D"/>
+      <rect x="60" y="8" width="4" height="4" fill="white"/>
+      <rect x="100" y="20" width="4" height="4" fill="#FF6B9D"/>
+      <rect x="160" y="10" width="4" height="4" fill="white"/>
+      <rect x="220" y="5" width="4" height="4" fill="#4D96FF"/>
+      <rect x="290" y="18" width="4" height="4" fill="#FFD93D"/>
+      <rect x="350" y="8" width="4" height="4" fill="white"/>
+      <rect x="410" y="15" width="4" height="4" fill="#6BCB77"/>
+      <rect x="455" y="6" width="4" height="4" fill="#FF6B9D"/>
+
+      <!-- BAZAR BANNER -->
+      <rect x="120" y="12" width="240" height="32" fill="#FF6B9D"/>
+      <rect x="116" y="12" width="4" height="32" fill="#c0365a"/>
+      <rect x="360" y="12" width="4" height="32" fill="#c0365a"/>
+      <rect x="120" y="8" width="240" height="4" fill="#FFD93D"/>
+      <rect x="120" y="44" width="240" height="4" fill="#FFD93D"/>
+      <!-- Banner text pixels (decorative) -->
+      <rect x="136" y="20" width="4" height="4" fill="white"/>
+      <rect x="148" y="20" width="4" height="4" fill="white"/>
+      <rect x="160" y="20" width="4" height="4" fill="white"/>
+      <rect x="172" y="20" width="4" height="4" fill="white"/>
+      <rect x="184" y="20" width="4" height="4" fill="white"/>
+      <rect x="196" y="20" width="4" height="4" fill="#FFD93D"/>
+      <rect x="208" y="20" width="4" height="4" fill="#FFD93D"/>
+      <rect x="220" y="20" width="4" height="4" fill="#FFD93D"/>
+      <rect x="232" y="20" width="4" height="4" fill="#FFD93D"/>
+      <rect x="244" y="20" width="4" height="4" fill="white"/>
+      <rect x="256" y="20" width="4" height="4" fill="white"/>
+      <rect x="268" y="20" width="4" height="4" fill="white"/>
+      <rect x="280" y="20" width="4" height="4" fill="white"/>
+      <rect x="292" y="20" width="4" height="4" fill="white"/>
+      <rect x="304" y="20" width="4" height="4" fill="white"/>
+      <!-- Banner rope -->
+      <rect x="176" y="0" width="4" height="12" fill="#a67c52"/>
+      <rect x="300" y="0" width="4" height="12" fill="#a67c52"/>
+
+      <!-- GROUND -->
+      <rect x="0" y="200" width="480" height="60" fill="#2d5a1b"/>
+      <rect x="0" y="200" width="480" height="8" fill="#3d7a25"/>
+
+      <!-- BOOTH / TABLE -->
+      <rect x="150" y="160" width="180" height="16" fill="#8B4513"/>
+      <rect x="150" y="156" width="180" height="4" fill="#a0522d"/>
+      <rect x="155" y="176" width="8" height="24" fill="#6b3410"/>
+      <rect x="317" y="176" width="8" height="24" fill="#6b3410"/>
+      <!-- Tablecloth stripes -->
+      <rect x="150" y="156" width="20" height="20" fill="#FF6B9D" opacity="0.5"/>
+      <rect x="170" y="156" width="20" height="20" fill="#4D96FF" opacity="0.5"/>
+      <rect x="190" y="156" width="20" height="20" fill="#FF6B9D" opacity="0.5"/>
+      <rect x="210" y="156" width="20" height="20" fill="#4D96FF" opacity="0.5"/>
+      <rect x="230" y="156" width="20" height="20" fill="#FF6B9D" opacity="0.5"/>
+      <rect x="250" y="156" width="20" height="20" fill="#4D96FF" opacity="0.5"/>
+      <rect x="270" y="156" width="20" height="20" fill="#FF6B9D" opacity="0.5"/>
+      <rect x="290" y="156" width="20" height="20" fill="#4D96FF" opacity="0.5"/>
+      <rect x="310" y="156" width="20" height="20" fill="#FF6B9D" opacity="0.5"/>
+
+      <!-- OREO BOLA ON TABLE (small) -->
+      <!-- oreo ball 1 -->
+      <rect x="168" y="140" width="24" height="16" fill="#1a1a1a" rx="8"/>
+      <rect x="172" y="136" width="16" height="4" fill="white" opacity="0.6"/>
+      <!-- oreo ball 2 -->
+      <rect x="204" y="138" width="24" height="16" fill="#1a1a1a" rx="8"/>
+      <rect x="208" y="134" width="16" height="4" fill="white" opacity="0.6"/>
+      <!-- oreo ball 3 -->
+      <rect x="240" y="140" width="24" height="16" fill="#1a1a1a" rx="8"/>
+      <rect x="244" y="136" width="16" height="4" fill="white" opacity="0.6"/>
+
+      <!-- ============ CHARACTER 1: CEWEK HIJAB ============ -->
+      <!-- x=28, cantik hijab pink -->
+      <!-- Hijab outer -->
+      <rect x="28" y="80" width="36" height="40" fill="#FF6B9D"/>
+      <rect x="24" y="88" width="8" height="28" fill="#FF6B9D"/>
+      <rect x="60" y="88" width="8" height="28" fill="#FF6B9D"/>
+      <!-- Hijab border -->
+      <rect x="28" y="80" width="36" height="4" fill="#c0365a"/>
+      <!-- Face -->
+      <rect x="32" y="84" width="28" height="24" fill="#FDBCB4"/>
+      <!-- Eyes -->
+      <rect x="37" y="90" width="6" height="6" fill="#3d2006"/>
+      <rect x="49" y="90" width="6" height="6" fill="#3d2006"/>
+      <!-- Eye shine -->
+      <rect x="38" y="90" width="2" height="2" fill="white"/>
+      <rect x="50" y="90" width="2" height="2" fill="white"/>
+      <!-- Blush -->
+      <rect x="34" y="97" width="6" height="4" fill="#FF9FB0" opacity="0.6"/>
+      <rect x="52" y="97" width="6" height="4" fill="#FF9FB0" opacity="0.6"/>
+      <!-- Smile -->
+      <rect x="40" y="102" width="12" height="3" fill="#c0365a"/>
+      <rect x="38" y="100" width="4" height="3" fill="#c0365a"/>
+      <rect x="50" y="100" width="4" height="3" fill="#c0365a"/>
+      <!-- Body / Dress -->
+      <rect x="28" y="116" width="36" height="44" fill="#A855F7"/>
+      <rect x="28" y="116" width="36" height="8" fill="#8B2FCF"/>
+      <!-- Dress detail -->
+      <rect x="36" y="128" width="4" height="4" fill="#FFD93D"/>
+      <rect x="44" y="128" width="4" height="4" fill="#FFD93D"/>
+      <rect x="52" y="128" width="4" height="4" fill="#FFD93D"/>
+      <!-- Arms -->
+      <rect x="16" y="120" width="12" height="8" fill="#A855F7"/>
+      <rect x="64" y="120" width="12" height="8" fill="#A855F7"/>
+      <!-- Hands -->
+      <rect x="16" y="128" width="12" height="8" fill="#FDBCB4"/>
+      <rect x="64" y="128" width="12" height="8" fill="#FDBCB4"/>
+      <!-- Hold food (right hand) -->
+      <rect x="68" y="124" width="12" height="8" fill="#1a1a1a"/>
+      <rect x="70" y="120" width="8" height="4" fill="white" opacity="0.5"/>
+      <!-- Legs -->
+      <rect x="32" y="160" width="12" height="20" fill="#8B2FCF"/>
+      <rect x="48" y="160" width="12" height="20" fill="#8B2FCF"/>
+      <!-- Shoes -->
+      <rect x="30" y="180" width="16" height="8" fill="#1a1a1a"/>
+      <rect x="46" y="180" width="16" height="8" fill="#1a1a1a"/>
+      <!-- Name tag -->
+      <rect x="22" y="68" width="48" height="12" fill="white"/>
+      <rect x="22" y="68" width="48" height="2" fill="#FF6B9D"/>
+
+      <!-- ============ CHARACTER 2: CEWEK TANPA HIJAB ============ -->
+      <!-- x=108, hair ponytail cantik -->
+      <!-- Hair back -->
+      <rect x="108" y="72" width="36" height="16" fill="#3d2006"/>
+      <!-- Ponytail -->
+      <rect x="136" y="72" width="8" height="36" fill="#3d2006"/>
+      <rect x="140" y="108" width="8" height="16" fill="#3d2006"/>
+      <!-- Face -->
+      <rect x="112" y="80" width="28" height="28" fill="#FDBCB4"/>
+      <!-- Hair front -->
+      <rect x="108" y="80" width="8" height="16" fill="#3d2006"/>
+      <rect x="132" y="80" width="8" height="8" fill="#3d2006"/>
+      <!-- Crown / hairpin -->
+      <rect x="120" y="76" width="12" height="4" fill="#FF6B9D"/>
+      <rect x="122" y="72" width="8" height="4" fill="#FF6B9D"/>
+      <!-- Eyes -->
+      <rect x="117" y="86" width="6" height="6" fill="#3d2006"/>
+      <rect x="129" y="86" width="6" height="6" fill="#3d2006"/>
+      <rect x="118" y="86" width="2" height="2" fill="white"/>
+      <rect x="130" y="86" width="2" height="2" fill="white"/>
+      <!-- Lashes -->
+      <rect x="116" y="84" width="8" height="2" fill="#1a0a00"/>
+      <rect x="128" y="84" width="8" height="2" fill="#1a0a00"/>
+      <!-- Blush -->
+      <rect x="113" y="93" width="6" height="4" fill="#FF9FB0" opacity="0.6"/>
+      <rect x="133" y="93" width="6" height="4" fill="#FF9FB0" opacity="0.6"/>
+      <!-- Smile -->
+      <rect x="120" y="98" width="12" height="3" fill="#c0365a"/>
+      <rect x="118" y="96" width="4" height="3" fill="#c0365a"/>
+      <rect x="130" y="96" width="4" height="3" fill="#c0365a"/>
+      <!-- Body / top -->
+      <rect x="108" y="108" width="36" height="44" fill="#4D96FF"/>
+      <rect x="108" y="108" width="36" height="8" fill="#185FA5"/>
+      <!-- Skirt detail -->
+      <rect x="108" y="140" width="36" height="12" fill="#6BCB77"/>
+      <!-- Top stripe -->
+      <rect x="116" y="120" width="20" height="4" fill="white" opacity="0.4"/>
+      <!-- Arms -->
+      <rect x="96" y="112" width="12" height="8" fill="#4D96FF"/>
+      <rect x="144" y="112" width="12" height="8" fill="#4D96FF"/>
+      <rect x="96" y="120" width="12" height="8" fill="#FDBCB4"/>
+      <rect x="144" y="120" width="12" height="8" fill="#FDBCB4"/>
+      <!-- Legs -->
+      <rect x="112" y="152" width="12" height="20" fill="#6BCB77"/>
+      <rect x="128" y="152" width="12" height="20" fill="#6BCB77"/>
+      <!-- Shoes -->
+      <rect x="110" y="172" width="16" height="8" fill="#FF6B9D"/>
+      <rect x="126" y="172" width="16" height="8" fill="#FF6B9D"/>
+
+      <!-- ============ CHARACTER 3: COWOK CURLY HAIR ============ -->
+      <!-- x=308 -->
+      <!-- Curly hair (multiple blocks) -->
+      <rect x="308" y="68" width="40" height="20" fill="#1a0a00"/>
+      <rect x="304" y="72" width="8" height="16" fill="#1a0a00"/>
+      <rect x="344" y="72" width="8" height="16" fill="#1a0a00"/>
+      <!-- Curly effect (bumps) -->
+      <rect x="308" y="64" width="8" height="8" fill="#2d1500"/>
+      <rect x="320" y="60" width="8" height="8" fill="#2d1500"/>
+      <rect x="332" y="64" width="8" height="8" fill="#2d1500"/>
+      <rect x="316" y="64" width="8" height="4" fill="#2d1500"/>
+      <rect x="328" y="62" width="8" height="4" fill="#2d1500"/>
+      <!-- Face -->
+      <rect x="312" y="80" width="32" height="28" fill="#D4A574"/>
+      <!-- Eyes -->
+      <rect x="317" y="86" width="7" height="7" fill="#1a0a00"/>
+      <rect x="332" y="86" width="7" height="7" fill="#1a0a00"/>
+      <rect x="318" y="86" width="2" height="2" fill="white"/>
+      <rect x="333" y="86" width="2" height="2" fill="white"/>
+      <!-- Eyebrows -->
+      <rect x="315" y="83" width="10" height="3" fill="#1a0a00"/>
+      <rect x="331" y="83" width="10" height="3" fill="#1a0a00"/>
+      <!-- Smile/grin -->
+      <rect x="320" y="100" width="16" height="4" fill="#7a3010"/>
+      <rect x="318" y="97" width="4" height="4" fill="#7a3010"/>
+      <rect x="334" y="97" width="4" height="4" fill="#7a3010"/>
+      <!-- Teeth -->
+      <rect x="320" y="100" width="6" height="4" fill="white"/>
+      <rect x="330" y="100" width="6" height="4" fill="white"/>
+      <!-- Body hoodie -->
+      <rect x="308" y="108" width="40" height="52" fill="#FF6B35"/>
+      <rect x="308" y="108" width="40" height="8" fill="#c0365a"/>
+      <!-- Hoodie pocket -->
+      <rect x="318" y="136" width="20" height="16" fill="#c0365a"/>
+      <rect x="320" y="138" width="16" height="12" fill="#FF6B35"/>
+      <!-- Hoodie strings -->
+      <rect x="324" y="108" width="4" height="20" fill="#c0365a"/>
+      <rect x="328" y="108" width="4" height="20" fill="#c0365a"/>
+      <!-- Arms -->
+      <rect x="296" y="112" width="12" height="12" fill="#FF6B35"/>
+      <rect x="348" y="112" width="12" height="12" fill="#FF6B35"/>
+      <rect x="296" y="124" width="12" height="8" fill="#D4A574"/>
+      <rect x="348" y="124" width="12" height="8" fill="#D4A574"/>
+      <!-- Pants -->
+      <rect x="308" y="160" width="40" height="20" fill="#1a1a4a"/>
+      <!-- Legs -->
+      <rect x="312" y="180" width="12" height="12" fill="#1a1a4a"/>
+      <rect x="332" y="180" width="12" height="12" fill="#1a1a4a"/>
+      <!-- Sneakers -->
+      <rect x="308" y="192" width="20" height="8" fill="#f0f0f0"/>
+      <rect x="308" y="192" width="20" height="3" fill="white"/>
+      <rect x="328" y="192" width="20" height="8" fill="#f0f0f0"/>
+      <rect x="328" y="192" width="20" height="3" fill="white"/>
+
+      <!-- ============ CHARACTER 4: COWOK MESSY HAIR ============ -->
+      <!-- x=400 -->
+      <!-- Messy hair -->
+      <rect x="400" y="72" width="40" height="18" fill="#4d3200"/>
+      <rect x="396" y="76" width="8" height="14" fill="#4d3200"/>
+      <rect x="436" y="76" width="8" height="14" fill="#4d3200"/>
+      <!-- Messy strands -->
+      <rect x="400" y="68" width="6" height="8" fill="#4d3200" transform="rotate(15,403,72)"/>
+      <rect x="412" y="64" width="6" height="10" fill="#4d3200" transform="rotate(-10,415,69)"/>
+      <rect x="424" y="66" width="6" height="8" fill="#4d3200" transform="rotate(8,427,70)"/>
+      <rect x="434" y="70" width="5" height="7" fill="#4d3200"/>
+      <rect x="398" y="70" width="5" height="7" fill="#4d3200"/>
+      <!-- Face -->
+      <rect x="404" y="82" width="32" height="28" fill="#FDBCB4"/>
+      <!-- Eyes -->
+      <rect x="409" y="88" width="7" height="7" fill="#1a3a6a"/>
+      <rect x="424" y="88" width="7" height="7" fill="#1a3a6a"/>
+      <rect x="410" y="88" width="2" height="2" fill="white"/>
+      <rect x="425" y="88" width="2" height="2" fill="white"/>
+      <!-- Eyebrows (messy/cool) -->
+      <rect x="407" y="85" width="11" height="3" fill="#4d3200"/>
+      <rect x="422" y="85" width="11" height="3" fill="#4d3200"/>
+      <rect x="417" y="84" width="3" height="2" fill="#4d3200"/>
+      <!-- Cool smirk -->
+      <rect x="416" y="102" width="12" height="3" fill="#c07060"/>
+      <rect x="414" y="100" width="4" height="3" fill="#c07060"/>
+      <!-- Blush subtle -->
+      <rect x="405" y="95" width="6" height="4" fill="#FF9FB0" opacity="0.4"/>
+      <rect x="429" y="95" width="6" height="4" fill="#FF9FB0" opacity="0.4"/>
+      <!-- Body / jacket -->
+      <rect x="400" y="110" width="40" height="52" fill="#1a3a6a"/>
+      <rect x="400" y="110" width="40" height="8" fill="#0c2244"/>
+      <!-- Jacket collar + zipper -->
+      <rect x="416" y="110" width="8" height="52" fill="#2d5a9a"/>
+      <rect x="419" y="118" width="2" height="40" fill="#FFD93D"/>
+      <!-- Jacket detail -->
+      <rect x="404" y="124" width="12" height="8" fill="#0c2244"/>
+      <!-- Arms -->
+      <rect x="388" y="114" width="12" height="12" fill="#1a3a6a"/>
+      <rect x="440" y="114" width="12" height="12" fill="#1a3a6a"/>
+      <rect x="388" y="126" width="12" height="8" fill="#FDBCB4"/>
+      <rect x="440" y="126" width="12" height="8" fill="#FDBCB4"/>
+      <!-- Hand wave gesture -->
+      <rect x="440" y="114" width="12" height="4" fill="#FDBCB4"/>
+      <!-- Pants -->
+      <rect x="400" y="162" width="40" height="20" fill="#2d2d2d"/>
+      <!-- Legs -->
+      <rect x="404" y="182" width="12" height="12" fill="#2d2d2d"/>
+      <rect x="424" y="182" width="12" height="12" fill="#2d2d2d"/>
+      <!-- Boots -->
+      <rect x="400" y="194" width="20" height="8" fill="#1a0a00"/>
+      <rect x="420" y="194" width="20" height="8" fill="#1a0a00"/>
+
+      <!-- Speech bubbles -->
+      <rect x="50" y="52" width="64" height="20" fill="white" rx="4"/>
+      <rect x="56" y="72" width="8" height="8" fill="white"/>
+      <text x="58" y="65" font-size="6" fill="#1a0a2e" font-family="monospace">YUK ORDER!</text>
+
+      <rect x="370" y="44" width="80" height="20" fill="white" rx="4"/>
+      <rect x="400" y="64" width="8" height="8" fill="white"/>
+      <text x="375" y="57" font-size="6" fill="#1a0a2e" font-family="monospace">ENAK BANGET!</text>
     </svg>
   </div>
-</section>
 
-<!-- ═══ SLIDE 2 · MENU ═══ -->
-<section id="menu">
-  <div class="section-header">
-    <span class="section-label">✨ Menu Pilihan Bazar</span>
-    <h2 class="section-title">Pilih Menu Favoritmu 🍽️</h2>
-    <p class="section-sub">Tambah kuantitas sesuai keinginan — harga otomatis terupdate!</p>
+  <!-- OREO BALLS FLOATING -->
+  <div class="oreo-section">
+    <!-- 5 Oreo balls pixel art SVG -->
+    <div class="oreo-ball">
+      <svg viewBox="0 0 72 72" style="width:100%;height:100%;image-rendering:pixelated">
+        <!-- Dark oreo body -->
+        <rect x="8" y="16" width="56" height="44" fill="#1a1a1a" rx="8"/>
+        <rect x="4" y="24" width="8" height="28" fill="#1a1a1a"/>
+        <rect x="60" y="24" width="8" height="28" fill="#1a1a1a"/>
+        <!-- Oreo top highlight -->
+        <rect x="12" y="12" width="48" height="8" fill="#2d2d2d"/>
+        <!-- White milk topping drizzle -->
+        <rect x="16" y="8" width="40" height="8" fill="white"/>
+        <rect x="20" y="4" width="32" height="8" fill="white"/>
+        <rect x="24" y="0" width="24" height="8" fill="white"/>
+        <!-- Topping drips -->
+        <rect x="12" y="12" width="8" height="8" fill="white"/>
+        <rect x="52" y="12" width="8" height="8" fill="white"/>
+        <rect x="32" y="8" width="8" height="6" fill="#f0e8d0"/>
+        <!-- Oreo pattern on body -->
+        <rect x="20" y="24" width="4" height="4" fill="#333"/>
+        <rect x="28" y="24" width="4" height="4" fill="#333"/>
+        <rect x="36" y="24" width="4" height="4" fill="#333"/>
+        <rect x="44" y="24" width="4" height="4" fill="#333"/>
+        <rect x="24" y="32" width="4" height="4" fill="#333"/>
+        <rect x="40" y="32" width="4" height="4" fill="#333"/>
+        <rect x="20" y="40" width="4" height="4" fill="#333"/>
+        <rect x="36" y="40" width="4" height="4" fill="#333"/>
+        <rect x="48" y="40" width="4" height="4" fill="#333"/>
+        <!-- Shadow -->
+        <rect x="12" y="58" width="56" height="8" fill="#0a0a0a" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="oreo-ball">
+      <svg viewBox="0 0 72 72" style="width:100%;height:100%;image-rendering:pixelated">
+        <rect x="8" y="16" width="56" height="44" fill="#111" rx="8"/>
+        <rect x="4" y="24" width="8" height="28" fill="#111"/>
+        <rect x="60" y="24" width="8" height="28" fill="#111"/>
+        <rect x="16" y="8" width="40" height="10" fill="white"/>
+        <rect x="20" y="4" width="32" height="8" fill="white"/>
+        <rect x="24" y="0" width="24" height="8" fill="white"/>
+        <rect x="8" y="14" width="12" height="8" fill="white"/>
+        <rect x="52" y="14" width="12" height="8" fill="white"/>
+        <rect x="28" y="6" width="8" height="6" fill="#f0e8d0"/>
+        <rect x="20" y="28" width="32" height="4" fill="#222"/>
+        <rect x="20" y="36" width="32" height="4" fill="#222"/>
+        <rect x="20" y="44" width="32" height="4" fill="#222"/>
+        <rect x="12" y="58" width="56" height="8" fill="#0a0a0a" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="oreo-ball">
+      <svg viewBox="0 0 72 72" style="width:100%;height:100%;image-rendering:pixelated">
+        <rect x="8" y="16" width="56" height="44" fill="#1a1a1a" rx="8"/>
+        <rect x="4" y="24" width="8" height="28" fill="#1a1a1a"/>
+        <rect x="60" y="24" width="8" height="28" fill="#1a1a1a"/>
+        <rect x="16" y="6" width="40" height="12" fill="white"/>
+        <rect x="12" y="10" width="12" height="10" fill="white"/>
+        <rect x="48" y="10" width="12" height="10" fill="white"/>
+        <rect x="20" y="2" width="32" height="8" fill="white"/>
+        <!-- Swirl topping -->
+        <rect x="24" y="4" width="8" height="4" fill="#f0e8d0"/>
+        <rect x="36" y="6" width="12" height="4" fill="#f0e8d0"/>
+        <!-- Dots pattern -->
+        <rect x="16" y="26" width="6" height="6" fill="#2d2d2d"/>
+        <rect x="30" y="22" width="6" height="6" fill="#2d2d2d"/>
+        <rect x="44" y="26" width="6" height="6" fill="#2d2d2d"/>
+        <rect x="22" y="38" width="6" height="6" fill="#2d2d2d"/>
+        <rect x="38" y="38" width="6" height="6" fill="#2d2d2d"/>
+        <rect x="12" y="58" width="56" height="8" fill="#0a0a0a" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="oreo-ball">
+      <svg viewBox="0 0 72 72" style="width:100%;height:100%;image-rendering:pixelated">
+        <rect x="8" y="16" width="56" height="44" fill="#111" rx="8"/>
+        <rect x="4" y="24" width="8" height="28" fill="#111"/>
+        <rect x="60" y="24" width="8" height="28" fill="#111"/>
+        <rect x="14" y="8" width="44" height="10" fill="white"/>
+        <rect x="10" y="12" width="10" height="8" fill="white"/>
+        <rect x="52" y="12" width="10" height="8" fill="white"/>
+        <rect x="18" y="4" width="36" height="8" fill="white"/>
+        <rect x="32" y="4" width="8" height="6" fill="#f0e8d0"/>
+        <rect x="16" y="24" width="40" height="6" fill="#1a1a1a"/>
+        <rect x="16" y="32" width="40" height="6" fill="#1a1a1a"/>
+        <rect x="16" y="40" width="40" height="6" fill="#1a1a1a"/>
+        <rect x="12" y="58" width="56" height="8" fill="#0a0a0a" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="oreo-ball">
+      <svg viewBox="0 0 72 72" style="width:100%;height:100%;image-rendering:pixelated">
+        <rect x="8" y="16" width="56" height="44" fill="#1a1a1a" rx="8"/>
+        <rect x="4" y="24" width="8" height="28" fill="#1a1a1a"/>
+        <rect x="60" y="24" width="8" height="28" fill="#1a1a1a"/>
+        <rect x="16" y="4" width="40" height="14" fill="white"/>
+        <rect x="8" y="10" width="16" height="10" fill="white"/>
+        <rect x="48" y="10" width="16" height="10" fill="white"/>
+        <rect x="20" y="2" width="32" height="6" fill="#f0e8d0"/>
+        <!-- Heart topping -->
+        <rect x="28" y="4" width="16" height="4" fill="#FF6B9D"/>
+        <rect x="24" y="6" width="8" height="4" fill="#FF6B9D"/>
+        <rect x="40" y="6" width="8" height="4" fill="#FF6B9D"/>
+        <rect x="28" y="10" width="16" height="4" fill="#FF6B9D"/>
+        <rect x="32" y="14" width="8" height="4" fill="#FF6B9D"/>
+        <rect x="16" y="26" width="40" height="4" fill="#2d2d2d"/>
+        <rect x="16" y="36" width="40" height="4" fill="#2d2d2d"/>
+        <rect x="16" y="46" width="40" height="4" fill="#2d2d2d"/>
+        <rect x="12" y="58" width="56" height="8" fill="#0a0a0a" opacity="0.5"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="ground"></div>
+
+  <div class="hero-cta">
+    <button class="pixel-btn btn-yellow" onclick="goSlide(2)" style="margin-top:24px;font-size:11px;padding:18px 32px">
+      ▶ ORDER SEKARANG ◀
+    </button>
+    <p style="font-size:7px;color:rgba(255,255,255,0.5);margin-top:16px;">● ● ●</p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 2: MENU ==================== -->
+<div class="slide" id="slide2">
+  <div class="marquee-wrap" style="background:var(--c3)">
+    <div class="marquee-inner" style="animation-direction:reverse;">
+      <span>🍫 BOLA OREO SUSU - Rp8.000 ●</span>
+      <span>🧀 MAC AND CHEESE - Rp10.000 ●</span>
+      <span>🎪 BAZAR 22 MEI ●</span>
+      <span>📲 PRE-ORDER VIA WA ●</span>
+      <span>🍫 BOLA OREO SUSU - Rp8.000 ●</span>
+      <span>🧀 MAC AND CHEESE - Rp10.000 ●</span>
+      <span>🎪 BAZAR 22 MEI ●</span>
+      <span>📲 PRE-ORDER VIA WA ●</span>
+    </div>
+  </div>
+
+  <div class="slide2-header">
+    <div class="menu-title">🛒 MENU KAMI 🛒</div>
+    <p style="font-size:7px;color:var(--c4);margin-top:8px">PILIH MENU & ATUR JUMLAHMU!</p>
   </div>
 
   <div class="menu-grid">
-
-    <!-- ── BOLA OREO SUSU ── -->
+    <!-- MENU 1: BOLA OREO -->
     <div class="menu-card">
-      <div class="card-badge badge-hot">🔥 Bestseller</div>
-
-      <!-- SVG: 3 dark oreo balls with white milk powder, "isi 5 pcs" label -->
-      <svg class="food-art" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="og1" cx="35%" cy="28%"><stop offset="0%" stop-color="#2e2e2e"/><stop offset="100%" stop-color="#050505"/></radialGradient>
-          <radialGradient id="og2" cx="35%" cy="28%"><stop offset="0%" stop-color="#2a2a2a"/><stop offset="100%" stop-color="#040404"/></radialGradient>
-          <radialGradient id="og3" cx="35%" cy="28%"><stop offset="0%" stop-color="#2c2c2c"/><stop offset="100%" stop-color="#060606"/></radialGradient>
-          <filter id="softGlow"><feGaussianBlur stdDeviation="2" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
-        </defs>
-        <!-- shadow -->
-        <ellipse cx="100" cy="149" rx="72" ry="9" fill="rgba(0,0,0,.12)"/>
-
-        <!-- BACK BALL (center-top) -->
-        <circle cx="100" cy="90" r="33" fill="url(#og1)"/>
-        <!-- cream ring -->
-        <ellipse cx="100" cy="88" rx="24" ry="4.5" fill="rgba(255,255,255,.13)"/>
-        <!-- white powder blobs -->
-        <ellipse cx="86" cy="72" rx="10" ry="4.5" fill="rgba(255,255,255,.42)" transform="rotate(-18,86,72)"/>
-        <ellipse cx="101" cy="66" rx="8"  ry="3.5" fill="rgba(255,255,255,.32)" transform="rotate(8,101,66)"/>
-        <ellipse cx="115" cy="73" rx="9"  ry="4"   fill="rgba(255,255,255,.38)" transform="rotate(-6,115,73)"/>
-        <circle cx="93" cy="63" r="3" fill="rgba(255,255,255,.45)"/>
-        <circle cx="107" cy="60" r="2.5" fill="rgba(255,255,255,.4)"/>
-        <circle cx="80"  cy="67" r="2"   fill="rgba(255,255,255,.35)"/>
-        <circle cx="120" cy="68" r="2"   fill="rgba(255,255,255,.3)"/>
-        <!-- shine -->
-        <circle cx="88" cy="78" r="5.5" fill="rgba(255,255,255,.1)"/>
-
-        <!-- LEFT BALL -->
-        <circle cx="58" cy="118" r="37" fill="url(#og2)"/>
-        <ellipse cx="58" cy="116" rx="26" ry="5"   fill="rgba(255,255,255,.13)"/>
-        <ellipse cx="43"  cy="97" rx="12" ry="5"   fill="rgba(255,255,255,.43)" transform="rotate(-22,43,97)"/>
-        <ellipse cx="60"  cy="91" rx="10" ry="4"   fill="rgba(255,255,255,.33)" transform="rotate(6,60,91)"/>
-        <ellipse cx="75"  cy="98" rx="11" ry="4.5" fill="rgba(255,255,255,.38)" transform="rotate(-10,75,98)"/>
-        <circle cx="50"  cy="88" r="3.2" fill="rgba(255,255,255,.46)"/>
-        <circle cx="65"  cy="85" r="2.8" fill="rgba(255,255,255,.4)"/>
-        <circle cx="37"  cy="92" r="2.5" fill="rgba(255,255,255,.36)"/>
-        <circle cx="79"  cy="89" r="2.2" fill="rgba(255,255,255,.3)"/>
-        <circle cx="46" cy="107" r="6"   fill="rgba(255,255,255,.09)"/>
-
-        <!-- RIGHT BALL -->
-        <circle cx="142" cy="118" r="37" fill="url(#og3)"/>
-        <ellipse cx="142" cy="116" rx="26" ry="5"   fill="rgba(255,255,255,.13)"/>
-        <ellipse cx="127" cy="97"  rx="12" ry="5"   fill="rgba(255,255,255,.43)" transform="rotate(-18,127,97)"/>
-        <ellipse cx="144" cy="91"  rx="10" ry="4"   fill="rgba(255,255,255,.33)" transform="rotate(8,144,91)"/>
-        <ellipse cx="159" cy="98"  rx="11" ry="4.5" fill="rgba(255,255,255,.38)" transform="rotate(-8,159,98)"/>
-        <circle cx="134" cy="88"  r="3.2" fill="rgba(255,255,255,.46)"/>
-        <circle cx="149" cy="85"  r="2.8" fill="rgba(255,255,255,.4)"/>
-        <circle cx="121" cy="92"  r="2.5" fill="rgba(255,255,255,.36)"/>
-        <circle cx="163" cy="90"  r="2.2" fill="rgba(255,255,255,.3)"/>
-        <circle cx="130" cy="107" r="6"   fill="rgba(255,255,255,.09)"/>
-
-        <!-- ISI 5PCS LABEL -->
-        <rect x="55" y="3" width="90" height="26" rx="13" fill="#FF6B35"/>
-        <text x="100" y="20.5" text-anchor="middle" font-family="Nunito,sans-serif" font-weight="900" font-size="11.5" fill="white">Isi 5 pcs 🍪</text>
-      </svg>
-
-      <div class="card-name">Bola Oreo Susu</div>
-      <div class="card-desc">3 bola cokelat hitam lumer di dalam, ditaburi serbuk susu wangi di atas. Dapat 5 pcs per porsi!</div>
-      <div class="card-footer">
-        <div class="card-price">Rp 8.000</div>
-        <div class="qty-wrap">
-          <button class="qty-btn m" onclick="chg('oreo',-1)">−</button>
-          <span class="qty-num" id="q-oreo">0</span>
-          <button class="qty-btn p" onclick="chg('oreo',1)">+</button>
-        </div>
+      <div class="menu-item-art">
+        <svg viewBox="0 0 120 90" style="width:120px;height:90px;image-rendering:pixelated">
+          <!-- Bowl -->
+          <rect x="20" y="60" width="80" height="24" fill="#8B4513" rx="12"/>
+          <rect x="24" y="56" width="72" height="8" fill="#a0522d"/>
+          <!-- 3 Oreo balls in bowl -->
+          <rect x="28" y="36" width="28" height="24" fill="#111" rx="6"/>
+          <rect x="30" y="30" width="24" height="10" fill="white"/>
+          <rect x="32" y="26" width="20" height="8" fill="white"/>
+          <rect x="36" y="24" width="12" height="6" fill="#f0e8d0"/>
+          <rect x="52" y="28" width="28" height="24" fill="#111" rx="6"/>
+          <rect x="54" y="22" width="24" height="10" fill="white"/>
+          <rect x="56" y="18" width="20" height="8" fill="white"/>
+          <rect x="60" y="16" width="12" height="6" fill="#f0e8d0"/>
+          <rect x="36" y="40" width="28" height="24" fill="#1a1a1a" rx="6"/>
+          <rect x="38" y="34" width="24" height="10" fill="white"/>
+          <rect x="40" y="30" width="20" height="8" fill="white"/>
+          <rect x="44" y="28" width="12" height="6" fill="#f0e8d0"/>
+          <!-- Star -->
+          <rect x="96" y="4" width="8" height="8" fill="#FFD93D"/>
+          <rect x="92" y="8" width="16" height="4" fill="#FFD93D"/>
+        </svg>
+      </div>
+      <div class="menu-item-name">🍫 BOLA OREO<br>SUSU</div>
+      <div class="menu-item-price">Rp 8.000</div>
+      <div class="qty-control">
+        <button class="qty-btn minus" onclick="changeQty('oreo', -1)">−</button>
+        <span class="qty-display" id="qty-oreo">0</span>
+        <button class="qty-btn plus" onclick="changeQty('oreo', 1)">+</button>
       </div>
     </div>
 
-    <!-- ── MAC AND CHEESE ── -->
+    <!-- MENU 2: MAC AND CHEESE -->
     <div class="menu-card">
-      <div class="card-badge badge-creamy">🧀 Creamy</div>
-
-      <!-- SVG: Mac and Cheese bowl -->
-      <svg class="food-art" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="bowlSide" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#D4956A"/>
-            <stop offset="100%" stop-color="#8B5A2B"/>
-          </linearGradient>
-          <radialGradient id="cheeseSauce" cx="50%" cy="30%">
-            <stop offset="0%"   stop-color="#FFE066"/>
-            <stop offset="50%"  stop-color="#FFC107"/>
-            <stop offset="100%" stop-color="#E68900"/>
-          </radialGradient>
-          <radialGradient id="bowlRim" cx="50%" cy="40%">
-            <stop offset="0%"  stop-color="#F0D090"/>
-            <stop offset="100%" stop-color="#C8953A"/>
-          </radialGradient>
-        </defs>
-        <!-- shadow -->
-        <ellipse cx="100" cy="151" rx="70" ry="9" fill="rgba(0,0,0,.12)"/>
-
-        <!-- bowl body -->
-        <path d="M32 90 Q28 148 100 154 Q172 148 168 90 Z" fill="url(#bowlSide)"/>
-        <!-- bowl rim outer -->
-        <ellipse cx="100" cy="90" rx="68" ry="17" fill="url(#bowlRim)"/>
-        <!-- bowl rim inner -->
-        <ellipse cx="100" cy="90" rx="56" ry="12" fill="#F8E4AA"/>
-        <!-- cheese sauce top -->
-        <ellipse cx="100" cy="90" rx="54" ry="11" fill="url(#cheeseSauce)"/>
-
-        <!-- macaroni elbow shapes -->
-        <!-- Row 1 (5 pieces) -->
-        <g transform="translate(52,72)">
-          <path d="M0 9 Q0 0 9 0 Q18 0 18 9 Q18 15 9 15 Q0 15 0 9Z" fill="#F5C430" stroke="#C8920A" stroke-width="1.4"/>
-          <path d="M4 9 Q4 4 9 4 Q14 4 14 9 Q14 13 9 13 Q4 13 4 9Z" fill="none" stroke="#C8920A" stroke-width="1"/>
-        </g>
-        <g transform="translate(72,70)">
-          <path d="M0 9 Q0 0 9 0 Q18 0 18 9 Q18 15 9 15 Q0 15 0 9Z" fill="#F0BC28" stroke="#C8920A" stroke-width="1.4"/>
-          <path d="M4 9 Q4 4 9 4 Q14 4 14 9 Q14 13 9 13 Q4 13 4 9Z" fill="none" stroke="#C8920A" stroke-width="1"/>
-        </g>
-        <g transform="translate(92,68)">
-          <path d="M0 9 Q0 0 9 0 Q18 0 18 9 Q18 15 9 15 Q0 15 0 9Z" fill="#F5C430" stroke="#C8920A" stroke-width="1.4"/>
-          <path d="M4 9 Q4 4 9 4 Q14 4 14 9 Q14 13 9 13 Q4 13 4 9Z" fill="none" stroke="#C8920A" stroke-width="1"/>
-        </g>
-        <g transform="translate(112,70)">
-          <path d="M0 9 Q0 0 9 0 Q18 0 18 9 Q18 15 9 15 Q0 15 0 9Z" fill="#F0BC28" stroke="#C8920A" stroke-width="1.4"/>
-          <path d="M4 9 Q4 4 9 4 Q14 4 14 9 Q14 13 9 13 Q4 13 4 9Z" fill="none" stroke="#C8920A" stroke-width="1"/>
-        </g>
-        <g transform="translate(132,72)">
-          <path d="M0 9 Q0 0 9 0 Q18 0 18 9 Q18 15 9 15 Q0 15 0 9Z" fill="#F5C430" stroke="#C8920A" stroke-width="1.4"/>
-          <path d="M4 9 Q4 4 9 4 Q14 4 14 9 Q14 13 9 13 Q4 13 4 9Z" fill="none" stroke="#C8920A" stroke-width="1"/>
-        </g>
-        <!-- Row 2 (4 pieces) -->
-        <g transform="translate(62,84)">
-          <path d="M0 9 Q0 0 9 0 Q18 0 18 9 Q18 15 9 15 Q0 15 0 9Z" fill="#EDB820" stroke="#C8920A" stroke-width="1.4"/>
-          <path d="M4 9 Q4 4 9 4 Q14 4 14 9 Q14 13 9 13 Q4 13 4 9Z" fill="none" stroke="#C8920A" stroke-width="1"/>
-        </g>
-        <g transform="translate(82,82)">
-          <path d="M0 9 Q0 0 9 0 Q18 0 18 9 Q18 15 9 15 Q0 15 0 9Z" fill="#F5C430" stroke="#C8920A" stroke-width="1.4"/>
-          <path d="M4 9 Q4 4 9 4 Q14 4 14 9 Q14 13 9 13 Q4 13 4 9Z" fill="none" stroke="#C8920A" stroke-width="1"/>
-        </g>
-        <g transform="translate(102,81)">
-          <path d="M0 9 Q0 0 9 0 Q18 0 18 9 Q18 15 9 15 Q0 15 0 9Z" fill="#EDB820" stroke="#C8920A" stroke-width="1.4"/>
-          <path d="M4 9 Q4 4 9 4 Q14 4 14 9 Q14 13 9 13 Q4 13 4 9Z" fill="none" stroke="#C8920A" stroke-width="1"/>
-        </g>
-        <g transform="translate(122,83)">
-          <path d="M0 9 Q0 0 9 0 Q18 0 18 9 Q18 15 9 15 Q0 15 0 9Z" fill="#F5C430" stroke="#C8920A" stroke-width="1.4"/>
-          <path d="M4 9 Q4 4 9 4 Q14 4 14 9 Q14 13 9 13 Q4 13 4 9Z" fill="none" stroke="#C8920A" stroke-width="1"/>
-        </g>
-
-        <!-- cheese drip -->
-        <path d="M60,88 Q56,76 58,66 Q60,56 66,54 Q72,52 73,60 Q74,68 70,76" fill="none" stroke="#FFD700" stroke-width="5" stroke-linecap="round"/>
-        <circle cx="70" cy="76" r="5" fill="#FFD700"/>
-
-        <!-- steam lines -->
-        <path d="M78 52 Q75 43 78 35 Q81 27 78 19" fill="none" stroke="rgba(255,210,80,.45)" stroke-width="3.5" stroke-linecap="round"/>
-        <path d="M100 49 Q97 40 100 32 Q103 24 100 16" fill="none" stroke="rgba(255,210,80,.45)" stroke-width="3.5" stroke-linecap="round"/>
-        <path d="M122 52 Q119 43 122 35 Q125 27 122 19" fill="none" stroke="rgba(255,210,80,.45)" stroke-width="3.5" stroke-linecap="round"/>
-
-        <!-- cheese wedge deco -->
-        <text x="150" y="66" font-size="20">🧀</text>
-      </svg>
-
-      <div class="card-name">Mac and Cheese</div>
-      <div class="card-desc">Makaroni elbow dengan saus keju leleh super creamy dan gurih. Bikin nagih setiap suapan!</div>
-      <div class="card-footer">
-        <div class="card-price">Rp 10.000</div>
-        <div class="qty-wrap">
-          <button class="qty-btn m" onclick="chg('mac',-1)">−</button>
-          <span class="qty-num" id="q-mac">0</span>
-          <button class="qty-btn p" onclick="chg('mac',1)">+</button>
-        </div>
+      <div class="menu-item-art">
+        <svg viewBox="0 0 120 90" style="width:120px;height:90px;image-rendering:pixelated">
+          <!-- Bowl -->
+          <rect x="20" y="56" width="80" height="28" fill="#8B4513" rx="12"/>
+          <rect x="24" y="52" width="72" height="8" fill="#a0522d"/>
+          <!-- Mac and cheese in bowl -->
+          <rect x="28" y="36" width="64" height="20" fill="#FFD93D"/>
+          <rect x="32" y="32" width="56" height="8" fill="#EF9F27"/>
+          <!-- Cheese swirls -->
+          <rect x="36" y="38" width="8" height="8" fill="#FF6B35"/>
+          <rect x="52" y="36" width="8" height="8" fill="#FF6B35"/>
+          <rect x="68" y="38" width="8" height="8" fill="#FF6B35"/>
+          <rect x="44" y="40" width="8" height="6" fill="#EF9F27"/>
+          <rect x="60" y="38" width="8" height="6" fill="#EF9F27"/>
+          <!-- Fork -->
+          <rect x="96" y="20" width="4" height="40" fill="#aaa"/>
+          <rect x="92" y="20" width="4" height="12" fill="#aaa"/>
+          <rect x="100" y="20" width="4" height="12" fill="#aaa"/>
+          <!-- Steam -->
+          <rect x="48" y="16" width="4" height="16" fill="white" opacity="0.5"/>
+          <rect x="60" y="12" width="4" height="20" fill="white" opacity="0.5"/>
+          <rect x="72" y="16" width="4" height="16" fill="white" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="menu-item-name">🧀 MAC AND<br>CHEESE</div>
+      <div class="menu-item-price">Rp 10.000</div>
+      <div class="qty-control">
+        <button class="qty-btn minus" onclick="changeQty('mac', -1)">−</button>
+        <span class="qty-display" id="qty-mac">0</span>
+        <button class="qty-btn plus" onclick="changeQty('mac', 1)">+</button>
       </div>
     </div>
   </div>
 
-  <!-- TOTAL BAR -->
-  <div class="total-bar">
-    <div class="total-left">
-      <div class="lbl">🛒 Total Pesanan</div>
-      <div class="summary-txt" id="summary-txt">Belum ada pesanan dipilih</div>
-    </div>
-    <div class="total-amount" id="total-disp">Rp 0</div>
+  <!-- TOTAL -->
+  <div class="total-box" style="margin:0 20px 24px;max-width:740px">
+    <div class="total-label">💰 TOTAL HARGA</div>
+    <div class="total-amount" id="total-display">Rp 0</div>
+    <div style="font-size:7px;color:rgba(255,255,255,0.4);margin-top:8px" id="breakdown-display"></div>
   </div>
 
-  <button class="btn-order" id="btn-order" onclick="goToForm()" disabled>
-    🛒 Pesan Sekarang
-  </button>
-</section>
+  <!-- ORDER BUTTON -->
+  <div style="text-align:center;padding:0 20px">
+    <button class="pixel-btn btn-pink" onclick="toggleForm()" id="order-btn" style="font-size:10px">
+      🛒 PESAN SEKARANG
+    </button>
+  </div>
 
-<!-- ═══ SLIDE 3 · FORM ═══ -->
-<section id="form-section">
-  <!-- bg blobs -->
-  <div class="fbg" style="width:400px;height:400px;background:rgba(238,75,106,.15);top:-100px;right:-100px;"></div>
-  <div class="fbg" style="width:280px;height:280px;background:rgba(123,47,190,.15);bottom:-50px;left:-50px;"></div>
+  <!-- ORDER FORM -->
+  <div class="order-form" id="orderForm" style="margin:24px 20px 100px;max-width:740px">
+    <div class="form-title">📝 FORM PESANAN</div>
 
-  <div class="form-wrap">
-    <div class="form-card">
-      <div class="form-section-hdr">
-        <span class="section-label">📋 Form Pre-Order</span>
-        <h2 class="section-title">Data Pemesan 👤</h2>
-      </div>
+    <div class="form-group">
+      <label class="form-label">👤 NAMA LENGKAP</label>
+      <input type="text" class="form-input" id="input-nama" placeholder="Nama kamu..."/>
+    </div>
 
-      <!-- mini order review -->
-      <div class="order-review">
-        <div class="rev-title">📦 Ringkasan Pesananmu:</div>
-        <div class="rev-line" id="rl-oreo">• Bola Oreo Susu × <span id="rs-oreo-qty">0</span> = Rp <span id="rs-oreo-price">0</span></div>
-        <div class="rev-line" id="rl-mac">• Mac and Cheese × <span id="rs-mac-qty">0</span> = Rp <span id="rs-mac-price">0</span></div>
-        <div class="rev-total">Total: Rp <span id="rs-total">0</span></div>
-      </div>
+    <div class="form-group">
+      <label class="form-label">🏫 KELAS</label>
+      <input type="text" class="form-input" id="input-kelas" placeholder="Contoh: XI IPA 2"/>
+    </div>
 
-      <div class="fgrp">
-        <label>👤 Nama Lengkap</label>
-        <input id="f-nama" type="text" placeholder="Ketik nama kamu di sini..."/>
-      </div>
-      <div class="fgrp">
-        <label>🏫 Kelas</label>
-        <input id="f-kelas" type="text" placeholder="Contoh: X IPA 1"/>
-      </div>
-      <div class="fgrp">
-        <label>📱 Nomor HP / WhatsApp</label>
-        <input id="f-hp" type="tel" placeholder="Contoh: 081234567890"/>
-      </div>
+    <div class="form-group">
+      <label class="form-label">📱 NO. HP / WA</label>
+      <input type="tel" class="form-input" id="input-hp" placeholder="08xxxxxxxxxx"/>
+    </div>
 
-      <div class="cash-info">
-        <div class="ci-icon">💵</div>
-        <div>
-          <p>Metode Pembayaran</p>
-          <strong>Cash Only — Bayar langsung di bazar tanggal 22 Mei</strong>
-        </div>
-      </div>
+    <div class="form-group">
+      <label class="form-label">💳 METODE PEMBAYARAN</label>
+      <div class="payment-badge">💵 CASH ONLY</div>
+    </div>
 
-      <button class="btn-submit" onclick="submitOrder()">
-        ✅ Konfirmasi Pesanan
+    <div style="text-align:center;margin-top:24px">
+      <button class="pixel-btn btn-green" onclick="submitOrder()" style="font-size:10px;padding:16px 28px">
+        ✅ KONFIRMASI PESANAN
       </button>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ═══ POPUP 1 · LOADING ═══ -->
-<div class="overlay" id="pop-loading">
-  <div class="pop-box">
-    <div class="spin-ring"></div>
-    <h2 class="pop-title">Terima kasih telah mengisi form! 🎉</h2>
-    <p class="pop-sub">Sedang memproses pesananmu dengan penuh semangat...</p>
+<!-- ==================== SLIDE 3: DONE ==================== -->
+<div class="slide" id="slide3">
+  <div class="thankyou-box" id="thankyouBox">
+    <div style="font-size:32px;text-align:center;margin-bottom:16px">🎉</div>
+    <div style="font-size:9px;color:var(--c3);text-align:center;line-height:2" id="slide3-msg">
+      TERIMA KASIH TELAH<br>MENGISI FORM!<br>MEMPROSES PESANANMU...
+    </div>
+    <div class="pixel-loader" id="pixelLoader">
+      <div class="pixel-dot"></div>
+      <div class="pixel-dot"></div>
+      <div class="pixel-dot"></div>
+      <div class="pixel-dot"></div>
+    </div>
+  </div>
+
+  <div class="redirect-msg" id="redirectMsg">
+    ⏳ TUNGGU SEBENTAR...<br>
+    KAMI AKAN MENGARAHKANMU<br>
+    KE WHATSAPP.<br><br>
+    <span style="color:var(--c2)">PASTIKAN PESANANMU SESUAI!</span>
+  </div>
+
+  <div class="countdown-bar" id="countdownBar">
+    <div class="countdown-fill" id="countdownFill"></div>
+  </div>
+
+  <!-- ORDER SUMMARY POP -->
+  <div class="order-summary-pop" id="orderSummaryPop">
+    <div class="summary-title">📋 RINCIAN PESANAN</div>
+    <div class="summary-row"><span>👤 Nama</span><span id="sum-nama">-</span></div>
+    <div class="summary-row"><span>🏫 Kelas</span><span id="sum-kelas">-</span></div>
+    <div class="summary-row"><span>📱 No. HP</span><span id="sum-hp">-</span></div>
+    <hr class="summary-divider"/>
+    <div id="sum-items"></div>
+    <hr class="summary-divider"/>
+    <div class="summary-total">
+      <span>💰 TOTAL</span>
+      <span id="sum-total">Rp 0</span>
+    </div>
+    <div class="confirm-msg" id="sum-confirm">
+      🎊 PESANAN KAMU TELAH DITERIMA!<br>
+      NANTI ADMIN SEGERA MENGONFIRMASI.
+    </div>
   </div>
 </div>
 
-<!-- ═══ POPUP 2 · RINCIAN PESANAN ═══ -->
-<div class="overlay" id="pop-detail">
-  <div class="pop-box" style="text-align:left;">
-    <div class="dp-header">
-      <span class="dp-emoji">🎊</span>
-      <div class="dp-title">Rincian Pesanan</div>
-    </div>
-
-    <div class="info-box">
-      <div class="info-row"><span class="k">Nama</span><span class="v" id="d-nama">-</span></div>
-      <div class="info-row"><span class="k">Kelas</span><span class="v" id="d-kelas">-</span></div>
-      <div class="info-row"><span class="k">No HP</span><span class="v" id="d-hp">-</span></div>
-    </div>
-
-    <div class="items-title">🛒 Pesanan:</div>
-    <div id="d-items"></div>
-
-    <div class="total-row">
-      <span>Total</span>
-      <span id="d-total">Rp 0</span>
-    </div>
-
-    <p class="confirm-note">Pesanan kamu telah diterima, nanti admin segera mengonfirmasi. ✨</p>
-
-    <div class="cd-bar"><div class="cd-fill" id="cd-fill"></div></div>
-    <p class="cd-txt" id="cd-txt">Mengarahkan ke WhatsApp dalam 5 detik...</p>
-
-    <button class="btn-wa" onclick="openWA()">
-      <svg width="21" height="21" viewBox="0 0 24 24" fill="white">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-      </svg>
-      Kirim ke WhatsApp Sekarang
-    </button>
+<!-- POPUP OVERLAY: error / validation -->
+<div class="overlay" id="errorOverlay">
+  <div class="popup-box">
+    <span class="popup-icon">⚠️</span>
+    <div class="popup-title" id="errorMsg">Ada yang kurang!</div>
+    <button class="pixel-btn btn-pink" onclick="closePopup()" style="margin-top:16px;font-size:8px">OK</button>
   </div>
 </div>
 
-<!-- ═══ WAITING / SLIDE 3 EXPERIENCE ═══ -->
-<div id="waiting">
-  <div class="cf-container" id="cf-wrap"></div>
-  <span class="w-icon">🚀</span>
-  <h2 class="w-title">Yeay! Pesanan Diterima! 🎉</h2>
-  <p class="w-sub">
-    Kami akan mengarahkan kamu ke WhatsApp.<br>
-    <strong>Pastikan pesananmu sudah sesuai ya!</strong>
-  </p>
-  <div class="ring-wrap">
-    <svg width="110" height="110" viewBox="0 0 110 110">
-      <circle class="ring-bg" cx="55" cy="55" r="45"/>
-      <circle class="ring-fg" id="ring-fg" cx="55" cy="55" r="45"/>
-    </svg>
-    <div class="ring-num" id="ring-num">5</div>
-  </div>
-  <p class="w-redirect-txt">Otomatis redirect ke WhatsApp dalam hitungan...</p>
-</div>
-
-<!-- ═══ JS ═══ -->
 <script>
-// ── CONFIG ──
-const WA_NUM   = '6281234567890'; // ← Ganti nomor admin
-const PRICE    = { oreo: 8000, mac: 10000 };
-const LABEL    = { oreo: 'Bola Oreo Susu', mac: 'Mac and Cheese' };
-let   qty      = { oreo: 0, mac: 0 };
-let   waMsg    = '';
-
-// ── FORMAT ──
-function rp(n){ return 'Rp ' + n.toLocaleString('id-ID'); }
-
-// ── QTY CHANGE ──
-function chg(item, d){
-  qty[item] = Math.max(0, qty[item] + d);
-  document.getElementById('q-' + item).textContent = qty[item];
-  updateAll();
-}
-
-function updateAll(){
-  const total = qty.oreo * PRICE.oreo + qty.mac * PRICE.mac;
-
-  // total bar
-  const ta = document.getElementById('total-disp');
-  ta.textContent = rp(total);
-  ta.classList.add('bump');
-  setTimeout(()=> ta.classList.remove('bump'), 300);
-
-  // summary text
-  const parts = [];
-  if(qty.oreo > 0) parts.push(`Oreo ×${qty.oreo}`);
-  if(qty.mac  > 0) parts.push(`Mac&Cheese ×${qty.mac}`);
-  document.getElementById('summary-txt').textContent = parts.length ? parts.join(', ') : 'Belum ada pesanan dipilih';
-
-  // order btn
-  document.getElementById('btn-order').disabled = total === 0;
-
-  // form review
-  const ro = document.getElementById('rl-oreo');
-  const rm = document.getElementById('rl-mac');
-  if(qty.oreo > 0){
-    ro.style.display='block';
-    document.getElementById('rs-oreo-qty').textContent   = qty.oreo;
-    document.getElementById('rs-oreo-price').textContent = (qty.oreo*PRICE.oreo).toLocaleString('id-ID');
-  } else { ro.style.display='none'; }
-  if(qty.mac > 0){
-    rm.style.display='block';
-    document.getElementById('rs-mac-qty').textContent   = qty.mac;
-    document.getElementById('rs-mac-price').textContent = (qty.mac*PRICE.mac).toLocaleString('id-ID');
-  } else { rm.style.display='none'; }
-  document.getElementById('rs-total').textContent = total.toLocaleString('id-ID');
-}
-
-// ── SCROLL TO FORM ──
-function goToForm(){
-  document.getElementById('form-section').scrollIntoView({ behavior:'smooth' });
-}
-
-// ── BUILD WA MESSAGE ──
-function buildMsg(nama, kelas, hp){
-  const total = qty.oreo*PRICE.oreo + qty.mac*PRICE.mac;
-  let m = `🎪 *PRE-ORDER BAZAR 22 MEI*\n\n`;
-  m += `*Rincian Pesanan*\n`;
-  m += `Nama: ${nama}\n`;
-  m += `Kelas: ${kelas}\n`;
-  m += `No HP: ${hp}\n\n`;
-  m += `*Pesanan:*\n`;
-  if(qty.oreo>0) m += `• Bola Oreo Susu ×${qty.oreo} – ${rp(qty.oreo*PRICE.oreo)}\n`;
-  if(qty.mac >0) m += `• Mac and Cheese ×${qty.mac} – ${rp(qty.mac*PRICE.mac)}\n`;
-  m += `\n*Total: ${rp(total)}*\n\n`;
-  m += `Pesanan kamu telah diterima, nanti admin segera mengonfirmasi. ✨`;
-  return m;
-}
-
-// ── SUBMIT FORM ──
-function submitOrder(){
-  const nama  = document.getElementById('f-nama').value.trim();
-  const kelas = document.getElementById('f-kelas').value.trim();
-  const hp    = document.getElementById('f-hp').value.trim();
-  const total = qty.oreo*PRICE.oreo + qty.mac*PRICE.mac;
-
-  if(!nama || !kelas || !hp){ alert('Mohon lengkapi semua data ya! 😊'); return; }
-  if(total === 0){ alert('Pilih menu dulu ya! 🍽️'); return; }
-
-  waMsg = buildMsg(nama, kelas, hp);
-
-  // Popup 1 — loading
-  document.getElementById('pop-loading').classList.add('on');
-
-  setTimeout(()=>{
-    document.getElementById('pop-loading').classList.remove('on');
-    showDetailPopup(nama, kelas, hp, total);
-  }, 3000);
-}
-
-// ── DETAIL POPUP ──
-function showDetailPopup(nama, kelas, hp, total){
-  document.getElementById('d-nama').textContent  = nama;
-  document.getElementById('d-kelas').textContent = kelas;
-  document.getElementById('d-hp').textContent    = hp;
-  document.getElementById('d-total').textContent = rp(total);
-
-  // build items
-  let html = '';
-  if(qty.oreo>0) html += `<div class="item-row"><span>Bola Oreo Susu ×${qty.oreo}</span><span>${rp(qty.oreo*PRICE.oreo)}</span></div>`;
-  if(qty.mac >0) html += `<div class="item-row"><span>Mac and Cheese ×${qty.mac}</span><span>${rp(qty.mac*PRICE.mac)}</span></div>`;
-  document.getElementById('d-items').innerHTML = html;
-
-  document.getElementById('pop-detail').classList.add('on');
-
-  // countdown 5 s
-  let c = 5;
-  const fill = document.getElementById('cd-fill');
-  const txt  = document.getElementById('cd-txt');
-  fill.style.width = '100%';
-  txt.textContent  = `Mengarahkan ke WhatsApp dalam ${c} detik...`;
-
-  const iv = setInterval(()=>{
-    c--;
-    fill.style.width = (c/5*100)+'%';
-    txt.textContent  = c > 0
-      ? `Mengarahkan ke WhatsApp dalam ${c} detik...`
-      : 'Mengarahkan sekarang... 🚀';
-    if(c <= 0){
-      clearInterval(iv);
-      document.getElementById('pop-detail').classList.remove('on');
-      showWaiting();
-    }
-  }, 1000);
-}
-
-// ── MANUAL WA OPEN ──
-function openWA(){
-  window.open(`https://wa.me/${WA_NUM}?text=${encodeURIComponent(waMsg)}`, '_blank');
-}
-
-// ── WAITING SCREEN + RING COUNTDOWN ──
-function showWaiting(){
-  spawnConfetti();
-  const ws = document.getElementById('waiting');
-  ws.classList.add('on');
-
-  const ring = document.getElementById('ring-fg');
-  const num  = document.getElementById('ring-num');
-  const circ = 282.6; // 2 * π * 45
-  let c = 5;
-  ring.style.strokeDashoffset = '0';
-  num.textContent = c;
-
-  const iv = setInterval(()=>{
-    c--;
-    num.textContent = c;
-    ring.style.strokeDashoffset = ((5-c)/5 * circ).toString();
-    if(c <= 0){
-      clearInterval(iv);
-      openWA();
-    }
-  }, 1000);
-}
-
-// ── CONFETTI ──
-function spawnConfetti(){
-  const wrap   = document.getElementById('cf-wrap');
-  const colors = ['#FF6B35','#FFD23F','#EE4B6A','#00C9A7','#7B2FBE','#FF85A1','#fff'];
-  for(let i=0;i<80;i++){
-    const p = document.createElement('div');
-    p.className = 'cf';
-    const size  = Math.random()*10+5;
-    p.style.cssText = `
-      left:${Math.random()*100}vw;
-      top:-20px;
-      width:${size}px;
-      height:${size}px;
-      background:${colors[~~(Math.random()*colors.length)]};
-      border-radius:${Math.random()>.5?'50%':'3px'};
-      animation-duration:${Math.random()*2.5+2}s;
-      animation-delay:${Math.random()*2}s;
-    `;
-    wrap.appendChild(p);
+  // ============ STARS ============
+  const sc = document.getElementById('starsContainer');
+  for(let i=0;i<60;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    s.style.left=Math.random()*100+'%';
+    s.style.top=Math.random()*100+'%';
+    s.style.animationDelay=Math.random()*3+'s';
+    s.style.animationDuration=(1.5+Math.random()*2)+'s';
+    if(Math.random()>0.7) { s.style.width='8px'; s.style.height='8px'; }
+    sc.appendChild(s);
   }
-  setTimeout(()=>{ wrap.innerHTML=''; }, 6000);
-}
-</script>
 
+  // ============ SLIDE NAV ============
+  function goSlide(n){
+    document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+    document.getElementById('slide'+n).classList.add('active');
+    document.getElementById('nav'+n).classList.add('active');
+    window.scrollTo(0,0);
+  }
+
+  // ============ QTY & TOTAL ============
+  const prices = { oreo: 8000, mac: 10000 };
+  const qty = { oreo: 0, mac: 0 };
+
+  function changeQty(item, delta){
+    qty[item] = Math.max(0, qty[item]+delta);
+    document.getElementById('qty-'+item).textContent = qty[item];
+    updateTotal();
+  }
+
+  function updateTotal(){
+    const total = qty.oreo*prices.oreo + qty.mac*prices.mac;
+    document.getElementById('total-display').textContent = 'Rp '+total.toLocaleString('id-ID');
+    let bd = [];
+    if(qty.oreo>0) bd.push('Oreo x'+qty.oreo+' = Rp'+( qty.oreo*prices.oreo).toLocaleString('id-ID'));
+    if(qty.mac>0) bd.push('Mac&Cheese x'+qty.mac+' = Rp'+(qty.mac*prices.mac).toLocaleString('id-ID'));
+    document.getElementById('breakdown-display').textContent = bd.join('  |  ');
+  }
+
+  // ============ FORM TOGGLE ============
+  function toggleForm(){
+    const f=document.getElementById('orderForm');
+    f.classList.toggle('show');
+    if(f.classList.contains('show')){
+      f.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  }
+
+  // ============ SUBMIT ============
+  function submitOrder(){
+    const nama=document.getElementById('input-nama').value.trim();
+    const kelas=document.getElementById('input-kelas').value.trim();
+    const hp=document.getElementById('input-hp').value.trim();
+    const total=qty.oreo*prices.oreo+qty.mac*prices.mac;
+
+    if(!nama){ showError('Nama tidak boleh kosong!'); return; }
+    if(!kelas){ showError('Kelas tidak boleh kosong!'); return; }
+    if(!hp){ showError('No. HP tidak boleh kosong!'); return; }
+    if(total===0){ showError('Pilih minimal 1 menu dulu!'); return; }
+
+    goSlide(3);
+    startSlide3Flow(nama,kelas,hp,total);
+  }
+
+  function showError(msg){
+    document.getElementById('errorMsg').textContent = msg;
+    document.getElementById('errorOverlay').classList.add('show');
+  }
+  function closePopup(){
+    document.getElementById('errorOverlay').classList.remove('show');
+  }
+
+  // ============ SLIDE 3 FLOW ============
+  function startSlide3Flow(nama,kelas,hp,total){
+    // Reset state
+    document.getElementById('thankyouBox').style.display='block';
+    document.getElementById('pixelLoader').style.display='flex';
+    document.getElementById('redirectMsg').classList.remove('show');
+    document.getElementById('countdownBar').classList.remove('show');
+    document.getElementById('orderSummaryPop').classList.remove('show');
+
+    // Fill summary
+    document.getElementById('sum-nama').textContent=nama;
+    document.getElementById('sum-kelas').textContent=kelas;
+    document.getElementById('sum-hp').textContent=hp;
+    document.getElementById('sum-total').textContent='Rp '+total.toLocaleString('id-ID');
+
+    let itemsHtml='';
+    if(qty.oreo>0){
+      itemsHtml+=`<div class="summary-row"><span>🍫 Bola Oreo Susu x${qty.oreo}</span><span>Rp ${(qty.oreo*8000).toLocaleString('id-ID')}</span></div>`;
+    }
+    if(qty.mac>0){
+      itemsHtml+=`<div class="summary-row"><span>🧀 Mac & Cheese x${qty.mac}</span><span>Rp ${(qty.mac*10000).toLocaleString('id-ID')}</span></div>`;
+    }
+    document.getElementById('sum-items').innerHTML=itemsHtml;
+
+    // After 3s: show redirect msg + summary
+    setTimeout(()=>{
+      document.getElementById('pixelLoader').style.display='none';
+      document.getElementById('slide3-msg').innerHTML='🎉 TERIMA KASIH TELAH<br>MENGISI FORM!';
+      document.getElementById('redirectMsg').classList.add('show');
+      document.getElementById('orderSummaryPop').classList.add('show');
+      document.getElementById('countdownBar').classList.add('show');
+      // reset animation
+      const f=document.getElementById('countdownFill');
+      f.style.animation='none'; f.offsetHeight;
+      f.style.animation='shrink 3s linear forwards';
+
+      // After 3 more seconds: redirect WA
+      setTimeout(()=>{
+        sendToWhatsApp(nama,kelas,hp,total);
+      },3000);
+    },3000);
+  }
+
+  function sendToWhatsApp(nama,kelas,hp,total){
+    let items=[];
+    if(qty.oreo>0) items.push(`🍫 Bola Oreo Susu x${qty.oreo} = Rp${(qty.oreo*8000).toLocaleString('id-ID')}`);
+    if(qty.mac>0) items.push(`🧀 Mac & Cheese x${qty.mac} = Rp${(qty.mac*10000).toLocaleString('id-ID')}`);
+
+    const msg=
+`*[PRE-ORDER BAZAR 22 MEI]*
+━━━━━━━━━━━━━━━
+👤 Nama   : ${nama}
+🏫 Kelas  : ${kelas}
+📱 No. HP : ${hp}
+━━━━━━━━━━━━━━━
+*RINCIAN PESANAN:*
+${items.join('\n')}
+━━━━━━━━━━━━━━━
+💰 TOTAL  : Rp ${total.toLocaleString('id-ID')}
+💳 Bayar  : Cash Only
+━━━━━━━━━━━━━━━
+Pesanan kamu telah diterima, nanti admin segera mengonfirmasi. 🎉`;
+
+    const waNum = '6281234567890'; // ganti dengan nomor WA admin
+    const url = 'https://wa.me/'+waNum+'?text='+encodeURIComponent(msg);
+    window.open(url,'_blank');
+  }
+</script>
 </body>
-</html
+  </html>
