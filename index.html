@@ -1,1159 +1,757 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pre-Order Bazar 22 Mei 🎉</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap');
-
-    :root {
-      --px: 4px;
-      --c1: #FF6B9D;
-      --c2: #FFD93D;
-      --c3: #6BCB77;
-      --c4: #4D96FF;
-      --c5: #FF6B35;
-      --c6: #A855F7;
-      --dark: #1a0a2e;
-      --dark2: #16213e;
-      --dark3: #0f3460;
-      --light: #fff9f0;
-      --pixel-border: 4px solid;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      image-rendering: pixelated;
-    }
-
-    body {
-      font-family: 'Press Start 2P', monospace;
-      background: var(--dark);
-      color: var(--light);
-      overflow-x: hidden;
-    }
-
-    /* ===================== PIXEL STARS BG ===================== */
-    .stars-bg {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-
-    .star {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: white;
-      animation: twinkle 2s infinite;
-    }
-
-    @keyframes twinkle {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.2; }
-    }
-
-    /* ===================== SLIDE SYSTEM ===================== */
-    .slide {
-      display: none;
-      min-height: 100vh;
-      position: relative;
-      z-index: 1;
-    }
-
-    .slide.active { display: block; }
-
-    /* ===================== PIXEL BUTTON ===================== */
-    .pixel-btn {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 10px;
-      padding: 14px 20px;
-      border: none;
-      cursor: pointer;
-      position: relative;
-      display: inline-block;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: transform 0.1s;
-      image-rendering: pixelated;
-    }
-
-    .pixel-btn:active { transform: translate(4px, 4px); }
-
-    .btn-pink {
-      background: var(--c1);
-      color: white;
-      box-shadow: 4px 4px 0 #a3305a, 8px 8px 0 #5a1830;
-    }
-    .btn-pink:active { box-shadow: 0 0 0 #a3305a; }
-
-    .btn-yellow {
-      background: var(--c2);
-      color: var(--dark);
-      box-shadow: 4px 4px 0 #b89100, 8px 8px 0 #5a4800;
-    }
-    .btn-yellow:active { box-shadow: 0 0 0; }
-
-    .btn-green {
-      background: var(--c3);
-      color: var(--dark);
-      box-shadow: 4px 4px 0 #2d8b3a, 8px 8px 0 #0d4015;
-    }
-    .btn-green:active { box-shadow: 0 0 0; }
-
-    .btn-purple {
-      background: var(--c6);
-      color: white;
-      box-shadow: 4px 4px 0 #7b2fc7, 8px 8px 0 #3d1870;
-    }
-    .btn-purple:active { box-shadow: 0 0 0; }
-
-    /* ===================== MARQUEE ===================== */
-    .marquee-wrap {
-      overflow: hidden;
-      background: var(--c1);
-      padding: 8px 0;
-      border-top: 4px solid var(--dark);
-      border-bottom: 4px solid var(--dark);
-    }
-
-    .marquee-inner {
-      display: flex;
-      gap: 32px;
-      white-space: nowrap;
-      animation: marquee 18s linear infinite;
-      font-size: 9px;
-      color: white;
-    }
-
-    @keyframes marquee {
-      from { transform: translateX(0); }
-      to { transform: translateX(-50%); }
-    }
-
-    /* ===================== SLIDE 1: HERO ===================== */
-    #slide1 {
-      background: linear-gradient(180deg, #1a0a2e 0%, #0f3460 40%, #16213e 100%);
-      padding: 0 0 40px;
-    }
-
-    .hero-header {
-      text-align: center;
-      padding: 32px 20px 16px;
-    }
-
-    .hero-title {
-      font-size: clamp(14px, 4vw, 24px);
-      color: var(--c2);
-      text-shadow: 4px 4px 0 var(--c5), 8px 8px 0 #5a2200;
-      animation: titlePop 1s ease-out;
-      line-height: 1.6;
-    }
-
-    @keyframes titlePop {
-      0% { transform: scale(0.5); opacity: 0; }
-      80% { transform: scale(1.05); }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    .hero-subtitle {
-      font-size: 8px;
-      color: var(--c4);
-      margin-top: 12px;
-      animation: blink 1.5s step-end infinite;
-    }
-
-    @keyframes blink { 50% { opacity: 0; } }
-
-    .date-badge {
-      display: inline-block;
-      background: var(--c1);
-      color: white;
-      font-size: 8px;
-      padding: 8px 16px;
-      margin-top: 16px;
-      box-shadow: 4px 4px 0 #7a1c42;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .pixel-scene {
-      width: 100%;
-      max-width: 700px;
-      margin: 24px auto 0;
-      padding: 0 16px;
-    }
-
-    .scene-canvas {
-      width: 100%;
-      height: auto;
-      display: block;
-      image-rendering: pixelated;
-    }
-
-    .oreo-section {
-      display: flex;
-      justify-content: center;
-      gap: clamp(8px, 3vw, 24px);
-      margin: 24px auto;
-      padding: 0 16px;
-      flex-wrap: wrap;
-      max-width: 500px;
-    }
-
-    .oreo-ball {
-      width: clamp(48px, 10vw, 72px);
-      height: clamp(48px, 10vw, 72px);
-      position: relative;
-      animation: oreoFloat 2s ease-in-out infinite;
-      flex-shrink: 0;
-    }
-
-    .oreo-ball:nth-child(2) { animation-delay: 0.2s; }
-    .oreo-ball:nth-child(3) { animation-delay: 0.4s; }
-    .oreo-ball:nth-child(4) { animation-delay: 0.6s; }
-    .oreo-ball:nth-child(5) { animation-delay: 0.8s; }
-
-    @keyframes oreoFloat {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-10px) rotate(5deg); }
-    }
-
-    .hero-cta {
-      text-align: center;
-      margin-top: 32px;
-      padding: 0 16px;
-    }
-
-    .ground {
-      height: 20px;
-      background: repeating-linear-gradient(90deg, #2d5a1b 0px, #2d5a1b 16px, #3d7a25 16px, #3d7a25 32px);
-      border-top: 4px solid #1a3a0f;
-      margin-top: 16px;
-    }
-
-    /* ===================== SLIDE 2: MENU & FORM ===================== */
-    #slide2 {
-      background: var(--dark2);
-      padding: 0 0 60px;
-    }
-
-    .slide2-header {
-      background: var(--dark3);
-      padding: 24px 20px;
-      text-align: center;
-      border-bottom: 4px solid var(--c2);
-    }
-
-    .menu-title {
-      font-size: clamp(10px, 3vw, 16px);
-      color: var(--c2);
-      text-shadow: 3px 3px 0 var(--c5);
-    }
-
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-      max-width: 780px;
-      margin: 32px auto;
-      padding: 0 20px;
-    }
-
-    .menu-card {
-      background: var(--dark3);
-      border: 4px solid var(--c2);
-      box-shadow: 8px 8px 0 #0a0a1a;
-      padding: 20px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .menu-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 4px;
-      background: repeating-linear-gradient(90deg, var(--c1) 0, var(--c1) 8px, var(--c4) 8px, var(--c4) 16px);
-    }
-
-    .menu-item-art {
-      text-align: center;
-      margin: 8px 0 16px;
-    }
-
-    .menu-item-name {
-      font-size: clamp(8px, 2vw, 12px);
-      color: var(--c3);
-      margin-bottom: 8px;
-      line-height: 1.6;
-    }
-
-    .menu-item-price {
-      font-size: clamp(14px, 3.5vw, 20px);
-      color: var(--c2);
-      text-shadow: 3px 3px 0 var(--c5);
-      margin-bottom: 16px;
-    }
-
-    .qty-control {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      justify-content: center;
-      margin-top: 12px;
-    }
-
-    .qty-btn {
-      font-family: 'Press Start 2P', monospace;
-      width: 40px; height: 40px;
-      font-size: 18px;
-      border: none;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: transform 0.1s;
-      box-shadow: 3px 3px 0 #000;
-      flex-shrink: 0;
-    }
-
-    .qty-btn:active { transform: translate(3px,3px); box-shadow: 0 0 0; }
-    .qty-btn.minus { background: var(--c1); color: white; }
-    .qty-btn.plus { background: var(--c3); color: var(--dark); }
-
-    .qty-display {
-      font-size: 18px;
-      color: white;
-      min-width: 32px;
-      text-align: center;
-    }
-
-    .total-box {
-      background: var(--dark);
-      border: 4px solid var(--c3);
-      max-width: 400px;
-      margin: 0 auto 32px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 8px 8px 0 #0a0a1a;
-    }
-
-    .total-label {
-      font-size: 8px;
-      color: var(--c4);
-      margin-bottom: 8px;
-    }
-
-    .total-amount {
-      font-size: clamp(18px, 5vw, 28px);
-      color: var(--c2);
-      text-shadow: 3px 3px 0 var(--c5);
-    }
-
-    .order-form {
-      display: none;
-      background: var(--dark);
-      border: 4px solid var(--c1);
-      max-width: 500px;
-      margin: 0 auto 32px;
-      padding: 24px 20px;
-      box-shadow: 8px 8px 0 #0a0a1a;
-    }
-
-    .order-form.show { display: block; }
-
-    .form-title {
-      font-size: 10px;
-      color: var(--c1);
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    .form-group { margin-bottom: 20px; }
-
-    .form-label {
-      display: block;
-      font-size: 8px;
-      color: var(--c4);
-      margin-bottom: 8px;
-    }
-
-    .form-input {
-      width: 100%;
-      background: var(--dark3);
-      border: 3px solid var(--c4);
-      color: white;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 9px;
-      padding: 12px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .form-input:focus { border-color: var(--c2); }
-
-    .payment-badge {
-      background: var(--c3);
-      color: var(--dark);
-      font-size: 9px;
-      padding: 12px;
-      text-align: center;
-      border: 3px solid #2d8b3a;
-    }
-
-    /* ===================== SLIDE 3 ===================== */
-    #slide3 {
-      background: var(--dark);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 20px;
-      text-align: center;
-    }
-
-    .thankyou-box {
-      border: 4px solid var(--c3);
-      padding: 32px 24px;
-      max-width: 480px;
-      width: 100%;
-      background: var(--dark2);
-      box-shadow: 8px 8px 0 #0a0a1a;
-      margin-bottom: 24px;
-    }
-
-    .pixel-loader {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      margin: 24px 0;
-    }
-
-    .pixel-dot {
-      width: 16px; height: 16px;
-      background: var(--c2);
-      animation: dotBounce 0.6s ease-in-out infinite;
-    }
-
-    .pixel-dot:nth-child(2) { background: var(--c1); animation-delay: 0.15s; }
-    .pixel-dot:nth-child(3) { background: var(--c3); animation-delay: 0.3s; }
-    .pixel-dot:nth-child(4) { background: var(--c4); animation-delay: 0.45s; }
-
-    @keyframes dotBounce {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-16px); }
-    }
-
-    .order-summary-pop {
-      display: none;
-      background: var(--dark3);
-      border: 4px solid var(--c2);
-      max-width: 480px;
-      width: 100%;
-      padding: 24px 20px;
-      box-shadow: 8px 8px 0 #0a0a1a;
-      text-align: left;
-      margin-bottom: 24px;
-    }
-
-    .order-summary-pop.show { display: block; }
-
-    .summary-title {
-      font-size: 10px;
-      color: var(--c2);
-      text-align: center;
-      margin-bottom: 20px;
-      text-shadow: 2px 2px 0 var(--c5);
-    }
-
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 7px;
-      color: var(--c4);
-      margin-bottom: 10px;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .summary-row span:last-child { color: white; text-align: right; flex: 1; min-width: 100px; }
-
-    .summary-divider {
-      border: none;
-      border-top: 2px solid var(--c4);
-      margin: 12px 0;
-      opacity: 0.4;
-    }
-
-    .summary-total {
-      display: flex;
-      justify-content: space-between;
-      font-size: 10px;
-      color: var(--c3);
-      margin-top: 12px;
-    }
-
-    .confirm-msg {
-      font-size: 7px;
-      color: var(--c1);
-      text-align: center;
-      margin-top: 16px;
-      line-height: 1.8;
-    }
-
-    .redirect-msg {
-      display: none;
-      font-size: 8px;
-      color: var(--c3);
-      text-align: center;
-      line-height: 2;
-      max-width: 400px;
-      margin-bottom: 16px;
-      padding: 0 16px;
-    }
-
-    .redirect-msg.show { display: block; }
-
-    .countdown-bar {
-      display: none;
-      width: 200px;
-      height: 16px;
-      background: var(--dark3);
-      border: 3px solid var(--c4);
-      margin: 12px auto;
-      overflow: hidden;
-    }
-
-    .countdown-bar.show { display: block; }
-
-    .countdown-fill {
-      height: 100%;
-      background: repeating-linear-gradient(90deg, var(--c3) 0, var(--c3) 8px, var(--c4) 8px, var(--c4) 16px);
-      width: 100%;
-      animation: shrink 3s linear forwards;
-    }
-
-    @keyframes shrink { to { width: 0%; } }
-
-    /* NAV */
-    .nav-bar {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: var(--dark);
-      border-top: 4px solid var(--c2);
-      display: flex;
-      z-index: 100;
-      height: 52px;
-    }
-
-    .nav-item {
-      flex: 1;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 7px;
-      background: none;
-      border: none;
-      color: rgba(255,255,255,0.4);
-      cursor: pointer;
-      padding: 8px 4px;
-      transition: all 0.2s;
-      border-right: 2px solid var(--dark3);
-    }
-
-    .nav-item.active { color: var(--c2); background: var(--dark3); }
-    .nav-item:last-child { border-right: none; }
-
-    .pixel-art { image-rendering: pixelated; }
-
-    /* POPUP OVERLAY */
-    .overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .overlay.show { display: flex; }
-
-    .popup-box {
-      background: var(--dark2);
-      border: 4px solid var(--c3);
-      padding: 32px 24px;
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-      box-shadow: 8px 8px 0 #0a0a1a;
-    }
-
-    .popup-icon {
-      font-size: 40px;
-      margin-bottom: 16px;
-      display: block;
-    }
-
-    .popup-title {
-      font-size: 10px;
-      color: var(--c3);
-      margin-bottom: 16px;
-      line-height: 1.8;
-    }
-
-    @media (max-width: 480px) {
-      .menu-grid { padding: 0 12px; gap: 16px; }
-      .oreo-section { gap: 8px; }
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>🎪 BAZAR FEST 22 MEI</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#ff6eb4;--yellow:#ffe135;--green:#39e75f;--blue:#38cfff;
+  --purple:#bf80ff;--orange:#ff8c42;--dark:#0d0b1a;--darker:#07060f;
+  --card:#1a1630;--border:#2e2a50;
+  --font:'Press Start 2P',monospace;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--darker)}
+body{font-family:var(--font);color:#fff;image-rendering:pixelated}
+
+/* ===== STARFIELD ===== */
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.star{position:absolute;width:3px;height:3px;background:#fff;animation:twinkle 2s infinite alternate}
+@keyframes twinkle{0%{opacity:.2;transform:scale(.8)}100%{opacity:1;transform:scale(1.4)}}
+
+/* ===== SLIDES ===== */
+.slide{position:fixed;inset:0;z-index:1;display:none;flex-direction:column;align-items:center;
+  overflow-y:auto;padding-bottom:90px;background:var(--darker)}
+.slide.active{display:flex}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#1a1630}
+::-webkit-scrollbar-thumb{background:var(--purple);border-radius:3px}
+
+/* ===== MARQUEE ===== */
+.marquee-wrap{width:100%;background:var(--pink);padding:6px 0;overflow:hidden;
+  border-bottom:3px solid var(--yellow);position:sticky;top:0;z-index:99}
+.marquee-track{display:flex;white-space:nowrap;animation:marquee 18s linear infinite}
+.marquee-track span{font-size:clamp(7px,1.5vw,11px);color:var(--dark);padding:0 40px;letter-spacing:1px}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ===== SLIDE 1 ===== */
+.s1-title{margin-top:22px;text-align:center;animation:titlePop .6s cubic-bezier(.34,1.56,.64,1) both}
+.s1-title h1{font-size:clamp(13px,3.5vw,26px);color:var(--yellow);
+  text-shadow:3px 3px 0 var(--orange),5px 5px 0 #b34f00;line-height:1.6;letter-spacing:1px}
+@keyframes titlePop{0%{opacity:0;transform:scale(.4) rotate(-8deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+
+.date-badge{margin:14px auto 0;background:var(--purple);border:3px solid var(--pink);
+  padding:8px 18px;display:inline-block;font-size:clamp(7px,1.6vw,11px);color:#fff;
+  animation:blink 1.4s step-start infinite;box-shadow:4px 4px 0 #5a007a}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:.35}}
+
+.scene-wrap{margin:18px auto 0;position:relative;width:min(480px,96vw)}
+.scene-wrap svg{width:100%;height:auto;image-rendering:pixelated}
+
+/* floating oreos on slide 1 */
+.oreo-float{position:absolute;animation:oreoFloat 3s ease-in-out infinite;pointer-events:none;font-size:22px}
+.of1{top:10px;left:8%;animation-delay:0s}
+.of2{top:40px;right:10%;animation-delay:.7s}
+.of3{bottom:30px;left:15%;animation-delay:1.2s}
+.of4{bottom:50px;right:8%;animation-delay:.4s}
+.of5{top:50%;left:48%;animation-delay:1.8s}
+@keyframes oreoFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-14px) rotate(12deg)}}
+
+.btn-order{display:block;margin:22px auto 0;background:var(--yellow);color:var(--dark);
+  border:none;font-family:var(--font);font-size:clamp(9px,2vw,13px);padding:14px 28px;
+  cursor:pointer;position:relative;
+  box-shadow:5px 5px 0 #b38a00,8px 8px 0 #7a5f00;
+  transition:transform .1s,box-shadow .1s;letter-spacing:1px;text-transform:uppercase}
+.btn-order:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 #b38a00,5px 5px 0 #7a5f00}
+.btn-order:active{transform:translate(5px,5px);box-shadow:0 0 0 #b38a00}
+
+/* ===== SLIDE 2 ===== */
+.s2-header{margin-top:20px;text-align:center;font-size:clamp(10px,2.2vw,16px);
+  color:var(--green);text-shadow:2px 2px 0 #006620;padding:0 10px}
+
+.menu-cards{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;
+  margin:22px auto;padding:0 12px;max-width:700px;width:100%}
+
+.card{background:var(--card);border:3px solid var(--border);padding:18px;
+  width:min(280px,90vw);position:relative;transition:border-color .2s}
+.card:hover{border-color:var(--pink)}
+.card-badge{position:absolute;top:-12px;right:12px;background:var(--orange);
+  color:var(--dark);font-size:8px;padding:4px 8px;border:2px solid var(--yellow)}
+.card-title{font-size:clamp(9px,1.8vw,12px);color:var(--yellow);margin-bottom:12px;line-height:1.8}
+.card svg{display:block;margin:0 auto 14px;width:min(130px,80%);height:auto}
+.card-price{font-size:clamp(9px,1.8vw,12px);color:var(--green);margin-bottom:14px}
+.qty-wrap{display:flex;align-items:center;gap:10px;justify-content:center}
+.qty-btn{width:34px;height:34px;background:var(--purple);border:2px solid #fff;
+  color:#fff;font-family:var(--font);font-size:16px;cursor:pointer;
+  box-shadow:3px 3px 0 #5a007a;transition:transform .1s,box-shadow .1s;display:flex;align-items:center;justify-content:center}
+.qty-btn:hover{transform:translate(1px,1px);box-shadow:2px 2px 0 #5a007a}
+.qty-btn:active{transform:translate(3px,3px);box-shadow:0 0 0 #5a007a}
+.qty-display{min-width:38px;text-align:center;font-size:clamp(11px,2vw,15px);color:#fff;
+  background:var(--dark);border:2px solid var(--border);padding:5px 8px}
+
+.total-box{background:var(--dark);border:3px solid var(--yellow);padding:16px 20px;
+  margin:0 auto 18px;max-width:500px;width:90%;text-align:center}
+.total-box .total-label{font-size:clamp(8px,1.5vw,11px);color:var(--blue);margin-bottom:10px}
+.total-box .total-val{font-size:clamp(12px,2.5vw,20px);color:var(--yellow);margin-bottom:10px}
+.total-detail{font-size:clamp(7px,1.3vw,9px);color:#aaa;line-height:2;text-align:left;min-height:20px}
+
+.btn-pesan{display:block;margin:0 auto 16px;background:var(--green);color:var(--dark);
+  border:none;font-family:var(--font);font-size:clamp(8px,1.8vw,12px);padding:12px 24px;
+  cursor:pointer;box-shadow:4px 4px 0 #005a1a,7px 7px 0 #003d11;
+  transition:transform .1s,box-shadow .1s;letter-spacing:1px}
+.btn-pesan:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 #005a1a,4px 4px 0 #003d11}
+.btn-pesan:active{transform:translate(4px,4px);box-shadow:0 0 0 #005a1a}
+
+/* Form */
+.order-form{max-width:460px;width:90%;margin:0 auto 20px;background:var(--card);
+  border:3px solid var(--pink);padding:20px;display:none}
+.order-form.show{display:block;animation:titlePop .4s ease both}
+.form-title{font-size:clamp(9px,1.8vw,12px);color:var(--pink);margin-bottom:16px;text-align:center}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:clamp(7px,1.4vw,10px);color:var(--blue);margin-bottom:6px}
+.field input{width:100%;background:var(--dark);border:2px solid var(--border);
+  color:#fff;font-family:var(--font);font-size:clamp(8px,1.5vw,11px);
+  padding:10px;outline:none;transition:border-color .2s}
+.field input:focus{border-color:var(--pink)}
+.cash-badge{display:block;margin:10px auto 16px;background:var(--orange);color:var(--dark);
+  font-size:clamp(8px,1.6vw,11px);padding:8px 16px;text-align:center;border:2px solid var(--yellow)}
+.btn-konfirm{display:block;width:100%;background:var(--pink);color:var(--dark);
+  border:none;font-family:var(--font);font-size:clamp(9px,1.8vw,12px);padding:13px;
+  cursor:pointer;box-shadow:4px 4px 0 #8b0050;transition:transform .1s,box-shadow .1s;letter-spacing:1px}
+.btn-konfirm:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 #8b0050}
+.btn-konfirm:active{transform:translate(4px,4px);box-shadow:0 0 #8b0050}
+
+/* ===== SLIDE 3 ===== */
+.s3-content{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:calc(100vh - 150px);padding:20px;text-align:center}
+
+/* Loader */
+#loader-dots{display:flex;gap:14px;justify-content:center;margin-bottom:24px}
+.dot{width:18px;height:18px;background:var(--purple);border:2px solid var(--pink);
+  animation:dotBounce .8s ease-in-out infinite alternate}
+.dot:nth-child(2){animation-delay:.2s;background:var(--blue)}
+.dot:nth-child(3){animation-delay:.4s;background:var(--green)}
+@keyframes dotBounce{0%{transform:translateY(0);opacity:.5}100%{transform:translateY(-20px);opacity:1}}
+
+#loader-text{font-size:clamp(9px,1.8vw,12px);color:var(--blue);animation:blink 1s step-start infinite}
+
+#thankyou-section{display:none}
+.ty-emoji{font-size:60px;display:block;margin-bottom:16px;animation:oreoFloat 2s ease-in-out infinite}
+.ty-title{font-size:clamp(13px,3vw,22px);color:var(--yellow);text-shadow:3px 3px 0 var(--orange);
+  margin-bottom:12px;line-height:1.8;animation:titlePop .6s ease both}
+.ty-sub{font-size:clamp(8px,1.5vw,11px);color:var(--green);margin-bottom:20px;line-height:2}
+.countdown-wrap{font-size:clamp(9px,1.8vw,12px);color:var(--purple);margin-bottom:20px}
+#countdown-num{font-size:clamp(20px,4vw,32px);color:var(--pink);display:inline-block;
+  animation:shrink 1s steps(1) infinite}
+@keyframes shrink{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+
+.order-summary{background:var(--card);border:3px solid var(--green);padding:16px 20px;
+  max-width:420px;width:90%;text-align:left;margin:0 auto 20px;font-size:clamp(7px,1.4vw,10px);
+  line-height:2.2;color:#ddd}
+.summary-title{color:var(--yellow);font-size:clamp(9px,1.7vw,12px);margin-bottom:10px;
+  text-align:center;border-bottom:2px solid var(--border);padding-bottom:8px}
+
+/* ===== ERROR POPUP ===== */
+#error-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.8);
+  align-items:center;justify-content:center}
+#error-overlay.show{display:flex}
+.error-box{background:var(--dark);border:4px solid var(--pink);padding:28px 24px;
+  max-width:340px;width:88%;text-align:center;animation:titlePop .4s ease both}
+.error-icon{font-size:36px;display:block;margin-bottom:12px}
+.error-msg{font-size:clamp(8px,1.6vw,11px);color:#fff;line-height:2;margin-bottom:18px}
+.btn-err-close{background:var(--pink);color:var(--dark);border:none;font-family:var(--font);
+  font-size:clamp(8px,1.6vw,11px);padding:10px 20px;cursor:pointer;
+  box-shadow:3px 3px 0 #8b0050;transition:transform .1s,box-shadow .1s}
+.btn-err-close:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 #8b0050}
+
+/* ===== BOTTOM NAV ===== */
+#bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:#100e22;border-top:3px solid var(--border);
+  display:flex;align-items:center;justify-content:space-around;padding:10px 8px;height:70px}
+.nav-btn{background:var(--dark);border:2px solid var(--border);color:#888;
+  font-family:var(--font);font-size:clamp(6px,1.2vw,9px);padding:8px 14px;
+  cursor:pointer;transition:all .15s;text-align:center;line-height:1.8}
+.nav-btn.active,.nav-btn:hover{border-color:var(--purple);color:var(--purple);
+  box-shadow:0 0 10px var(--purple)44}
+
+/* Pixel grid overlay for atmosphere */
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:repeating-linear-gradient(transparent,transparent 3px,rgba(0,0,0,.15) 3px,rgba(0,0,0,.15) 4px),
+  repeating-linear-gradient(90deg,transparent,transparent 3px,rgba(0,0,0,.1) 3px,rgba(0,0,0,.1) 4px)}
+
+/* ===== SPEECH BUBBLE in SVG scene ===== */
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+</style>
 </head>
 <body>
 
-<!-- STARS BACKGROUND -->
-<div class="stars-bg" id="starsContainer"></div>
+<!-- Stars -->
+<div id="stars"></div>
 
-<!-- NAV BAR -->
-<nav class="nav-bar">
-  <button class="nav-item active" onclick="goSlide(1)" id="nav1">🏠 HOME</button>
-  <button class="nav-item" onclick="goSlide(2)" id="nav2">🛒 ORDER</button>
-  <button class="nav-item" onclick="goSlide(3)" id="nav3">✅ DONE</button>
-</nav>
-
-<!-- ==================== SLIDE 1: HERO ==================== -->
-<div class="slide active" id="slide1">
+<!-- ========== SLIDE 1 ========== -->
+<div class="slide active" id="slide-1">
+  <!-- Marquee -->
   <div class="marquee-wrap">
-    <div class="marquee-inner">
-      <span>⭐ BAZAR SEKOLAH 22 MEI ⭐</span>
-      <span>🍪 Bola Oreo Susu ⭐</span>
-      <span>🧀 Mac and Cheese ⭐</span>
-      <span>💰 HARGA TERJANGKAU ⭐</span>
-      <span> PRE-ORDER SEKARANG ⭐</span>
-      <span>⭐ BAZAR SEKOLAH 22 MEI ⭐</span>
-      <span>🍪 Bola Oreo Susu ⭐</span>
-      <span>🧀 Mac and Cheese ⭐</span>
-      <span>💰 HARGA TERJANGKAU ⭐</span>
-      <span> PRE-ORDER SEKARANG ⭐</span>
+    <div class="marquee-track">
+      <span>🎪 BAZAR FEST 22 MEI ★ PRE-ORDER DIBUKA ★ BOLA OREO SUSU & MAC AND CHEESE ★ CASH ONLY ★ RABU 22 MEI 2024 ★ YUK ORDER SEKARANG ★&nbsp;</span>
+      <span>🎪 BAZAR FEST 22 MEI ★ PRE-ORDER DIBUKA ★ BOLA OREO SUSU & MAC AND CHEESE ★ CASH ONLY ★ RABU 22 MEI 2024 ★ YUK ORDER SEKARANG ★&nbsp;</span>
     </div>
   </div>
 
-  <div class="hero-header">
-    <div class="hero-title">🎪 BAZAR FEST 🎪<br>22 MEI!</div>
-    <div class="hero-subtitle">▶ PRE-ORDER DIBUKA SEKARANG ◀</div>
-    <div class="date-badge">📅 RABU, 22 MEI 2024</div>
+  <!-- Title -->
+  <div class="s1-title">
+    <h1>🎪 BAZAR FEST 🎪<br/>22 MEI!</h1>
   </div>
 
-  <!-- PIXEL ART SCENE -->
-  <div class="pixel-scene">
-    <svg class="scene-canvas" viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
-      <rect width="480" height="200" fill="#0f3460"/>
-      <rect x="20" y="15" width="4" height="4" fill="#FFD93D"/>
-      <rect x="60" y="8" width="4" height="4" fill="white"/>
-      <rect x="100" y="20" width="4" height="4" fill="#FF6B9D"/>
-      <rect x="160" y="10" width="4" height="4" fill="white"/>
-      <rect x="220" y="5" width="4" height="4" fill="#4D96FF"/>
-      <rect x="290" y="18" width="4" height="4" fill="#FFD93D"/>
-      <rect x="350" y="8" width="4" height="4" fill="white"/>
-      <rect x="410" y="15" width="4" height="4" fill="#6BCB77"/>
-      <rect x="455" y="6" width="4" height="4" fill="#FF6B9D"/>
+  <!-- Date badge -->
+  <div class="date-badge">📅 RABU, 22 MEI 2024</div>
 
-      <rect x="120" y="12" width="240" height="32" fill="#FF6B9D"/>
-      <rect x="116" y="12" width="4" height="32" fill="#c0365a"/>
-      <rect x="360" y="12" width="4" height="32" fill="#c0365a"/>
-      <rect x="120" y="8" width="240" height="4" fill="#FFD93D"/>
-      <rect x="120" y="44" width="240" height="4" fill="#FFD93D"/>
-      <rect x="136" y="20" width="4" height="4" fill="white"/>
-      <rect x="148" y="20" width="4" height="4" fill="white"/>
-      <rect x="160" y="20" width="4" height="4" fill="white"/>
-      <rect x="172" y="20" width="4" height="4" fill="white"/>
-      <rect x="184" y="20" width="4" height="4" fill="white"/>
-      <rect x="196" y="20" width="4" height="4" fill="#FFD93D"/>
-      <rect x="208" y="20" width="4" height="4" fill="#FFD93D"/>
-      <rect x="220" y="20" width="4" height="4" fill="#FFD93D"/>
-      <rect x="232" y="20" width="4" height="4" fill="#FFD93D"/>
-      <rect x="244" y="20" width="4" height="4" fill="white"/>
-      <rect x="256" y="20" width="4" height="4" fill="white"/>
-      <rect x="268" y="20" width="4" height="4" fill="white"/>
-      <rect x="280" y="20" width="4" height="4" fill="white"/>
-      <rect x="292" y="20" width="4" height="4" fill="white"/>
-      <rect x="304" y="20" width="4" height="4" fill="white"/>
-      <rect x="176" y="0" width="4" height="12" fill="#a67c52"/>
-      <rect x="300" y="0" width="4" height="12" fill="#a67c52"/>
+  <!-- SVG Scene -->
+  <div class="scene-wrap" style="position:relative">
+    <svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;image-rendering:pixelated">
+      <!-- Sky background -->
+      <rect width="480" height="260" fill="#0d0b1a"/>
+      <!-- Stars in sky -->
+      <rect x="30" y="10" width="3" height="3" fill="#ffe135" opacity=".9"/>
+      <rect x="80" y="20" width="2" height="2" fill="#fff" opacity=".7"/>
+      <rect x="150" y="8" width="3" height="3" fill="#ff6eb4"/>
+      <rect x="220" y="15" width="2" height="2" fill="#38cfff"/>
+      <rect x="310" y="12" width="3" height="3" fill="#39e75f"/>
+      <rect x="380" y="18" width="2" height="2" fill="#bf80ff"/>
+      <rect x="440" y="9" width="3" height="3" fill="#ffe135"/>
+      <rect x="55" y="35" width="2" height="2" fill="#fff" opacity=".5"/>
+      <rect x="185" y="30" width="2" height="2" fill="#ff8c42"/>
+      <rect x="260" y="25" width="2" height="2" fill="#ff6eb4"/>
+      <rect x="420" y="40" width="2" height="2" fill="#38cfff"/>
 
-      <rect x="0" y="200" width="480" height="60" fill="#2d5a1b"/>
-      <rect x="0" y="200" width="480" height="8" fill="#3d7a25"/>
+      <!-- Ground -->
+      <rect x="0" y="200" width="480" height="60" fill="#1a1630"/>
+      <rect x="0" y="200" width="480" height="4" fill="#2e2a50"/>
 
-      <rect x="150" y="160" width="180" height="16" fill="#8B4513"/>
-      <rect x="150" y="156" width="180" height="4" fill="#a0522d"/>
-      <rect x="155" y="176" width="8" height="24" fill="#6b3410"/>
-      <rect x="317" y="176" width="8" height="24" fill="#6b3410"/>
-      <rect x="150" y="156" width="20" height="20" fill="#FF6B9D" opacity="0.5"/>
-      <rect x="170" y="156" width="20" height="20" fill="#4D96FF" opacity="0.5"/>
-      <rect x="190" y="156" width="20" height="20" fill="#FF6B9D" opacity="0.5"/>
-      <rect x="210" y="156" width="20" height="20" fill="#4D96FF" opacity="0.5"/>
-      <rect x="230" y="156" width="20" height="20" fill="#FF6B9D" opacity="0.5"/>
-      <rect x="250" y="156" width="20" height="20" fill="#4D96FF" opacity="0.5"/>
-      <rect x="270" y="156" width="20" height="20" fill="#FF6B9D" opacity="0.5"/>
-      <rect x="290" y="156" width="20" height="20" fill="#4D96FF" opacity="0.5"/>
-      <rect x="310" y="156" width="20" height="20" fill="#FF6B9D" opacity="0.5"/>
+      <!-- ===== BOOTH ===== -->
+      <!-- Booth body -->
+      <rect x="140" y="120" width="200" height="82" fill="#2a1f60"/>
+      <rect x="140" y="120" width="200" height="5" fill="#3d2e8a"/>
+      <!-- Booth top / awning -->
+      <rect x="125" y="105" width="230" height="22" fill="#ff6eb4"/>
+      <rect x="125" y="105" width="230" height="5" fill="#ff9fd2"/>
+      <!-- Awning zigzag -->
+      <polygon points="125,127 145,115 165,127 185,115 205,127 225,115 245,127 265,115 285,127 305,115 325,127 345,115 355,127" fill="#ffe135"/>
+      <!-- Booth counter -->
+      <rect x="140" y="175" width="200" height="10" fill="#3d2e8a"/>
+      <rect x="140" y="175" width="200" height="3" fill="#5a45b8"/>
+      <!-- Booth sign -->
+      <rect x="168" y="130" width="144" height="36" fill="#1a1630" rx="2"/>
+      <rect x="170" y="132" width="140" height="32" fill="#0d0b1a" rx="1"/>
+      <!-- BAZAR text on sign (pixel style) -->
+      <text x="240" y="152" font-family="monospace" font-size="10" fill="#ffe135" text-anchor="middle" font-weight="bold">🎪 BAZAR FEST</text>
+      <!-- Bunting/lights -->
+      <circle cx="145" cy="110" r="5" fill="#ffe135"/>
+      <circle cx="175" cy="106" r="5" fill="#ff6eb4"/>
+      <circle cx="205" cy="110" r="5" fill="#39e75f"/>
+      <circle cx="235" cy="106" r="5" fill="#38cfff"/>
+      <circle cx="265" cy="110" r="5" fill="#bf80ff"/>
+      <circle cx="295" cy="106" r="5" fill="#ff8c42"/>
+      <circle cx="325" cy="110" r="5" fill="#ffe135"/>
+      <circle cx="355" cy="106" r="5" fill="#ff6eb4"/>
+      <!-- String for lights -->
+      <path d="M145,110 Q160,107 175,106 Q190,107 205,110 Q220,107 235,106 Q250,107 265,110 Q280,107 295,106 Q310,107 325,110 Q340,107 355,106" stroke="#555" stroke-width="1" fill="none"/>
+      <!-- Oreo on counter -->
+      <circle cx="185" cy="172" r="9" fill="#222"/>
+      <circle cx="185" cy="172" r="7" fill="#111"/>
+      <rect x="179" y="169" width="12" height="2" fill="#fff" opacity=".6" rx="1"/>
+      <circle cx="205" cy="170" r="8" fill="#222"/>
+      <circle cx="205" cy="170" r="6" fill="#111"/>
+      <rect x="200" y="168" width="10" height="2" fill="#fff" opacity=".6" rx="1"/>
+      <circle cx="223" cy="172" r="9" fill="#222"/>
+      <circle cx="223" cy="172" r="7" fill="#111"/>
+      <rect x="217" y="169" width="12" height="2" fill="#fff" opacity=".6" rx="1"/>
 
-      <rect x="168" y="140" width="24" height="16" fill="#1a1a1a" rx="8"/>
-      <rect x="172" y="136" width="16" height="4" fill="white" opacity="0.6"/>
-      <rect x="204" y="138" width="24" height="16" fill="#1a1a1a" rx="8"/>
-      <rect x="208" y="134" width="16" height="4" fill="white" opacity="0.6"/>
-      <rect x="240" y="140" width="24" height="16" fill="#1a1a1a" rx="8"/>
-      <rect x="244" y="136" width="16" height="4" fill="white" opacity="0.6"/>
+      <!-- ===== CHARACTERS ===== -->
 
-      <!-- Character 1 -->
-      <rect x="28" y="80" width="36" height="40" fill="#FF6B9D"/>
-      <rect x="24" y="88" width="8" height="28" fill="#FF6B9D"/>
-      <rect x="60" y="88" width="8" height="28" fill="#FF6B9D"/>
-      <rect x="28" y="80" width="36" height="4" fill="#c0365a"/>
-      <rect x="32" y="84" width="28" height="24" fill="#FDBCB4"/>
-      <rect x="37" y="90" width="6" height="6" fill="#3d2006"/>
-      <rect x="49" y="90" width="6" height="6" fill="#3d2006"/>
-      <rect x="38" y="90" width="2" height="2" fill="white"/>
-      <rect x="50" y="90" width="2" height="2" fill="white"/>
-      <rect x="40" y="102" width="12" height="3" fill="#c0365a"/>
-      <rect x="28" y="116" width="36" height="44" fill="#A855F7"/>
-      <rect x="16" y="120" width="12" height="8" fill="#A855F7"/>
-      <rect x="64" y="120" width="12" height="8" fill="#A855F7"/>
-      <rect x="16" y="128" width="12" height="8" fill="#FDBCB4"/>
-      <rect x="64" y="128" width="12" height="8" fill="#FDBCB4"/>
-      <rect x="32" y="160" width="12" height="20" fill="#8B2FCF"/>
-      <rect x="48" y="160" width="12" height="20" fill="#8B2FCF"/>
-      <rect x="30" y="180" width="16" height="8" fill="#1a1a1a"/>
-      <rect x="46" y="180" width="16" height="8" fill="#1a1a1a"/>
+      <!-- Character 1: Cewek hijab putih (left) -->
+      <!-- Body -->
+      <rect x="60" y="155" width="22" height="35" fill="#f0f0f0"/>
+      <!-- Skirt -->
+      <rect x="57" y="175" width="28" height="15" fill="#888" rx="2"/>
+      <rect x="57" y="188" width="28" height="4" fill="#666"/>
+      <!-- Hijab -->
+      <rect x="58" y="130" width="26" height="22" fill="#fff"/>
+      <rect x="58" y="148" width="26" height="8" fill="#ddd"/>
+      <!-- Face -->
+      <rect x="64" y="134" width="14" height="14" fill="#f5c8a0"/>
+      <!-- Eyes -->
+      <rect x="66" y="138" width="3" height="3" fill="#222"/>
+      <rect x="73" y="138" width="3" height="3" fill="#222"/>
+      <!-- Smile -->
+      <rect x="67" y="144" width="8" height="2" fill="#c0706a"/>
+      <!-- Shoes -->
+      <rect x="59" y="188" width="8" height="5" fill="#333"/>
+      <rect x="71" y="188" width="8" height="5" fill="#333"/>
+      <!-- Arms -->
+      <rect x="48" y="156" width="13" height="6" fill="#f0f0f0"/>
+      <rect x="79" y="158" width="10" height="5" fill="#f0f0f0"/>
 
-      <!-- Character 2 -->
-      <rect x="108" y="72" width="36" height="16" fill="#3d2006"/>
-      <rect x="136" y="72" width="8" height="36" fill="#3d2006"/>
-      <rect x="112" y="80" width="28" height="28" fill="#FDBCB4"/>
-      <rect x="108" y="80" width="8" height="16" fill="#3d2006"/>
-      <rect x="132" y="80" width="8" height="8" fill="#3d2006"/>
-      <rect x="117" y="86" width="6" height="6" fill="#3d2006"/>
-      <rect x="129" y="86" width="6" height="6" fill="#3d2006"/>
-      <rect x="118" y="86" width="2" height="2" fill="white"/>
-      <rect x="130" y="86" width="2" height="2" fill="white"/>
-      <rect x="120" y="98" width="12" height="3" fill="#c0365a"/>
-      <rect x="108" y="108" width="36" height="44" fill="#4D96FF"/>
-      <rect x="96" y="112" width="12" height="8" fill="#4D96FF"/>
-      <rect x="144" y="112" width="12" height="8" fill="#4D96FF"/>
-      <rect x="96" y="120" width="12" height="8" fill="#FDBCB4"/>
-      <rect x="144" y="120" width="12" height="8" fill="#FDBCB4"/>
-      <rect x="112" y="152" width="12" height="20" fill="#6BCB77"/>
-      <rect x="128" y="152" width="12" height="20" fill="#6BCB77"/>
-      <rect x="110" y="172" width="16" height="8" fill="#FF6B9D"/>
-      <rect x="126" y="172" width="16" height="8" fill="#FF6B9D"/>
+      <!-- Character 2: Cewek kuncir (second from left) -->
+      <!-- Body -->
+      <rect x="100" y="155" width="22" height="35" fill="#e8e8e8"/>
+      <!-- Skirt -->
+      <rect x="97" y="175" width="28" height="15" fill="#555" rx="2"/>
+      <rect x="97" y="188" width="28" height="4" fill="#444"/>
+      <!-- Hair -->
+      <rect x="100" y="126" width="22" height="14" fill="#3b2206"/>
+      <!-- Ponytail -->
+      <rect x="116" y="126" width="5" height="18" fill="#3b2206" rx="2"/>
+      <rect x="116" y="141" width="5" height="6" fill="#5a3510" rx="2"/>
+      <!-- Face -->
+      <rect x="102" y="133" width="16" height="14" fill="#f5c8a0"/>
+      <!-- Eyes -->
+      <rect x="104" y="137" width="3" height="3" fill="#222"/>
+      <rect x="112" y="137" width="3" height="3" fill="#222"/>
+      <!-- Smile -->
+      <rect x="105" y="143" width="9" height="2" fill="#c0706a"/>
+      <!-- Shoes -->
+      <rect x="99" y="188" width="8" height="5" fill="#222"/>
+      <rect x="111" y="188" width="8" height="5" fill="#222"/>
+      <!-- Arms -->
+      <rect x="89" y="158" width="12" height="5" fill="#e8e8e8"/>
+      <rect x="121" y="156" width="11" height="6" fill="#e8e8e8"/>
 
-      <!-- Character 3 -->
-      <rect x="308" y="68" width="40" height="20" fill="#1a0a00"/>
-      <rect x="304" y="72" width="8" height="16" fill="#1a0a00"/>
-      <rect x="344" y="72" width="8" height="16" fill="#1a0a00"/>
-      <rect x="308" y="64" width="8" height="8" fill="#2d1500"/>
-      <rect x="320" y="60" width="8" height="8" fill="#2d1500"/>
-      <rect x="332" y="64" width="8" height="8" fill="#2d1500"/>
-      <rect x="312" y="80" width="32" height="28" fill="#D4A574"/>
-      <rect x="317" y="86" width="7" height="7" fill="#1a0a00"/>
-      <rect x="332" y="86" width="7" height="7" fill="#1a0a00"/>
-      <rect x="318" y="86" width="2" height="2" fill="white"/>
-      <rect x="333" y="86" width="2" height="2" fill="white"/>
-      <rect x="320" y="100" width="16" height="4" fill="#7a3010"/>
-      <rect x="308" y="108" width="40" height="52" fill="#FF6B35"/>
-      <rect x="296" y="112" width="12" height="12" fill="#FF6B35"/>
-      <rect x="348" y="112" width="12" height="12" fill="#FF6B35"/>
-      <rect x="296" y="124" width="12" height="8" fill="#D4A574"/>
-      <rect x="348" y="124" width="12" height="8" fill="#D4A574"/>
-      <rect x="308" y="160" width="40" height="20" fill="#1a1a4a"/>
-      <rect x="312" y="180" width="12" height="12" fill="#1a1a4a"/>
-      <rect x="332" y="180" width="12" height="12" fill="#1a1a4a"/>
-      <rect x="308" y="192" width="20" height="8" fill="#f0f0f0"/>
-      <rect x="328" y="192" width="20" height="8" fill="#f0f0f0"/>
+      <!-- Character 3: Cowok keriting (third) -->
+      <!-- Body -->
+      <rect x="338" y="155" width="22" height="35" fill="#f0f0f0"/>
+      <!-- Pants -->
+      <rect x="335" y="175" width="28" height="15" fill="#444" rx="2"/>
+      <rect x="335" y="188" width="28" height="4" fill="#333"/>
+      <!-- Curly hair -->
+      <ellipse cx="349" cy="128" rx="14" ry="10" fill="#1a0a00"/>
+      <circle cx="340" cy="126" r="5" fill="#1a0a00"/>
+      <circle cx="358" cy="126" r="5" fill="#1a0a00"/>
+      <circle cx="349" cy="122" r="5" fill="#1a0a00"/>
+      <!-- Face -->
+      <rect x="342" y="130" width="14" height="14" fill="#8b5e3c"/>
+      <!-- Eyes -->
+      <rect x="344" y="134" width="3" height="3" fill="#111"/>
+      <rect x="351" y="134" width="3" height="3" fill="#111"/>
+      <!-- Smile -->
+      <rect x="345" y="140" width="8" height="2" fill="#c0706a"/>
+      <!-- Shoes -->
+      <rect x="337" y="188" width="8" height="5" fill="#111"/>
+      <rect x="349" y="188" width="8" height="5" fill="#111"/>
+      <!-- Arms -->
+      <rect x="326" y="158" width="13" height="5" fill="#f0f0f0"/>
+      <rect x="359" y="156" width="12" height="6" fill="#f0f0f0"/>
 
-      <!-- Character 4 -->
-      <rect x="400" y="72" width="40" height="18" fill="#4d3200"/>
-      <rect x="396" y="76" width="8" height="14" fill="#4d3200"/>
-      <rect x="436" y="76" width="8" height="14" fill="#4d3200"/>
-      <rect x="400" y="68" width="6" height="8" fill="#4d3200" transform="rotate(15,403,72)"/>
-      <rect x="412" y="64" width="6" height="10" fill="#4d3200" transform="rotate(-10,415,69)"/>
-      <rect x="424" y="66" width="6" height="8" fill="#4d3200" transform="rotate(8,427,70)"/>
-      <rect x="404" y="82" width="32" height="28" fill="#FDBCB4"/>
-      <rect x="409" y="88" width="7" height="7" fill="#1a3a6a"/>
-      <rect x="424" y="88" width="7" height="7" fill="#1a3a6a"/>
-      <rect x="410" y="88" width="2" height="2" fill="white"/>
-      <rect x="425" y="88" width="2" height="2" fill="white"/>
-      <rect x="416" y="102" width="12" height="3" fill="#c07060"/>
-      <rect x="400" y="110" width="40" height="52" fill="#1a3a6a"/>
-      <rect x="388" y="114" width="12" height="12" fill="#1a3a6a"/>
-      <rect x="440" y="114" width="12" height="12" fill="#1a3a6a"/>
-      <rect x="388" y="126" width="12" height="8" fill="#FDBCB4"/>
-      <rect x="440" y="126" width="12" height="8" fill="#FDBCB4"/>
-      <rect x="400" y="162" width="40" height="20" fill="#2d2d2d"/>
-      <rect x="404" y="182" width="12" height="12" fill="#2d2d2d"/>
-      <rect x="424" y="182" width="12" height="12" fill="#2d2d2d"/>
-      <rect x="400" y="194" width="20" height="8" fill="#1a0a00"/>
-      <rect x="420" y="194" width="20" height="8" fill="#1a0a00"/>
+      <!-- Character 4: Cowok messy hair (rightmost) -->
+      <!-- Body -->
+      <rect x="390" y="155" width="22" height="35" fill="#e8e8e8"/>
+      <!-- Pants -->
+      <rect x="387" y="175" width="28" height="15" fill="#333" rx="2"/>
+      <rect x="387" y="188" width="28" height="4" fill="#222"/>
+      <!-- Messy hair -->
+      <rect x="389" y="120" width="24" height="14" fill="#2b1a0a"/>
+      <rect x="386" y="122" width="5" height="10" fill="#2b1a0a"/>
+      <rect x="408" y="120" width="8" height="8" fill="#2b1a0a"/>
+      <rect x="398" y="117" width="5" height="6" fill="#3d2511"/>
+      <rect x="392" y="118" width="4" height="5" fill="#3d2511"/>
+      <!-- Face -->
+      <rect x="392" y="130" width="16" height="14" fill="#d4956a"/>
+      <!-- Eyes -->
+      <rect x="394" y="134" width="3" height="3" fill="#111"/>
+      <rect x="402" y="134" width="3" height="3" fill="#111"/>
+      <!-- Smile -->
+      <rect x="395" y="140" width="9" height="2" fill="#c0706a"/>
+      <!-- Shoes -->
+      <rect x="389" y="188" width="8" height="5" fill="#111"/>
+      <rect x="401" y="188" width="8" height="5" fill="#111"/>
+      <!-- Arms raised -->
+      <rect x="378" y="150" width="13" height="5" fill="#e8e8e8" transform="rotate(-20 378 153)"/>
+      <rect x="411" y="148" width="13" height="5" fill="#e8e8e8" transform="rotate(20 411 151)"/>
 
-      <rect x="50" y="52" width="64" height="20" fill="white" rx="4"/>
-      <rect x="56" y="72" width="8" height="8" fill="white"/>
-      <text x="58" y="65" font-size="6" fill="#1a0a2e" font-family="monospace">YUK ORDER!</text>
-      <rect x="370" y="44" width="80" height="20" fill="white" rx="4"/>
-      <rect x="400" y="64" width="8" height="8" fill="white"/>
-      <text x="375" y="57" font-size="6" fill="#1a0a2e" font-family="monospace">ENAK BANGET!</text>
+      <!-- Speech bubble "YUK ORDER!" above chars 1-2 -->
+      <rect x="22" y="88" width="110" height="34" fill="#ffe135" rx="4"/>
+      <rect x="24" y="90" width="106" height="30" fill="#ffe135" rx="3"/>
+      <polygon points="60,122 75,122 68,135" fill="#ffe135"/>
+      <text x="76" y="110" font-family="monospace" font-size="8" fill="#0d0b1a" text-anchor="middle" font-weight="bold">YUK ORDER!</text>
+
+      <!-- Speech bubble "ENAK BANGET!" above chars 3-4 -->
+      <rect x="335" y="82" width="130" height="34" fill="#39e75f" rx="4"/>
+      <rect x="337" y="84" width="126" height="30" fill="#39e75f" rx="3"/>
+      <polygon points="385,116 400,116 392,130" fill="#39e75f"/>
+      <text x="400" y="104" font-family="monospace" font-size="8" fill="#0d0b1a" text-anchor="middle" font-weight="bold">ENAK BANGET!</text>
+
+      <!-- Balloons -->
+      <ellipse cx="46" cy="50" rx="14" ry="18" fill="#ff6eb4" opacity=".9"/>
+      <line x1="46" y1="68" x2="48" y2="90" stroke="#ff6eb4" stroke-width="1.5"/>
+      <ellipse cx="20" cy="58" rx="11" ry="15" fill="#ffe135" opacity=".9"/>
+      <line x1="20" y1="73" x2="22" y2="90" stroke="#ffe135" stroke-width="1.5"/>
+      <ellipse cx="450" cy="46" rx="13" ry="17" fill="#bf80ff" opacity=".9"/>
+      <line x1="450" y1="63" x2="448" y2="90" stroke="#bf80ff" stroke-width="1.5"/>
+      <ellipse cx="468" cy="60" rx="10" ry="13" fill="#38cfff" opacity=".9"/>
+      <line x1="468" y1="73" x2="466" y2="90" stroke="#38cfff" stroke-width="1.5"/>
     </svg>
+
+    <!-- Floating oreos (HTML layer) -->
+    <div class="oreo-float of1">🍪</div>
+    <div class="oreo-float of2">🍪</div>
+    <div class="oreo-float of3">🍪</div>
+    <div class="oreo-float of4">🍪</div>
+    <div class="oreo-float of5">🍪</div>
   </div>
 
-  <!-- OREO BALLS -->
-  <div class="oreo-section">
-    <div class="oreo-ball"><svg viewBox="0 0 72 72" style="width:100%;height:100%;image-rendering:pixelated"><rect x="8" y="16" width="56" height="44" fill="#1a1a1a" rx="8"/><rect x="4" y="24" width="8" height="28" fill="#1a1a1a"/><rect x="60" y="24" width="8" height="28" fill="#1a1a1a"/><rect x="16" y="8" width="40" height="8" fill="white"/><rect x="20" y="4" width="32" height="8" fill="white"/><rect x="24" y="0" width="24" height="8" fill="white"/><rect x="12" y="12" width="8" height="8" fill="white"/><rect x="52" y="12" width="8" height="8" fill="white"/></svg></div>
-    <div class="oreo-ball"><svg viewBox="0 0 72 72" style="width:100%;height:100%;image-rendering:pixelated"><rect x="8" y="16" width="56" height="44" fill="#111" rx="8"/><rect x="4" y="24" width="8" height="28" fill="#111"/><rect x="60" y="24" width="8" height="28" fill="#111"/><rect x="16" y="8" width="40" height="10" fill="white"/><rect x="20" y="4" width="32" height="8" fill="white"/><rect x="24" y="0" width="24" height="8" fill="white"/></svg></div>
-    <div class="oreo-ball"><svg viewBox="0 0 72 72" style="width:100%;height:100%;image-rendering:pixelated"><rect x="8" y="16" width="56" height="44" fill="#1a1a1a" rx="8"/><rect x="4" y="24" width="8" height="28" fill="#1a1a1a"/><rect x="60" y="24" width="8" height="28" fill="#1a1a1a"/><rect x="16" y="6" width="40" height="12" fill="white"/><rect x="12" y="10" width="12" height="10" fill="white"/><rect x="48" y="10" width="12" height="10" fill="white"/><rect x="20" y="2" width="32" height="8" fill="white"/></svg></div>
-    <div class="oreo-ball"><svg viewBox="0 0 72 72" style="width:100%;height:100%;image-rendering:pixelated"><rect x="8" y="16" width="56" height="44" fill="#111" rx="8"/><rect x="4" y="24" width="8" height="28" fill="#111"/><rect x="60" y="24" width="8" height="28" fill="#111"/><rect x="14" y="8" width="44" height="10" fill="white"/><rect x="10" y="12" width="10" height="8" fill="white"/><rect x="52" y="12" width="10" height="8" fill="white"/><rect x="18" y="4" width="36" height="8" fill="white"/></svg></div>
-    <div class="oreo-ball"><svg viewBox="0 0 72 72" style="width:100%;height:100%;image-rendering:pixelated"><rect x="8" y="16" width="56" height="44" fill="#1a1a1a" rx="8"/><rect x="4" y="24" width="8" height="28" fill="#1a1a1a"/><rect x="60" y="24" width="8" height="28" fill="#1a1a1a"/><rect x="16" y="4" width="40" height="14" fill="white"/><rect x="8" y="10" width="16" height="10" fill="white"/><rect x="48" y="10" width="16" height="10" fill="white"/><rect x="20" y="2" width="32" height="6" fill="#f0e8d0"/></svg></div>
+  <!-- Order button -->
+  <button class="btn-order" onclick="goSlide(2)">▶ ORDER SEKARANG ◀</button>
+</div>
+
+<!-- ========== SLIDE 2 ========== -->
+<div class="slide" id="slide-2">
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span>🛒 PILIH MENU KAMU ★ BOLA OREO SUSU Rp8.000 ★ MAC AND CHEESE Rp10.000 ★ MINIMUM 1 ITEM ★ CASH ONLY ★&nbsp;</span>
+      <span>🛒 PILIH MENU KAMU ★ BOLA OREO SUSU Rp8.000 ★ MAC AND CHEESE Rp10.000 ★ MINIMUM 1 ITEM ★ CASH ONLY ★&nbsp;</span>
+    </div>
+  </div>
+  <div class="s2-header" style="margin-top:20px">🛒 PILIH MENU PESANANMU</div>
+
+  <!-- Menu Cards -->
+  <div class="menu-cards">
+
+    <!-- Card 1: Bola Oreo -->
+    <div class="card">
+      <div class="card-badge">BEST SELLER</div>
+      <div class="card-title">🍪 Bola Oreo Susu</div>
+      <svg viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
+        <!-- Plate -->
+        <ellipse cx="65" cy="95" rx="52" ry="10" fill="#2e2a50"/>
+        <ellipse cx="65" cy="92" rx="52" ry="10" fill="#3d2e8a"/>
+        <!-- Bola Oreo stack -->
+        <!-- Ball 3 (back) -->
+        <circle cx="65" cy="65" r="22" fill="#1a1a1a"/>
+        <circle cx="65" cy="65" r="20" fill="#111"/>
+        <rect x="56" y="61" width="18" height="3" fill="#fff" opacity=".5" rx="1"/>
+        <rect x="58" y="66" width="14" height="2" fill="#fff" opacity=".3" rx="1"/>
+        <!-- Cream layer -->
+        <ellipse cx="65" cy="58" rx="20" ry="6" fill="#f5f0e8"/>
+        <!-- Ball 2 (mid) -->
+        <circle cx="48" cy="75" r="18" fill="#1a1a1a"/>
+        <circle cx="48" cy="75" r="16" fill="#111"/>
+        <rect x="40" y="72" width="16" height="2.5" fill="#fff" opacity=".5" rx="1"/>
+        <!-- Ball 1 (front right) -->
+        <circle cx="82" cy="77" r="18" fill="#1a1a1a"/>
+        <circle cx="82" cy="77" r="16" fill="#111"/>
+        <rect x="74" y="74" width="16" height="2.5" fill="#fff" opacity=".5" rx="1"/>
+        <!-- Drizzle milk -->
+        <path d="M55,52 Q60,40 65,48 Q70,40 75,52" stroke="#fff" stroke-width="2" fill="none" opacity=".7"/>
+        <!-- Sprinkle -->
+        <rect x="50" y="45" width="5" height="2" fill="#ff6eb4" rx="1" transform="rotate(-20 50 45)"/>
+        <rect x="70" y="43" width="5" height="2" fill="#ffe135" rx="1" transform="rotate(15 70 43)"/>
+        <rect x="60" y="40" width="5" height="2" fill="#39e75f" rx="1" transform="rotate(-5 60 40)"/>
+        <rect x="78" y="48" width="4" height="2" fill="#38cfff" rx="1" transform="rotate(30 78 48)"/>
+        <!-- Stars sparkle -->
+        <text x="20" y="35" font-size="12" fill="#ffe135">★</text>
+        <text x="95" y="30" font-size="10" fill="#ff6eb4">✦</text>
+      </svg>
+      <div class="card-price">💰 Rp 8.000 / porsi</div>
+      <div class="qty-wrap">
+        <button class="qty-btn" onclick="changeQty('oreo',-1)">−</button>
+        <div class="qty-display" id="qty-oreo">0</div>
+        <button class="qty-btn" onclick="changeQty('oreo',1)">+</button>
+      </div>
+    </div>
+
+    <!-- Card 2: Mac and Cheese -->
+    <div class="card">
+      <div class="card-badge" style="background:var(--blue);color:var(--dark)">FAVORIT</div>
+      <div class="card-title">🧀 Mac and Cheese</div>
+      <svg viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
+        <!-- Bowl shadow -->
+        <ellipse cx="65" cy="100" rx="48" ry="8" fill="#1a1630" opacity=".5"/>
+        <!-- Bowl -->
+        <path d="M20,70 Q20,105 65,105 Q110,105 110,70 Z" fill="#c45e00"/>
+        <path d="M22,70 Q22,102 65,102 Q108,102 108,70 Z" fill="#e07b00"/>
+        <!-- Bowl rim -->
+        <ellipse cx="65" cy="70" rx="45" ry="10" fill="#f59332"/>
+        <ellipse cx="65" cy="68" rx="43" ry="8" fill="#ffc04a"/>
+        <!-- Mac pile -->
+        <!-- Macaroni pieces (pixel) -->
+        <ellipse cx="45" cy="62" rx="10" ry="5" fill="#f5c842" opacity=".9"/>
+        <ellipse cx="60" cy="58" rx="11" ry="5" fill="#f0b830"/>
+        <ellipse cx="76" cy="60" rx="10" ry="5" fill="#f5c842"/>
+        <ellipse cx="50" cy="52" rx="9" ry="4" fill="#f0b830"/>
+        <ellipse cx="64" cy="48" rx="10" ry="4" fill="#f5c842"/>
+        <ellipse cx="80" cy="54" rx="9" ry="4" fill="#f0b830"/>
+        <ellipse cx="42" cy="45" rx="7" ry="3.5" fill="#f5c842" opacity=".8"/>
+        <ellipse cx="72" cy="44" rx="8" ry="3.5" fill="#f5c842" opacity=".8"/>
+        <!-- Cheese sauce drip -->
+        <path d="M38,68 Q36,75 40,80" stroke="#ffb800" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M88,68 Q90,76 86,82" stroke="#ffb800" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <!-- Cheese block on top -->
+        <rect x="54" y="36" width="22" height="14" fill="#ffe135"/>
+        <rect x="54" y="36" width="22" height="4" fill="#fef08a"/>
+        <rect x="58" y="40" width="4" height="4" fill="#fbbf24" opacity=".7"/>
+        <rect x="66" y="41" width="4" height="3" fill="#fbbf24" opacity=".7"/>
+        <!-- Steam -->
+        <path d="M50,32 Q47,25 52,20" stroke="#fff" stroke-width="2" fill="none" opacity=".4" stroke-linecap="round"/>
+        <path d="M65,28 Q62,20 67,15" stroke="#fff" stroke-width="2" fill="none" opacity=".4" stroke-linecap="round"/>
+        <path d="M80,32 Q77,24 82,19" stroke="#fff" stroke-width="2" fill="none" opacity=".4" stroke-linecap="round"/>
+        <!-- Sparkle -->
+        <text x="95" y="42" font-size="10" fill="#ffe135">★</text>
+        <text x="18" y="38" font-size="8" fill="#ff8c42">✦</text>
+      </svg>
+      <div class="card-price">💰 Rp 10.000 / porsi</div>
+      <div class="qty-wrap">
+        <button class="qty-btn" onclick="changeQty('mac',-1)">−</button>
+        <div class="qty-display" id="qty-mac">0</div>
+        <button class="qty-btn" onclick="changeQty('mac',1)">+</button>
+      </div>
+    </div>
+
   </div>
 
-  <div class="ground"></div>
+  <!-- Total Box -->
+  <div class="total-box">
+    <div class="total-label">💸 TOTAL PEMBAYARAN</div>
+    <div class="total-val" id="total-display">Rp 0</div>
+    <div class="total-detail" id="detail-display">— Belum ada item dipilih —</div>
+  </div>
 
-  <div class="hero-cta">
-    <button class="pixel-btn btn-yellow" onclick="goSlide(2)" style="margin-top:24px;font-size:11px;padding:18px 32px">
-      ▶ ORDER SEKARANG ◀
-    </button>
-    <p style="font-size:7px;color:rgba(255,255,255,0.5);margin-top:16px;">● ● ●</p>
+  <!-- Pesan button -->
+  <button class="btn-pesan" id="btn-pesan" onclick="toggleForm()">🛒 PESAN SEKARANG</button>
+
+  <!-- Form -->
+  <div class="order-form" id="order-form">
+    <div class="form-title">📋 FORM PRE-ORDER</div>
+    <div class="field">
+      <label>🧑 NAMA LENGKAP</label>
+      <input type="text" id="inp-nama" placeholder="masukkan namamu..." maxlength="50"/>
+    </div>
+    <div class="field">
+      <label>🏫 KELAS</label>
+      <input type="text" id="inp-kelas" placeholder="contoh: X-IPA 1" maxlength="20"/>
+    </div>
+    <div class="field">
+      <label>📱 NO. HP / WA</label>
+      <input type="tel" id="inp-hp" placeholder="contoh: 08123456789" maxlength="15"/>
+    </div>
+    <div class="cash-badge">💵 BAYAR : CASH ONLY — SAAT PENGAMBILAN</div>
+    <button class="btn-konfirm" onclick="submitOrder()">✅ KONFIRMASI PESANAN</button>
   </div>
 </div>
 
-<!-- ==================== SLIDE 2: MENU ==================== -->
-<div class="slide" id="slide2">
-  <div class="marquee-wrap" style="background:var(--c3)">
-    <div class="marquee-inner" style="animation-direction:reverse;">
-      <span>🍪 Bola Oreo Susu - Rp8.000 ●</span>
-      <span>🧀 Mac and Cheese - Rp10.000 ●</span>
-      <span>🎪 BAZAR 22 MEI ●</span>
-      <span>📲 PRE-ORDER VIA WA ●</span>
-      <span>🍪 Bola Oreo Susu - Rp8.000 ●</span>
-      <span>🧀 Mac and Cheese - Rp10.000 ●</span>
-      <span>🎪 BAZAR 22 MEI ●</span>
-      <span>📲 PRE-ORDER VIA WA ●</span>
-    </div>
-  </div>
-
-  <div class="slide2-header">
-    <div class="menu-title">🛒 MENU KAMI 🛒</div>
-    <p style="font-size:7px;color:var(--c4);margin-top:8px">PILIH MENU & ATUR JUMLAHMU!</p>
-  </div>
-
-  <div class="menu-grid">
-    <!-- MENU 1: BOLA OREO -->
-    <div class="menu-card">
-      <div class="menu-item-art">
-        <svg viewBox="0 0 120 90" style="width:120px;height:90px;image-rendering:pixelated">
-          <rect x="20" y="60" width="80" height="24" fill="#8B4513" rx="12"/>
-          <rect x="24" y="56" width="72" height="8" fill="#a0522d"/>
-          <rect x="28" y="36" width="28" height="24" fill="#111" rx="6"/>
-          <rect x="30" y="30" width="24" height="10" fill="white"/>
-          <rect x="32" y="26" width="20" height="8" fill="white"/>
-          <rect x="36" y="24" width="12" height="6" fill="#f0e8d0"/>
-          <rect x="52" y="28" width="28" height="24" fill="#111" rx="6"/>
-          <rect x="54" y="22" width="24" height="10" fill="white"/>
-          <rect x="56" y="18" width="20" height="8" fill="white"/>
-          <rect x="60" y="16" width="12" height="6" fill="#f0e8d0"/>
-          <rect x="36" y="40" width="28" height="24" fill="#1a1a1a" rx="6"/>
-          <rect x="38" y="34" width="24" height="10" fill="white"/>
-          <rect x="40" y="30" width="20" height="8" fill="white"/>
-          <rect x="44" y="28" width="12" height="6" fill="#f0e8d0"/>
-          <rect x="96" y="4" width="8" height="8" fill="#FFD93D"/>
-          <rect x="92" y="8" width="16" height="4" fill="#FFD93D"/>
-        </svg>
+<!-- ========== SLIDE 3 ========== -->
+<div class="slide" id="slide-3">
+  <div class="s3-content">
+    <!-- Loader -->
+    <div id="loader-section">
+      <div id="loader-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
       </div>
-      <div class="menu-item-name">🍪 Bola Oreo<br>Susu</div>
-      <div class="menu-item-price">Rp 8.000</div>
-      <div class="qty-control">
-        <button class="qty-btn minus" onclick="changeQty('oreo', -1)">−</button>
-        <span class="qty-display" id="qty-oreo">0</span>
-        <button class="qty-btn plus" onclick="changeQty('oreo', 1)">+</button>
+      <div id="loader-text">MEMPROSES PESANAN...</div>
+    </div>
+
+    <!-- Thank you section -->
+    <div id="thankyou-section">
+      <span class="ty-emoji">🎉</span>
+      <div class="ty-title">YEAY! PESANAN<br/>DITERIMA!</div>
+      <div class="ty-sub">Kamu akan diarahkan ke WhatsApp<br/>untuk konfirmasi pesanan~</div>
+      <div class="countdown-wrap">
+        Redirect dalam <span id="countdown-num">3</span> detik...
       </div>
-    </div>
-
-    <!-- MENU 2: MAC AND CHEESE -->
-    <div class="menu-card">
-      <div class="menu-item-art">
-        <svg viewBox="0 0 120 90" style="width:120px;height:90px;image-rendering:pixelated">
-          <rect x="20" y="56" width="80" height="28" fill="#8B4513" rx="12"/>
-          <rect x="24" y="52" width="72" height="8" fill="#a0522d"/>
-          <rect x="28" y="36" width="64" height="20" fill="#FFD93D"/>
-          <rect x="32" y="32" width="56" height="8" fill="#EF9F27"/>
-          <rect x="36" y="38" width="8" height="8" fill="#FF6B35"/>
-          <rect x="52" y="36" width="8" height="8" fill="#FF6B35"/>
-          <rect x="68" y="38" width="8" height="8" fill="#FF6B35"/>
-          <rect x="44" y="40" width="8" height="6" fill="#EF9F27"/>
-          <rect x="60" y="38" width="8" height="6" fill="#EF9F27"/>
-          <rect x="96" y="20" width="4" height="40" fill="#aaa"/>
-          <rect x="92" y="20" width="4" height="12" fill="#aaa"/>
-          <rect x="100" y="20" width="4" height="12" fill="#aaa"/>
-          <rect x="48" y="16" width="4" height="16" fill="white" opacity="0.5"/>
-          <rect x="60" y="12" width="4" height="20" fill="white" opacity="0.5"/>
-          <rect x="72" y="16" width="4" height="16" fill="white" opacity="0.5"/>
-        </svg>
+      <div class="order-summary" id="order-summary">
+        <div class="summary-title">📋 RINGKASAN PESANAN</div>
+        <div id="summary-content"></div>
       </div>
-      <div class="menu-item-name">🧀 Mac and<br>Cheese</div>
-      <div class="menu-item-price">Rp 10.000</div>
-      <div class="qty-control">
-        <button class="qty-btn minus" onclick="changeQty('mac', -1)">−</button>
-        <span class="qty-display" id="qty-mac">0</span>
-        <button class="qty-btn plus" onclick="changeQty('mac', 1)">+</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- TOTAL -->
-  <div class="total-box" style="margin:0 20px 24px;max-width:740px">
-    <div class="total-label">💰 TOTAL HARGA</div>
-    <div class="total-amount" id="total-display">Rp 0</div>
-    <div style="font-size:7px;color:rgba(255,255,255,0.4);margin-top:8px" id="breakdown-display"></div>
-  </div>
-
-  <!-- ORDER BUTTON -->
-  <div style="text-align:center;padding:0 20px">
-    <button class="pixel-btn btn-pink" onclick="toggleForm()" id="order-btn" style="font-size:10px">
-      🛒 PESAN SEKARANG
-    </button>
-  </div>
-
-  <!-- ORDER FORM -->
-  <div class="order-form" id="orderForm" style="margin:24px 20px 100px;max-width:740px">
-    <div class="form-title">📝 FORM PESANAN</div>
-
-    <div class="form-group">
-      <label class="form-label">🧑 NAMA LENGKAP</label>
-      <input type="text" class="form-input" id="input-nama" placeholder="Nama kamu..."/>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">🏫 KELAS</label>
-      <input type="text" class="form-input" id="input-kelas" placeholder="Contoh: XI IPA 2"/>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">📱 NO. HP / WA</label>
-      <input type="tel" class="form-input" id="input-hp" placeholder="08xxxxxxxxxx"/>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">💵 METODE PEMBAYARAN</label>
-      <div class="payment-badge"> CASH ONLY</div>
-    </div>
-
-    <div style="text-align:center;margin-top:24px">
-      <button class="pixel-btn btn-green" onclick="submitOrder()" style="font-size:10px;padding:16px 28px">
-        ✅ KONFIRMASI PESANAN
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== SLIDE 3: DONE ==================== -->
-<div class="slide" id="slide3">
-  <div class="thankyou-box" id="thankyouBox">
-    <div style="font-size:32px;text-align:center;margin-bottom:16px">🎉</div>
-    <div style="font-size:9px;color:var(--c3);text-align:center;line-height:2" id="slide3-msg">
-      TERIMA KASIH TELAH<br>MENGISI FORM!<br>MEMPROSES PESANANMU...
-    </div>
-    <div class="pixel-loader" id="pixelLoader">
-      <div class="pixel-dot"></div>
-      <div class="pixel-dot"></div>
-      <div class="pixel-dot"></div>
-      <div class="pixel-dot"></div>
-    </div>
-  </div>
-
-  <div class="redirect-msg" id="redirectMsg">
-    ⏳ TUNGGU SEBENTAR...<br>
-    KAMI AKAN MENGARAHKANMU<br>
-    KE WHATSAPP.<br><br>
-    <span style="color:var(--c2)">PASTIKAN PESANANMU SESUAI!</span>
-  </div>
-
-  <div class="countdown-bar" id="countdownBar">
-    <div class="countdown-fill" id="countdownFill"></div>
-  </div>
-
-  <!-- ORDER SUMMARY POP -->
-  <div class="order-summary-pop" id="orderSummaryPop">
-    <div class="summary-title"> RINCIAN PESANAN</div>
-    <div class="summary-row"><span> Nama</span><span id="sum-nama">-</span></div>
-    <div class="summary-row"><span> Kelas</span><span id="sum-kelas">-</span></div>
-    <div class="summary-row"><span> No. HP</span><span id="sum-hp">-</span></div>
-    <hr class="summary-divider"/>
-    <div id="sum-items"></div>
-    <hr class="summary-divider"/>
-    <div class="summary-total">
-      <span>💰 TOTAL</span>
-      <span id="sum-total">Rp 0</span>
-    </div>
-    <div class="confirm-msg" id="sum-confirm">
-      🎊 PESANAN KAMU TELAH DITERIMA!<br>
-      NANTI ADMIN SEGERA MENGONFIRMASI.
     </div>
   </div>
 </div>
 
-<!-- POPUP OVERLAY -->
-<div class="overlay" id="errorOverlay">
-  <div class="popup-box">
-    <span class="popup-icon">⚠️</span>
-    <div class="popup-title" id="errorMsg">Ada yang kurang!</div>
-    <button class="pixel-btn btn-pink" onclick="closePopup()" style="margin-top:16px;font-size:8px">OK</button>
+<!-- Error Popup -->
+<div id="error-overlay" onclick="closeError()">
+  <div class="error-box" onclick="event.stopPropagation()">
+    <span class="error-icon">⚠️</span>
+    <div class="error-msg" id="error-msg">Terjadi kesalahan.</div>
+    <button class="btn-err-close" onclick="closeError()">OK, MENGERTI!</button>
   </div>
+</div>
+
+<!-- Bottom Nav -->
+<div id="bottom-nav">
+  <button class="nav-btn active" id="nav-1" onclick="goSlide(1)">🎪<br/>HOME</button>
+  <button class="nav-btn" id="nav-2" onclick="goSlide(2)">🛒<br/>ORDER</button>
+  <button class="nav-btn" id="nav-3" id="nav-3">🎉<br/>STATUS</button>
 </div>
 
 <script>
-  // ============ STARS ============
-  const sc = document.getElementById('starsContainer');
+// ===== STATE =====
+const prices = { oreo: 8000, mac: 10000 };
+let qty = { oreo: 0, mac: 0 };
+let formVisible = false;
+let orderData = {};
+
+// ===== STARS =====
+(function createStars() {
+  const container = document.getElementById('stars');
   for (let i = 0; i < 60; i++) {
     const s = document.createElement('div');
     s.className = 'star';
-    s.style.left = Math.random() * 100 + '%';
-    s.style.top = Math.random() * 100 + '%';
-    s.style.animationDelay = Math.random() * 3 + 's';
-    s.style.animationDuration = (1.5 + Math.random() * 2) + 's';
-    if (Math.random() > 0.7) {
-      s.style.width = '8px';
-      s.style.height = '8px';
-    }
-    sc.appendChild(s);
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;
+      animation-delay:${(Math.random()*3).toFixed(2)}s;
+      animation-duration:${(1.5+Math.random()*2).toFixed(2)}s;
+      width:${Math.random()>0.7?4:2}px;height:${Math.random()>0.7?4:2}px;
+      background:${['#fff','#ffe135','#ff6eb4','#38cfff','#39e75f','#bf80ff'][Math.floor(Math.random()*6)]}`;
+    container.appendChild(s);
+  }
+})();
+
+// ===== NAVIGATION =====
+function goSlide(n) {
+  document.querySelectorAll('.slide').forEach((s,i) => {
+    s.classList.toggle('active', i === n-1);
+    s.scrollTop = 0;
+  });
+  document.querySelectorAll('.nav-btn').forEach((b,i) => {
+    b.classList.toggle('active', i === n-1);
+  });
+}
+
+// ===== QTY =====
+function changeQty(item, delta) {
+  qty[item] = Math.max(0, qty[item] + delta);
+  document.getElementById('qty-' + item).textContent = qty[item];
+  updateTotal();
+}
+
+// ===== UPDATE TOTAL =====
+function updateTotal() {
+  const total = qty.oreo * prices.oreo + qty.mac * prices.mac;
+  document.getElementById('total-display').textContent = 'Rp ' + total.toLocaleString('id-ID');
+
+  let details = '';
+  if (qty.oreo > 0) {
+    details += `🍪 Bola Oreo Susu x${qty.oreo} = Rp ${(qty.oreo*prices.oreo).toLocaleString('id-ID')}\n`;
+  }
+  if (qty.mac > 0) {
+    details += `🧀 Mac & Cheese x${qty.mac} = Rp ${(qty.mac*prices.mac).toLocaleString('id-ID')}`;
+  }
+  if (!details) details = '— Belum ada item dipilih —';
+
+  const el = document.getElementById('detail-display');
+  el.style.whiteSpace = 'pre-line';
+  el.textContent = details;
+}
+
+// ===== TOGGLE FORM =====
+function toggleForm() {
+  formVisible = !formVisible;
+  const f = document.getElementById('order-form');
+  f.classList.toggle('show', formVisible);
+  document.getElementById('btn-pesan').textContent = formVisible ? '✖ TUTUP FORM' : '🛒 PESAN SEKARANG';
+  if (formVisible) f.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== SHOW ERROR =====
+function showError(msg) {
+  document.getElementById('error-msg').textContent = msg;
+  document.getElementById('error-overlay').classList.add('show');
+}
+function closeError() {
+  document.getElementById('error-overlay').classList.remove('show');
+}
+
+// ===== SUBMIT ORDER =====
+function submitOrder() {
+  const nama = document.getElementById('inp-nama').value.trim();
+  const kelas = document.getElementById('inp-kelas').value.trim();
+  const hp = document.getElementById('inp-hp').value.trim();
+
+  if (!nama) { showError('🧑 Nama belum diisi!\nMasukkan nama lengkapmu dulu ya~'); return; }
+  if (!kelas) { showError('🏫 Kelas belum diisi!\nTulis kelasmu ya, contoh: X-IPA 1'); return; }
+  if (!hp) { showError('📱 No. HP / WA belum diisi!\nKita butuh kontakmu untuk konfirmasi!'); return; }
+  if (qty.oreo === 0 && qty.mac === 0) {
+    showError('🛒 Belum ada menu yang dipilih!\nPilih minimal 1 item dulu ya!'); return;
   }
 
-  // ============ SLIDE NAV ============
-  function goSlide(n) {
-    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-    document.getElementById('slide' + n).classList.add('active');
-    document.getElementById('nav' + n).classList.add('active');
-    window.scrollTo(0, 0);
-  }
+  orderData = { nama, kelas, hp, qtyOreo: qty.oreo, qtyMac: qty.mac,
+    total: qty.oreo * prices.oreo + qty.mac * prices.mac };
 
-  // ============ QTY & TOTAL ============
-  const prices = { oreo: 8000, mac: 10000 };
-  const qty = { oreo: 0, mac: 0 };
+  goSlide(3);
+  startSlide3Flow();
+}
 
-  function changeQty(item, delta) {
-    qty[item] = Math.max(0, qty[item] + delta);
-    document.getElementById('qty-' + item).textContent = qty[item];
-    updateTotal();
-  }
+// ===== SLIDE 3 FLOW =====
+function startSlide3Flow() {
+  document.getElementById('loader-section').style.display = 'block';
+  document.getElementById('thankyou-section').style.display = 'none';
 
-  function updateTotal() {
-    const total = qty.oreo * prices.oreo + qty.mac * prices.mac;
-    document.getElementById('total-display').textContent = 'Rp ' + total.toLocaleString('id-ID');
-    let bd = [];
-    if (qty.oreo > 0) bd.push('🍪 Oreo x' + qty.oreo + ' = Rp' + (qty.oreo * 8000).toLocaleString('id-ID'));
-    if (qty.mac > 0) bd.push('🧀 Mac & Cheese x' + qty.mac + ' = Rp' + (qty.mac * 10000).toLocaleString('id-ID'));
-    document.getElementById('breakdown-display').textContent = bd.join('  |  ');
-  }
+  setTimeout(() => {
+    document.getElementById('loader-section').style.display = 'none';
+    buildSummary();
+    document.getElementById('thankyou-section').style.display = 'block';
+    startCountdown(3);
+  }, 3000);
+}
 
-  // ============ FORM TOGGLE ============
-  function toggleForm() {
-    const f = document.getElementById('orderForm');
-    f.classList.toggle('show');
-    if (f.classList.contains('show')) {
-      f.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
+function buildSummary() {
+  const d = orderData;
+  let items = '';
+  if (d.qtyOreo > 0)
+    items += `🍪 Bola Oreo Susu x${d.qtyOreo} = Rp ${(d.qtyOreo*prices.oreo).toLocaleString('id-ID')}\n`;
+  if (d.qtyMac > 0)
+    items += `🧀 Mac & Cheese x${d.qtyMac} = Rp ${(d.qtyMac*prices.mac).toLocaleString('id-ID')}\n`;
 
-  // ============ SUBMIT ============
-  function submitOrder() {
-    const nama = document.getElementById('input-nama').value.trim();
-    const kelas = document.getElementById('input-kelas').value.trim();
-    const hp = document.getElementById('input-hp').value.trim();
-    const total = qty.oreo * prices.oreo + qty.mac * prices.mac;
+  document.getElementById('summary-content').innerHTML =
+    `<pre style="font-size:clamp(7px,1.3vw,9px);line-height:2.2;color:#ddd;white-space:pre-wrap;font-family:var(--font)">` +
+    `🧑 Nama   : ${d.nama}\n` +
+    `🏫 Kelas  : ${d.kelas}\n` +
+    `📱 HP     : ${d.hp}\n` +
+    `─────────────────────\n` +
+    items +
+    `─────────────────────\n` +
+    `💰 TOTAL  : Rp ${d.total.toLocaleString('id-ID')}\n` +
+    `💵 Bayar  : Cash Only</pre>`;
+}
 
-    if (!nama) { showError('Nama tidak boleh kosong!'); return; }
-    if (!kelas) { showError('Kelas tidak boleh kosong!'); return; }
-    if (!hp) { showError('No. HP tidak boleh kosong!'); return; }
-    if (total === 0) { showError('Pilih minimal 1 menu dulu!'); return; }
+function startCountdown(n) {
+  const el = document.getElementById('countdown-num');
+  el.textContent = n;
+  if (n <= 0) { sendToWhatsApp(); return; }
+  setTimeout(() => startCountdown(n - 1), 1000);
+}
 
-    goSlide(3);
-    startSlide3Flow(nama, kelas, hp, total);
-  }
+// ===== SEND WHATSAPP =====
+function sendToWhatsApp() {
+  const d = orderData;
+  let items = '';
+  if (d.qtyOreo > 0)
+    items += `🍪 Bola Oreo Susu x${d.qtyOreo} = Rp ${(d.qtyOreo*prices.oreo).toLocaleString('id-ID')}\n`;
+  if (d.qtyMac > 0)
+    items += `🧀 Mac & Cheese x${d.qtyMac} = Rp ${(d.qtyMac*prices.mac).toLocaleString('id-ID')}`;
 
-  function showError(msg) {
-    document.getElementById('errorMsg').textContent = msg;
-    document.getElementById('errorOverlay').classList.add('show');
-  }
-  function closePopup() {
-    document.getElementById('errorOverlay').classList.remove('show');
-  }
+  const msg =
+`*[PRE-ORDER BAZAR 22 MEI]*
+=============================
+ Nama   : ${d.nama}
+ Kelas  : ${d.kelas}
+ No. HP : ${d.hp}
+=============================
+*RINCIAN PESANAN:*
+${items}
+=============================
+ TOTAL  : Rp ${d.total.toLocaleString('id-ID')}
+ Bayar  : Cash Only
+=============================
+Pesanan kamu telah diterima, nanti admin segera mengonfirmasi. [OK]`;
 
-  // ============ SLIDE 3 FLOW ============
-  function startSlide3Flow(nama, kelas, hp, total) {
-    document.getElementById('thankyouBox').style.display = 'block';
-    document.getElementById('pixelLoader').style.display = 'flex';
-    document.getElementById('redirectMsg').classList.remove('show');
-    document.getElementById('countdownBar').classList.remove('show');
-    document.getElementById('orderSummaryPop').classList.remove('show');
-
-    document.getElementById('sum-nama').textContent = nama;
-    document.getElementById('sum-kelas').textContent = kelas;
-    document.getElementById('sum-hp').textContent = hp;
-    document.getElementById('sum-total').textContent = 'Rp ' + total.toLocaleString('id-ID');
-
-    let itemsHtml = '';
-    if (qty.oreo > 0) {
-      itemsHtml += `<div class="summary-row"><span>🍪 Bola Oreo Susu x${qty.oreo}</span><span>Rp ${(qty.oreo * 8000).toLocaleString('id-ID')}</span></div>`;
-    }
-    if (qty.mac > 0) {
-      itemsHtml += `<div class="summary-row"><span>🧀 Mac & Cheese x${qty.mac}</span><span>Rp ${(qty.mac * 10000).toLocaleString('id-ID')}</span></div>`;
-    }
-    document.getElementById('sum-items').innerHTML = itemsHtml;
-
-    setTimeout(() => {
-      document.getElementById('pixelLoader').style.display = 'none';
-      document.getElementById('slide3-msg').innerHTML = '🎉 TERIMA KASIH TELAH<br>MENGISI FORM!';
-      document.getElementById('redirectMsg').classList.add('show');
-      document.getElementById('orderSummaryPop').classList.add('show');
-      document.getElementById('countdownBar').classList.add('show');
-      const f = document.getElementById('countdownFill');
-      f.style.animation = 'none'; f.offsetHeight;
-      f.style.animation = 'shrink 3s linear forwards';
-
-      setTimeout(() => {
-        sendToWhatsApp(nama, kelas, hp, total);
-      }, 3000);
-    }, 3000);
-  }
-
-  function sendToWhatsApp(nama, kelas, hp, total) {
-    let items = [];
-    if (qty.oreo > 0) items.push(`🍪 Bola Oreo Susu x${qty.oreo} = Rp${(qty.oreo * 8000).toLocaleString('id-ID')}`);
-    if (qty.mac > 0) items.push(`🧀 Mac & Cheese x${qty.mac} = Rp${(qty.mac * 10000).toLocaleString('id-ID')}`);
-
-    const msg =
-      `*[PRE-ORDER BAZAR 22 MEI]*\n` +
-      `=============================\n` +
-      ` Nama   : ${nama}\n` +
-      ` Kelas  : ${kelas}\n` +
-      ` No. HP : ${hp}\n` +
-      `=============================\n` +
-      `*RINCIAN PESANAN:*\n` +
-      `${items.join('\n')}\n` +
-      `=============================\n` +
-      ` TOTAL  : Rp ${total.toLocaleString('id-ID')}\n` +
-      ` Bayar  : Cash Only\n` +
-      `=============================\n` +
-      `Pesanan kamu telah diterima, nanti admin segera mengonfirmasi. [OK]`;
-
-    const waNum = '6285694458024';
-    const url = 'https://wa.me/' + waNum + '?text=' + encodeURIComponent(msg);
-    window.open(url, '_blank');
-  }
+  const url = 'https://wa.me/6285694458024?text=' + encodeURIComponent(msg);
+  window.open(url, '_blank');
+}
 </script>
 </body>
-            </html>
+        </html>
