@@ -1,757 +1,2176 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>🎪 BAZAR FEST 22 MEI</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
-<style>
-/* ===== RESET & BASE ===== */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --pink:#ff6eb4;--yellow:#ffe135;--green:#39e75f;--blue:#38cfff;
-  --purple:#bf80ff;--orange:#ff8c42;--dark:#0d0b1a;--darker:#07060f;
-  --card:#1a1630;--border:#2e2a50;
-  --font:'Press Start 2P',monospace;
-}
-html,body{width:100%;height:100%;overflow:hidden;background:var(--darker)}
-body{font-family:var(--font);color:#fff;image-rendering:pixelated}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pre-Order Bazar 22 Mei 🌅</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
 
-/* ===== STARFIELD ===== */
-#stars{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.star{position:absolute;width:3px;height:3px;background:#fff;animation:twinkle 2s infinite alternate}
-@keyframes twinkle{0%{opacity:.2;transform:scale(.8)}100%{opacity:1;transform:scale(1.4)}}
+  <style>
+    /* ===================================================
+       CSS VARIABLES & RESET
+    =================================================== */
+    :root {
+      --sunset-orange: #FF6B35;
+      --sunset-pink:   #FF4F8B;
+      --sunset-purple: #7B3FA0;
+      --sunset-sky:    #4A90D9;
+      --sunset-gold:   #FFD166;
+      --sunset-warm:   #FF9A5C;
+      --pixel-dark:    #1A1040;
+      --pixel-mid:     #2D1B69;
+      --pixel-light:   #F7E8D0;
+      --card-bg:       #FFF8F0;
+      --text-primary:  #1A1040;
+      --text-secondary:#5A4080;
+      --shadow-glow:   0 0 20px rgba(255,107,53,0.4);
+      --border-pixel:  3px solid var(--pixel-dark);
+      --font-pixel:    'Press Start 2P', monospace;
+      --font-body:     'Nunito', sans-serif;
+    }
 
-/* ===== SLIDES ===== */
-.slide{position:fixed;inset:0;z-index:1;display:none;flex-direction:column;align-items:center;
-  overflow-y:auto;padding-bottom:90px;background:var(--darker)}
-.slide.active{display:flex}
+    [data-theme="dark"] {
+      --card-bg:       #2D1B69;
+      --text-primary:  #F7E8D0;
+      --text-secondary:#FFD166;
+      --pixel-light:   #1A1040;
+      --shadow-glow:   0 0 20px rgba(255,166,93,0.5);
+    }
 
-/* ===== SCROLLBAR ===== */
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:#1a1630}
-::-webkit-scrollbar-thumb{background:var(--purple);border-radius:3px}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ===== MARQUEE ===== */
-.marquee-wrap{width:100%;background:var(--pink);padding:6px 0;overflow:hidden;
-  border-bottom:3px solid var(--yellow);position:sticky;top:0;z-index:99}
-.marquee-track{display:flex;white-space:nowrap;animation:marquee 18s linear infinite}
-.marquee-track span{font-size:clamp(7px,1.5vw,11px);color:var(--dark);padding:0 40px;letter-spacing:1px}
-@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    html { scroll-behavior: smooth; }
 
-/* ===== SLIDE 1 ===== */
-.s1-title{margin-top:22px;text-align:center;animation:titlePop .6s cubic-bezier(.34,1.56,.64,1) both}
-.s1-title h1{font-size:clamp(13px,3.5vw,26px);color:var(--yellow);
-  text-shadow:3px 3px 0 var(--orange),5px 5px 0 #b34f00;line-height:1.6;letter-spacing:1px}
-@keyframes titlePop{0%{opacity:0;transform:scale(.4) rotate(-8deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+    body {
+      font-family: var(--font-body);
+      background: var(--pixel-light);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      transition: background 0.4s, color 0.4s;
+    }
 
-.date-badge{margin:14px auto 0;background:var(--purple);border:3px solid var(--pink);
-  padding:8px 18px;display:inline-block;font-size:clamp(7px,1.6vw,11px);color:#fff;
-  animation:blink 1.4s step-start infinite;box-shadow:4px 4px 0 #5a007a}
-@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:.35}}
+    /* ===================================================
+       PIXEL UTILITY CLASSES
+    =================================================== */
+    .pixel-border {
+      border: 3px solid var(--pixel-dark);
+      image-rendering: pixelated;
+    }
 
-.scene-wrap{margin:18px auto 0;position:relative;width:min(480px,96vw)}
-.scene-wrap svg{width:100%;height:auto;image-rendering:pixelated}
+    .pixel-shadow {
+      box-shadow: 4px 4px 0px var(--pixel-dark);
+    }
 
-/* floating oreos on slide 1 */
-.oreo-float{position:absolute;animation:oreoFloat 3s ease-in-out infinite;pointer-events:none;font-size:22px}
-.of1{top:10px;left:8%;animation-delay:0s}
-.of2{top:40px;right:10%;animation-delay:.7s}
-.of3{bottom:30px;left:15%;animation-delay:1.2s}
-.of4{bottom:50px;right:8%;animation-delay:.4s}
-.of5{top:50%;left:48%;animation-delay:1.8s}
-@keyframes oreoFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-14px) rotate(12deg)}}
+    .pixel-btn {
+      font-family: var(--font-pixel);
+      font-size: 0.55rem;
+      padding: 12px 20px;
+      border: 3px solid var(--pixel-dark);
+      box-shadow: 4px 4px 0 var(--pixel-dark);
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: inline-block;
+    }
 
-.btn-order{display:block;margin:22px auto 0;background:var(--yellow);color:var(--dark);
-  border:none;font-family:var(--font);font-size:clamp(9px,2vw,13px);padding:14px 28px;
-  cursor:pointer;position:relative;
-  box-shadow:5px 5px 0 #b38a00,8px 8px 0 #7a5f00;
-  transition:transform .1s,box-shadow .1s;letter-spacing:1px;text-transform:uppercase}
-.btn-order:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 #b38a00,5px 5px 0 #7a5f00}
-.btn-order:active{transform:translate(5px,5px);box-shadow:0 0 0 #b38a00}
+    .pixel-btn:active {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0 var(--pixel-dark);
+    }
 
-/* ===== SLIDE 2 ===== */
-.s2-header{margin-top:20px;text-align:center;font-size:clamp(10px,2.2vw,16px);
-  color:var(--green);text-shadow:2px 2px 0 #006620;padding:0 10px}
+    /* ===================================================
+       FLOATING CONTROLS (SOUND + DARK MODE)
+    =================================================== */
+    #floating-controls {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 1000;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
 
-.menu-cards{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;
-  margin:22px auto;padding:0 12px;max-width:700px;width:100%}
+    .ctrl-btn {
+      width: 38px; height: 38px;
+      border: 3px solid var(--pixel-dark);
+      box-shadow: 3px 3px 0 var(--pixel-dark);
+      background: var(--card-bg);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 4px;
+      transition: transform 0.1s, box-shadow 0.1s, background 0.3s;
+    }
+    .ctrl-btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--pixel-dark); }
 
-.card{background:var(--card);border:3px solid var(--border);padding:18px;
-  width:min(280px,90vw);position:relative;transition:border-color .2s}
-.card:hover{border-color:var(--pink)}
-.card-badge{position:absolute;top:-12px;right:12px;background:var(--orange);
-  color:var(--dark);font-size:8px;padding:4px 8px;border:2px solid var(--yellow)}
-.card-title{font-size:clamp(9px,1.8vw,12px);color:var(--yellow);margin-bottom:12px;line-height:1.8}
-.card svg{display:block;margin:0 auto 14px;width:min(130px,80%);height:auto}
-.card-price{font-size:clamp(9px,1.8vw,12px);color:var(--green);margin-bottom:14px}
-.qty-wrap{display:flex;align-items:center;gap:10px;justify-content:center}
-.qty-btn{width:34px;height:34px;background:var(--purple);border:2px solid #fff;
-  color:#fff;font-family:var(--font);font-size:16px;cursor:pointer;
-  box-shadow:3px 3px 0 #5a007a;transition:transform .1s,box-shadow .1s;display:flex;align-items:center;justify-content:center}
-.qty-btn:hover{transform:translate(1px,1px);box-shadow:2px 2px 0 #5a007a}
-.qty-btn:active{transform:translate(3px,3px);box-shadow:0 0 0 #5a007a}
-.qty-display{min-width:38px;text-align:center;font-size:clamp(11px,2vw,15px);color:#fff;
-  background:var(--dark);border:2px solid var(--border);padding:5px 8px}
+    /* ===================================================
+       HERO SECTION
+    =================================================== */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 20px;
+    }
 
-.total-box{background:var(--dark);border:3px solid var(--yellow);padding:16px 20px;
-  margin:0 auto 18px;max-width:500px;width:90%;text-align:center}
-.total-box .total-label{font-size:clamp(8px,1.5vw,11px);color:var(--blue);margin-bottom:10px}
-.total-box .total-val{font-size:clamp(12px,2.5vw,20px);color:var(--yellow);margin-bottom:10px}
-.total-detail{font-size:clamp(7px,1.3vw,9px);color:#aaa;line-height:2;text-align:left;min-height:20px}
+    /* Sky gradient background */
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        180deg,
+        #1A1040 0%,
+        #3A2070 15%,
+        #7B3FA0 30%,
+        #FF4F8B 50%,
+        #FF6B35 65%,
+        #FFD166 80%,
+        #FFE599 100%
+      );
+      z-index: 0;
+    }
 
-.btn-pesan{display:block;margin:0 auto 16px;background:var(--green);color:var(--dark);
-  border:none;font-family:var(--font);font-size:clamp(8px,1.8vw,12px);padding:12px 24px;
-  cursor:pointer;box-shadow:4px 4px 0 #005a1a,7px 7px 0 #003d11;
-  transition:transform .1s,box-shadow .1s;letter-spacing:1px}
-.btn-pesan:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 #005a1a,4px 4px 0 #003d11}
-.btn-pesan:active{transform:translate(4px,4px);box-shadow:0 0 0 #005a1a}
+    /* Stars layer */
+    .stars-layer {
+      position: absolute; inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
 
-/* Form */
-.order-form{max-width:460px;width:90%;margin:0 auto 20px;background:var(--card);
-  border:3px solid var(--pink);padding:20px;display:none}
-.order-form.show{display:block;animation:titlePop .4s ease both}
-.form-title{font-size:clamp(9px,1.8vw,12px);color:var(--pink);margin-bottom:16px;text-align:center}
-.field{margin-bottom:14px}
-.field label{display:block;font-size:clamp(7px,1.4vw,10px);color:var(--blue);margin-bottom:6px}
-.field input{width:100%;background:var(--dark);border:2px solid var(--border);
-  color:#fff;font-family:var(--font);font-size:clamp(8px,1.5vw,11px);
-  padding:10px;outline:none;transition:border-color .2s}
-.field input:focus{border-color:var(--pink)}
-.cash-badge{display:block;margin:10px auto 16px;background:var(--orange);color:var(--dark);
-  font-size:clamp(8px,1.6vw,11px);padding:8px 16px;text-align:center;border:2px solid var(--yellow)}
-.btn-konfirm{display:block;width:100%;background:var(--pink);color:var(--dark);
-  border:none;font-family:var(--font);font-size:clamp(9px,1.8vw,12px);padding:13px;
-  cursor:pointer;box-shadow:4px 4px 0 #8b0050;transition:transform .1s,box-shadow .1s;letter-spacing:1px}
-.btn-konfirm:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 #8b0050}
-.btn-konfirm:active{transform:translate(4px,4px);box-shadow:0 0 #8b0050}
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle 2s infinite alternate;
+    }
 
-/* ===== SLIDE 3 ===== */
-.s3-content{display:flex;flex-direction:column;align-items:center;justify-content:center;
-  min-height:calc(100vh - 150px);padding:20px;text-align:center}
+    @keyframes twinkle {
+      0%   { opacity: 0.2; transform: scale(0.8); }
+      100% { opacity: 1;   transform: scale(1.2); }
+    }
 
-/* Loader */
-#loader-dots{display:flex;gap:14px;justify-content:center;margin-bottom:24px}
-.dot{width:18px;height:18px;background:var(--purple);border:2px solid var(--pink);
-  animation:dotBounce .8s ease-in-out infinite alternate}
-.dot:nth-child(2){animation-delay:.2s;background:var(--blue)}
-.dot:nth-child(3){animation-delay:.4s;background:var(--green)}
-@keyframes dotBounce{0%{transform:translateY(0);opacity:.5}100%{transform:translateY(-20px);opacity:1}}
+    /* Clouds */
+    .cloud-layer {
+      position: absolute; inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
 
-#loader-text{font-size:clamp(9px,1.8vw,12px);color:var(--blue);animation:blink 1s step-start infinite}
+    .cloud {
+      position: absolute;
+      display: flex;
+      gap: 0;
+      animation: cloud-drift linear infinite;
+    }
 
-#thankyou-section{display:none}
-.ty-emoji{font-size:60px;display:block;margin-bottom:16px;animation:oreoFloat 2s ease-in-out infinite}
-.ty-title{font-size:clamp(13px,3vw,22px);color:var(--yellow);text-shadow:3px 3px 0 var(--orange);
-  margin-bottom:12px;line-height:1.8;animation:titlePop .6s ease both}
-.ty-sub{font-size:clamp(8px,1.5vw,11px);color:var(--green);margin-bottom:20px;line-height:2}
-.countdown-wrap{font-size:clamp(9px,1.8vw,12px);color:var(--purple);margin-bottom:20px}
-#countdown-num{font-size:clamp(20px,4vw,32px);color:var(--pink);display:inline-block;
-  animation:shrink 1s steps(1) infinite}
-@keyframes shrink{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+    .cloud-block {
+      width: 16px; height: 10px;
+      background: rgba(255,255,255,0.7);
+    }
+    .cloud-block.tall { height: 16px; }
 
-.order-summary{background:var(--card);border:3px solid var(--green);padding:16px 20px;
-  max-width:420px;width:90%;text-align:left;margin:0 auto 20px;font-size:clamp(7px,1.4vw,10px);
-  line-height:2.2;color:#ddd}
-.summary-title{color:var(--yellow);font-size:clamp(9px,1.7vw,12px);margin-bottom:10px;
-  text-align:center;border-bottom:2px solid var(--border);padding-bottom:8px}
+    @keyframes cloud-drift {
+      from { transform: translateX(-200px); }
+      to   { transform: translateX(110vw); }
+    }
 
-/* ===== ERROR POPUP ===== */
-#error-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.8);
-  align-items:center;justify-content:center}
-#error-overlay.show{display:flex}
-.error-box{background:var(--dark);border:4px solid var(--pink);padding:28px 24px;
-  max-width:340px;width:88%;text-align:center;animation:titlePop .4s ease both}
-.error-icon{font-size:36px;display:block;margin-bottom:12px}
-.error-msg{font-size:clamp(8px,1.6vw,11px);color:#fff;line-height:2;margin-bottom:18px}
-.btn-err-close{background:var(--pink);color:var(--dark);border:none;font-family:var(--font);
-  font-size:clamp(8px,1.6vw,11px);padding:10px 20px;cursor:pointer;
-  box-shadow:3px 3px 0 #8b0050;transition:transform .1s,box-shadow .1s}
-.btn-err-close:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 #8b0050}
+    /* Ground / Buildings layer */
+    .buildings-layer {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      z-index: 3;
+    }
 
-/* ===== BOTTOM NAV ===== */
-#bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:200;
-  background:#100e22;border-top:3px solid var(--border);
-  display:flex;align-items:center;justify-content:space-around;padding:10px 8px;height:70px}
-.nav-btn{background:var(--dark);border:2px solid var(--border);color:#888;
-  font-family:var(--font);font-size:clamp(6px,1.2vw,9px);padding:8px 14px;
-  cursor:pointer;transition:all .15s;text-align:center;line-height:1.8}
-.nav-btn.active,.nav-btn:hover{border-color:var(--purple);color:var(--purple);
-  box-shadow:0 0 10px var(--purple)44}
+    /* Parallax wrapper */
+    .parallax-scene {
+      position: absolute; inset: 0;
+      z-index: 3;
+      pointer-events: none;
+    }
 
-/* Pixel grid overlay for atmosphere */
-body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:repeating-linear-gradient(transparent,transparent 3px,rgba(0,0,0,.15) 3px,rgba(0,0,0,.15) 4px),
-  repeating-linear-gradient(90deg,transparent,transparent 3px,rgba(0,0,0,.1) 3px,rgba(0,0,0,.1) 4px)}
+    /* Hero content */
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding-top: 20px;
+    }
 
-/* ===== SPEECH BUBBLE in SVG scene ===== */
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-</style>
+    .hero-tag {
+      font-family: var(--font-pixel);
+      font-size: 0.45rem;
+      background: var(--sunset-gold);
+      color: var(--pixel-dark);
+      padding: 6px 12px;
+      border: 2px solid var(--pixel-dark);
+      box-shadow: 2px 2px 0 var(--pixel-dark);
+      display: inline-block;
+      margin-bottom: 16px;
+      letter-spacing: 1px;
+    }
+
+    .hero-title {
+      font-family: var(--font-pixel);
+      font-size: clamp(0.75rem, 3.5vw, 1.3rem);
+      color: #fff;
+      text-shadow:
+        3px 3px 0 var(--pixel-dark),
+        0 0 30px rgba(255,209,102,0.8);
+      line-height: 1.8;
+      margin-bottom: 14px;
+      letter-spacing: 1px;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-body);
+      font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+      color: #FFE599;
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.6);
+      margin-bottom: 24px;
+      font-weight: 700;
+    }
+
+    /* CTA Button */
+    .cta-btn {
+      background: linear-gradient(135deg, var(--sunset-orange), var(--sunset-pink));
+      color: #fff;
+      font-family: var(--font-pixel);
+      font-size: 0.55rem;
+      padding: 14px 28px;
+      border: 3px solid #fff;
+      box-shadow: 4px 4px 0 var(--pixel-dark), 0 0 20px rgba(255,107,53,0.6);
+      cursor: pointer;
+      letter-spacing: 1px;
+      animation: bounce-glow 2s ease-in-out infinite;
+      text-decoration: none;
+      display: inline-block;
+      border-radius: 4px;
+    }
+
+    @keyframes bounce-glow {
+      0%, 100% { transform: translateY(0); box-shadow: 4px 4px 0 var(--pixel-dark), 0 0 20px rgba(255,107,53,0.5); }
+      50% { transform: translateY(-6px); box-shadow: 4px 10px 0 var(--pixel-dark), 0 0 35px rgba(255,107,53,0.9); }
+    }
+
+    /* COUNTDOWN */
+    .countdown-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .countdown-block {
+      background: rgba(26,16,64,0.75);
+      border: 3px solid var(--sunset-gold);
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.5);
+      padding: 10px 14px;
+      min-width: 64px;
+      text-align: center;
+      border-radius: 4px;
+    }
+
+    .countdown-num {
+      font-family: var(--font-pixel);
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      color: var(--sunset-gold);
+      display: block;
+      line-height: 1;
+    }
+
+    .countdown-label {
+      font-family: var(--font-body);
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.7);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* ===================================================
+       PIXEL CHARACTERS — pure CSS pixel art
+    =================================================== */
+    .characters-row {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: clamp(12px, 4vw, 36px);
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .char-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: char-float 3s ease-in-out infinite;
+    }
+
+    .char-wrap:nth-child(2) { animation-delay: 0.5s; }
+    .char-wrap:nth-child(3) { animation-delay: 1s; }
+    .char-wrap:nth-child(4) { animation-delay: 1.5s; }
+
+    @keyframes char-float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-5px); }
+    }
+
+    .char-label {
+      font-family: var(--font-pixel);
+      font-size: 0.3rem;
+      color: #FFE599;
+      margin-bottom: 4px;
+      text-align: center;
+      text-shadow: 1px 1px 0 #000;
+    }
+
+    /* Pixel art via box-shadow grid technique */
+    .pixel-char {
+      image-rendering: pixelated;
+      display: block;
+    }
+
+    /* We'll use SVG-based pixel art characters embedded inline */
+
+    /* OREO BALLS decoration */
+    .oreo-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 12px 0;
+      position: relative;
+      z-index: 5;
+    }
+
+    .oreo-ball {
+      width: 24px; height: 24px;
+      background: #1A1040;
+      border: 3px solid #333;
+      border-radius: 50%;
+      position: relative;
+      box-shadow: 0 0 8px rgba(255,255,255,0.2), 2px 2px 0 #000;
+      animation: oreo-bounce 1.5s ease-in-out infinite;
+    }
+
+    .oreo-ball::after {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: 50%; transform: translateX(-50%);
+      width: 14px; height: 7px;
+      background: #fff;
+      border-radius: 50% 50% 0 0;
+      border: 2px solid #eee;
+    }
+
+    .oreo-ball:nth-child(2) { animation-delay: 0.2s; }
+    .oreo-ball:nth-child(3) { animation-delay: 0.4s; }
+    .oreo-ball:nth-child(4) { animation-delay: 0.6s; }
+    .oreo-ball:nth-child(5) { animation-delay: 0.8s; }
+
+    @keyframes oreo-bounce {
+      0%,100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-6px) scale(1.05); }
+    }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      text-align: center;
+    }
+
+    .scroll-hint span {
+      font-family: var(--font-pixel);
+      font-size: 0.35rem;
+      color: rgba(255,255,255,0.6);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .scroll-arrow {
+      width: 20px; height: 20px;
+      border-right: 3px solid rgba(255,255,255,0.6);
+      border-bottom: 3px solid rgba(255,255,255,0.6);
+      transform: rotate(45deg);
+      margin: 0 auto;
+      animation: scroll-arrow-anim 1.2s ease infinite;
+    }
+
+    @keyframes scroll-arrow-anim {
+      0%   { opacity: 0; transform: rotate(45deg) translate(-4px,-4px); }
+      50%  { opacity: 1; }
+      100% { opacity: 0; transform: rotate(45deg) translate(4px,4px); }
+    }
+
+    /* ===================================================
+       SECTION STYLES
+    =================================================== */
+    section {
+      padding: 60px 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-family: var(--font-pixel);
+      font-size: clamp(0.6rem, 2.5vw, 0.9rem);
+      color: var(--text-primary);
+      text-align: center;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .section-sub {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: 36px;
+      font-weight: 600;
+    }
+
+    .section-divider {
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--sunset-orange), var(--sunset-pink));
+      margin: 12px auto 36px;
+      border: 1px solid var(--pixel-dark);
+    }
+
+    /* ===================================================
+       MENU SECTION
+    =================================================== */
+    #menu {
+      background: transparent;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 28px;
+      margin-bottom: 20px;
+    }
+
+    .menu-card {
+      background: var(--card-bg);
+      border: 3px solid var(--pixel-dark);
+      box-shadow: 5px 5px 0 var(--pixel-dark);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+      position: relative;
+    }
+
+    .menu-card:hover {
+      transform: translate(-2px,-2px);
+      box-shadow: 8px 8px 0 var(--pixel-dark);
+    }
+
+    .menu-card-art {
+      background: linear-gradient(135deg, var(--sunset-purple), var(--sunset-pink));
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-card-art::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 7px,
+        rgba(0,0,0,0.05) 8px
+      );
+    }
+
+    .food-icon {
+      font-size: 3rem;
+      filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.4));
+      animation: food-wiggle 3s ease-in-out infinite;
+      display: block;
+      text-align: center;
+    }
+
+    @keyframes food-wiggle {
+      0%,100% { transform: rotate(-3deg) scale(1); }
+      50%      { transform: rotate(3deg) scale(1.05); }
+    }
+
+    .menu-card-body {
+      padding: 16px;
+    }
+
+    .menu-card-name {
+      font-family: var(--font-pixel);
+      font-size: 0.5rem;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      line-height: 1.6;
+    }
+
+    .menu-card-price {
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--sunset-orange);
+      margin-bottom: 14px;
+    }
+
+    .qty-stepper {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 3px solid var(--pixel-dark);
+      display: inline-flex;
+      box-shadow: 2px 2px 0 var(--pixel-dark);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .qty-btn {
+      width: 34px; height: 34px;
+      background: var(--sunset-purple);
+      color: #fff;
+      border: none;
+      font-family: var(--font-pixel);
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s, transform 0.1s;
+      flex-shrink: 0;
+    }
+
+    .qty-btn:hover { background: var(--sunset-pink); }
+    .qty-btn:active { transform: scale(0.9); }
+
+    .qty-display {
+      min-width: 40px;
+      text-align: center;
+      font-family: var(--font-pixel);
+      font-size: 0.6rem;
+      color: var(--text-primary);
+      padding: 0 8px;
+      background: var(--card-bg);
+      line-height: 34px;
+      transition: transform 0.15s;
+    }
+
+    .qty-display.bump {
+      animation: qty-bump 0.2s ease;
+    }
+
+    @keyframes qty-bump {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    .badge-new {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: var(--sunset-gold);
+      color: var(--pixel-dark);
+      font-family: var(--font-pixel);
+      font-size: 0.3rem;
+      padding: 4px 6px;
+      border: 2px solid var(--pixel-dark);
+      box-shadow: 2px 2px 0 var(--pixel-dark);
+    }
+
+    /* ===================================================
+       PROMO CODE
+    =================================================== */
+    .promo-section {
+      background: var(--card-bg);
+      border: 3px solid var(--pixel-dark);
+      box-shadow: 4px 4px 0 var(--pixel-dark);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      transition: background 0.3s;
+    }
+
+    .promo-label {
+      font-family: var(--font-pixel);
+      font-size: 0.45rem;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .promo-input-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .promo-input {
+      flex: 1;
+      min-width: 150px;
+      font-family: var(--font-pixel);
+      font-size: 0.5rem;
+      padding: 10px 14px;
+      border: 3px solid var(--pixel-dark);
+      background: var(--pixel-light);
+      color: var(--text-primary);
+      outline: none;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 4px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .promo-input:focus {
+      border-color: var(--sunset-orange);
+      box-shadow: 0 0 0 2px rgba(255,107,53,0.3);
+    }
+
+    .promo-apply-btn {
+      background: var(--sunset-orange);
+      color: #fff;
+    }
+
+    .promo-msg {
+      margin-top: 8px;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 700;
+      min-height: 20px;
+    }
+
+    .promo-msg.success { color: #27AE60; }
+    .promo-msg.error   { color: #E74C3C; }
+
+    /* ===================================================
+       FLOATING CART
+    =================================================== */
+    #floating-cart {
+      position: fixed;
+      bottom: 20px;
+      right: 16px;
+      z-index: 900;
+    }
+
+    .cart-icon-btn {
+      width: 58px; height: 58px;
+      background: linear-gradient(135deg, var(--sunset-orange), var(--sunset-pink));
+      border: 3px solid var(--pixel-dark);
+      box-shadow: 4px 4px 0 var(--pixel-dark);
+      border-radius: 50%;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      transition: transform 0.15s;
+    }
+
+    .cart-icon-btn:hover { transform: scale(1.08); }
+
+    .cart-badge {
+      position: absolute;
+      top: -5px; right: -5px;
+      background: var(--sunset-gold);
+      color: var(--pixel-dark);
+      font-family: var(--font-pixel);
+      font-size: 0.4rem;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--pixel-dark);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold;
+    }
+
+    .cart-panel {
+      position: absolute;
+      bottom: 66px;
+      right: 0;
+      width: clamp(260px, 80vw, 320px);
+      background: var(--card-bg);
+      border: 3px solid var(--pixel-dark);
+      box-shadow: 5px 5px 0 var(--pixel-dark);
+      border-radius: 8px;
+      padding: 16px;
+      display: none;
+      transition: background 0.3s;
+    }
+
+    .cart-panel.open { display: block; animation: slide-up 0.2s ease; }
+
+    @keyframes slide-up {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .cart-panel-title {
+      font-family: var(--font-pixel);
+      font-size: 0.5rem;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--pixel-dark);
+    }
+
+    .cart-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .cart-item-row span:last-child {
+      color: var(--sunset-orange);
+      font-weight: 800;
+    }
+
+    .cart-empty-msg {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .cart-divider { border: 1px dashed var(--pixel-dark); margin: 8px 0; }
+
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-pixel);
+      font-size: 0.45rem;
+      color: var(--text-primary);
+    }
+
+    .cart-total-num {
+      color: var(--sunset-orange);
+    }
+
+    .cart-discount-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      color: #27AE60;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    /* ===================================================
+       ORDER FORM SECTION
+    =================================================== */
+    #order-form-section {
+      background: var(--card-bg);
+      border: 3px solid var(--pixel-dark);
+      box-shadow: 6px 6px 0 var(--pixel-dark);
+      border-radius: 12px;
+      padding: 32px 24px;
+      margin: 0 auto;
+      max-width: 600px;
+      transition: background 0.3s;
+    }
+
+    .form-note {
+      background: var(--sunset-gold);
+      color: var(--pixel-dark);
+      font-family: var(--font-pixel);
+      font-size: 0.38rem;
+      padding: 10px 14px;
+      border: 2px solid var(--pixel-dark);
+      box-shadow: 2px 2px 0 var(--pixel-dark);
+      margin-bottom: 24px;
+      border-radius: 4px;
+      line-height: 1.8;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      font-family: var(--font-pixel);
+      font-size: 0.4rem;
+      color: var(--text-primary);
+      display: block;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 3px solid var(--pixel-dark);
+      background: var(--pixel-light);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      outline: none;
+      border-radius: 4px;
+      box-shadow: 2px 2px 0 var(--pixel-dark);
+      transition: border-color 0.2s, background 0.3s, color 0.3s;
+    }
+
+    .form-input:focus {
+      border-color: var(--sunset-orange);
+      box-shadow: 2px 2px 0 var(--pixel-dark), 0 0 0 3px rgba(255,107,53,0.2);
+    }
+
+    .form-input.error-field { border-color: #E74C3C; }
+
+    .field-error {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      color: #E74C3C;
+      margin-top: 4px;
+      font-weight: 700;
+      display: none;
+    }
+
+    .field-error.show { display: block; }
+
+    /* Order summary inside form */
+    .order-summary-box {
+      background: linear-gradient(135deg, rgba(123,63,160,0.1), rgba(255,79,139,0.1));
+      border: 2px dashed var(--sunset-purple);
+      border-radius: 6px;
+      padding: 14px;
+      margin-bottom: 20px;
+    }
+
+    .order-summary-box p {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      padding: 4px 0;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .order-summary-box p span:last-child { color: var(--sunset-orange); }
+
+    .total-final {
+      font-family: var(--font-pixel);
+      font-size: 0.5rem !important;
+      border-top: 2px solid var(--pixel-dark);
+      padding-top: 10px !important;
+      margin-top: 6px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--sunset-orange), var(--sunset-pink));
+      color: #fff;
+      font-family: var(--font-pixel);
+      font-size: 0.55rem;
+      padding: 16px;
+      border: 3px solid var(--pixel-dark);
+      box-shadow: 5px 5px 0 var(--pixel-dark);
+      cursor: pointer;
+      border-radius: 6px;
+      letter-spacing: 1px;
+      transition: transform 0.1s, box-shadow 0.1s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 6px 6px 0 var(--pixel-dark);
+    }
+
+    .submit-btn:active {
+      transform: translate(4px, 4px);
+      box-shadow: 1px 1px 0 var(--pixel-dark);
+    }
+
+    /* ===================================================
+       MODALS & OVERLAYS
+    =================================================== */
+    .overlay {
+      position: fixed; inset: 0;
+      background: rgba(26,16,64,0.85);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(3px);
+    }
+
+    .overlay.hidden { display: none; }
+
+    .modal-box {
+      background: var(--card-bg);
+      border: 4px solid var(--pixel-dark);
+      box-shadow: 8px 8px 0 var(--pixel-dark);
+      border-radius: 10px;
+      padding: 32px 28px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      animation: modal-pop 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      transition: background 0.3s;
+    }
+
+    @keyframes modal-pop {
+      from { opacity: 0; transform: scale(0.7); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-title {
+      font-family: var(--font-pixel);
+      font-size: 0.6rem;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      line-height: 1.8;
+    }
+
+    .modal-body {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .modal-emoji { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+
+    /* Pixel spinner */
+    .pixel-spinner {
+      width: 48px; height: 48px;
+      margin: 12px auto 20px;
+      position: relative;
+    }
+
+    .pixel-spinner::before,
+    .pixel-spinner::after {
+      content: '';
+      position: absolute; inset: 0;
+      border: 6px solid transparent;
+      border-top-color: var(--sunset-orange);
+      border-right-color: var(--sunset-pink);
+      border-radius: 50%;
+      animation: spin-pixel 0.8s steps(8, end) infinite;
+    }
+
+    .pixel-spinner::after {
+      inset: 8px;
+      border-top-color: var(--sunset-purple);
+      border-right-color: var(--sunset-gold);
+      animation-direction: reverse;
+      animation-duration: 0.6s;
+    }
+
+    @keyframes spin-pixel {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Summary modal */
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      text-align: left;
+    }
+
+    .summary-table td {
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 6px 8px;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      color: var(--text-primary);
+    }
+
+    .summary-table td:first-child {
+      color: var(--text-secondary);
+      font-weight: 600;
+      width: 45%;
+    }
+
+    .summary-table tr:last-child td { border-bottom: none; }
+
+    .summary-total-row td {
+      font-family: var(--font-pixel);
+      font-size: 0.42rem !important;
+      color: var(--sunset-orange) !important;
+      padding-top: 10px !important;
+    }
+
+    .wa-preview-box {
+      background: #DCF8C6;
+      border: 2px solid #25D366;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin: 14px 0;
+      text-align: left;
+      font-family: 'Courier New', monospace;
+      font-size: 0.78rem;
+      color: #1A1A1A;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .redirect-countdown {
+      font-family: var(--font-pixel);
+      font-size: 0.45rem;
+      color: var(--sunset-purple);
+      margin-top: 12px;
+    }
+
+    /* ===================================================
+       CONFETTI
+    =================================================== */
+    #confetti-canvas {
+      position: fixed; inset: 0;
+      z-index: 1999;
+      pointer-events: none;
+    }
+
+    /* ===================================================
+       FOOTER
+    =================================================== */
+    footer {
+      background: var(--pixel-dark);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 30px 20px;
+      font-family: var(--font-pixel);
+      font-size: 0.35rem;
+      line-height: 2;
+      letter-spacing: 1px;
+    }
+
+    footer span { color: var(--sunset-gold); }
+
+    /* ===================================================
+       RESPONSIVE TWEAKS
+    =================================================== */
+    @media (max-width: 540px) {
+      .characters-row { gap: 8px; }
+      .countdown-container { gap: 6px; }
+      .countdown-block { min-width: 54px; padding: 8px 10px; }
+      .hero-title { font-size: 0.7rem; }
+      section { padding: 40px 16px; }
+      #order-form-section { padding: 24px 16px; }
+    }
+
+    /* ===================================================
+       PIXEL ART BUILDINGS (SVG approach via inline CSS)
+    =================================================== */
+    .buildings-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Light streaks in sky */
+    .light-streak {
+      position: absolute;
+      width: 2px;
+      background: linear-gradient(180deg, transparent, rgba(255,209,102,0.4), transparent);
+      animation: streak-fade 4s ease-in-out infinite;
+    }
+
+    @keyframes streak-fade {
+      0%,100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    /* ===================================================
+       WHATSAPP BUTTON inside summary
+    =================================================== */
+    .wa-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #25D366;
+      color: #fff;
+      font-family: var(--font-pixel);
+      font-size: 0.45rem;
+      padding: 12px 20px;
+      border: 3px solid var(--pixel-dark);
+      box-shadow: 4px 4px 0 var(--pixel-dark);
+      cursor: pointer;
+      letter-spacing: 1px;
+      border-radius: 4px;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    .wa-btn:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--pixel-dark); }
+    .wa-btn:active { transform: translate(3px,3px); box-shadow: 1px 1px 0 var(--pixel-dark); }
+
+    /* Pixel decorative line */
+    .pixel-line {
+      height: 8px;
+      background: repeating-linear-gradient(90deg, var(--sunset-orange) 0px, var(--sunset-orange) 8px, var(--sunset-pink) 8px, var(--sunset-pink) 16px, var(--sunset-purple) 16px, var(--sunset-purple) 24px, var(--sunset-sky) 24px, var(--sunset-sky) 32px);
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
 
-<!-- Stars -->
-<div id="stars"></div>
+<!-- =====================================================
+     CONFETTI CANVAS
+===================================================== -->
+<canvas id="confetti-canvas"></canvas>
 
-<!-- ========== SLIDE 1 ========== -->
-<div class="slide active" id="slide-1">
-  <!-- Marquee -->
-  <div class="marquee-wrap">
-    <div class="marquee-track">
-      <span>🎪 BAZAR FEST 22 MEI ★ PRE-ORDER DIBUKA ★ BOLA OREO SUSU & MAC AND CHEESE ★ CASH ONLY ★ RABU 22 MEI 2024 ★ YUK ORDER SEKARANG ★&nbsp;</span>
-      <span>🎪 BAZAR FEST 22 MEI ★ PRE-ORDER DIBUKA ★ BOLA OREO SUSU & MAC AND CHEESE ★ CASH ONLY ★ RABU 22 MEI 2024 ★ YUK ORDER SEKARANG ★&nbsp;</span>
-    </div>
-  </div>
-
-  <!-- Title -->
-  <div class="s1-title">
-    <h1>🎪 BAZAR FEST 🎪<br/>22 MEI!</h1>
-  </div>
-
-  <!-- Date badge -->
-  <div class="date-badge">📅 RABU, 22 MEI 2024</div>
-
-  <!-- SVG Scene -->
-  <div class="scene-wrap" style="position:relative">
-    <svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;image-rendering:pixelated">
-      <!-- Sky background -->
-      <rect width="480" height="260" fill="#0d0b1a"/>
-      <!-- Stars in sky -->
-      <rect x="30" y="10" width="3" height="3" fill="#ffe135" opacity=".9"/>
-      <rect x="80" y="20" width="2" height="2" fill="#fff" opacity=".7"/>
-      <rect x="150" y="8" width="3" height="3" fill="#ff6eb4"/>
-      <rect x="220" y="15" width="2" height="2" fill="#38cfff"/>
-      <rect x="310" y="12" width="3" height="3" fill="#39e75f"/>
-      <rect x="380" y="18" width="2" height="2" fill="#bf80ff"/>
-      <rect x="440" y="9" width="3" height="3" fill="#ffe135"/>
-      <rect x="55" y="35" width="2" height="2" fill="#fff" opacity=".5"/>
-      <rect x="185" y="30" width="2" height="2" fill="#ff8c42"/>
-      <rect x="260" y="25" width="2" height="2" fill="#ff6eb4"/>
-      <rect x="420" y="40" width="2" height="2" fill="#38cfff"/>
-
-      <!-- Ground -->
-      <rect x="0" y="200" width="480" height="60" fill="#1a1630"/>
-      <rect x="0" y="200" width="480" height="4" fill="#2e2a50"/>
-
-      <!-- ===== BOOTH ===== -->
-      <!-- Booth body -->
-      <rect x="140" y="120" width="200" height="82" fill="#2a1f60"/>
-      <rect x="140" y="120" width="200" height="5" fill="#3d2e8a"/>
-      <!-- Booth top / awning -->
-      <rect x="125" y="105" width="230" height="22" fill="#ff6eb4"/>
-      <rect x="125" y="105" width="230" height="5" fill="#ff9fd2"/>
-      <!-- Awning zigzag -->
-      <polygon points="125,127 145,115 165,127 185,115 205,127 225,115 245,127 265,115 285,127 305,115 325,127 345,115 355,127" fill="#ffe135"/>
-      <!-- Booth counter -->
-      <rect x="140" y="175" width="200" height="10" fill="#3d2e8a"/>
-      <rect x="140" y="175" width="200" height="3" fill="#5a45b8"/>
-      <!-- Booth sign -->
-      <rect x="168" y="130" width="144" height="36" fill="#1a1630" rx="2"/>
-      <rect x="170" y="132" width="140" height="32" fill="#0d0b1a" rx="1"/>
-      <!-- BAZAR text on sign (pixel style) -->
-      <text x="240" y="152" font-family="monospace" font-size="10" fill="#ffe135" text-anchor="middle" font-weight="bold">🎪 BAZAR FEST</text>
-      <!-- Bunting/lights -->
-      <circle cx="145" cy="110" r="5" fill="#ffe135"/>
-      <circle cx="175" cy="106" r="5" fill="#ff6eb4"/>
-      <circle cx="205" cy="110" r="5" fill="#39e75f"/>
-      <circle cx="235" cy="106" r="5" fill="#38cfff"/>
-      <circle cx="265" cy="110" r="5" fill="#bf80ff"/>
-      <circle cx="295" cy="106" r="5" fill="#ff8c42"/>
-      <circle cx="325" cy="110" r="5" fill="#ffe135"/>
-      <circle cx="355" cy="106" r="5" fill="#ff6eb4"/>
-      <!-- String for lights -->
-      <path d="M145,110 Q160,107 175,106 Q190,107 205,110 Q220,107 235,106 Q250,107 265,110 Q280,107 295,106 Q310,107 325,110 Q340,107 355,106" stroke="#555" stroke-width="1" fill="none"/>
-      <!-- Oreo on counter -->
-      <circle cx="185" cy="172" r="9" fill="#222"/>
-      <circle cx="185" cy="172" r="7" fill="#111"/>
-      <rect x="179" y="169" width="12" height="2" fill="#fff" opacity=".6" rx="1"/>
-      <circle cx="205" cy="170" r="8" fill="#222"/>
-      <circle cx="205" cy="170" r="6" fill="#111"/>
-      <rect x="200" y="168" width="10" height="2" fill="#fff" opacity=".6" rx="1"/>
-      <circle cx="223" cy="172" r="9" fill="#222"/>
-      <circle cx="223" cy="172" r="7" fill="#111"/>
-      <rect x="217" y="169" width="12" height="2" fill="#fff" opacity=".6" rx="1"/>
-
-      <!-- ===== CHARACTERS ===== -->
-
-      <!-- Character 1: Cewek hijab putih (left) -->
-      <!-- Body -->
-      <rect x="60" y="155" width="22" height="35" fill="#f0f0f0"/>
-      <!-- Skirt -->
-      <rect x="57" y="175" width="28" height="15" fill="#888" rx="2"/>
-      <rect x="57" y="188" width="28" height="4" fill="#666"/>
-      <!-- Hijab -->
-      <rect x="58" y="130" width="26" height="22" fill="#fff"/>
-      <rect x="58" y="148" width="26" height="8" fill="#ddd"/>
-      <!-- Face -->
-      <rect x="64" y="134" width="14" height="14" fill="#f5c8a0"/>
-      <!-- Eyes -->
-      <rect x="66" y="138" width="3" height="3" fill="#222"/>
-      <rect x="73" y="138" width="3" height="3" fill="#222"/>
-      <!-- Smile -->
-      <rect x="67" y="144" width="8" height="2" fill="#c0706a"/>
-      <!-- Shoes -->
-      <rect x="59" y="188" width="8" height="5" fill="#333"/>
-      <rect x="71" y="188" width="8" height="5" fill="#333"/>
-      <!-- Arms -->
-      <rect x="48" y="156" width="13" height="6" fill="#f0f0f0"/>
-      <rect x="79" y="158" width="10" height="5" fill="#f0f0f0"/>
-
-      <!-- Character 2: Cewek kuncir (second from left) -->
-      <!-- Body -->
-      <rect x="100" y="155" width="22" height="35" fill="#e8e8e8"/>
-      <!-- Skirt -->
-      <rect x="97" y="175" width="28" height="15" fill="#555" rx="2"/>
-      <rect x="97" y="188" width="28" height="4" fill="#444"/>
-      <!-- Hair -->
-      <rect x="100" y="126" width="22" height="14" fill="#3b2206"/>
-      <!-- Ponytail -->
-      <rect x="116" y="126" width="5" height="18" fill="#3b2206" rx="2"/>
-      <rect x="116" y="141" width="5" height="6" fill="#5a3510" rx="2"/>
-      <!-- Face -->
-      <rect x="102" y="133" width="16" height="14" fill="#f5c8a0"/>
-      <!-- Eyes -->
-      <rect x="104" y="137" width="3" height="3" fill="#222"/>
-      <rect x="112" y="137" width="3" height="3" fill="#222"/>
-      <!-- Smile -->
-      <rect x="105" y="143" width="9" height="2" fill="#c0706a"/>
-      <!-- Shoes -->
-      <rect x="99" y="188" width="8" height="5" fill="#222"/>
-      <rect x="111" y="188" width="8" height="5" fill="#222"/>
-      <!-- Arms -->
-      <rect x="89" y="158" width="12" height="5" fill="#e8e8e8"/>
-      <rect x="121" y="156" width="11" height="6" fill="#e8e8e8"/>
-
-      <!-- Character 3: Cowok keriting (third) -->
-      <!-- Body -->
-      <rect x="338" y="155" width="22" height="35" fill="#f0f0f0"/>
-      <!-- Pants -->
-      <rect x="335" y="175" width="28" height="15" fill="#444" rx="2"/>
-      <rect x="335" y="188" width="28" height="4" fill="#333"/>
-      <!-- Curly hair -->
-      <ellipse cx="349" cy="128" rx="14" ry="10" fill="#1a0a00"/>
-      <circle cx="340" cy="126" r="5" fill="#1a0a00"/>
-      <circle cx="358" cy="126" r="5" fill="#1a0a00"/>
-      <circle cx="349" cy="122" r="5" fill="#1a0a00"/>
-      <!-- Face -->
-      <rect x="342" y="130" width="14" height="14" fill="#8b5e3c"/>
-      <!-- Eyes -->
-      <rect x="344" y="134" width="3" height="3" fill="#111"/>
-      <rect x="351" y="134" width="3" height="3" fill="#111"/>
-      <!-- Smile -->
-      <rect x="345" y="140" width="8" height="2" fill="#c0706a"/>
-      <!-- Shoes -->
-      <rect x="337" y="188" width="8" height="5" fill="#111"/>
-      <rect x="349" y="188" width="8" height="5" fill="#111"/>
-      <!-- Arms -->
-      <rect x="326" y="158" width="13" height="5" fill="#f0f0f0"/>
-      <rect x="359" y="156" width="12" height="6" fill="#f0f0f0"/>
-
-      <!-- Character 4: Cowok messy hair (rightmost) -->
-      <!-- Body -->
-      <rect x="390" y="155" width="22" height="35" fill="#e8e8e8"/>
-      <!-- Pants -->
-      <rect x="387" y="175" width="28" height="15" fill="#333" rx="2"/>
-      <rect x="387" y="188" width="28" height="4" fill="#222"/>
-      <!-- Messy hair -->
-      <rect x="389" y="120" width="24" height="14" fill="#2b1a0a"/>
-      <rect x="386" y="122" width="5" height="10" fill="#2b1a0a"/>
-      <rect x="408" y="120" width="8" height="8" fill="#2b1a0a"/>
-      <rect x="398" y="117" width="5" height="6" fill="#3d2511"/>
-      <rect x="392" y="118" width="4" height="5" fill="#3d2511"/>
-      <!-- Face -->
-      <rect x="392" y="130" width="16" height="14" fill="#d4956a"/>
-      <!-- Eyes -->
-      <rect x="394" y="134" width="3" height="3" fill="#111"/>
-      <rect x="402" y="134" width="3" height="3" fill="#111"/>
-      <!-- Smile -->
-      <rect x="395" y="140" width="9" height="2" fill="#c0706a"/>
-      <!-- Shoes -->
-      <rect x="389" y="188" width="8" height="5" fill="#111"/>
-      <rect x="401" y="188" width="8" height="5" fill="#111"/>
-      <!-- Arms raised -->
-      <rect x="378" y="150" width="13" height="5" fill="#e8e8e8" transform="rotate(-20 378 153)"/>
-      <rect x="411" y="148" width="13" height="5" fill="#e8e8e8" transform="rotate(20 411 151)"/>
-
-      <!-- Speech bubble "YUK ORDER!" above chars 1-2 -->
-      <rect x="22" y="88" width="110" height="34" fill="#ffe135" rx="4"/>
-      <rect x="24" y="90" width="106" height="30" fill="#ffe135" rx="3"/>
-      <polygon points="60,122 75,122 68,135" fill="#ffe135"/>
-      <text x="76" y="110" font-family="monospace" font-size="8" fill="#0d0b1a" text-anchor="middle" font-weight="bold">YUK ORDER!</text>
-
-      <!-- Speech bubble "ENAK BANGET!" above chars 3-4 -->
-      <rect x="335" y="82" width="130" height="34" fill="#39e75f" rx="4"/>
-      <rect x="337" y="84" width="126" height="30" fill="#39e75f" rx="3"/>
-      <polygon points="385,116 400,116 392,130" fill="#39e75f"/>
-      <text x="400" y="104" font-family="monospace" font-size="8" fill="#0d0b1a" text-anchor="middle" font-weight="bold">ENAK BANGET!</text>
-
-      <!-- Balloons -->
-      <ellipse cx="46" cy="50" rx="14" ry="18" fill="#ff6eb4" opacity=".9"/>
-      <line x1="46" y1="68" x2="48" y2="90" stroke="#ff6eb4" stroke-width="1.5"/>
-      <ellipse cx="20" cy="58" rx="11" ry="15" fill="#ffe135" opacity=".9"/>
-      <line x1="20" y1="73" x2="22" y2="90" stroke="#ffe135" stroke-width="1.5"/>
-      <ellipse cx="450" cy="46" rx="13" ry="17" fill="#bf80ff" opacity=".9"/>
-      <line x1="450" y1="63" x2="448" y2="90" stroke="#bf80ff" stroke-width="1.5"/>
-      <ellipse cx="468" cy="60" rx="10" ry="13" fill="#38cfff" opacity=".9"/>
-      <line x1="468" y1="73" x2="466" y2="90" stroke="#38cfff" stroke-width="1.5"/>
-    </svg>
-
-    <!-- Floating oreos (HTML layer) -->
-    <div class="oreo-float of1">🍪</div>
-    <div class="oreo-float of2">🍪</div>
-    <div class="oreo-float of3">🍪</div>
-    <div class="oreo-float of4">🍪</div>
-    <div class="oreo-float of5">🍪</div>
-  </div>
-
-  <!-- Order button -->
-  <button class="btn-order" onclick="goSlide(2)">▶ ORDER SEKARANG ◀</button>
+<!-- =====================================================
+     FLOATING CONTROLS (Dark Mode + Sound)
+===================================================== -->
+<div id="floating-controls">
+  <button class="ctrl-btn" id="sound-toggle" title="Toggle Suara" aria-label="Toggle suara">🔊</button>
+  <button class="ctrl-btn" id="theme-toggle" title="Toggle Tema" aria-label="Toggle tema">🌙</button>
 </div>
 
-<!-- ========== SLIDE 2 ========== -->
-<div class="slide" id="slide-2">
-  <div class="marquee-wrap">
-    <div class="marquee-track">
-      <span>🛒 PILIH MENU KAMU ★ BOLA OREO SUSU Rp8.000 ★ MAC AND CHEESE Rp10.000 ★ MINIMUM 1 ITEM ★ CASH ONLY ★&nbsp;</span>
-      <span>🛒 PILIH MENU KAMU ★ BOLA OREO SUSU Rp8.000 ★ MAC AND CHEESE Rp10.000 ★ MINIMUM 1 ITEM ★ CASH ONLY ★&nbsp;</span>
+<!-- =====================================================
+     FLOATING CART
+===================================================== -->
+<div id="floating-cart">
+  <div class="cart-panel" id="cart-panel">
+    <div class="cart-panel-title">🛒 Keranjang Pesanan</div>
+    <div id="cart-items-list">
+      <div class="cart-empty-msg">Belum ada item dipilih</div>
+    </div>
+    <hr class="cart-divider" />
+    <div id="cart-discount-display" class="cart-discount-row" style="display:none">
+      <span>Diskon Promo</span><span id="cart-discount-amount">-Rp0</span>
+    </div>
+    <div class="cart-total-row">
+      <span>TOTAL</span>
+      <span class="cart-total-num" id="cart-total-display">Rp0</span>
     </div>
   </div>
-  <div class="s2-header" style="margin-top:20px">🛒 PILIH MENU PESANANMU</div>
+  <button class="cart-icon-btn" id="cart-toggle-btn" aria-label="Buka keranjang">
+    🛒
+    <span class="cart-badge" id="cart-badge">0</span>
+  </button>
+</div>
 
-  <!-- Menu Cards -->
-  <div class="menu-cards">
+<!-- =====================================================
+     HERO SECTION
+===================================================== -->
+<section id="hero">
+  <!-- Sky background -->
+  <div class="hero-bg"></div>
 
-    <!-- Card 1: Bola Oreo -->
-    <div class="card">
-      <div class="card-badge">BEST SELLER</div>
-      <div class="card-title">🍪 Bola Oreo Susu</div>
-      <svg viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
-        <!-- Plate -->
-        <ellipse cx="65" cy="95" rx="52" ry="10" fill="#2e2a50"/>
-        <ellipse cx="65" cy="92" rx="52" ry="10" fill="#3d2e8a"/>
-        <!-- Bola Oreo stack -->
-        <!-- Ball 3 (back) -->
-        <circle cx="65" cy="65" r="22" fill="#1a1a1a"/>
-        <circle cx="65" cy="65" r="20" fill="#111"/>
-        <rect x="56" y="61" width="18" height="3" fill="#fff" opacity=".5" rx="1"/>
-        <rect x="58" y="66" width="14" height="2" fill="#fff" opacity=".3" rx="1"/>
-        <!-- Cream layer -->
-        <ellipse cx="65" cy="58" rx="20" ry="6" fill="#f5f0e8"/>
-        <!-- Ball 2 (mid) -->
-        <circle cx="48" cy="75" r="18" fill="#1a1a1a"/>
-        <circle cx="48" cy="75" r="16" fill="#111"/>
-        <rect x="40" y="72" width="16" height="2.5" fill="#fff" opacity=".5" rx="1"/>
-        <!-- Ball 1 (front right) -->
-        <circle cx="82" cy="77" r="18" fill="#1a1a1a"/>
-        <circle cx="82" cy="77" r="16" fill="#111"/>
-        <rect x="74" y="74" width="16" height="2.5" fill="#fff" opacity=".5" rx="1"/>
-        <!-- Drizzle milk -->
-        <path d="M55,52 Q60,40 65,48 Q70,40 75,52" stroke="#fff" stroke-width="2" fill="none" opacity=".7"/>
-        <!-- Sprinkle -->
-        <rect x="50" y="45" width="5" height="2" fill="#ff6eb4" rx="1" transform="rotate(-20 50 45)"/>
-        <rect x="70" y="43" width="5" height="2" fill="#ffe135" rx="1" transform="rotate(15 70 43)"/>
-        <rect x="60" y="40" width="5" height="2" fill="#39e75f" rx="1" transform="rotate(-5 60 40)"/>
-        <rect x="78" y="48" width="4" height="2" fill="#38cfff" rx="1" transform="rotate(30 78 48)"/>
-        <!-- Stars sparkle -->
-        <text x="20" y="35" font-size="12" fill="#ffe135">★</text>
-        <text x="95" y="30" font-size="10" fill="#ff6eb4">✦</text>
-      </svg>
-      <div class="card-price">💰 Rp 8.000 / porsi</div>
-      <div class="qty-wrap">
-        <button class="qty-btn" onclick="changeQty('oreo',-1)">−</button>
-        <div class="qty-display" id="qty-oreo">0</div>
-        <button class="qty-btn" onclick="changeQty('oreo',1)">+</button>
+  <!-- Stars -->
+  <div class="stars-layer" id="stars-layer"></div>
+
+  <!-- Light streaks -->
+  <div class="parallax-scene" id="parallax-scene" aria-hidden="true"></div>
+
+  <!-- Clouds -->
+  <div class="cloud-layer" id="cloud-layer"></div>
+
+  <!-- Buildings SVG at bottom -->
+  <div class="buildings-layer" aria-hidden="true">
+    <svg class="buildings-svg" viewBox="0 0 1200 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+      <!-- Far buildings (darker, smaller) -->
+      <rect x="0"   y="120" width="80"  height="100" fill="#1A1040"/>
+      <rect x="10"  y="100" width="20"  height="20"  fill="#1A1040"/>
+      <rect x="30"  y="90"  width="20"  height="30"  fill="#1A1040"/>
+      <rect x="60"  y="108" width="16"  height="12"  fill="#FFD166" opacity="0.6"/>
+      <rect x="20"  y="108" width="16"  height="12"  fill="#FFD166" opacity="0.6"/>
+
+      <rect x="90"  y="80"  width="60"  height="140" fill="#2D1B69"/>
+      <rect x="95"  y="95"  width="14"  height="18"  fill="#FFD166" opacity="0.7"/>
+      <rect x="115" y="95"  width="14"  height="18"  fill="#2D1B69"/>
+      <rect x="95"  y="120" width="14"  height="18"  fill="#FFD166" opacity="0.5"/>
+      <rect x="115" y="120" width="14"  height="18"  fill="#FFD166" opacity="0.7"/>
+
+      <rect x="160" y="130" width="50"  height="90"  fill="#1A1040"/>
+      <rect x="165" y="110" width="40"  height="20"  fill="#1A1040"/>
+      <rect x="170" y="100" width="30"  height="10"  fill="#7B3FA0"/>
+      <rect x="165" y="140" width="12"  height="15"  fill="#FFD166" opacity="0.6"/>
+      <rect x="183" y="145" width="12"  height="15"  fill="#FFD166" opacity="0.4"/>
+
+      <!-- School building (center) -->
+      <rect x="380" y="60"  width="200" height="160" fill="#2D1B69"/>
+      <rect x="430" y="40"  width="100" height="20"  fill="#3A2070"/>
+      <rect x="455" y="20"  width="50"  height="20"  fill="#7B3FA0"/>
+      <!-- Windows -->
+      <rect x="395" y="80"  width="24" height="20" fill="#FFD166" opacity="0.8"/>
+      <rect x="427" y="80"  width="24" height="20" fill="#FFD166" opacity="0.5"/>
+      <rect x="459" y="80"  width="24" height="20" fill="#FFD166" opacity="0.8"/>
+      <rect x="491" y="80"  width="24" height="20" fill="#FFD166" opacity="0.3"/>
+      <rect x="523" y="80"  width="24" height="20" fill="#FFD166" opacity="0.8"/>
+      <rect x="395" y="110" width="24" height="20" fill="#FFD166" opacity="0.4"/>
+      <rect x="427" y="110" width="24" height="20" fill="#FFD166" opacity="0.8"/>
+      <rect x="459" y="110" width="24" height="20" fill="#FFD166" opacity="0.7"/>
+      <rect x="491" y="110" width="24" height="20" fill="#FFD166" opacity="0.5"/>
+      <rect x="523" y="110" width="24" height="20" fill="#FFD166" opacity="0.8"/>
+      <!-- Door -->
+      <rect x="460" y="175" width="40" height="45" fill="#7B3FA0"/>
+      <rect x="463" y="178" width="14" height="42" fill="#9B5FCC"/>
+      <rect x="483" y="178" width="14" height="42" fill="#9B5FCC"/>
+      <!-- Flag -->
+      <line x1="480" y1="0" x2="480" y2="20" stroke="#fff" stroke-width="2"/>
+      <rect x="480" y="0" width="24" height="12" fill="#FF4F8B"/>
+
+      <!-- Right buildings -->
+      <rect x="700" y="100" width="80"  height="120" fill="#2D1B69"/>
+      <rect x="705" y="115" width="14"  height="18"  fill="#FFD166" opacity="0.6"/>
+      <rect x="725" y="115" width="14"  height="18"  fill="#FFD166" opacity="0.8"/>
+      <rect x="745" y="115" width="14"  height="18"  fill="#FFD166" opacity="0.3"/>
+      <rect x="705" y="140" width="14"  height="18"  fill="#FFD166" opacity="0.8"/>
+      <rect x="725" y="140" width="14"  height="18"  fill="#FFD166" opacity="0.6"/>
+      <rect x="745" y="140" width="14"  height="18"  fill="#FFD166" opacity="0.8"/>
+
+      <rect x="800" y="70"  width="60"  height="150" fill="#1A1040"/>
+      <rect x="808" y="85"  width="16"  height="20"  fill="#FFD166" opacity="0.7"/>
+      <rect x="830" y="85"  width="16"  height="20"  fill="#FFD166" opacity="0.4"/>
+      <rect x="808" y="115" width="16"  height="20"  fill="#FFD166" opacity="0.5"/>
+      <rect x="830" y="115" width="16"  height="20"  fill="#FFD166" opacity="0.8"/>
+
+      <rect x="900" y="90"  width="100" height="130" fill="#2D1B69"/>
+      <rect x="910" y="108" width="18"  height="22"  fill="#FFD166" opacity="0.6"/>
+      <rect x="935" y="108" width="18"  height="22"  fill="#FFD166" opacity="0.8"/>
+      <rect x="960" y="108" width="18"  height="22"  fill="#FFD166" opacity="0.4"/>
+      <rect x="910" y="138" width="18"  height="22"  fill="#FFD166" opacity="0.8"/>
+      <rect x="935" y="138" width="18"  height="22"  fill="#FFD166" opacity="0.5"/>
+      <rect x="960" y="138" width="18"  height="22"  fill="#FFD166" opacity="0.7"/>
+
+      <rect x="1040" y="110" width="70" height="110" fill="#1A1040"/>
+      <rect x="1048" y="125" width="14" height="16"  fill="#FFD166" opacity="0.5"/>
+      <rect x="1068" y="125" width="14" height="16"  fill="#FFD166" opacity="0.8"/>
+      <rect x="1088" y="125" width="14" height="16"  fill="#FFD166" opacity="0.6"/>
+      <rect x="1048" y="150" width="14" height="16"  fill="#FFD166" opacity="0.8"/>
+      <rect x="1068" y="150" width="14" height="16"  fill="#FFD166" opacity="0.3"/>
+      <rect x="1088" y="150" width="14" height="16"  fill="#FFD166" opacity="0.7"/>
+
+      <rect x="1130" y="130" width="70" height="90"  fill="#2D1B69"/>
+
+      <!-- Ground -->
+      <rect x="0" y="218" width="1200" height="4" fill="#1A1040"/>
+    </svg>
+  </div>
+
+  <!-- Hero Content -->
+  <div class="hero-content">
+    <div class="hero-tag">✨ BAZAAR SEKOLAH 2025 ✨</div>
+
+    <!-- Oreo balls decoration -->
+    <div class="oreo-row" aria-label="Dekorasi Bola Oreo Susu">
+      <div class="oreo-ball"></div>
+      <div class="oreo-ball"></div>
+      <div class="oreo-ball"></div>
+      <div class="oreo-ball"></div>
+      <div class="oreo-ball"></div>
+    </div>
+    <div style="font-family:var(--font-pixel);font-size:0.35rem;color:rgba(255,229,153,0.8);margin-bottom:16px;letter-spacing:1px;">
+      ← BOLA OREO SUSU →
+    </div>
+
+    <!-- Pixel Characters -->
+    <div class="characters-row" aria-label="Karakter pelajar SMA">
+      <!-- Girl hijab -->
+      <div class="char-wrap">
+        <div class="char-label">Siti</div>
+        <svg width="48" height="72" viewBox="0 0 12 18" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
+          <!-- hijab -->
+          <rect x="2" y="0" width="8" height="2" fill="#7B3FA0"/>
+          <rect x="1" y="2" width="10" height="6" fill="#9B5FCC"/>
+          <rect x="2" y="1" width="8" height="5" fill="#F4C2A1"/><!-- face -->
+          <rect x="3" y="3" width="2" height="1" fill="#2D1B69"/><!-- eye L -->
+          <rect x="7" y="3" width="2" height="1" fill="#2D1B69"/><!-- eye R -->
+          <rect x="5" y="5" width="2" height="1" fill="#E0A080"/><!-- mouth -->
+          <!-- hijab sides -->
+          <rect x="0" y="4" width="2" height="6" fill="#9B5FCC"/>
+          <rect x="10" y="4" width="2" height="6" fill="#9B5FCC"/>
+          <!-- body/uniform (white top) -->
+          <rect x="2" y="8" width="8" height="5" fill="#F0F0F0"/>
+          <rect x="5" y="9" width="2" height="3" fill="#4A90D9"/><!-- tie -->
+          <!-- skirt (gray) -->
+          <rect x="2" y="13" width="8" height="3" fill="#888"/>
+          <!-- legs -->
+          <rect x="3" y="16" width="2" height="2" fill="#F4C2A1"/>
+          <rect x="7" y="16" width="2" height="2" fill="#F4C2A1"/>
+          <!-- shoes -->
+          <rect x="2" y="17" width="3" height="1" fill="#1A1040"/>
+          <rect x="7" y="17" width="3" height="1" fill="#1A1040"/>
+        </svg>
+      </div>
+
+      <!-- Boy curly -->
+      <div class="char-wrap">
+        <div class="char-label">Budi</div>
+        <svg width="48" height="72" viewBox="0 0 12 18" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
+          <!-- curly hair -->
+          <rect x="2" y="0" width="8" height="3" fill="#3D2010"/>
+          <rect x="1" y="1" width="2" height="2" fill="#3D2010"/>
+          <rect x="9" y="1" width="2" height="2" fill="#3D2010"/>
+          <rect x="3" y="0" width="6" height="1" fill="#5A3020"/>
+          <!-- face -->
+          <rect x="3" y="3" width="6" height="5" fill="#F4C2A1"/>
+          <rect x="3" y="3" width="2" height="1" fill="#F4C2A1"/>
+          <rect x="7" y="3" width="2" height="1" fill="#F4C2A1"/>
+          <rect x="4" y="4" width="2" height="1" fill="#2D1B69"/>
+          <rect x="7" y="4" width="2" height="1" fill="#2D1B69"/>
+          <rect x="5" y="6" width="2" height="1" fill="#E0A080"/>
+          <!-- uniform (white shirt) -->
+          <rect x="2" y="8" width="8" height="5" fill="#F0F0F0"/>
+          <rect x="5" y="9" width="2" height="3" fill="#FF6B35"/><!-- tie -->
+          <!-- pants (dark gray) -->
+          <rect x="2" y="13" width="8" height="3" fill="#555"/>
+          <!-- legs -->
+          <rect x="3" y="16" width="2" height="2" fill="#555"/>
+          <rect x="7" y="16" width="2" height="2" fill="#555"/>
+          <!-- shoes -->
+          <rect x="2" y="17" width="3" height="1" fill="#1A1040"/>
+          <rect x="7" y="17" width="3" height="1" fill="#1A1040"/>
+        </svg>
+      </div>
+
+      <!-- Girl no hijab -->
+      <div class="char-wrap">
+        <div class="char-label">Nisa</div>
+        <svg width="48" height="72" viewBox="0 0 12 18" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
+          <!-- hair -->
+          <rect x="2" y="0" width="8" height="4" fill="#3D2010"/>
+          <rect x="1" y="1" width="1" height="5" fill="#3D2010"/>
+          <rect x="10" y="1" width="1" height="5" fill="#3D2010"/>
+          <!-- face -->
+          <rect x="2" y="2" width="8" height="5" fill="#F8D5B0"/>
+          <rect x="3" y="3" width="2" height="1" fill="#2D1B69"/>
+          <rect x="7" y="3" width="2" height="1" fill="#2D1B69"/>
+          <rect x="4" y="5" width="1" height="1" fill="#FF8FAB"/><!-- cheek -->
+          <rect x="7" y="5" width="1" height="1" fill="#FF8FAB"/>
+          <rect x="5" y="6" width="2" height="1" fill="#E08070"/>
+          <!-- uniform white -->
+          <rect x="2" y="8" width="8" height="5" fill="#F0F0F0"/>
+          <rect x="5" y="9" width="2" height="3" fill="#FF4F8B"/><!-- tie pink -->
+          <!-- skirt gray -->
+          <rect x="2" y="13" width="8" height="3" fill="#888"/>
+          <!-- legs -->
+          <rect x="3" y="16" width="2" height="2" fill="#F8D5B0"/>
+          <rect x="7" y="16" width="2" height="2" fill="#F8D5B0"/>
+          <!-- shoes -->
+          <rect x="2" y="17" width="3" height="1" fill="#1A1040"/>
+          <rect x="7" y="17" width="3" height="1" fill="#1A1040"/>
+        </svg>
+      </div>
+
+      <!-- Boy messy hair -->
+      <div class="char-wrap">
+        <div class="char-label">Reza</div>
+        <svg width="48" height="72" viewBox="0 0 12 18" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
+          <!-- messy hair -->
+          <rect x="1" y="0" width="10" height="4" fill="#1A0A00"/>
+          <rect x="0" y="1" width="2" height="2" fill="#1A0A00"/>
+          <rect x="10" y="0" width="2" height="3" fill="#1A0A00"/>
+          <rect x="3" y="0" width="1" height="2" fill="#3D2010"/>
+          <rect x="7" y="0" width="2" height="1" fill="#3D2010"/>
+          <!-- face -->
+          <rect x="2" y="3" width="8" height="5" fill="#C8956A"/>
+          <rect x="3" y="4" width="2" height="1" fill="#2D1B69"/>
+          <rect x="7" y="4" width="2" height="1" fill="#2D1B69"/>
+          <rect x="5" y="7" width="2" height="1" fill="#A06040"/>
+          <!-- uniform -->
+          <rect x="2" y="8" width="8" height="5" fill="#F0F0F0"/>
+          <rect x="5" y="9" width="2" height="3" fill="#7B3FA0"/><!-- tie purple -->
+          <!-- pants -->
+          <rect x="2" y="13" width="8" height="3" fill="#444"/>
+          <!-- legs -->
+          <rect x="3" y="16" width="2" height="2" fill="#444"/>
+          <rect x="7" y="16" width="2" height="2" fill="#444"/>
+          <!-- shoes -->
+          <rect x="2" y="17" width="3" height="1" fill="#1A1040"/>
+          <rect x="7" y="17" width="3" height="1" fill="#1A1040"/>
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="hero-title">Pre-Order Bazar<br/>22 Mei</h1>
+    <p class="hero-subtitle">Pesan sekarang, ambil nanti di bazar!</p>
+
+    <!-- Countdown Timer -->
+    <div class="countdown-container" aria-label="Hitung mundur ke 22 Mei">
+      <div class="countdown-block">
+        <span class="countdown-num" id="cd-days">00</span>
+        <span class="countdown-label">Hari</span>
+      </div>
+      <div class="countdown-block">
+        <span class="countdown-num" id="cd-hours">00</span>
+        <span class="countdown-label">Jam</span>
+      </div>
+      <div class="countdown-block">
+        <span class="countdown-num" id="cd-mins">00</span>
+        <span class="countdown-label">Menit</span>
+      </div>
+      <div class="countdown-block">
+        <span class="countdown-num" id="cd-secs">00</span>
+        <span class="countdown-label">Detik</span>
+      </div>
+    </div>
+
+    <a href="#menu" class="cta-btn" id="cta-main" aria-label="Pesan sekarang">Pesan Sekarang →</a>
+  </div>
+
+  <div class="scroll-hint" aria-hidden="true">
+    <span>SCROLL</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- Pixel divider -->
+<div class="pixel-line"></div>
+
+<!-- =====================================================
+     MENU SECTION
+===================================================== -->
+<section id="menu">
+  <h2 class="section-title">✨ Menu Bazar ✨</h2>
+  <p class="section-sub">Pilih menu favoritmu dan tentukan jumlahnya!</p>
+  <div class="section-divider"></div>
+
+  <div class="menu-grid">
+
+    <!-- Card 1: Bola Oreo Susu -->
+    <div class="menu-card" id="card-oreo" role="region" aria-label="Bola Oreo Susu">
+      <div class="menu-card-art" style="background: linear-gradient(135deg,#1A1040,#3A2070,#7B3FA0);">
+        <div>
+          <svg width="80" height="80" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;display:block;margin:0 auto 4px;" class="food-icon">
+            <!-- Ball 1 -->
+            <circle cx="5" cy="12" r="4" fill="#1A1040"/>
+            <circle cx="5" cy="12" r="3" fill="#2D2D2D"/>
+            <ellipse cx="5" cy="8.5" rx="3.5" ry="1.5" fill="white"/>
+            <!-- Ball 2 -->
+            <circle cx="15" cy="12" r="4" fill="#1A1040"/>
+            <circle cx="15" cy="12" r="3" fill="#2D2D2D"/>
+            <ellipse cx="15" cy="8.5" rx="3.5" ry="1.5" fill="white"/>
+            <!-- Ball 3 (center top) -->
+            <circle cx="10" cy="8" r="4" fill="#1A1040"/>
+            <circle cx="10" cy="8" r="3" fill="#2D2D2D"/>
+            <ellipse cx="10" cy="4.5" rx="3.5" ry="1.5" fill="white"/>
+          </svg>
+          <div style="font-family:var(--font-pixel);font-size:0.3rem;color:white;text-align:center;text-shadow:1px 1px 0 #000;">OREO SUSU</div>
+        </div>
+      </div>
+      <div class="badge-new">FAVORIT</div>
+      <div class="menu-card-body">
+        <div class="menu-card-name">Bola Oreo Susu</div>
+        <div class="menu-card-price">Rp8.000 / porsi</div>
+        <div class="qty-stepper" role="group" aria-label="Jumlah Bola Oreo Susu">
+          <button class="qty-btn" onclick="changeQty('oreo',-1)" aria-label="Kurangi">−</button>
+          <span class="qty-display" id="qty-oreo">0</span>
+          <button class="qty-btn" onclick="changeQty('oreo',1)" aria-label="Tambah">+</button>
+        </div>
       </div>
     </div>
 
     <!-- Card 2: Mac and Cheese -->
-    <div class="card">
-      <div class="card-badge" style="background:var(--blue);color:var(--dark)">FAVORIT</div>
-      <div class="card-title">🧀 Mac and Cheese</div>
-      <svg viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
-        <!-- Bowl shadow -->
-        <ellipse cx="65" cy="100" rx="48" ry="8" fill="#1a1630" opacity=".5"/>
-        <!-- Bowl -->
-        <path d="M20,70 Q20,105 65,105 Q110,105 110,70 Z" fill="#c45e00"/>
-        <path d="M22,70 Q22,102 65,102 Q108,102 108,70 Z" fill="#e07b00"/>
-        <!-- Bowl rim -->
-        <ellipse cx="65" cy="70" rx="45" ry="10" fill="#f59332"/>
-        <ellipse cx="65" cy="68" rx="43" ry="8" fill="#ffc04a"/>
-        <!-- Mac pile -->
-        <!-- Macaroni pieces (pixel) -->
-        <ellipse cx="45" cy="62" rx="10" ry="5" fill="#f5c842" opacity=".9"/>
-        <ellipse cx="60" cy="58" rx="11" ry="5" fill="#f0b830"/>
-        <ellipse cx="76" cy="60" rx="10" ry="5" fill="#f5c842"/>
-        <ellipse cx="50" cy="52" rx="9" ry="4" fill="#f0b830"/>
-        <ellipse cx="64" cy="48" rx="10" ry="4" fill="#f5c842"/>
-        <ellipse cx="80" cy="54" rx="9" ry="4" fill="#f0b830"/>
-        <ellipse cx="42" cy="45" rx="7" ry="3.5" fill="#f5c842" opacity=".8"/>
-        <ellipse cx="72" cy="44" rx="8" ry="3.5" fill="#f5c842" opacity=".8"/>
-        <!-- Cheese sauce drip -->
-        <path d="M38,68 Q36,75 40,80" stroke="#ffb800" stroke-width="4" fill="none" stroke-linecap="round"/>
-        <path d="M88,68 Q90,76 86,82" stroke="#ffb800" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-        <!-- Cheese block on top -->
-        <rect x="54" y="36" width="22" height="14" fill="#ffe135"/>
-        <rect x="54" y="36" width="22" height="4" fill="#fef08a"/>
-        <rect x="58" y="40" width="4" height="4" fill="#fbbf24" opacity=".7"/>
-        <rect x="66" y="41" width="4" height="3" fill="#fbbf24" opacity=".7"/>
-        <!-- Steam -->
-        <path d="M50,32 Q47,25 52,20" stroke="#fff" stroke-width="2" fill="none" opacity=".4" stroke-linecap="round"/>
-        <path d="M65,28 Q62,20 67,15" stroke="#fff" stroke-width="2" fill="none" opacity=".4" stroke-linecap="round"/>
-        <path d="M80,32 Q77,24 82,19" stroke="#fff" stroke-width="2" fill="none" opacity=".4" stroke-linecap="round"/>
-        <!-- Sparkle -->
-        <text x="95" y="42" font-size="10" fill="#ffe135">★</text>
-        <text x="18" y="38" font-size="8" fill="#ff8c42">✦</text>
-      </svg>
-      <div class="card-price">💰 Rp 10.000 / porsi</div>
-      <div class="qty-wrap">
-        <button class="qty-btn" onclick="changeQty('mac',-1)">−</button>
-        <div class="qty-display" id="qty-mac">0</div>
-        <button class="qty-btn" onclick="changeQty('mac',1)">+</button>
+    <div class="menu-card" id="card-mac" role="region" aria-label="Mac and Cheese">
+      <div class="menu-card-art" style="background: linear-gradient(135deg,#FF6B35,#FFD166,#FF9A5C);">
+        <div>
+          <svg width="80" height="80" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;display:block;margin:0 auto 4px;" class="food-icon">
+            <!-- Bowl -->
+            <rect x="2" y="12" width="16" height="6" rx="3" fill="#F5A623"/>
+            <rect x="3" y="11" width="14" height="2" fill="#FFD166"/>
+            <!-- Mac noodles -->
+            <circle cx="7" cy="10" r="2" fill="#FFE599" stroke="#F5A623" stroke-width="1"/>
+            <circle cx="11" cy="9" r="2" fill="#FFE599" stroke="#F5A623" stroke-width="1"/>
+            <circle cx="9"  cy="12" r="2" fill="#FFE599" stroke="#F5A623" stroke-width="1"/>
+            <!-- Cheese drip -->
+            <path d="M6 11 Q5 13 6 14" stroke="#F5A623" stroke-width="1.5" fill="none"/>
+            <path d="M14 11 Q15 13 14 14" stroke="#F5A623" stroke-width="1.5" fill="none"/>
+            <!-- Steam -->
+            <path d="M8 7 Q9 5 8 3" stroke="rgba(255,255,255,0.6)" stroke-width="1" fill="none"/>
+            <path d="M12 6 Q13 4 12 2" stroke="rgba(255,255,255,0.6)" stroke-width="1" fill="none"/>
+          </svg>
+          <div style="font-family:var(--font-pixel);font-size:0.3rem;color:white;text-align:center;text-shadow:1px 1px 0 rgba(0,0,0,0.5);">MAC & CHEESE</div>
+        </div>
+      </div>
+      <div class="badge-new" style="background:var(--sunset-pink);color:#fff;">BARU</div>
+      <div class="menu-card-body">
+        <div class="menu-card-name">Mac and Cheese</div>
+        <div class="menu-card-price">Rp10.000 / porsi</div>
+        <div class="qty-stepper" role="group" aria-label="Jumlah Mac and Cheese">
+          <button class="qty-btn" onclick="changeQty('mac',-1)" aria-label="Kurangi">−</button>
+          <span class="qty-display" id="qty-mac">0</span>
+          <button class="qty-btn" onclick="changeQty('mac',1)" aria-label="Tambah">+</button>
+        </div>
       </div>
     </div>
 
   </div>
 
-  <!-- Total Box -->
-  <div class="total-box">
-    <div class="total-label">💸 TOTAL PEMBAYARAN</div>
-    <div class="total-val" id="total-display">Rp 0</div>
-    <div class="total-detail" id="detail-display">— Belum ada item dipilih —</div>
+  <!-- Promo Code -->
+  <div class="promo-section">
+    <span class="promo-label">🎟️ Punya Kode Promo?</span>
+    <div class="promo-input-row">
+      <input
+        type="text"
+        class="promo-input"
+        id="promo-input"
+        placeholder="HEMAT2K"
+        maxlength="10"
+        aria-label="Masukkan kode promo"
+      />
+      <button class="pixel-btn promo-apply-btn" onclick="applyPromo()" aria-label="Pakai kode promo">Pakai</button>
+    </div>
+    <div class="promo-msg" id="promo-msg" aria-live="polite"></div>
   </div>
 
-  <!-- Pesan button -->
-  <button class="btn-pesan" id="btn-pesan" onclick="toggleForm()">🛒 PESAN SEKARANG</button>
+</section>
 
-  <!-- Form -->
-  <div class="order-form" id="order-form">
-    <div class="form-title">📋 FORM PRE-ORDER</div>
-    <div class="field">
-      <label>🧑 NAMA LENGKAP</label>
-      <input type="text" id="inp-nama" placeholder="masukkan namamu..." maxlength="50"/>
-    </div>
-    <div class="field">
-      <label>🏫 KELAS</label>
-      <input type="text" id="inp-kelas" placeholder="contoh: X-IPA 1" maxlength="20"/>
-    </div>
-    <div class="field">
-      <label>📱 NO. HP / WA</label>
-      <input type="tel" id="inp-hp" placeholder="contoh: 08123456789" maxlength="15"/>
-    </div>
-    <div class="cash-badge">💵 BAYAR : CASH ONLY — SAAT PENGAMBILAN</div>
-    <button class="btn-konfirm" onclick="submitOrder()">✅ KONFIRMASI PESANAN</button>
-  </div>
-</div>
+<!-- =====================================================
+     ORDER FORM SECTION
+===================================================== -->
+<section id="order" style="padding-top:0;">
+  <h2 class="section-title" style="margin-bottom:8px;">📋 Form Pemesanan</h2>
+  <p class="section-sub">Isi data dirimu untuk melanjutkan pesanan</p>
+  <div class="section-divider"></div>
 
-<!-- ========== SLIDE 3 ========== -->
-<div class="slide" id="slide-3">
-  <div class="s3-content">
-    <!-- Loader -->
-    <div id="loader-section">
-      <div id="loader-dots">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
+  <div id="order-form-section">
+    <div class="form-note">
+      ⚠️ PENTING: Pembayaran hanya Cash (tunai) saat pengambilan di bazar, 22 Mei.
+    </div>
+
+    <form id="order-form" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="f-nama">👤 Nama Lengkap</label>
+        <input type="text" id="f-nama" class="form-input" placeholder="Masukkan nama lengkapmu" autocomplete="name" required />
+        <div class="field-error" id="err-nama">Nama wajib diisi!</div>
       </div>
-      <div id="loader-text">MEMPROSES PESANAN...</div>
-    </div>
 
-    <!-- Thank you section -->
-    <div id="thankyou-section">
-      <span class="ty-emoji">🎉</span>
-      <div class="ty-title">YEAY! PESANAN<br/>DITERIMA!</div>
-      <div class="ty-sub">Kamu akan diarahkan ke WhatsApp<br/>untuk konfirmasi pesanan~</div>
-      <div class="countdown-wrap">
-        Redirect dalam <span id="countdown-num">3</span> detik...
+      <div class="form-group">
+        <label class="form-label" for="f-kelas">🏫 Kelas</label>
+        <input type="text" id="f-kelas" class="form-input" placeholder="Contoh: XII IPA 2" required />
+        <div class="field-error" id="err-kelas">Kelas wajib diisi!</div>
       </div>
-      <div class="order-summary" id="order-summary">
-        <div class="summary-title">📋 RINGKASAN PESANAN</div>
-        <div id="summary-content"></div>
+
+      <div class="form-group">
+        <label class="form-label" for="f-hp">📱 No. HP / WhatsApp</label>
+        <input type="tel" id="f-hp" class="form-input" placeholder="Contoh: 08123456789" autocomplete="tel" required />
+        <div class="field-error" id="err-hp">No. HP wajib diisi dengan benar!</div>
       </div>
-    </div>
+
+      <!-- Live order summary -->
+      <div class="order-summary-box" id="order-summary-box">
+        <p><span>Bola Oreo Susu</span><span id="sum-oreo">0 × Rp8.000 = Rp0</span></p>
+        <p><span>Mac and Cheese</span><span id="sum-mac">0 × Rp10.000 = Rp0</span></p>
+        <p id="sum-discount-row" style="display:none;"><span>Diskon Promo</span><span id="sum-discount" style="color:#27AE60;">-Rp0</span></p>
+        <p class="total-final"><span>TOTAL BAYAR</span><span id="sum-total">Rp0</span></p>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submit-btn">
+        🚀 Kirim Pesanan Sekarang
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+<div class="pixel-line"></div>
+<footer>
+  <p>✨ Pre-Order Bazar Sekolah — <span>22 Mei 2025</span> ✨</p>
+  <p>Dibuat dengan ❤️ · <span>Cash Only</span> · Ambil di lokasi bazar</p>
+  <p style="margin-top:8px;opacity:0.5;">© 2025 — Pixel Bazaar Team</p>
+</footer>
+
+<!-- =====================================================
+     MODAL: Loading / Thank You
+===================================================== -->
+<div class="overlay hidden" id="modal-loading" aria-modal="true" role="dialog" aria-label="Memproses pesanan">
+  <div class="modal-box">
+    <span class="modal-emoji">✉️</span>
+    <div class="modal-title">Terima kasih telah<br/>mengisi form!</div>
+    <div class="pixel-spinner" aria-hidden="true"></div>
+    <div class="modal-body">Memproses pesananmu...<br/>Tunggu sebentar ya 😊</div>
   </div>
 </div>
 
-<!-- Error Popup -->
-<div id="error-overlay" onclick="closeError()">
-  <div class="error-box" onclick="event.stopPropagation()">
-    <span class="error-icon">⚠️</span>
-    <div class="error-msg" id="error-msg">Terjadi kesalahan.</div>
-    <button class="btn-err-close" onclick="closeError()">OK, MENGERTI!</button>
+<!-- =====================================================
+     MODAL: Order Summary + WA Preview
+===================================================== -->
+<div class="overlay hidden" id="modal-summary" aria-modal="true" role="dialog" aria-label="Ringkasan pesanan">
+  <div class="modal-box" style="max-width:480px; max-height:90vh; overflow-y:auto;">
+    <span class="modal-emoji">🎉</span>
+    <div class="modal-title">Pesanan Diterima!</div>
+
+    <table class="summary-table" id="summary-table" aria-label="Detail pesanan">
+      <tbody>
+        <tr><td>Nama</td><td id="s-nama">—</td></tr>
+        <tr><td>Kelas</td><td id="s-kelas">—</td></tr>
+        <tr><td>No. HP</td><td id="s-hp">—</td></tr>
+        <tr><td>Bola Oreo Susu</td><td id="s-oreo">—</td></tr>
+        <tr><td>Mac and Cheese</td><td id="s-mac">—</td></tr>
+        <tr id="s-discount-row" style="display:none"><td>Diskon Promo</td><td id="s-discount" style="color:#27AE60;">—</td></tr>
+        <tr class="summary-total-row"><td>TOTAL BAYAR</td><td id="s-total">—</td></tr>
+      </tbody>
+    </table>
+
+    <div class="modal-body" style="background:rgba(123,63,160,0.08);border:2px solid var(--sunset-purple);border-radius:6px;padding:10px;margin-bottom:12px;">
+      Pesanan kamu telah diterima 🎊<br/>Admin akan segera mengonfirmasi via WhatsApp.
+    </div>
+
+    <div style="font-family:var(--font-pixel);font-size:0.38rem;color:var(--text-secondary);margin-bottom:8px;">
+      Preview Pesan WhatsApp:
+    </div>
+    <div class="wa-preview-box" id="wa-preview-box"></div>
+
+    <div class="redirect-countdown" id="redirect-countdown">
+      Mengarahkan ke WhatsApp dalam <span id="redirect-num">3</span> detik...
+    </div>
+
+    <button class="wa-btn" id="wa-manual-btn" onclick="redirectWA()" style="margin-top:12px;">
+      📲 Buka WhatsApp Sekarang
+    </button>
   </div>
 </div>
 
-<!-- Bottom Nav -->
-<div id="bottom-nav">
-  <button class="nav-btn active" id="nav-1" onclick="goSlide(1)">🎪<br/>HOME</button>
-  <button class="nav-btn" id="nav-2" onclick="goSlide(2)">🛒<br/>ORDER</button>
-  <button class="nav-btn" id="nav-3" id="nav-3">🎉<br/>STATUS</button>
-</div>
-
+<!-- ===================================================== -->
+<!-- JAVASCRIPT                                            -->
+<!-- ===================================================== -->
 <script>
-// ===== STATE =====
-const prices = { oreo: 8000, mac: 10000 };
-let qty = { oreo: 0, mac: 0 };
-let formVisible = false;
-let orderData = {};
+  /* =====================================================
+     STATE
+  ===================================================== */
+  const state = {
+    quantities: { oreo: 0, mac: 0 },
+    prices:     { oreo: 8000, mac: 10000 },
+    names:      { oreo: 'Bola Oreo Susu', mac: 'Mac and Cheese' },
+    discount:   0,
+    promoApplied: false,
+    soundEnabled: true,
+    darkMode: false,
+    waNumber: '6285694458024' // ← GANTI dengan nomor WhatsApp tujuan
+  };
 
-// ===== STARS =====
-(function createStars() {
-  const container = document.getElementById('stars');
-  for (let i = 0; i < 60; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;
-      animation-delay:${(Math.random()*3).toFixed(2)}s;
-      animation-duration:${(1.5+Math.random()*2).toFixed(2)}s;
-      width:${Math.random()>0.7?4:2}px;height:${Math.random()>0.7?4:2}px;
-      background:${['#fff','#ffe135','#ff6eb4','#38cfff','#39e75f','#bf80ff'][Math.floor(Math.random()*6)]}`;
-    container.appendChild(s);
+  /* =====================================================
+     AUDIO (pixel click sound via AudioContext)
+  ===================================================== */
+  let audioCtx = null;
+
+  function initAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
-})();
 
-// ===== NAVIGATION =====
-function goSlide(n) {
-  document.querySelectorAll('.slide').forEach((s,i) => {
-    s.classList.toggle('active', i === n-1);
-    s.scrollTop = 0;
+  function playClick(freq = 440, dur = 0.05) {
+    if (!state.soundEnabled) return;
+    try {
+      initAudio();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.connect(g); g.connect(audioCtx.destination);
+      o.type = 'square';
+      o.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      g.gain.setValueAtTime(0.08, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+      o.start(); o.stop(audioCtx.currentTime + dur);
+    } catch(e) {}
+  }
+
+  /* =====================================================
+     SOUND TOGGLE
+  ===================================================== */
+  document.getElementById('sound-toggle').addEventListener('click', function() {
+    state.soundEnabled = !state.soundEnabled;
+    this.textContent = state.soundEnabled ? '🔊' : '🔇';
+    playClick(880, 0.08);
   });
-  document.querySelectorAll('.nav-btn').forEach((b,i) => {
-    b.classList.toggle('active', i === n-1);
+
+  /* =====================================================
+     DARK MODE TOGGLE
+  ===================================================== */
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    state.darkMode = !state.darkMode;
+    document.documentElement.setAttribute('data-theme', state.darkMode ? 'dark' : 'light');
+    this.textContent = state.darkMode ? '☀️' : '🌙';
+    playClick(600, 0.06);
   });
-}
 
-// ===== QTY =====
-function changeQty(item, delta) {
-  qty[item] = Math.max(0, qty[item] + delta);
-  document.getElementById('qty-' + item).textContent = qty[item];
-  updateTotal();
-}
+  /* =====================================================
+     STAR GENERATION
+  ===================================================== */
+  (function generateStars() {
+    const layer = document.getElementById('stars-layer');
+    for (let i = 0; i < 60; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = Math.random() * 3 + 1;
+      s.style.cssText = `
+        width:${size}px; height:${size}px;
+        top:${Math.random()*60}%;
+        left:${Math.random()*100}%;
+        animation-delay:${Math.random()*3}s;
+        animation-duration:${1.5+Math.random()*2}s;
+      `;
+      layer.appendChild(s);
+    }
+  })();
 
-// ===== UPDATE TOTAL =====
-function updateTotal() {
-  const total = qty.oreo * prices.oreo + qty.mac * prices.mac;
-  document.getElementById('total-display').textContent = 'Rp ' + total.toLocaleString('id-ID');
+  /* =====================================================
+     CLOUD GENERATION
+  ===================================================== */
+  (function generateClouds() {
+    const layer = document.getElementById('cloud-layer');
+    const cloudShapes = [
+      [0,1,1,0, 1,1,1,1, 1,1,1,1, 0,1,1,0],
+      [0,0,1,0, 0,1,1,1, 1,1,1,1, 1,1,1,0],
+      [0,1,1,1, 1,1,1,1, 1,1,1,0, 0,0,0,0],
+    ];
 
-  let details = '';
-  if (qty.oreo > 0) {
-    details += `🍪 Bola Oreo Susu x${qty.oreo} = Rp ${(qty.oreo*prices.oreo).toLocaleString('id-ID')}\n`;
+    for (let i = 0; i < 5; i++) {
+      const c = document.createElement('div');
+      c.className = 'cloud';
+      const top = 5 + Math.random() * 35;
+      const dur  = 30 + Math.random() * 40;
+      const delay= -Math.random() * dur;
+      const scale= 0.5 + Math.random() * 1;
+      c.style.cssText = `top:${top}%;animation-duration:${dur}s;animation-delay:${delay}s;transform:scale(${scale});opacity:${0.4+Math.random()*0.4};`;
+      // simple cloud: a few blocks
+      for (let j = 0; j < 5+Math.floor(Math.random()*5); j++) {
+        const b = document.createElement('div');
+        b.className = 'cloud-block' + (j===2?'  tall':'');
+        c.appendChild(b);
+      }
+      layer.appendChild(c);
+    }
+  })();
+
+  /* =====================================================
+     PARALLAX
+  ===================================================== */
+  window.addEventListener('scroll', function() {
+    const scrollY = window.scrollY;
+    const heroBg  = document.querySelector('.hero-bg');
+    const buildings= document.querySelector('.buildings-layer');
+    if (heroBg) heroBg.style.transform = `translateY(${scrollY * 0.3}px)`;
+    if (buildings) buildings.style.transform = `translateY(${scrollY * 0.15}px)`;
+  });
+
+  /* =====================================================
+     COUNTDOWN TIMER → 22 Mei 2025 (current year if past)
+  ===================================================== */
+  function updateCountdown() {
+    const now    = new Date();
+    let target   = new Date(`2025-05-22T08:00:00`);
+    // If already past, use next year
+    if (now > target) target = new Date(`2026-05-22T08:00:00`);
+
+    const diff = target - now;
+    if (diff <= 0) {
+      ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id => document.getElementById(id).textContent = '00');
+      return;
+    }
+
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+
+    document.getElementById('cd-days').textContent  = String(d).padStart(2,'0');
+    document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-mins').textContent  = String(m).padStart(2,'0');
+    document.getElementById('cd-secs').textContent  = String(s).padStart(2,'0');
   }
-  if (qty.mac > 0) {
-    details += `🧀 Mac & Cheese x${qty.mac} = Rp ${(qty.mac*prices.mac).toLocaleString('id-ID')}`;
-  }
-  if (!details) details = '— Belum ada item dipilih —';
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
 
-  const el = document.getElementById('detail-display');
-  el.style.whiteSpace = 'pre-line';
-  el.textContent = details;
-}
-
-// ===== TOGGLE FORM =====
-function toggleForm() {
-  formVisible = !formVisible;
-  const f = document.getElementById('order-form');
-  f.classList.toggle('show', formVisible);
-  document.getElementById('btn-pesan').textContent = formVisible ? '✖ TUTUP FORM' : '🛒 PESAN SEKARANG';
-  if (formVisible) f.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-// ===== SHOW ERROR =====
-function showError(msg) {
-  document.getElementById('error-msg').textContent = msg;
-  document.getElementById('error-overlay').classList.add('show');
-}
-function closeError() {
-  document.getElementById('error-overlay').classList.remove('show');
-}
-
-// ===== SUBMIT ORDER =====
-function submitOrder() {
-  const nama = document.getElementById('inp-nama').value.trim();
-  const kelas = document.getElementById('inp-kelas').value.trim();
-  const hp = document.getElementById('inp-hp').value.trim();
-
-  if (!nama) { showError('🧑 Nama belum diisi!\nMasukkan nama lengkapmu dulu ya~'); return; }
-  if (!kelas) { showError('🏫 Kelas belum diisi!\nTulis kelasmu ya, contoh: X-IPA 1'); return; }
-  if (!hp) { showError('📱 No. HP / WA belum diisi!\nKita butuh kontakmu untuk konfirmasi!'); return; }
-  if (qty.oreo === 0 && qty.mac === 0) {
-    showError('🛒 Belum ada menu yang dipilih!\nPilih minimal 1 item dulu ya!'); return;
+  /* =====================================================
+     QUANTITY STEPPER
+  ===================================================== */
+  function changeQty(item, delta) {
+    playClick(delta > 0 ? 550 : 330, 0.06);
+    state.quantities[item] = Math.max(0, state.quantities[item] + delta);
+    const el = document.getElementById(`qty-${item}`);
+    el.textContent = state.quantities[item];
+    el.classList.remove('bump');
+    void el.offsetWidth; // reflow
+    el.classList.add('bump');
+    updateAll();
   }
 
-  orderData = { nama, kelas, hp, qtyOreo: qty.oreo, qtyMac: qty.mac,
-    total: qty.oreo * prices.oreo + qty.mac * prices.mac };
+  /* =====================================================
+     PROMO CODE
+  ===================================================== */
+  const PROMO_CODES = { 'HEMAT1K': 1000, 'BAZAR22': 3000 };
 
-  goSlide(3);
-  startSlide3Flow();
-}
+  function applyPromo() {
+    playClick(700, 0.08);
+    const code = document.getElementById('promo-input').value.trim().toUpperCase();
+    const msgEl = document.getElementById('promo-msg');
 
-// ===== SLIDE 3 FLOW =====
-function startSlide3Flow() {
-  document.getElementById('loader-section').style.display = 'block';
-  document.getElementById('thankyou-section').style.display = 'none';
+    if (state.promoApplied) {
+      msgEl.textContent = '✅ Kode promo sudah dipakai!';
+      msgEl.className = 'promo-msg success';
+      return;
+    }
 
-  setTimeout(() => {
-    document.getElementById('loader-section').style.display = 'none';
-    buildSummary();
-    document.getElementById('thankyou-section').style.display = 'block';
-    startCountdown(3);
-  }, 3000);
-}
+    if (PROMO_CODES[code]) {
+      state.discount = PROMO_CODES[code];
+      state.promoApplied = true;
+      msgEl.textContent = `🎉 Kode "${code}" berhasil! Diskon Rp${state.discount.toLocaleString('id-ID')}`;
+      msgEl.className = 'promo-msg success';
+      playClick(880, 0.12);
+    } else {
+      state.discount = 0;
+      msgEl.textContent = '❌ Kode promo tidak valid!';
+      msgEl.className = 'promo-msg error';
+      playClick(200, 0.1);
+    }
+    updateAll();
+  }
 
-function buildSummary() {
-  const d = orderData;
-  let items = '';
-  if (d.qtyOreo > 0)
-    items += `🍪 Bola Oreo Susu x${d.qtyOreo} = Rp ${(d.qtyOreo*prices.oreo).toLocaleString('id-ID')}\n`;
-  if (d.qtyMac > 0)
-    items += `🧀 Mac & Cheese x${d.qtyMac} = Rp ${(d.qtyMac*prices.mac).toLocaleString('id-ID')}\n`;
+  /* =====================================================
+     TOTAL CALCULATION
+  ===================================================== */
+  function getSubtotal() {
+    return state.quantities.oreo * state.prices.oreo +
+           state.quantities.mac  * state.prices.mac;
+  }
 
-  document.getElementById('summary-content').innerHTML =
-    `<pre style="font-size:clamp(7px,1.3vw,9px);line-height:2.2;color:#ddd;white-space:pre-wrap;font-family:var(--font)">` +
-    `🧑 Nama   : ${d.nama}\n` +
-    `🏫 Kelas  : ${d.kelas}\n` +
-    `📱 HP     : ${d.hp}\n` +
-    `─────────────────────\n` +
-    items +
-    `─────────────────────\n` +
-    `💰 TOTAL  : Rp ${d.total.toLocaleString('id-ID')}\n` +
-    `💵 Bayar  : Cash Only</pre>`;
-}
+  function getTotal() {
+    return Math.max(0, getSubtotal() - state.discount);
+  }
 
-function startCountdown(n) {
-  const el = document.getElementById('countdown-num');
-  el.textContent = n;
-  if (n <= 0) { sendToWhatsApp(); return; }
-  setTimeout(() => startCountdown(n - 1), 1000);
-}
+  function getTotalItems() {
+    return state.quantities.oreo + state.quantities.mac;
+  }
 
-// ===== SEND WHATSAPP =====
-function sendToWhatsApp() {
-  const d = orderData;
-  let items = '';
-  if (d.qtyOreo > 0)
-    items += `🍪 Bola Oreo Susu x${d.qtyOreo} = Rp ${(d.qtyOreo*prices.oreo).toLocaleString('id-ID')}\n`;
-  if (d.qtyMac > 0)
-    items += `🧀 Mac & Cheese x${d.qtyMac} = Rp ${(d.qtyMac*prices.mac).toLocaleString('id-ID')}`;
+  function fmt(n) { return 'Rp' + n.toLocaleString('id-ID'); }
 
-  const msg =
-`*[PRE-ORDER BAZAR 22 MEI]*
-=============================
- Nama   : ${d.nama}
- Kelas  : ${d.kelas}
- No. HP : ${d.hp}
-=============================
-*RINCIAN PESANAN:*
-${items}
-=============================
- TOTAL  : Rp ${d.total.toLocaleString('id-ID')}
- Bayar  : Cash Only
-=============================
-Pesanan kamu telah diterima, nanti admin segera mengonfirmasi. [OK]`;
+  /* =====================================================
+     UPDATE ALL UI
+  ===================================================== */
+  function updateAll() {
+    const sub   = getSubtotal();
+    const total = getTotal();
+    const items = getTotalItems();
+    const disc  = state.discount;
 
-  const url = 'https://wa.me/6285694458024?text=' + encodeURIComponent(msg);
-  window.open(url, '_blank');
-}
+    /* Cart badge */
+    document.getElementById('cart-badge').textContent = items;
+
+    /* Cart panel items */
+    const listEl = document.getElementById('cart-items-list');
+    let html = '';
+    if (items === 0) {
+      html = '<div class="cart-empty-msg">Belum ada item dipilih</div>';
+    } else {
+      for (const [key, qty] of Object.entries(state.quantities)) {
+        if (qty > 0) {
+          html += `<div class="cart-item-row">
+            <span>${state.names[key]} ×${qty}</span>
+            <span>${fmt(qty * state.prices[key])}</span>
+          </div>`;
+        }
+      }
+    }
+    listEl.innerHTML = html;
+
+    /* Cart discount */
+    const discRow = document.getElementById('cart-discount-display');
+    if (disc > 0 && items > 0) {
+      discRow.style.display = 'flex';
+      document.getElementById('cart-discount-amount').textContent = `-${fmt(disc)}`;
+    } else {
+      discRow.style.display = 'none';
+    }
+
+    /* Cart total */
+    document.getElementById('cart-total-display').textContent = fmt(total);
+
+    /* Order summary in form */
+    document.getElementById('sum-oreo').textContent =
+      `${state.quantities.oreo} × ${fmt(state.prices.oreo)} = ${fmt(state.quantities.oreo * state.prices.oreo)}`;
+    document.getElementById('sum-mac').textContent =
+      `${state.quantities.mac} × ${fmt(state.prices.mac)} = ${fmt(state.quantities.mac * state.prices.mac)}`;
+
+    const discSumRow = document.getElementById('sum-discount-row');
+    if (disc > 0) {
+      discSumRow.style.display = 'flex';
+      document.getElementById('sum-discount').textContent = `-${fmt(disc)}`;
+    } else {
+      discSumRow.style.display = 'none';
+    }
+
+    document.getElementById('sum-total').textContent = fmt(total);
+  }
+
+  updateAll();
+
+  /* =====================================================
+     CART TOGGLE
+  ===================================================== */
+  document.getElementById('cart-toggle-btn').addEventListener('click', function() {
+    playClick(500, 0.07);
+    const panel = document.getElementById('cart-panel');
+    panel.classList.toggle('open');
+  });
+
+  // Close cart when clicking outside
+  document.addEventListener('click', function(e) {
+    const cart = document.getElementById('floating-cart');
+    if (!cart.contains(e.target)) {
+      document.getElementById('cart-panel').classList.remove('open');
+    }
+  });
+
+  /* =====================================================
+     SMOOTH SCROLL for CTA
+  ===================================================== */
+  document.getElementById('cta-main').addEventListener('click', function(e) {
+    e.preventDefault();
+    playClick(660, 0.1);
+    document.getElementById('menu').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  /* =====================================================
+     FORM VALIDATION & SUBMISSION
+  ===================================================== */
+  let waMessage = '';
+
+  document.getElementById('order-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    playClick(440, 0.05);
+
+    const nama  = document.getElementById('f-nama').value.trim();
+    const kelas = document.getElementById('f-kelas').value.trim();
+    const hp    = document.getElementById('f-hp').value.trim();
+
+    let valid = true;
+
+    // Validate
+    function setErr(fieldId, errId, condition) {
+      const field = document.getElementById(fieldId);
+      const err   = document.getElementById(errId);
+      if (condition) {
+        field.classList.add('error-field');
+        err.classList.add('show');
+        valid = false;
+      } else {
+        field.classList.remove('error-field');
+        err.classList.remove('show');
+      }
+    }
+
+    setErr('f-nama',  'err-nama',  !nama);
+    setErr('f-kelas', 'err-kelas', !kelas);
+    setErr('f-hp',    'err-hp',    !hp || !/^[0-9+\s\-]{8,15}$/.test(hp));
+
+    if (getTotalItems() === 0) {
+      alert('Pilih minimal satu menu terlebih dahulu! 🛒');
+      document.getElementById('menu').scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+
+    if (!valid) {
+      playClick(200, 0.12);
+      return;
+    }
+
+    playClick(880, 0.15);
+
+    // Build WA message
+    let msgLines = [
+      `🛒 *PRE-ORDER BAZAR 22 MEI*`,
+      `━━━━━━━━━━━━━━`,
+      `👤 Nama  : ${nama}`,
+      `🏫 Kelas : ${kelas}`,
+      `📱 No HP : ${hp}`,
+      `━━━━━━━━━━━━━━`,
+      `*Detail Pesanan:*`,
+    ];
+
+    for (const [key, qty] of Object.entries(state.quantities)) {
+      if (qty > 0) {
+        msgLines.push(`• ${state.names[key]} ×${qty} = ${fmt(qty * state.prices[key])}`);
+      }
+    }
+
+    if (state.discount > 0) {
+      msgLines.push(`🎟️ Diskon Promo : -${fmt(state.discount)}`);
+    }
+
+    msgLines.push(`━━━━━━━━━━━━━━`);
+    msgLines.push(`💰 *TOTAL BAYAR: ${fmt(getTotal())}*`);
+    msgLines.push(`━━━━━━━━━━━━━━`);
+    msgLines.push(`⚠️ _Pembayaran Cash saat ambil di bazar_`);
+    msgLines.push(`Terima kasih! 🙏`);
+
+    waMessage = msgLines.join('\n');
+
+    // Fill summary modal
+    document.getElementById('s-nama').textContent  = nama;
+    document.getElementById('s-kelas').textContent = kelas;
+    document.getElementById('s-hp').textContent    = hp;
+
+    document.getElementById('s-oreo').textContent =
+      state.quantities.oreo > 0 ? `${state.quantities.oreo} porsi = ${fmt(state.quantities.oreo * state.prices.oreo)}` : '—';
+    document.getElementById('s-mac').textContent =
+      state.quantities.mac > 0 ? `${state.quantities.mac} porsi = ${fmt(state.quantities.mac * state.prices.mac)}` : '—';
+
+    const sDiscRow = document.getElementById('s-discount-row');
+    if (state.discount > 0) {
+      sDiscRow.style.display = '';
+      document.getElementById('s-discount').textContent = `-${fmt(state.discount)}`;
+    } else {
+      sDiscRow.style.display = 'none';
+    }
+
+    document.getElementById('s-total').textContent = fmt(getTotal());
+    document.getElementById('wa-preview-box').textContent = waMessage;
+
+    // Step 1: Show loading modal
+    document.getElementById('modal-loading').classList.remove('hidden');
+
+    // Step 2: After 3s → show summary
+    setTimeout(function() {
+      document.getElementById('modal-loading').classList.add('hidden');
+      document.getElementById('modal-summary').classList.remove('hidden');
+      triggerConfetti();
+      startRedirectCountdown();
+    }, 3000);
+  });
+
+  /* =====================================================
+     REDIRECT COUNTDOWN & WA REDIRECT
+  ===================================================== */
+  let redirectTimer = null;
+
+  function startRedirectCountdown() {
+    let count = 3;
+    document.getElementById('redirect-num').textContent = count;
+
+    redirectTimer = setInterval(function() {
+      count--;
+      document.getElementById('redirect-num').textContent = count;
+      if (count <= 0) {
+        clearInterval(redirectTimer);
+        redirectWA();
+      }
+    }, 1000);
+  }
+
+  function redirectWA() {
+    clearInterval(redirectTimer);
+    const url = `https://wa.me/${state.waNumber}?text=${encodeURIComponent(waMessage)}`;
+    window.open(url, '_blank');
+  }
+
+  /* =====================================================
+     CONFETTI
+  ===================================================== */
+  function triggerConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx    = canvas.getContext('2d');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const COLORS = ['#FF6B35','#FF4F8B','#7B3FA0','#4A90D9','#FFD166','#27AE60'];
+    const particles = [];
+
+    for (let i = 0; i < 120; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: -10 - Math.random() * 200,
+        w: 6 + Math.random() * 10,
+        h: 6 + Math.random() * 10,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        vx: (Math.random() - 0.5) * 4,
+        vy: 2 + Math.random() * 4,
+        rot: Math.random() * Math.PI * 2,
+        vr: (Math.random() - 0.5) * 0.2,
+        alpha: 1
+      });
+    }
+
+    let frame;
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      let alive = false;
+      for (const p of particles) {
+        p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+        if (p.y > canvas.height + 20) { p.y = -20; p.alpha -= 0.02; }
+        if (p.alpha <= 0) continue;
+        alive = true;
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        ctx.restore();
+      }
+      if (alive) frame = requestAnimationFrame(draw);
+      else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    draw();
+
+    setTimeout(() => {
+      cancelAnimationFrame(frame);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }, 5000);
+  }
+
+  /* =====================================================
+     LIGHT STREAKS IN PARALLAX SCENE
+  ===================================================== */
+  (function generateStreaks() {
+    const scene = document.getElementById('parallax-scene');
+    for (let i = 0; i < 8; i++) {
+      const s = document.createElement('div');
+      s.className = 'light-streak';
+      s.style.cssText = `
+        left:${10+Math.random()*80}%;
+        top:0; bottom:0;
+        height:${30+Math.random()*40}%;
+        top:${Math.random()*30}%;
+        animation-delay:${Math.random()*4}s;
+        animation-duration:${3+Math.random()*4}s;
+        opacity:${0.2+Math.random()*0.3};
+      `;
+      scene.appendChild(s);
+    }
+  })();
+
+  /* =====================================================
+     PROMO INPUT UPPERCASE + ENTER
+  ===================================================== */
+  document.getElementById('promo-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); applyPromo(); }
+  });
+  document.getElementById('promo-input').addEventListener('input', function() {
+    this.value = this.value.toUpperCase();
+  });
+
+  /* =====================================================
+     RESIZE CONFETTI CANVAS
+  ===================================================== */
+  window.addEventListener('resize', function() {
+    const c = document.getElementById('confetti-canvas');
+    c.width = window.innerWidth;
+    c.height = window.innerHeight;
+  });
 </script>
 </body>
-        </html>
+</html>
