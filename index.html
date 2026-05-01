@@ -1,1519 +1,2060 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>🎪 Bazar 22 Mei — Pre-Order</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bazar 22 Mei 🎪</title>
+<style>
+/* ============================================================
+   RESET & BASE
+============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+button { font-family: inherit; }
+input { font-family: inherit; }
 
-  <style>
-    /* ============================================================
-       RESET & CSS VARIABLES
-    ============================================================ */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ============================================================
+   DESIGN TOKENS
+============================================================ */
+:root {
+  --gold:        #FFD166;
+  --orange:      #FF7043;
+  --pink:        #F06292;
+  --purple:      #7B52AB;
+  --blue-deep:   #1A237E;
 
-    :root {
-      --orange:      #ff6b35;
-      --amber:       #ffa552;
-      --gold:        #ffd166;
-      --deep-purple: #1a0a2e;
-      --mid-purple:  #6b2d8b;
-      --dark-navy:   #0a0818;
-      --card-bg:     rgba(18, 8, 36, 0.75);
-      --card-border: rgba(255, 165, 82, 0.28);
-      --text:        #ffe8c8;
-      --text-dim:    rgba(255, 232, 200, 0.55);
-      --err:         #ff6b7a;
-      --pixel:       'Press Start 2P', monospace;
-      --body:        'M PLUS Rounded 1c', sans-serif;
-    }
+  --glass-bg:    rgba(18, 8, 38, 0.52);
+  --glass-b:     rgba(255,255,255,0.14);
+  --glass-blur:  blur(18px);
 
-    html, body {
-      width: 100%; height: 100%;
-      overflow: hidden;
-      font-family: var(--body);
-      color: var(--text);
-      background: var(--dark-navy);
-      -webkit-font-smoothing: antialiased;
-    }
+  --txt:         #FFF8F0;
+  --txt2:        rgba(255,248,240,0.62);
 
-    /* ============================================================
-       CANVAS BACKGROUND + OVERLAY
-    ============================================================ */
-    #bg-canvas {
-      position: fixed; inset: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      image-rendering: pixelated;
-    }
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out:    cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-    .scene-overlay {
-      position: fixed; inset: 0;
-      background: linear-gradient(to bottom, transparent 55%, rgba(8,5,20,.65) 100%);
-      z-index: 1;
-      pointer-events: none;
-    }
+/* ============================================================
+   PARALLAX SCENE
+============================================================ */
+#scene {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden;
+  background: linear-gradient(180deg,#FF5722 0%,#FF7043 18%,#CE93D8 48%,#7E57C2 70%,#283593 100%);
+}
+.p-layer {
+  position: absolute; top: -4%; left: -4%;
+  width: 108%; height: 108%;
+  will-change: transform;
+  pointer-events: none;
+}
+.p-layer svg { width: 100%; height: 100%; }
 
-    /* ============================================================
-       PIXEL STAR LAYER (animated, injected by JS)
-    ============================================================ */
-    #star-layer {
-      position: fixed; inset: 0;
-      z-index: 2;
-      pointer-events: none;
-    }
+/* ============================================================
+   STEP SYSTEM
+============================================================ */
+#app { position: fixed; inset: 0; z-index: 10; }
 
-    /* ============================================================
-       AUDIO TOGGLE BUTTON
-    ============================================================ */
-    #audio-toggle {
-      position: fixed; top: 14px; right: 14px;
-      z-index: 200;
-      width: 42px; height: 42px;
-      border-radius: 50%;
-      background: rgba(18, 8, 36, 0.75);
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(8px);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
-      cursor: pointer;
-      transition: transform .2s, background .2s;
-    }
-    #audio-toggle:hover { transform: scale(1.12); background: rgba(255,165,82,.15); }
+.step {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+  opacity: 0; pointer-events: none;
+}
+.step.active { opacity: 1; pointer-events: all; }
 
-    /* ============================================================
-       PROGRESS DOTS
-    ============================================================ */
-    #progress-dots {
-      position: fixed; bottom: 18px; left: 50%;
-      transform: translateX(-50%);
-      display: flex; gap: 8px;
-      z-index: 200;
-    }
-    .pdot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: rgba(255,232,200,.22);
-      transition: all .35s cubic-bezier(.4,0,.2,1);
-    }
-    .pdot.active {
-      background: var(--orange);
-      width: 22px;
-      border-radius: 3px;
-    }
+/* Forward transitions */
+@keyframes enterFwd  { from { opacity:0; transform:translateX(6%) scale(.97); } to { opacity:1; transform:none; } }
+@keyframes leaveFwd  { from { opacity:1; transform:none; } to { opacity:0; transform:translateX(-6%) scale(.97); } }
+/* Backward transitions */
+@keyframes enterBack { from { opacity:0; transform:translateX(-6%) scale(.97); } to { opacity:1; transform:none; } }
+@keyframes leaveBack { from { opacity:1; transform:none; } to { opacity:0; transform:translateX(6%) scale(.97); } }
 
-    /* ============================================================
-       TOAST
-    ============================================================ */
-    #toast {
-      position: fixed; bottom: 52px; left: 50%;
-      transform: translateX(-50%) translateY(16px);
-      background: rgba(18,8,36,.96);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 9px 20px;
-      font-size: 12px; color: var(--text);
-      opacity: 0; pointer-events: none;
-      transition: opacity .3s, transform .3s;
-      z-index: 300; white-space: nowrap;
-    }
-    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.step.ef { animation: enterFwd  .46s var(--ease-out) forwards; }
+.step.eb { animation: enterBack .46s var(--ease-out) forwards; }
+.step.lf { animation: leaveFwd  .38s var(--ease-out) forwards; }
+.step.lb { animation: leaveBack .38s var(--ease-out) forwards; }
 
-    /* ============================================================
-       APP CONTAINER
-    ============================================================ */
-    #app {
-      position: fixed; inset: 0;
-      z-index: 10;
-      display: flex; align-items: center; justify-content: center;
-    }
+/* ============================================================
+   GLASS CARD
+============================================================ */
+.gc {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-b);
+  border-radius: 22px;
+  box-shadow: 0 12px 48px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.09);
+}
 
-    /* ============================================================
-       STEP SYSTEM
-    ============================================================ */
-    .step {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      flex-direction: column;
-      padding: 16px;
-      opacity: 0; pointer-events: none;
-      transform: translateX(48px);
-      transition:
-        opacity .48s cubic-bezier(.4,0,.2,1),
-        transform .48s cubic-bezier(.4,0,.2,1);
-    }
-    .step.active   { opacity: 1; pointer-events: all; transform: translateX(0); }
-    .step.go-left  { opacity: 0; transform: translateX(-48px); }
-    .step.go-right { opacity: 0; transform: translateX(48px); }
+/* ============================================================
+   BUTTONS
+============================================================ */
+.btn-p {
+  background: linear-gradient(135deg, var(--orange), var(--pink));
+  color: #fff; border: none; border-radius: 14px;
+  padding: 15px 36px; font-size: 1.05rem; font-weight: 700;
+  cursor: pointer; letter-spacing: .03em;
+  box-shadow: 0 4px 22px rgba(240,98,146,.38);
+  transition: transform .12s, box-shadow .12s, filter .12s;
+  white-space: nowrap;
+}
+.btn-p:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(240,98,146,.5); }
+.btn-p:active:not(:disabled) { transform: scale(.97); }
+.btn-p:disabled { opacity: .45; cursor: not-allowed; }
 
-    /* ============================================================
-       CARD
-    ============================================================ */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      box-shadow: 0 8px 36px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,200,100,.08);
-      padding: 30px 26px;
-      width: 100%; max-width: 460px;
-    }
+.btn-s {
+  background: rgba(255,255,255,.09);
+  color: var(--txt); border: 1px solid rgba(255,255,255,.18);
+  border-radius: 11px; padding: 9px 18px; font-size: .85rem;
+  cursor: pointer; transition: background .14s, transform .12s;
+}
+.btn-s:hover { background: rgba(255,255,255,.18); }
+.btn-s:active { transform: scale(.97); }
 
-    /* ============================================================
-       PIXEL TITLE
-    ============================================================ */
-    .pixel-title {
-      font-family: var(--pixel);
-      color: var(--gold);
-      text-shadow: 3px 3px 0 var(--deep-purple), 0 0 24px var(--orange);
-      line-height: 1.7; letter-spacing: 1px;
-    }
+.btn-back {
+  position: absolute; top: 14px; left: 14px; z-index: 5;
+  background: rgba(18,8,38,.5); backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.15); color: #fff;
+  padding: 7px 16px; border-radius: 10px; font-size: .82rem;
+  cursor: pointer; transition: background .14s;
+}
+.btn-back:hover { background: rgba(255,255,255,.18); }
 
-    /* ============================================================
-       BUTTONS
-    ============================================================ */
-    .btn {
-      font-family: var(--pixel);
-      font-size: 10px;
-      cursor: pointer;
-      border: none; border-radius: 10px;
-      padding: 14px 24px;
-      transition: transform .12s, box-shadow .12s, opacity .2s;
-      letter-spacing: .5px;
-      position: relative; overflow: hidden;
-    }
-    .btn::after {
-      content: ''; position: absolute; inset: 0;
-      background: rgba(255,255,255,.1);
-      opacity: 0; transition: opacity .15s;
-    }
-    .btn:hover::after { opacity: 1; }
-    .btn:active  { transform: scale(.95) !important; }
-    .btn:disabled { opacity: .38; cursor: not-allowed; }
-    .btn:disabled:active { transform: none !important; }
+/* ============================================================
+   AUDIO TOGGLE
+============================================================ */
+#aud-btn {
+  position: fixed; top: 14px; right: 14px; z-index: 100;
+  width: 42px; height: 42px; border-radius: 12px;
+  background: rgba(18,8,38,.52); backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.15); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.15rem; color: #fff; transition: all .14s;
+}
+#aud-btn:hover { background: rgba(255,255,255,.18); transform: scale(1.05); }
 
-    /* Primary */
-    .btn-primary {
-      background: linear-gradient(135deg, #ff7040, #d04818);
-      color: #fff;
-      box-shadow: 0 4px 0 #8c2a08, 0 6px 20px rgba(255,107,53,.38);
-    }
-    .btn-primary:not(:disabled):hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 0 #8c2a08, 0 10px 26px rgba(255,107,53,.48);
-    }
+/* ============================================================
+   STEP 1 — HOME
+============================================================ */
+#s-home { text-align: center; }
+.home-card { padding: 44px 52px; max-width: 520px; width: 100%; text-align: center; }
+.home-chip {
+  display: inline-block; background: rgba(255,209,102,.17);
+  border: 1px solid rgba(255,209,102,.38); color: var(--gold);
+  padding: 5px 18px; border-radius: 999px; font-size: .75rem;
+  font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.home-title {
+  font-size: clamp(2.8rem, 9vw, 5.2rem); font-weight: 900; line-height: .95;
+  color: var(--txt); letter-spacing: -.02em; margin-bottom: 10px;
+  font-style: italic;
+  text-shadow: 0 0 50px rgba(255,209,102,.7), 0 4px 18px rgba(0,0,0,.5);
+}
+.home-title span { color: var(--gold); }
+.home-sub {
+  font-size: clamp(.9rem, 2.8vw, 1.2rem); color: var(--txt2);
+  line-height: 1.5; margin-bottom: 32px;
+}
+.home-meta { margin-top: 14px; font-size: .72rem; color: rgba(255,255,255,.3); }
 
-    /* Secondary */
-    .btn-secondary {
-      background: rgba(255,255,255,.07);
-      color: var(--text);
-      border: 1px solid rgba(255,200,100,.22);
-    }
+/* ============================================================
+   STEP 2 — MENU
+============================================================ */
+#s-menu { align-items: center; }
+.menu-wrap {
+  width: 100%; max-width: 540px;
+  max-height: calc(100dvh - 32px);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.menu-head { padding: 18px 20px 10px; flex-shrink: 0; }
+.menu-head h2 { font-size: 1.5rem; font-weight: 800; color: var(--txt); }
+.menu-head p { font-size: .8rem; color: var(--txt2); margin-top: 3px; }
 
-    /* Ghost */
-    .btn-ghost {
-      background: transparent;
-      color: var(--text-dim);
-      font-size: 9px;
-      padding: 10px 18px;
-      border: 1px dashed rgba(255,200,100,.2);
-    }
+.menu-list {
+  flex: 1; overflow-y: auto; padding: 4px 16px 8px;
+  display: flex; flex-direction: column; gap: 11px;
+}
+.menu-list::-webkit-scrollbar { width: 3px; }
+.menu-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 2px; }
 
-    /* ============================================================
-       STEP 1 — HOME
-    ============================================================ */
-    #step-home { gap: 0; text-align: center; }
+/* Product card */
+.pc {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px; padding: 13px;
+  display: flex; align-items: center; gap: 12px;
+  transition: transform .22s var(--ease-spring), border-color .22s, box-shadow .22s;
+}
+.pc:hover { transform: translateY(-3px); border-color: rgba(255,255,255,.22); box-shadow: 0 10px 36px rgba(0,0,0,.25); }
+.pc.sold-out { opacity: .45; }
 
-    .lanterns {
-      display: flex; gap: 18px; justify-content: center;
-      margin-bottom: 22px;
-      animation: lanternFloat 3.2s ease-in-out infinite;
-    }
-    @keyframes lanternFloat {
-      0%,100% { transform: translateY(0) rotate(0deg); }
-      50%      { transform: translateY(-10px) rotate(.8deg); }
-    }
+.pc-vis {
+  width: 68px; height: 68px; border-radius: 12px; flex-shrink: 0;
+  overflow: hidden; background: rgba(0,0,0,.25);
+}
+.pc-vis svg { width: 100%; height: 100%; display: block; }
 
-    .badge {
-      display: inline-block;
-      font-family: var(--pixel); font-size: 8px;
-      color: var(--gold);
-      background: rgba(255,165,53,.13);
-      border: 1px solid rgba(255,165,53,.4);
-      border-radius: 20px;
-      padding: 6px 16px;
-      margin-bottom: 18px;
-      letter-spacing: 1px;
-    }
+.pc-info { flex: 1; min-width: 0; }
+.pc-badges { display: flex; gap: 5px; margin-bottom: 3px; flex-wrap: wrap; }
+.badge-hot {
+  background: linear-gradient(135deg,#FF4500,#FF1744); color: #fff;
+  font-size: .62rem; font-weight: 700; padding: 2px 8px;
+  border-radius: 999px; letter-spacing: .05em;
+}
+.badge-stock {
+  background: rgba(255,255,255,.1); color: var(--txt2);
+  font-size: .62rem; padding: 2px 8px; border-radius: 999px;
+}
+.badge-out {
+  background: rgba(255,60,60,.18); color: #FF7070;
+  font-size: .62rem; font-weight: 700; padding: 2px 8px; border-radius: 999px;
+}
+.pc-name { font-size: .92rem; font-weight: 700; color: var(--txt); }
+.pc-desc { font-size: .72rem; color: var(--txt2); margin: 2px 0; }
+.pc-price { font-size: .98rem; font-weight: 800; color: var(--gold); }
 
-    .home-title { font-size: clamp(16px, 4.5vw, 26px); margin-bottom: 12px; }
+.stepper { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+.sp-btn {
+  width: 32px; height: 32px; border-radius: 9px;
+  border: 1px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.09); color: #fff;
+  font-size: 1.1rem; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .12s; line-height: 1;
+}
+.sp-btn:hover:not(:disabled) { background: rgba(255,255,255,.2); transform: scale(1.08); }
+.sp-btn:active:not(:disabled) { transform: scale(.93); }
+.sp-btn:disabled { opacity: .28; cursor: not-allowed; }
+.sp-n {
+  font-size: 1.05rem; font-weight: 700; color: var(--txt);
+  min-width: 24px; text-align: center;
+}
 
-    .home-sub {
-      font-size: 13px; color: var(--text-dim);
-      line-height: 1.7; margin-bottom: 30px;
-    }
+/* Menu footer */
+.menu-foot {
+  margin: 10px 16px 14px; flex-shrink: 0;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px; padding: 13px 16px;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.sub-lbl { font-size: .72rem; color: var(--txt2); }
+.sub-amt {
+  font-size: 1.25rem; font-weight: 800; color: var(--gold);
+  transition: transform .22s var(--ease-spring);
+}
+.sub-amt.bump { transform: scale(1.18); }
+.sub-empty { font-size: .72rem; color: rgba(255,255,255,.32); margin-top: 1px; }
 
-    /* ============================================================
-       STEP 2 — MENU
-    ============================================================ */
-    #step-menu { justify-content: flex-start; align-items: center; }
+/* ============================================================
+   STEP 3 — FORM
+============================================================ */
+#s-form { align-items: center; }
+.form-wrap {
+  width: 100%; max-width: 470px;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto; display: flex; flex-direction: column;
+}
+.form-wrap::-webkit-scrollbar { width: 3px; }
+.form-wrap::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 2px; }
 
-    .menu-wrapper {
-      width: 100%; max-width: 460px;
-      height: 100%;
-      display: flex; flex-direction: column;
-      padding: 18px 0;
-    }
+.form-head { padding: 18px 20px 8px; flex-shrink: 0; text-align: center; }
+.form-head h2 { font-size: 1.45rem; font-weight: 800; color: var(--txt); }
+.form-head p { font-size: .78rem; color: var(--txt2); margin-top: 3px; }
 
-    .step-header {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 16px;
-    }
+.form-body { padding: 10px 18px; display: flex; flex-direction: column; gap: 11px; }
+.fg { display: flex; flex-direction: column; gap: 4px; }
+.fl { font-size: .74rem; font-weight: 600; color: var(--txt2); text-transform: uppercase; letter-spacing: .08em; }
+.fi {
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14);
+  border-radius: 12px; padding: 11px 15px; font-size: .92rem; color: var(--txt);
+  outline: none; width: 100%;
+  transition: border-color .15s, background .15s, box-shadow .15s;
+}
+.fi::placeholder { color: rgba(255,255,255,.28); }
+.fi:focus {
+  border-color: var(--gold); background: rgba(255,255,255,.11);
+  box-shadow: 0 0 0 3px rgba(255,209,102,.14);
+}
+.fi.err { border-color: #FF6B6B; box-shadow: 0 0 0 3px rgba(255,107,107,.14); }
+.fe { font-size: .72rem; color: #FF8C8C; min-height: 15px; }
 
-    .back-btn {
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,200,100,.2);
-      border-radius: 8px;
-      color: var(--text); cursor: pointer;
-      padding: 8px 13px; font-size: 15px;
-      transition: background .15s;
-    }
-    .back-btn:hover { background: rgba(255,255,255,.14); }
+/* Order summary inside form */
+.ord-sum {
+  background: rgba(255,209,102,.07); border: 1px solid rgba(255,209,102,.18);
+  border-radius: 14px; padding: 12px 14px;
+}
+.ord-sum-ttl {
+  font-size: .72rem; font-weight: 700; color: var(--gold);
+  text-transform: uppercase; letter-spacing: .08em; margin-bottom: 7px;
+}
+.ord-line {
+  display: flex; align-items: center; gap: 8px;
+  font-size: .8rem; color: var(--txt2); padding: 2px 0;
+}
+.ord-line-n { flex: 1; }
+.ord-line-s { display: flex; align-items: center; gap: 5px; }
+.ord-line-s .sp-btn { width: 24px; height: 24px; border-radius: 7px; font-size: .9rem; }
+.ord-line-s .sp-n { font-size: .82rem; min-width: 18px; }
+.ord-total {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 8px; padding-top: 8px;
+  border-top: 1px solid rgba(255,209,102,.18);
+}
+.ord-total-l { font-size: .85rem; font-weight: 700; color: var(--txt); }
+.ord-total-v { font-size: 1.08rem; font-weight: 800; color: var(--gold); }
 
-    .step-label { font-family: var(--pixel); font-size: 11px; color: var(--gold); }
+.form-acts { padding: 10px 18px 16px; display: flex; flex-direction: column; gap: 8px; }
+.form-acts-row { display: flex; gap: 8px; }
+.form-acts-row .btn-s { flex: 1; font-size: .78rem; }
+.btn-danger { background: rgba(255,60,60,.1)!important; border-color: rgba(255,60,60,.22)!important; color: #FF8888!important; }
 
-    /* Scrollable menu list */
-    .menu-scroll {
-      flex: 1; overflow-y: auto; overflow-x: hidden;
-      padding-right: 4px;
-      display: flex; flex-direction: column; gap: 14px;
-    }
-    .menu-scroll::-webkit-scrollbar { width: 4px; }
-    .menu-scroll::-webkit-scrollbar-thumb { background: rgba(255,165,82,.28); border-radius: 4px; }
+/* ============================================================
+   STEP 4 — REDIRECT
+============================================================ */
+#s-redirect { text-align: center; }
+.redir-card { padding: 44px 40px; max-width: 360px; width: 100%; text-align: center; }
+.redir-ico { font-size: 3.8rem; margin-bottom: 14px; display: block; animation: bounceY 1.1s ease infinite alternate; }
+@keyframes bounceY { from { transform: translateY(0); } to { transform: translateY(-12px); } }
+.redir-title { font-size: 2rem; font-weight: 900; color: var(--txt); margin-bottom: 8px; font-style: italic; }
+.redir-sub { font-size: .92rem; color: var(--txt2); line-height: 1.55; margin-bottom: 20px; }
+.redir-meta { font-size: .7rem; color: rgba(255,255,255,.3); margin-top: 18px; }
 
-    /* Product card */
-    .product-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      backdrop-filter: blur(12px);
-      padding: 14px;
-      display: flex; gap: 12px; align-items: center;
-      transition: border-color .22s, box-shadow .22s;
-    }
-    .product-card:hover {
-      border-color: rgba(255,165,82,.55);
-      box-shadow: 0 4px 24px rgba(255,107,53,.13);
-    }
+.ld::after { content: '.'; animation: ldots 1.4s infinite; }
+@keyframes ldots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} 100%{content:'.'} }
 
-    .product-art {
-      width: 82px; height: 82px;
-      flex-shrink: 0;
-      border-radius: 10px;
-      overflow: hidden;
-      background: rgba(0,0,0,.35);
-    }
-    .product-art svg { width: 100%; height: 100%; }
+/* ============================================================
+   TOAST
+============================================================ */
+#toast {
+  position: fixed; bottom: 22px; left: 50%;
+  transform: translateX(-50%) translateY(90px);
+  background: rgba(22,160,84,.9); color: #fff;
+  padding: 10px 22px; border-radius: 12px;
+  font-size: .82rem; font-weight: 600; z-index: 200;
+  transition: transform .32s var(--ease-spring);
+  pointer-events: none;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
 
-    .product-info { flex: 1; }
+/* ============================================================
+   MISC ANIMATIONS
+============================================================ */
+@keyframes sway { 0%,100%{transform:rotate(-1deg)} 50%{transform:rotate(1deg)} }
+@keyframes shimmer {
+  0%   { background-position: -400% 0; }
+  100% { background-position: 400% 0; }
+}
 
-    .product-name {
-      font-family: var(--pixel); font-size: 8px;
-      color: var(--gold); margin-bottom: 4px; line-height: 1.7;
-    }
-    .product-desc {
-      font-size: 11px; color: var(--text-dim);
-      margin-bottom: 6px; line-height: 1.5;
-    }
-    .product-price {
-      font-family: var(--pixel); font-size: 9px;
-      color: var(--orange);
-    }
-
-    /* Stepper */
-    .stepper { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
-    .stp-btn {
-      width: 30px; height: 30px; border-radius: 8px;
-      border: 1px solid rgba(255,165,82,.35);
-      background: rgba(255,165,82,.09);
-      color: var(--text); font-size: 18px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: background .15s, transform .1s;
-      line-height: 1;
-    }
-    .stp-btn:hover  { background: rgba(255,165,82,.2); }
-    .stp-btn:active { transform: scale(.88); }
-    .stp-qty {
-      font-family: var(--pixel); font-size: 12px;
-      color: var(--text); min-width: 24px; text-align: center;
-    }
-
-    /* Footer bar */
-    .menu-footer { margin-top: 14px; }
-
-    .subtotal-bar {
-      background: rgba(255,165,82,.07);
-      border: 1px solid rgba(255,165,82,.2);
-      border-radius: 10px;
-      padding: 11px 16px;
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 10px;
-    }
-    .subtotal-label { font-size: 12px; color: var(--text-dim); }
-    .subtotal-amount { font-family: var(--pixel); font-size: 11px; color: var(--gold); }
-
-    .empty-hint {
-      text-align: center; font-size: 12px;
-      color: rgba(255,107,53,.75);
-      margin-bottom: 8px; display: none;
-    }
-
-    /* ============================================================
-       STEP 3 — FORM
-    ============================================================ */
-    #step-form { justify-content: flex-start; align-items: center; }
-
-    .form-wrapper {
-      width: 100%; max-width: 460px;
-      height: 100%;
-      display: flex; flex-direction: column;
-      padding: 18px 0;
-    }
-
-    .form-scroll { flex: 1; overflow-y: auto; }
-    .form-scroll::-webkit-scrollbar { width: 4px; }
-    .form-scroll::-webkit-scrollbar-thumb { background: rgba(255,165,82,.25); border-radius: 4px; }
-
-    /* Order summary block */
-    .order-summary {
-      background: rgba(255,165,82,.06);
-      border: 1px solid rgba(255,165,82,.2);
-      border-radius: 12px;
-      padding: 13px 14px;
-      margin-bottom: 16px;
-    }
-    .os-title {
-      font-family: var(--pixel); font-size: 8px;
-      color: var(--gold); margin-bottom: 10px;
-    }
-    .os-item {
-      display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
-    }
-    .os-name { flex: 1; font-size: 12px; }
-    .mini-stepper { display: flex; align-items: center; gap: 5px; }
-    .mstp {
-      width: 22px; height: 22px; border-radius: 6px;
-      border: 1px solid rgba(255,165,82,.3);
-      background: rgba(255,165,82,.08);
-      color: var(--text); font-size: 14px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: background .15s;
-    }
-    .mstp:hover  { background: rgba(255,165,82,.2); }
-    .mstp:active { transform: scale(.88); }
-    .mq {
-      font-family: var(--pixel); font-size: 9px;
-      min-width: 18px; text-align: center;
-    }
-    .os-price { font-family: var(--pixel); font-size: 8px; color: var(--orange); }
-    .os-total-row {
-      border-top: 1px dashed rgba(255,165,82,.2);
-      padding-top: 9px;
-      display: flex; justify-content: space-between; align-items: center;
-      margin-top: 4px;
-    }
-    .os-total-label { font-family: var(--pixel); font-size: 8px; color: var(--text-dim); }
-    .os-total-val   { font-family: var(--pixel); font-size: 10px; color: var(--gold); }
-
-    /* Form fields panel */
-    .form-panel {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      backdrop-filter: blur(14px);
-      padding: 18px;
-      margin-bottom: 14px;
-    }
-
-    .f-group { margin-bottom: 14px; }
-    .f-label {
-      display: block;
-      font-family: var(--pixel); font-size: 7px;
-      color: var(--gold); margin-bottom: 8px; letter-spacing: .5px;
-    }
-    .f-input {
-      width: 100%;
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,200,100,.18);
-      border-radius: 10px;
-      padding: 12px 14px;
-      color: var(--text);
-      font-family: var(--body); font-size: 14px;
-      outline: none;
-      transition: border-color .2s, box-shadow .2s;
-    }
-    .f-input:focus {
-      border-color: rgba(255,165,82,.6);
-      box-shadow: 0 0 0 3px rgba(255,107,53,.1);
-    }
-    .f-input.err {
-      border-color: var(--err);
-      box-shadow: 0 0 0 3px rgba(255,71,87,.1);
-    }
-    .f-input::placeholder { color: rgba(255,232,200,.28); }
-
-    .f-error {
-      font-size: 11px; color: var(--err);
-      margin-top: 5px; display: none;
-    }
-    .f-error.show { display: block; }
-
-    /* Form actions */
-    .form-actions {
-      display: flex; flex-direction: column;
-      gap: 9px; padding-bottom: 20px;
-    }
-    .btn-row { display: flex; gap: 9px; }
-
-    /* ============================================================
-       STEP 4 — REDIRECT
-    ============================================================ */
-    #step-redirect .card { text-align: center; max-width: 380px; }
-
-    .success-icon {
-      font-size: 62px; margin-bottom: 18px;
-      display: block;
-      animation: popIn .55s cubic-bezier(.34,1.56,.64,1);
-    }
-    @keyframes popIn {
-      from { transform: scale(0) rotate(-18deg); opacity: 0; }
-      to   { transform: scale(1) rotate(0);      opacity: 1; }
-    }
-
-    .redir-title {
-      font-family: var(--pixel); font-size: 13px;
-      color: var(--gold); margin-bottom: 10px;
-      text-shadow: 2px 2px 0 var(--deep-purple);
-    }
-    .redir-sub {
-      font-size: 13px; color: var(--text-dim);
-      line-height: 1.7; margin-bottom: 22px;
-    }
-
-    .dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 22px; }
-    .dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--orange);
-      animation: dotBounce 1.2s infinite;
-    }
-    .dot:nth-child(2) { animation-delay: .2s; }
-    .dot:nth-child(3) { animation-delay: .4s; }
-    @keyframes dotBounce {
-      0%,80%,100% { transform: scale(.55); opacity: .35; }
-      40%          { transform: scale(1.2); opacity: 1;   }
-    }
-
-    /* ============================================================
-       RESPONSIVE TWEAKS
-    ============================================================ */
-    @media (max-height: 580px) {
-      .lanterns  { display: none; }
-      .card      { padding: 18px 16px; }
-      .home-sub  { margin-bottom: 18px; }
-    }
-    @media (max-width: 380px) {
-      .card { padding: 20px 14px; }
-    }
-  </style>
+/* ============================================================
+   RESPONSIVE TWEAKS
+============================================================ */
+@media (max-height: 680px) {
+  .home-card { padding: 28px 36px; }
+  .home-title { font-size: 2.6rem; }
+  .menu-head { padding: 12px 16px 6px; }
+  .pc { padding: 9px; }
+  .pc-vis { width: 56px; height: 56px; }
+  .form-head { padding: 12px 16px 4px; }
+  .form-body { gap: 7px; }
+  .fi { padding: 9px 13px; }
+}
+@media (max-width: 420px) {
+  .home-card { padding: 30px 24px; }
+}
+</style>
 </head>
 <body>
 
-<!-- ========== CANVAS BACKGROUND ========== -->
-<canvas id="bg-canvas"></canvas>
-<div class="scene-overlay"></div>
-<div id="star-layer"></div>
+<!-- ======================================================
+     PARALLAX BACKGROUND SCENE
+====================================================== -->
+<div id="scene">
 
-<!-- ========== AUDIO TOGGLE ========== -->
-<div id="audio-toggle" title="Toggle suara">🔊</div>
-
-<!-- ========== PROGRESS DOTS ========== -->
-<div id="progress-dots">
-  <div class="pdot active"></div>
-  <div class="pdot"></div>
-  <div class="pdot"></div>
-  <div class="pdot"></div>
-</div>
-
-<!-- ========== TOAST ========== -->
-<div id="toast"></div>
-
-<!-- ========== APP ========== -->
-<div id="app">
-
-  <!-- ==================== STEP 1: HOME ==================== -->
-  <div class="step active" id="step-home">
-
-    <!-- Lanterns decoration -->
-    <div class="lanterns" aria-hidden="true">
-      <!-- Lantern orange -->
-      <svg width="26" height="38" viewBox="0 0 26 38">
-        <rect x="9" y="0" width="8" height="4" fill="#ffd166" rx="1"/>
-        <rect x="7" y="4" width="12" height="26" fill="#ff6b35" rx="3"/>
-        <rect x="9" y="7" width="8" height="2" fill="#ffa552" opacity=".5"/>
-        <rect x="9" y="12" width="8" height="2" fill="#ffa552" opacity=".35"/>
-        <rect x="9" y="17" width="8" height="2" fill="#ffa552" opacity=".35"/>
-        <rect x="10" y="30" width="6" height="6" fill="#ffd166" rx="1"/>
-        <ellipse cx="13" cy="33" rx="3" ry="2.5" fill="#fff8dc" opacity=".8"/>
-      </svg>
-      <!-- Lantern purple -->
-      <svg width="26" height="38" viewBox="0 0 26 38">
-        <rect x="9" y="0" width="8" height="4" fill="#ffd166" rx="1"/>
-        <rect x="7" y="4" width="12" height="26" fill="#6b2d8b" rx="3"/>
-        <rect x="9" y="7" width="8" height="2" fill="#9b4dca" opacity=".5"/>
-        <rect x="9" y="12" width="8" height="2" fill="#9b4dca" opacity=".35"/>
-        <rect x="9" y="17" width="8" height="2" fill="#9b4dca" opacity=".35"/>
-        <rect x="10" y="30" width="6" height="6" fill="#ffd166" rx="1"/>
-        <ellipse cx="13" cy="33" rx="3" ry="2.5" fill="#fff8dc" opacity=".8"/>
-      </svg>
-      <!-- Lantern orange-red -->
-      <svg width="26" height="38" viewBox="0 0 26 38">
-        <rect x="9" y="0" width="8" height="4" fill="#ffd166" rx="1"/>
-        <rect x="7" y="4" width="12" height="26" fill="#c03028" rx="3"/>
-        <rect x="9" y="7" width="8" height="2" fill="#e05040" opacity=".5"/>
-        <rect x="9" y="12" width="8" height="2" fill="#e05040" opacity=".35"/>
-        <rect x="9" y="17" width="8" height="2" fill="#e05040" opacity=".35"/>
-        <rect x="10" y="30" width="6" height="6" fill="#ffd166" rx="1"/>
-        <ellipse cx="13" cy="33" rx="3" ry="2.5" fill="#fff8dc" opacity=".8"/>
-      </svg>
-    </div>
-
-    <div class="card" style="text-align:center;">
-      <div class="badge">📅 22 MEI 2025</div>
-      <div class="pixel-title home-title">Bazar 22 Mei</div>
-      <p class="home-sub">
-        Pre-order sekarang, ambil di hari bazar! 🎪<br>
-        Stok terbatas — jangan sampai kehabisan.
-      </p>
-      <button class="btn btn-primary" onclick="goStep(1)" style="width:100%;">
-        🛒 Mulai Pesan
-      </button>
-    </div>
+  <!-- LAYER 1 — SKY (slowest) -->
+  <div class="p-layer" id="l1">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="sglow" cx="50%" cy="60%" r="38%">
+          <stop offset="0%" stop-color="#FFE082" stop-opacity=".55"/>
+          <stop offset="55%" stop-color="#FF8F00" stop-opacity=".18"/>
+          <stop offset="100%" stop-color="#FF5722" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <!-- Sun glow overlay -->
+      <rect width="1440" height="900" fill="url(#sglow)"/>
+      <!-- Sun disk -->
+      <circle cx="720" cy="540" r="62" fill="#FFE082" opacity=".93"/>
+      <circle cx="720" cy="540" r="82" fill="#FFCC02" opacity=".22"/>
+      <circle cx="720" cy="540" r="108" fill="#FF8F00" opacity=".09"/>
+      <!-- Cloud A -->
+      <g opacity=".72">
+        <rect x="80"  y="100" width="156" height="30" rx="15" fill="#FFD4B0"/>
+        <rect x="108" y="82"  width="106" height="34" rx="17" fill="#FFE4CC"/>
+        <rect x="138" y="68"  width="66"  height="30" rx="15" fill="#FFF0E0"/>
+      </g>
+      <!-- Cloud B -->
+      <g opacity=".6">
+        <rect x="960"  y="70"  width="192" height="34" rx="17" fill="#EFCBE6"/>
+        <rect x="994"  y="48"  width="132" height="38" rx="19" fill="#F7D9F0"/>
+        <rect x="1028" y="32"  width="80"  height="34" rx="17" fill="#FCEDFB"/>
+      </g>
+      <!-- Cloud C (tiny) -->
+      <g opacity=".5">
+        <rect x="380" y="52" width="108" height="24" rx="12" fill="#D4C8F8"/>
+        <rect x="398" y="38" width="74"  height="28" rx="14" fill="#E4D8FF"/>
+      </g>
+      <!-- Stars -->
+      <g fill="white" opacity=".45">
+        <circle cx="190" cy="38" r="1.8"/><circle cx="340" cy="22" r="1.4"/>
+        <circle cx="510" cy="32" r="2"/><circle cx="890" cy="18" r="1.5"/>
+        <circle cx="1080" cy="42" r="1.8"/><circle cx="1270" cy="28" r="1.4"/>
+        <circle cx="74"  cy="68" r="1.4"/><circle cx="1390" cy="56" r="1.8"/>
+        <circle cx="620" cy="14" r="1.2"/><circle cx="1160" cy="12" r="1.6"/>
+      </g>
+      <!-- Horizon glow bar -->
+      <rect x="0" y="490" width="1440" height="80" fill="#FF9800" opacity=".08" rx="0"/>
+    </svg>
   </div>
 
+  <!-- LAYER 2 — SCHOOL (slow) -->
+  <div class="p-layer" id="l2">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <!-- Ground -->
+      <rect x="0" y="688" width="1440" height="212" fill="#3E4F30"/>
+      <rect x="0" y="688" width="1440" height="10"  fill="#4C6038"/>
+      <!-- Pavement -->
+      <rect x="0" y="724" width="1440" height="64" fill="#7C7060"/>
+      <rect x="0" y="724" width="1440" height="4"  fill="#8C8072" opacity=".7"/>
+      <!-- Paving lines -->
+      <g fill="#6C6052" opacity=".45">
+        <rect x="50"  y="730" width="180" height="4" rx="2"/>
+        <rect x="310" y="730" width="180" height="4" rx="2"/>
+        <rect x="570" y="730" width="180" height="4" rx="2"/>
+        <rect x="830" y="730" width="180" height="4" rx="2"/>
+        <rect x="1090" y="730" width="180" height="4" rx="2"/>
+        <rect x="1300" y="730" width="120" height="4" rx="2"/>
+      </g>
 
-  <!-- ==================== STEP 2: MENU ==================== -->
-  <div class="step" id="step-menu">
-    <div class="menu-wrapper">
+      <!-- ===== BUILDING LEFT ===== -->
+      <rect x="48"  y="340" width="528" height="372" fill="#E6D49C"/>
+      <rect x="48"  y="340" width="14"  height="372" fill="#C8B47A"/>
+      <rect x="32"  y="316" width="560" height="30"  fill="#C07838" rx="2"/>
+      <rect x="32"  y="312" width="560" height="8"   fill="#D88A50"/>
+      <!-- Banner -->
+      <rect x="148" y="348" width="292" height="40" fill="#7A3018" rx="3"/>
+      <rect x="152" y="352" width="284" height="32" fill="#9A4028" rx="2"/>
+      <text x="294" y="374" text-anchor="middle" font-size="13" fill="#FFEEBB" font-family="monospace" font-weight="bold" letter-spacing="1">SMA NUSANTARA</text>
+      <!-- Floor line -->
+      <rect x="48" y="524" width="528" height="7" fill="#C0A870"/>
+      <!-- Ground floor windows -->
+      <g fill="none" stroke="#7A6040" stroke-width="4">
+        <rect x="76"  y="545" width="76" height="92" rx="4" fill="#FFD078" opacity=".9"/>
+        <rect x="76"  y="545" width="76" height="92" rx="4"/>
+        <line x1="114" y1="545" x2="114" y2="637" stroke-width="3"/>
+        <line x1="76"  y1="590" x2="152" y2="590" stroke-width="3"/>
 
-      <!-- Header -->
-      <div class="step-header">
-        <button class="back-btn" onclick="goStep(0)">←</button>
-        <span class="step-label">Menu Bazar</span>
+        <rect x="196" y="545" width="76" height="92" rx="4" fill="#FFD078" opacity=".9"/>
+        <rect x="196" y="545" width="76" height="92" rx="4"/>
+        <line x1="234" y1="545" x2="234" y2="637" stroke-width="3"/>
+        <line x1="196" y1="590" x2="272" y2="590" stroke-width="3"/>
+
+        <!-- Door -->
+        <rect x="306" y="577" width="64" height="135" rx="4" fill="#7A3818" opacity=".92"/>
+        <rect x="310" y="581" width="56" height="129" rx="3" fill="#944828"/>
+        <circle cx="362" cy="644" r="5" fill="#FFD700" opacity="1" stroke="none"/>
+
+        <rect x="412" y="545" width="76" height="92" rx="4" fill="#87CEEB" opacity=".75"/>
+        <rect x="412" y="545" width="76" height="92" rx="4"/>
+        <line x1="450" y1="545" x2="450" y2="637" stroke-width="3"/>
+        <line x1="412" y1="590" x2="488" y2="590" stroke-width="3"/>
+      </g>
+      <!-- 2nd floor windows -->
+      <g fill="none" stroke="#7A6040" stroke-width="4">
+        <rect x="76"  y="382" width="76" height="92" rx="4" fill="#87CEEB" opacity=".75"/>
+        <rect x="76"  y="382" width="76" height="92" rx="4"/>
+        <line x1="114" y1="382" x2="114" y2="474" stroke-width="3"/>
+        <line x1="76"  y1="426" x2="152" y2="426" stroke-width="3"/>
+
+        <rect x="196" y="382" width="76" height="92" rx="4" fill="#FFD078" opacity=".92"/>
+        <rect x="196" y="382" width="76" height="92" rx="4"/>
+        <line x1="234" y1="382" x2="234" y2="474" stroke-width="3"/>
+        <line x1="196" y1="426" x2="272" y2="426" stroke-width="3"/>
+
+        <rect x="314" y="382" width="76" height="92" rx="4" fill="#87CEEB" opacity=".75"/>
+        <rect x="314" y="382" width="76" height="92" rx="4"/>
+        <line x1="352" y1="382" x2="352" y2="474" stroke-width="3"/>
+        <line x1="314" y1="426" x2="390" y2="426" stroke-width="3"/>
+
+        <rect x="428" y="382" width="76" height="92" rx="4" fill="#FFD078" opacity=".92"/>
+        <rect x="428" y="382" width="76" height="92" rx="4"/>
+        <line x1="466" y1="382" x2="466" y2="474" stroke-width="3"/>
+        <line x1="428" y1="426" x2="504" y2="426" stroke-width="3"/>
+      </g>
+
+      <!-- Flagpole -->
+      <rect x="706" y="290" width="6" height="214" fill="#B8B8C0"/>
+      <polygon points="712,290 712,334 758,312" fill="#C0392B"/>
+      <polygon points="712,290 712,312 758,301" fill="#E74C3C"/>
+      <polygon points="712,312 712,334 758,323 758,301" fill="#FAFAFA"/>
+
+      <!-- ===== BUILDING RIGHT ===== -->
+      <rect x="858" y="375" width="530" height="337" fill="#DDD09A"/>
+      <rect x="858" y="375" width="10"  height="337" fill="#BBAA72"/>
+      <rect x="844" y="354" width="560" height="28"  fill="#B07030" rx="2"/>
+      <rect x="844" y="350" width="560" height="8"   fill="#C88040"/>
+      <!-- Ground floor windows right -->
+      <g fill="none" stroke="#7A6040" stroke-width="3">
+        <rect x="886" y="536" width="68" height="84" rx="3" fill="#FFD078" opacity=".9"/>
+        <rect x="886" y="536" width="68" height="84" rx="3"/>
+        <line x1="920" y1="536" x2="920" y2="620" stroke-width="2"/>
+        <line x1="886" y1="577" x2="954" y2="577" stroke-width="2"/>
+
+        <rect x="986" y="536" width="68" height="84" rx="3" fill="#87CEEB" opacity=".7"/>
+        <rect x="986" y="536" width="68" height="84" rx="3"/>
+        <line x1="1020" y1="536" x2="1020" y2="620" stroke-width="2"/>
+
+        <rect x="1086" y="536" width="68" height="84" rx="3" fill="#FFD078" opacity=".9"/>
+        <rect x="1086" y="536" width="68" height="84" rx="3"/>
+        <line x1="1120" y1="536" x2="1120" y2="620" stroke-width="2"/>
+
+        <!-- Door right -->
+        <rect x="1184" y="568" width="56" height="144" rx="3" fill="#6B2E10" opacity=".92"/>
+        <rect x="1188" y="572" width="48" height="138" rx="2" fill="#8A3A18"/>
+        <circle cx="1232" cy="640" r="4" fill="#FFD700" stroke="none"/>
+      </g>
+      <!-- 2nd floor windows right -->
+      <g fill="none" stroke="#7A6040" stroke-width="3">
+        <rect x="886" y="400" width="68" height="84" rx="3" fill="#87CEEB" opacity=".7"/>
+        <rect x="886" y="400" width="68" height="84" rx="3"/>
+        <rect x="986" y="400" width="68" height="84" rx="3" fill="#FFD078" opacity=".9"/>
+        <rect x="986" y="400" width="68" height="84" rx="3"/>
+        <rect x="1086" y="400" width="68" height="84" rx="3" fill="#87CEEB" opacity=".7"/>
+        <rect x="1086" y="400" width="68" height="84" rx="3"/>
+        <rect x="1186" y="400" width="68" height="84" rx="3" fill="#FFD078" opacity=".9"/>
+        <rect x="1186" y="400" width="68" height="84" rx="3"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- LAYER 3 — BAZAAR STALLS (medium) -->
+  <div class="p-layer" id="l3">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- ===== TREES ===== -->
+      <!-- Tree A (left) -->
+      <g style="transform-origin:138px 688px; animation:sway 5s ease-in-out infinite">
+        <rect x="130" y="590" width="16" height="98"  fill="#6B4322"/>
+        <rect x="127" y="568" width="22" height="36"  fill="#7A5230"/>
+        <ellipse cx="138" cy="528" rx="52" ry="44"   fill="#286818"/>
+        <ellipse cx="138" cy="496" rx="42" ry="36"   fill="#348828"/>
+        <ellipse cx="138" cy="468" rx="32" ry="28"   fill="#40A030"/>
+        <ellipse cx="138" cy="447" rx="20" ry="18"   fill="#52B840"/>
+        <ellipse cx="151" cy="495" rx="13" ry="10"   fill="#62CC4E" opacity=".48"/>
+      </g>
+      <!-- Tree B (right) -->
+      <g style="transform-origin:1300px 688px; animation:sway 5.5s ease-in-out infinite .8s">
+        <rect x="1292" y="590" width="16" height="98" fill="#6B4322"/>
+        <ellipse cx="1300" cy="530" rx="55" ry="47"  fill="#245C18"/>
+        <ellipse cx="1300" cy="496" rx="44" ry="37"  fill="#307A22"/>
+        <ellipse cx="1300" cy="466" rx="34" ry="30"  fill="#3C9630"/>
+        <ellipse cx="1300" cy="444" rx="22" ry="20"  fill="#4EAE3E"/>
+        <ellipse cx="1314" cy="495" rx="14" ry="11"  fill="#5EC04A" opacity=".48"/>
+      </g>
+      <!-- Tree C (mid-left behind stall) -->
+      <g style="transform-origin:348px 688px; animation:sway 4.8s ease-in-out infinite .3s">
+        <rect x="342" y="618" width="12" height="72" fill="#5A3818"/>
+        <ellipse cx="348" cy="578" rx="40" ry="34"   fill="#226018"/>
+        <ellipse cx="348" cy="552" rx="32" ry="28"   fill="#2E7820"/>
+        <ellipse cx="348" cy="530" rx="22" ry="20"   fill="#3A9030"/>
+      </g>
+
+      <!-- ===== STALL 1 — BOLA OREO (red/white striped) ===== -->
+      <g>
+        <!-- Poles -->
+        <rect x="152" y="596" width="7" height="104" fill="#9A9A9A"/>
+        <rect x="405" y="596" width="7" height="104" fill="#9A9A9A"/>
+        <!-- Awning base -->
+        <path d="M144,592 L418,592 L422,642 L140,642 Z" fill="#C62828"/>
+        <!-- White stripes -->
+        <g fill="white" opacity=".88">
+          <path d="M160,592 L164,642 L152,642 L148,592 Z"/>
+          <path d="M180,592 L184,642 L172,642 L168,592 Z"/>
+          <path d="M200,592 L204,642 L192,642 L188,592 Z"/>
+          <path d="M220,592 L224,642 L212,642 L208,592 Z"/>
+          <path d="M240,592 L244,642 L232,642 L228,592 Z"/>
+          <path d="M260,592 L264,642 L252,642 L248,592 Z"/>
+          <path d="M280,592 L284,642 L272,642 L268,592 Z"/>
+          <path d="M300,592 L304,642 L292,642 L288,592 Z"/>
+          <path d="M320,592 L324,642 L312,642 L308,592 Z"/>
+          <path d="M340,592 L344,642 L332,642 L328,592 Z"/>
+          <path d="M360,592 L364,642 L352,642 L348,592 Z"/>
+          <path d="M380,592 L384,642 L372,642 L368,592 Z"/>
+          <path d="M400,592 L404,642 L392,642 L388,592 Z"/>
+        </g>
+        <!-- Fringe -->
+        <path d="M140,642 Q144,652 148,642 Q152,652 156,642 Q160,652 164,642 Q168,652 172,642 Q176,652 180,642 Q184,652 188,642 Q192,652 196,642 Q200,652 204,642 Q208,652 212,642 Q216,652 220,642 Q224,652 228,642 Q232,652 236,642 Q240,652 244,642 Q248,652 252,642 Q256,652 260,642 Q264,652 268,642 Q272,652 276,642 Q280,652 284,642 Q288,652 292,642 Q296,652 300,642 Q304,652 308,642 Q312,652 316,642 Q320,652 324,642 Q328,652 332,642 Q336,652 340,642 Q344,652 348,642 Q352,652 356,642 Q360,652 364,642 Q368,652 372,642 Q376,652 380,642 Q384,652 388,642 Q392,652 396,642 Q400,652 404,642 Q408,652 412,642 Q416,652 420,642 Q422,642" fill="none" stroke="#C62828" stroke-width="2"/>
+        <!-- Counter/Table -->
+        <rect x="140" y="642" width="284" height="72" fill="#4A3018" rx="3"/>
+        <rect x="145" y="646" width="274" height="64" fill="#5A3C22" rx="2"/>
+        <rect x="140" y="682" width="284" height="14" fill="#7A5832" rx="2"/>
+        <!-- Table legs -->
+        <rect x="162" y="696" width="10" height="56" fill="#6A4828"/>
+        <rect x="398" y="696" width="10" height="56" fill="#6A4828"/>
+        <!-- Sign -->
+        <rect x="172" y="608" width="218" height="32" fill="#8B1A1A" rx="4" opacity=".9"/>
+        <text x="281" y="629" text-anchor="middle" font-size="12" fill="#FFEEBB" font-family="monospace" font-weight="bold">🍪 BOLA OREO SUSU</text>
+        <!-- Oreo balls on table -->
+        <circle cx="204" cy="672" r="12" fill="#1C0A06"/>
+        <circle cx="204" cy="672" r="12" fill="none" stroke="#3C1C10" stroke-width="2"/>
+        <circle cx="200" cy="668" r="3.5" fill="white" opacity=".28"/>
+        <circle cx="226" cy="668" r="12" fill="#1C0A06"/>
+        <circle cx="226" cy="668" r="12" fill="none" stroke="#3C1C10" stroke-width="2"/>
+        <circle cx="248" cy="672" r="12" fill="#1C0A06"/>
+        <ellipse cx="204" cy="664" rx="7" ry="3" fill="white" opacity=".38" transform="rotate(-12,204,664)"/>
+        <ellipse cx="226" cy="660" rx="7" ry="3" fill="white" opacity=".38" transform="rotate(8,226,660)"/>
+        <ellipse cx="248" cy="664" rx="7" ry="3" fill="white" opacity=".38" transform="rotate(-6,248,664)"/>
+        <!-- Price tag -->
+        <rect x="330" y="656" width="64" height="26" fill="#FFF8EE" rx="4" opacity=".92"/>
+        <text x="362" y="673" text-anchor="middle" font-size="10" fill="#444" font-family="monospace" font-weight="bold">Rp 8.000</text>
+      </g>
+
+      <!-- ===== STALL 2 — MAC AND CHEESE (blue/yellow) ===== -->
+      <g>
+        <!-- Poles -->
+        <rect x="1015" y="596" width="7" height="104" fill="#9A9A9A"/>
+        <rect x="1268" y="596" width="7" height="104" fill="#9A9A9A"/>
+        <!-- Awning base -->
+        <path d="M1007,592 L1281,592 L1285,642 L1003,642 Z" fill="#1565C0"/>
+        <!-- Yellow stripes -->
+        <g fill="#FFD600" opacity=".88">
+          <path d="M1023,592 L1027,642 L1015,642 L1011,592 Z"/>
+          <path d="M1043,592 L1047,642 L1035,642 L1031,592 Z"/>
+          <path d="M1063,592 L1067,642 L1055,642 L1051,592 Z"/>
+          <path d="M1083,592 L1087,642 L1075,642 L1071,592 Z"/>
+          <path d="M1103,592 L1107,642 L1095,642 L1091,592 Z"/>
+          <path d="M1123,592 L1127,642 L1115,642 L1111,592 Z"/>
+          <path d="M1143,592 L1147,642 L1135,642 L1131,592 Z"/>
+          <path d="M1163,592 L1167,642 L1155,642 L1151,592 Z"/>
+          <path d="M1183,592 L1187,642 L1175,642 L1171,592 Z"/>
+          <path d="M1203,592 L1207,642 L1195,642 L1191,592 Z"/>
+          <path d="M1223,592 L1227,642 L1215,642 L1211,592 Z"/>
+          <path d="M1243,592 L1247,642 L1235,642 L1231,592 Z"/>
+          <path d="M1263,592 L1267,642 L1255,642 L1251,592 Z"/>
+        </g>
+        <!-- Fringe -->
+        <path d="M1003,642 Q1007,652 1011,642 Q1015,652 1019,642 Q1023,652 1027,642 Q1031,652 1035,642 Q1039,652 1043,642 Q1047,652 1051,642 Q1055,652 1059,642 Q1063,652 1067,642 Q1071,652 1075,642 Q1079,652 1083,642 Q1087,652 1091,642 Q1095,652 1099,642 Q1103,652 1107,642 Q1111,652 1115,642 Q1119,652 1123,642 Q1127,652 1131,642 Q1135,652 1139,642 Q1143,652 1147,642 Q1151,652 1155,642 Q1159,652 1163,642 Q1167,652 1171,642 Q1175,652 1179,642 Q1183,652 1187,642 Q1191,652 1195,642 Q1199,652 1203,642 Q1207,652 1211,642 Q1215,652 1219,642 Q1223,652 1227,642 Q1231,652 1235,642 Q1239,652 1243,642 Q1247,652 1251,642 Q1255,652 1259,642 Q1263,652 1267,642 Q1271,652 1275,642 Q1279,652 1283,642 Q1285,642" fill="none" stroke="#1565C0" stroke-width="2"/>
+        <!-- Counter -->
+        <rect x="1003" y="642" width="284" height="72" fill="#4A3018" rx="3"/>
+        <rect x="1008" y="646" width="274" height="64" fill="#5A3C22" rx="2"/>
+        <rect x="1003" y="682" width="284" height="14" fill="#7A5832" rx="2"/>
+        <rect x="1025" y="696" width="10" height="56" fill="#6A4828"/>
+        <rect x="1260" y="696" width="10" height="56" fill="#6A4828"/>
+        <!-- Sign -->
+        <rect x="1028" y="608" width="224" height="32" fill="#0D3A8A" rx="4" opacity=".9"/>
+        <text x="1140" y="629" text-anchor="middle" font-size="12" fill="#FFEEBB" font-family="monospace" font-weight="bold">🧀 MAC AND CHEESE</text>
+        <!-- Bowl -->
+        <ellipse cx="1112" cy="676" rx="28" ry="10" fill="#C07820"/>
+        <path d="M1084,650 Q1082,676 1112,684 Q1142,676 1140,650 Z" fill="#D48830"/>
+        <ellipse cx="1112" cy="650" rx="28" ry="10" fill="#E09830"/>
+        <ellipse cx="1112" cy="647" rx="24" ry="8"   fill="#F2C040"/>
+        <ellipse cx="1112" cy="644" rx="20" ry="6.5" fill="#FAD060"/>
+        <!-- Mac swirls -->
+        <path d="M1101,642 Q1104,637 1107,642 Q1110,647 1113,642" fill="none" stroke="#D4A020" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M1113,644 Q1116,639 1119,644 Q1122,649 1125,644" fill="none" stroke="#D4A020" stroke-width="2.2" stroke-linecap="round"/>
+        <!-- Steam -->
+        <path d="M1104,636 Q1102,630 1104,623 Q1106,616 1104,610" fill="none" stroke="white" stroke-width="1.4" opacity=".38" stroke-linecap="round"/>
+        <path d="M1113,634 Q1111,627 1113,620 Q1115,613 1113,607" fill="none" stroke="white" stroke-width="1.4" opacity=".38" stroke-linecap="round"/>
+        <path d="M1122,636 Q1120,630 1122,623" fill="none" stroke="white" stroke-width="1.4" opacity=".38" stroke-linecap="round"/>
+        <!-- Cheese drip -->
+        <path d="M1136,654 Q1138,660 1136,668" fill="none" stroke="#F0C040" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="1136" cy="670" r="3.5" fill="#F0C040"/>
+        <!-- Price tag -->
+        <rect x="1186" y="656" width="72" height="26" fill="#FFF8EE" rx="4" opacity=".92"/>
+        <text x="1222" y="673" text-anchor="middle" font-size="10" fill="#444" font-family="monospace" font-weight="bold">Rp 10.000</text>
+      </g>
+
+      <!-- ===== BANNER STRING + PENNANTS ===== -->
+      <path d="M148,585 Q284,568 424,578 Q568,563 712,574 Q856,560 1000,571 Q1108,558 1280,576" fill="none" stroke="rgba(220,220,220,.55)" stroke-width="1.4"/>
+      <g>
+        <!-- Left cluster -->
+        <polygon points="244,572 258,572 251,587" fill="#E74C3C" opacity=".82"/>
+        <polygon points="263,570 277,570 270,585" fill="#3498DB" opacity=".82"/>
+        <polygon points="282,571 296,571 289,586" fill="#F1C40F" opacity=".82"/>
+        <polygon points="301,570 315,570 308,585" fill="#2ECC71" opacity=".82"/>
+        <polygon points="320,571 334,571 327,586" fill="#9B59B6" opacity=".82"/>
+        <polygon points="339,570 353,570 346,585" fill="#E74C3C" opacity=".82"/>
+        <!-- Mid cluster -->
+        <polygon points="660,570 674,570 667,585" fill="#3498DB" opacity=".82"/>
+        <polygon points="679,568 693,568 686,583" fill="#E74C3C" opacity=".82"/>
+        <polygon points="698,570 712,570 705,585" fill="#F1C40F" opacity=".82"/>
+        <polygon points="717,568 731,568 724,583" fill="#2ECC71" opacity=".82"/>
+        <polygon points="736,570 750,570 743,585" fill="#9B59B6" opacity=".82"/>
+        <!-- Right cluster -->
+        <polygon points="1060,571 1074,571 1067,586" fill="#F1C40F" opacity=".82"/>
+        <polygon points="1079,569 1093,569 1086,584" fill="#E74C3C" opacity=".82"/>
+        <polygon points="1098,571 1112,571 1105,586" fill="#3498DB" opacity=".82"/>
+        <polygon points="1117,569 1131,569 1124,584" fill="#2ECC71" opacity=".82"/>
+        <polygon points="1136,571 1150,571 1143,586" fill="#E74C3C" opacity=".82"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- LAYER 4 — CHARACTERS (fastest/front) -->
+  <div class="p-layer" id="l4">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- ===== CHARACTER 1 — Male student, facing right ===== -->
+      <g transform="translate(508,494)">
+        <ellipse cx="36" cy="206" rx="30" ry="8" fill="black" opacity=".22"/>
+        <!-- Shoes -->
+        <ellipse cx="24" cy="204" rx="13" ry="7" fill="#181824"/>
+        <ellipse cx="50" cy="204" rx="13" ry="7" fill="#181824"/>
+        <!-- Pants (blue) -->
+        <rect x="16" y="150" width="18" height="56" rx="7" fill="#1A3A6B"/>
+        <rect x="40" y="150" width="18" height="56" rx="7" fill="#1A3A6B"/>
+        <rect x="16" y="148" width="42" height="12" fill="#1A3A6B" rx="4"/>
+        <!-- Belt -->
+        <rect x="14" y="146" width="46" height="6" fill="#2C1810" rx="3"/>
+        <!-- Shirt (white) -->
+        <rect x="10" y="90" width="56" height="62" rx="11" fill="#F6F6F6"/>
+        <rect x="10" y="90" width="9"  height="62" fill="#E8E8E8" rx="5"/>
+        <!-- Collar -->
+        <path d="M36,90 L28,102 L36,110 L44,102 Z" fill="#EAEAEA"/>
+        <!-- School emblem on chest -->
+        <circle cx="46" cy="115" r="6" fill="#1A3A6B" opacity=".7"/>
+        <!-- Arm left (slightly forward) -->
+        <rect x="-4" y="94" width="15" height="50" rx="7" fill="#F0F0F0" transform="rotate(14,-4,94)"/>
+        <ellipse cx="-4" cy="147" rx="9" ry="10" fill="#E8C090"/>
+        <!-- Arm right -->
+        <rect x="63" y="94" width="15" height="46" rx="7" fill="#F0F0F0" transform="rotate(-9,63,94)"/>
+        <ellipse cx="72" cy="140" rx="9" ry="10" fill="#E8C090"/>
+        <!-- Neck -->
+        <rect x="29" y="79" width="16" height="17" rx="7" fill="#E8C090"/>
+        <!-- Head -->
+        <ellipse cx="37" cy="55" rx="27" ry="31" fill="#E8C090"/>
+        <ellipse cx="29" cy="43" rx="12" ry="9" fill="#F2D0A4" opacity=".44"/>
+        <!-- Hair (short, neat) -->
+        <ellipse cx="37" cy="29" rx="27" ry="19" fill="#1A1008"/>
+        <path d="M11,38 Q9,26 18,20 Q28,12 37,12 Q46,12 56,20 Q65,26 63,38" fill="#241410"/>
+        <path d="M11,40 Q8,54 11,62 Q12,48 17,44" fill="#1A1008" opacity=".65"/>
+        <path d="M63,40 Q66,54 63,62 Q62,48 57,44" fill="#1A1008" opacity=".65"/>
+        <rect x="11" y="26" width="4" height="28" rx="2" fill="#1A1008"/>
+        <rect x="59" y="26" width="4" height="28" rx="2" fill="#1A1008"/>
+        <!-- Eyebrows -->
+        <path d="M22,42 Q28,38 33,42" fill="none" stroke="#2A1808" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M41,42 Q46,38 52,42" fill="none" stroke="#2A1808" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Eyes -->
+        <ellipse cx="27.5" cy="48" rx="5.5" ry="6" fill="white"/>
+        <ellipse cx="27.5" cy="48" rx="3.8" ry="4.2" fill="#3C2010"/>
+        <ellipse cx="27.5" cy="48" rx="2.2" ry="2.6" fill="#080808"/>
+        <ellipse cx="26"   cy="46" rx="1.3" ry="1.3" fill="white" opacity=".82"/>
+        <ellipse cx="47.5" cy="48" rx="5.5" ry="6" fill="white"/>
+        <ellipse cx="47.5" cy="48" rx="3.8" ry="4.2" fill="#3C2010"/>
+        <ellipse cx="47.5" cy="48" rx="2.2" ry="2.6" fill="#080808"/>
+        <ellipse cx="46"   cy="46" rx="1.3" ry="1.3" fill="white" opacity=".82"/>
+        <!-- Nose -->
+        <path d="M34,54 Q37,59 40,54" fill="none" stroke="#C08060" stroke-width="1.5" stroke-linecap="round"/>
+        <ellipse cx="32.5" cy="55" rx="2.2" ry="1.3" fill="#C09070" opacity=".35"/>
+        <ellipse cx="41.5" cy="55" rx="2.2" ry="1.3" fill="#C09070" opacity=".35"/>
+        <!-- Mouth (slight smile) -->
+        <path d="M29,64 Q37,70 45,64" fill="none" stroke="#B06040" stroke-width="2" stroke-linecap="round"/>
+        <!-- Ears -->
+        <ellipse cx="10"  cy="52" rx="5.5" ry="7" fill="#E2BA86"/>
+        <ellipse cx="10"  cy="52" rx="3.2" ry="5" fill="#CAA070"/>
+        <ellipse cx="64"  cy="52" rx="5.5" ry="7" fill="#E2BA86"/>
+        <ellipse cx="64"  cy="52" rx="3.2" ry="5" fill="#CAA070"/>
+      </g>
+
+      <!-- ===== CHARACTER 2 — Female student ===== -->
+      <g transform="translate(830,504)">
+        <ellipse cx="33" cy="196" rx="28" ry="7" fill="black" opacity=".2"/>
+        <!-- Shoes -->
+        <ellipse cx="15" cy="196" rx="11" ry="6" fill="#181824"/>
+        <ellipse cx="39" cy="196" rx="11" ry="6" fill="#181824"/>
+        <!-- Socks (white) -->
+        <rect x="8"  y="182" width="14" height="16" rx="5" fill="#F8F8F8"/>
+        <rect x="32" y="182" width="14" height="16" rx="5" fill="#F8F8F8"/>
+        <!-- Skirt (blue) -->
+        <path d="M8,138 Q-4,170 2,192 L54,192 Q60,170 46,138 Z" fill="#1A3A6B"/>
+        <path d="M27,138 Q27,162 27,180 L31,192 L31,138 Z" fill="#2A5AA0" opacity=".28"/>
+        <!-- Shirt -->
+        <rect x="7" y="82" width="52" height="60" rx="11" fill="#FAFAFA"/>
+        <rect x="7" y="82" width="8"  height="60" fill="#EBEBEB" rx="5"/>
+        <path d="M33,82 L25,93 L33,101 L41,93 Z" fill="#E8E8E8"/>
+        <!-- Arm left -->
+        <rect x="-3" y="86" width="13" height="44" rx="6" fill="#F5F5F5" transform="rotate(18,-3,86)"/>
+        <ellipse cx="-5" cy="132" rx="8.5" ry="9.5" fill="#E8C090"/>
+        <!-- Arm right -->
+        <rect x="56" y="86" width="13" height="40" rx="6" fill="#F5F5F5" transform="rotate(-14,56,86)"/>
+        <ellipse cx="64" cy="128" rx="8.5" ry="9.5" fill="#E8C090"/>
+        <!-- Neck -->
+        <rect x="27" y="72" width="14" height="16" rx="6" fill="#E8C090"/>
+        <!-- Head -->
+        <ellipse cx="34" cy="49" rx="25" ry="29" fill="#E8C090"/>
+        <ellipse cx="26" cy="38" rx="11" ry="9" fill="#F2D0A4" opacity=".38"/>
+        <!-- Long hair back -->
+        <rect x="8"  y="25" width="13" height="76" rx="7" fill="#221410"/>
+        <rect x="53" y="25" width="11" height="72" rx="6" fill="#221410"/>
+        <!-- Hair top -->
+        <ellipse cx="34" cy="25" rx="25" ry="18" fill="#1A1008"/>
+        <path d="M10,32 Q14,18 34,16 Q54,18 58,32" fill="#241410"/>
+        <path d="M8,26 Q4,44 6,72 Q10,82 15,76 Q10,56 12,32" fill="#1A1008"/>
+        <path d="M60,26 Q64,44 62,70 Q58,80 53,74 Q58,54 56,32" fill="#1A1008"/>
+        <!-- Hair clip -->
+        <rect x="50" y="22" width="10" height="8" rx="3" fill="#FF6B9D" opacity=".9"/>
+        <rect x="51" y="23" width="8"  height="6" rx="2" fill="#FF9EBF"/>
+        <!-- Eyebrows (arched) -->
+        <path d="M20,36 Q26,32 30,36" fill="none" stroke="#2A1808" stroke-width="2" stroke-linecap="round"/>
+        <path d="M38,36 Q42,32 48,36" fill="none" stroke="#2A1808" stroke-width="2" stroke-linecap="round"/>
+        <!-- Eyes -->
+        <ellipse cx="25" cy="42" rx="5.5" ry="6" fill="white"/>
+        <ellipse cx="25" cy="42" rx="3.8" ry="4.2" fill="#3C2010"/>
+        <ellipse cx="25" cy="42" rx="2.2" ry="2.6" fill="#080808"/>
+        <ellipse cx="23.5" cy="40.5" rx="1.3" ry="1.3" fill="white" opacity=".88"/>
+        <!-- Lashes (upper) -->
+        <path d="M20,36 L18,33 M23,35 L22,32 M26,35 L26,32" fill="none" stroke="#1A1008" stroke-width="1.2"/>
+        <ellipse cx="43" cy="42" rx="5.5" ry="6" fill="white"/>
+        <ellipse cx="43" cy="42" rx="3.8" ry="4.2" fill="#3C2010"/>
+        <ellipse cx="43" cy="42" rx="2.2" ry="2.6" fill="#080808"/>
+        <ellipse cx="41.5" cy="40.5" rx="1.3" ry="1.3" fill="white" opacity=".88"/>
+        <path d="M38,36 L36,33 M41,35 L40,32 M44,35 L45,32 M47,36 L49,33" fill="none" stroke="#1A1008" stroke-width="1.2"/>
+        <!-- Nose -->
+        <path d="M31,47 Q34,52 37,47" fill="none" stroke="#C09070" stroke-width="1.4" stroke-linecap="round"/>
+        <!-- Lips -->
+        <path d="M26,57 Q34,64 42,57" fill="none" stroke="#C06050" stroke-width="2" stroke-linecap="round"/>
+        <path d="M29,57 Q34,61 39,57" fill="#E09080" opacity=".38"/>
+        <!-- Blush -->
+        <ellipse cx="16" cy="49" rx="7" ry="4" fill="#FF8888" opacity=".18"/>
+        <ellipse cx="52" cy="49" rx="7" ry="4" fill="#FF8888" opacity=".18"/>
+        <!-- Ears -->
+        <ellipse cx="9"  cy="45" rx="5" ry="7" fill="#E2BA86"/>
+        <ellipse cx="59" cy="45" rx="5" ry="7" fill="#E2BA86"/>
+        <!-- Earrings -->
+        <circle cx="9"  cy="50" r="3" fill="#FFD700"/>
+        <circle cx="59" cy="50" r="3" fill="#FFD700"/>
+      </g>
+
+      <!-- Speech bubble -->
+      <g transform="translate(608,468)">
+        <rect x="0" y="0" width="158" height="46" rx="14" fill="rgba(255, transform="translate(608,468)">
+        <rect x="0" y="0" width="158" height="46" rx="14" fill="rgba(255,255,255,.86)"/>
+        <polygon points255,255,.86)"/>
+        <polygon points="28="28,46 52,46 52,46,46 40,62 40" fill="rg,62" fill="rgba(ba(255,255,255,.86)"/>
+        <text255,255,255,.86)"/>
+        <text x=" x="79" y="19"79" y=" text-an19" text-anchor="middle"chor="middle" font-size="11" fill font-size="11" fill="#333="#333" font" font-family="monospace-family="">Eh, udah pesen</monospace">Eh, udah pesen</text>
+       text>
+        <text x="79 <text x="79" y" y="35="35" text" text-anchor="middle-anchor="middle" font-size="11" fill="#" font-size="11" fill="#333" font-family333"="mon font-family="monospace">ospace">OreOreo-nya belum? 🍪o-nya belum? 🍪</text>
+      </g>
+
+    </svg</text>
+      </g>
+
+    </svg>
+ >
+  </div </div>
+
+</>
+
+</div><!-- /scenediv><!-- /scene -->
+
+<!-- ===================================================== -->
+
+<!-- ======================================================
+    =
+     AUDIO AUDIO TOGG TOGGLE
+================================================LE
+====================================================== -->
+<button====== -->
+<button id=" id="aud-btnaud-btn" title="Toggle" title="Toggle suara"> suara">🔊</🔊</buttonbutton>
+
+<!-- =================================================>
+
+<!-- ==========================================================
+     TO=
+     TOAST
+================================================AST
+============================================================ -->
+<div id="to -->
+<div id="toast">✅ Pesast">✅ Pesanananan berhasil disalin!</ berhasil disalin!</divdiv>
+
+<!-- =================================================>
+
+<!-- ======================================================
+     APP=====
+     APP
+======================================================
+====================================================== -->
+<div -->
+<div id=" id="appapp">
+
+  <!--">
+
+  <!-- ===== ===== STEP 1: HOME = STEP 1: HOME ========= -->
+  <div class -->
+  <div class="step="step active" id="s-home active" id="s-home">
+    <div">
+    <div class="home-card class="home-card gc gc">
+     ">
+      <div class="home <div class="home-chip">📅-chip">📅 22 22 Mei · OSIS SMA Nusantara Mei · OSIS SMA Nusantara</div</div>
+     >
+      <h <h1 class1 class="home-title">Bazar<br="home-title">Bazar<br><span>22 Mei><span>22 Mei</span></h</span1></h1>
+     >
+      <p class="home-sub"> <p class="home-sub">Pre-order makanan favorPre-order makanan favoritmuitmu<br>sebel<br>sebelum kehabisan!um kehabisan! 🎪</p 🎪</p>
+      <button>
+      <button class=" class="btn-pbtn-p" id" id="btn-start"="btn-start" style="min-width:210 style="min-width:210px;font-sizepx;:1.1font-size:1.1rem;rem;padding:padding:17px 17px 44px44px;">
+        Mulai Pes;">
+        Mulai Pesanan 🛒
+      🛒
+      </button </button>
+     >
+      <p class=" <p class="home-meta">Stokhome-meta">Stok terbat terbatas ·as · Bayar di tempat Bayar di tempat saat b saat bazar</pazar</>
+    </p>
+    </divdiv>
+  </>
+  </div>
+
+  <!-- =====div>
+
+  <!-- ===== STEP  STEP 2: MENU2: MENU ===== ===== -->
+  <div -->
+  <div class="step" id=" class="step" id="s-menus-menu">
+    <button class="btn-back">
+    <button class="btn-back" onclick="nav" onclick="nav('home')">← K('home')">← Kembaliembali</button</button>
+   >
+    <div class="menu-wrap <div class="menu-wrap gc gc">
+
+     ">
+
+      <div class <div class="menu-head="menu-head">
+        <h2">
+       > <h2>🍽️ Menu B🍽️azar</h2 Menu Bazar</h2>
+       >
+        <p>Pilih makanan favorit <p>Pilih makanan favoritmu</pmu</p>
       </div>
 
-      <!-- Product list -->
-      <div class="menu-scroll">
+     >
+      </div>
 
-        <!-- PRODUCT 1: Bola Oreo Susu -->
-        <div class="product-card">
-          <div class="product-art">
-            <svg viewBox="0 0 82 82" xmlns="http://www.w3.org/2000/svg">
-              <!-- Background -->
-              <rect width="82" height="82" fill="#14091c" rx="10"/>
-              <!-- Drop shadow -->
-              <ellipse cx="41" cy="62" rx="28" ry="7" fill="rgba(0,0,0,.5)"/>
-              <!-- Ball back-left -->
-              <circle cx="22" cy="53" r="16" fill="#181818"/>
-              <circle cx="17" cy="48" r="5" fill="#222" opacity=".6"/>
-              <!-- Powder on back-left -->
-              <ellipse cx="22" cy="39" rx="9" ry="4" fill="#eee" opacity=".85"/>
-              <ellipse cx="20" cy="38" rx="5" ry="2.2" fill="#fff" opacity=".65"/>
-              <!-- Ball back-right -->
-              <circle cx="60" cy="53" r="16" fill="#181818"/>
-              <circle cx="55" cy="48" r="5" fill="#222" opacity=".6"/>
-              <!-- Powder on back-right -->
-              <ellipse cx="60" cy="39" rx="9" ry="4" fill="#eee" opacity=".85"/>
-              <ellipse cx="58" cy="38" rx="5" ry="2.2" fill="#fff" opacity=".65"/>
-              <!-- Ball front-center -->
-              <circle cx="41" cy="49" r="20" fill="#111"/>
-              <circle cx="35" cy="43" r="6" fill="#1e1e1e" opacity=".7"/>
-              <!-- Cream powder top -->
-              <ellipse cx="41" cy="31" rx="12" ry="5.5" fill="#f2f2f2" opacity=".95"/>
-              <ellipse cx="38" cy="30" rx="7"  ry="3"   fill="#fff"    opacity=".8"/>
-              <ellipse cx="43" cy="29" rx="3.5" ry="2"  fill="#fff"    opacity=".55"/>
-              <!-- Milk drips -->
-              <line x1="31" y1="33" x2="34" y2="29" stroke="#fff" stroke-width="1.5" opacity=".4"/>
-              <line x1="47" y1="32" x2="50" y2="29" stroke="#fff" stroke-width="1.5" opacity=".4"/>
-              <line x1="40" y1="27" x2="41" y2="23" stroke="#fff" stroke-width="1.5" opacity=".35"/>
+      <div class="menu <div class="menu-list">
+
+        <!---list">
+
+        <!-- Product: Bola Oreo Product: Bola Oreo -->
+        <div -->
+        <div class=" class="pc" id="pc" id="card-oreo">
+          <divcard-oreo">
+          <div class=" class="pc-vispc-vis">
+           ">
+            <svg <svg viewBox="0 0 68 68" xmlns="http viewBox="0 0 68 68" xmlns="http://www.w3://www.w3.org/2000.org/2000/svg">
+             /svg">
+              <rect <rect width=" width="68"68" height="68" height="68" rx="12" rx="12" fill="# fill="#140A04140A04"/>
+              <circle cx"/>
+              <circle cx="22="22" cy" cy="44" r="44" r="13" fill="13" fill="#1C0="#1C0C06C06"/><circle cx"/><circle cx="22" cy="22" cy="44="44" r" r="13="13" fill="none" fill="none" stroke" stroke="#3="#3C181C1810"0" stroke-width stroke-width="2="2"/>
+              <circle cx=""/>
+              <circle cx="46" cy="46" cy="42"42" r=" r="13"13" fill="# fill="#1C1C0C0C06"/06"/><circle cx="><circle cx="46"46" cy=" cy="42" r="42"13" fill="none" stroke="# r="13" fill="none" stroke="#3C18103C1810" stroke-width="2" stroke-width="2"/>
+              <circle cx="34"/>
+              <circle cx="34" cy="29" r" cy="29" r="13="13" fill="#220" fill="#220E08"/E08><circle cx="34" cy"/><circle cx="34" cy="29" r="29" r="13" fill="13" fill="none" stroke="none" stroke="#3C1810" stroke-width="#3C1810" stroke-width="2"/>
+              <ell="2"/>
+              <ellipse cxipse cx="22" cy="36="22" cy="36" rx="7" rx="7" ry="3" ry="3"  fill=""  fill="white" opacity="white" opacity=".42" transform.42" transform="rotate="rotate(-12,22(-12,36,22,36)"/>
+             )"/>
+              <ellipse <ellipse cx="46" cx="46" cy=" cy="34"34" rx=" rx="7"7" ry="3"  fill ry="3"  fill="white="white" opacity=".42"" opacity=".42" transform="rotate( transform="rotate(9,9,46,46,34)34)"/>
+              <ellipse cx"/>
+              <ellipse cx="34="34" cy="22" rx="6" ry" cy="22" rx="6" ry="2.5="2.5" fill="white" opacity" fill="white" opacity=".=".46" transform="46" transform="rotate(-5,34,22)"/>
+             rotate(-5,34,22)"/>
+              <circle cx=" <circle cx="25" cy="26"25" cy="26" r="3" fill="white" r="3" fill="white" opacity=" opacity=".14"/>
+              <circle cx="49" cy="37" r="2.5" fill=".14"/>
+              <circle cx="49" cy="37" r="2.5" fill="white" opacity=".14"/>
+           white" opacity=".14"/>
             </svg>
           </div>
-          <div class="product-info">
-            <div class="product-name">Bola Oreo<br>Susu</div>
-            <div class="product-desc">5 pcs / porsi — bulat, lembut, taburan susu 🤍</div>
-            <div class="product-price">Rp8.000</div>
-            <div class="stepper">
-              <button class="stp-btn" onclick="changeQty(0,-1)">−</button>
-              <span class="stp-qty" id="qty-0">0</span>
-              <button class="stp-btn" onclick="changeQty(0,1)">+</button>
+          <div class=" </svg>
+          </div>
+          <div class="pc-info">
+            <div class="pc-badges">
+              <span class="pc-info">
+            <div class="pc-badges">
+              <span class="badge-hot">🔥 Best Seller</badge-hot">🔥 Best Seller</span>
+              <span class="badspan>
+              <span class="badge-stock" id="sb-oreo">Sisa:ge-stock" id="sb-oreo">S 20</span>
             </div>
+            <div class="isa: 20</span>
+            </div>
+            <div class="pc-name">Bola Orepc-name">Bola Oreo Suso Susu</div>
+            <div class="pc-desc">Per porsi (5 pcs) · susu bubu</div>
+            <div class="pc-desc">Per porsi (5 pcs) · susu bubuk</divuk</div>
+            <div class="pc-price">Rp8.000</div>
+          </div>
+          <div class="stepper">
+            <button class="sp-btn>
+            <div class="pc-price">Rp8.000</div>
+          </div>
+          <div class="stepper">
+            <button class="sp-btn" id="btn-ore" id="btn-oreo-m" onclick="chg('oreo',-1)">−o-m" onclick="chg('oreo',-1)">−</button>
+            <span class="sp-n" id</button>
+            <span class="sp-n" id="qn-oreo">0</span>
+           ="qn-oreo">0</span>
+            <button class="sp-btn" id=" <button class="sp-btn" id="btn-oreo-p" onclick="chg('oreo',1)">+</button>
+         btn-oreo-p" onclick="chg('oreo',1)">+</button>
+          </div>
+        </div>
+        </div>
+
+        <!-- Product </div>
+
+        <!-- Product: Mac and Cheese -->
+       : Mac and Cheese -->
+        <div class=" <div class="pc" id="card-mac">
+         pc" id="card-mac">
+          <div class="pc-vis">
+            <svg viewBox="0  <div class="pc-vis">
+            <svg viewBox="0 0 68 68" xmlns="http://www.w3.org0 68 68" xmlns="http://www.w3.org/2000/svg">
+              <rect width="68" height="68" rx/2000/svg">
+              <rect width="68" height="68" rx="12" fill="#341E08"/>
+              <ellipse cx="12" fill="#341E08"/>
+              <ellipse cx="34" cy="54" rx="23="34" cy="54" rx="23" ry" ry="8" fill="#C07820"/>
+              <path d="M11,38 Q9,54 34,62="8" fill="#C07820"/>
+              <path d="M11,38 Q9,54 34,62 Q59,54 57 Q59,54 57,38,38 Z" fill="#D48830"/>
+              <ellipse cx="34" cy=" Z" fill="#D48830"/>
+              <ellipse cx="34" cy="38" rx="23" ry="9" fill="#E0983038" rx="23" ry="9" fill="#E09830"/>
+              <ellipse cx="34""/>
+              <ellipse cx="34" cy="36" rx="19" cy="36" rx="19" ry="7" fill="#F2C040"/>
+              <ellipse cx="34" cy="33" rx="16" ry="5.5" fill="#FAD060"/>
+              <path d="M24 ry="7" fill="#F2C040"/>
+              <ellipse cx="34" cy="33" rx="16" ry="5.5" fill="#FAD060"/>
+              <path d="M24,31 Q27,26 30,31,31 Q27,26 30,31 Q33,36 36,31" fill="none Q33,36 36,31" fill="none" stroke" stroke="#D4A020" stroke-width="2.2" stroke-linecap="#D4A020" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M34="round"/>
+              <path d="M34,32,32 Q37,27 40,32 Q43 Q37,27 40,32 Q43,37,37 46,32" fill="none" stroke="#C89018" stroke-width="2. 46,32" fill="none" stroke="#C89018" stroke-width="2.2" stroke-linecap="2" stroke-linecap="round"/>
+              <path dround"/>
+              <path d="M26,24 Q="M26,24 Q24,18 24,18 26,12 Q28,6 26,2"  fill="none26,12 Q28,6 26,2"  fill="none" stroke="white" stroke-width="" stroke="white" stroke-width="1.1.4" opacity=".38" stroke4" opacity=".38" stroke-linecap="round"/>
+              <path d="M34,22 Q32-linecap="round"/>
+              <path d="M34,22 Q32,16 34,10 Q36,4 34,16 34,10 Q36,4 34,1"  fill=",1" none" stroke=" fill="none" stroke="white" stroke-width="1.4" opacity=".38" stroke-linecap="white" stroke-width="1.4" opacity=".38" stroke-lineround"/>
+              <path d="M42,24 Q40,18 cap="round"/>
+              <path d="M42,24 Q40,18 42,12" fill="none"42,12" fill="none" stroke="white" stroke="white" stroke-width stroke-width="1="1.4" opacity.4" opacity=".=".38" stroke-line38" stroke-linecap="round"/>
+              <path d="M52,40 Q54,46 cap="round"/>
+              <path d="M52,40 Q54,46 52,54" fill="none" stroke="#F052,54" fill="none" stroke="#F0C040C040" stroke-width="2." stroke-width="2.8"8" stroke-linecap="round"/>
+              <circle cx="52" cy="56" r stroke-linecap="round"/>
+              <circle cx="52" cy="56" r="3.5" fill="#F0C040"/>
+            </svg="3.5" fill="#F0C040"/>
+            </>
+          </div>
+          <div class="pc-info">
+            <div class="pc-badgessvg>
+          </div>
+          <div class="pc-info">
+            <div class="pc-badges">
+              <span class="badge-stock"">
+              <span class="badge-stock" id="sb-mac"> id="sb-mac">SisaSisa: 15</span>
+            </: 15</span>
+            </div>
+            <div class="pc-name">Mac and Cheese</divdiv>
+            <div class="pc-name">Mac and Cheese</div>
+            <div class="pc-desc">1 porsi · saus keju>
+            <div class="pc-desc">1 porsi · saus keju creamy</ creamy</div>
+           div <div class="pc-price">Rp10.000</div>
+          </div>
+          <div class="stepper">
+            <button>
+            <div class="pc-price">Rp10.000</div>
+          </div>
+          <div class="stepper">
+            <button class="sp-btn class="sp-btn" id" id="btn-mac-m" onclick="chg('mac',-="btn-mac-m" onclick="chg('mac',-1)">−1)">−</button</button>
+           >
+            <span class=" <span class="sp-n" id="qnsp-n" id-mac">0="qn-mac">0</span>
+            <button class="sp-btn" id="btn</span>
+            <button class="sp-btn" id="btn-mac-p" onclick="chg-mac-p" onclick="chg('mac',1)">('mac',1)">+</button>
+          </+</button>
           </div>
         </div>
 
-        <!-- PRODUCT 2: Mac and Cheese -->
-        <div class="product-card">
-          <div class="product-art">
-            <svg viewBox="0 0 82 82" xmlns="http://www.w3.org/2000/svg">
-              <!-- Background -->
-              <rect width="82" height="82" fill="#180d06" rx="10"/>
-              <!-- Bowl shadow -->
-              <ellipse cx="41" cy="70" rx="27" ry="6" fill="rgba(0,0,0,.5)"/>
-              <!-- Bowl body -->
-              <path d="M14 43 Q14 68 41 68 Q68 68 68 43 Z" fill="#b86830"/>
-              <path d="M14 43 Q14 66 41 66 Q68 66 68 43 Z" fill="#c8783c"/>
-              <!-- Bowl rim -->
-              <ellipse cx="41" cy="43" rx="27" ry="8.5" fill="#d8885a"/>
-              <ellipse cx="41" cy="43" rx="24"  ry="7"   fill="#2c1008"/>
-              <!-- Cheese base -->
-              <ellipse cx="41" cy="43" rx="24"  ry="7"   fill="#f0c030"/>
-              <!-- Macaroni pieces (hollow ellipses) -->
-              <ellipse cx="29" cy="41" rx="5.5" ry="3.2" fill="none" stroke="#d4941c" stroke-width="2.5"/>
-              <ellipse cx="41" cy="40" rx="5.5" ry="3.2" fill="none" stroke="#c8881a" stroke-width="2.5"/>
-              <ellipse cx="53" cy="41" rx="5.5" ry="3.2" fill="none" stroke="#d4941c" stroke-width="2.5"/>
-              <ellipse cx="35" cy="45" rx="5.5" ry="3.2" fill="none" stroke="#c07e18" stroke-width="2.5"/>
-              <ellipse cx="47" cy="45" rx="5.5" ry="3.2" fill="none" stroke="#c07e18" stroke-width="2.5"/>
-              <!-- Cheese drizzle -->
-              <path d="M24 43 Q30 38 37 43 Q43 48 49 43 Q55 38 60 43"
-                    stroke="#fad84a" stroke-width="2.2" fill="none" opacity=".85"/>
-              <!-- Creamy pool -->
-              <ellipse cx="41" cy="44.5" rx="15" ry="4.2" fill="#f5c840" opacity=".35"/>
-              <!-- Steam wisps -->
-              <path d="M31 31 Q29 24 31 17" stroke="#fff" stroke-width="1.4" fill="none"
-                    opacity=".22" stroke-linecap="round"/>
-              <path d="M41 29 Q39 22 41 15" stroke="#fff" stroke-width="1.4" fill="none"
-                    opacity=".22" stroke-linecap="round"/>
-              <path d="M51 31 Q49 24 51 17" stroke="#fff" stroke-width="1.4" fill="none"
-                    opacity=".22" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="product-info">
-            <div class="product-name">Mac and<br>Cheese</div>
-            <div class="product-desc">1 porsi — makaroni creamy, saus keju melimpah 🧀</div>
-            <div class="product-price">Rp10.000</div>
-            <div class="stepper">
-              <button class="stp-btn" onclick="changeQty(1,-1)">−</button>
-              <span class="stp-qty" id="qty-1">0</span>
-              <button class="stp-btn" onclick="changeQty(1,1)">+</button>
-            </div>
-          </div>
+      </div><!-- /menu-listdiv>
         </div>
 
-      </div><!-- /menu-scroll -->
+      </div><!-- /menu-list -->
 
       <!-- Footer -->
-      <div class="menu-footer">
-        <div class="subtotal-bar">
-          <span class="subtotal-label">Subtotal</span>
-          <span class="subtotal-amount" id="subtotal">Rp0</span>
+      <div class="menu -->
+
+      <!-- Footer -->
+      <div class="menu-foot-foot">
+        <div>
+         ">
+        <div>
+          <div class="sub-lbl">Total Pesanan</div>
+          <div <div class="sub-lbl">Total Pesanan</div>
+          <div class="sub- class="sub-amt" id="sub-amt">Rp0</div>
+          <div class="sub-empty" id="sub-empty">Pilih menu dulu 👆</div>
         </div>
-        <div class="empty-hint" id="empty-hint">⚠️ Pilih menu dulu ya!</div>
-        <button class="btn btn-primary" id="btn-next"
-                onclick="proceedToForm()" style="width:100%;" disabled>
-          Lanjut ke Pemesanan →
+        <button class="btn-p"amt" id="sub-amt">Rp0</div>
+          <div class="sub-empty" id="sub-empty">Pilih menu dulu 👆</div>
+        </div>
+        <button class="btn-p" id="btn-to-form" onclick="nav('form')" disabled style=" id="btn-to-form" onclick="nav('form')" disabled style="padding:13pxpadding:13px 26px;">
+          Pesan →
+        </button>
+      </div>
+
+    </ 26px;">
+          Pesan →
         </button>
       </div>
 
     </div>
   </div>
+  </div><!-- /s-menu -->
 
+  <!-- ===== STEP 3: FORM ===== -->
+ div><!-- /s-menu -->
 
-  <!-- ==================== STEP 3: FORM ==================== -->
-  <div class="step" id="step-form">
-    <div class="form-wrapper">
+  <!-- ===== STEP 3: FORM ===== -->
+  <div class="step" id="s <div class="step" id="s-form">
+    <button class-form">
+    <button class="btn-back"="btn-back" onclick="nav(' onclick="nav('menu')">← Ubah Pesanan</button>
+    <div class="form-wrap gc" style="width:calc(menu')">← Ubah Pesanan</button>
+    <div class="form-wrap gc" style="width:calc(100% - 32px100% - 32px);max);max-width:460px;">
 
-      <!-- Header -->
-      <div class="step-header">
-        <button class="back-btn" onclick="goStep(1)">←</button>
-        <span class="step-label">Detail Pesanan</span>
+     -width:460px;">
+
+      <div class="form <div class="form-head">
+       -head">
+        <h2 <h2>📋 Detail Pemesan</h2>
+       >📋 Detail Pemesan</h2>
+        <p> <p>Isi data diri untuk konfirmasi pesanan</p>
       </div>
 
-      <div class="form-scroll">
+      <div classIsi data diri untuk konfirmasi pesanan</p>
+      </div>
 
-        <!-- Mini order summary -->
-        <div class="order-summary">
-          <div class="os-title">📋 Ringkasan Pesanan</div>
-          <div id="summary-items"></div>
-          <div class="os-total-row">
-            <span class="os-total-label">Total</span>
-            <span class="os-total-val" id="summary-total">Rp0</span>
+      <div class="form-body="form-body">
+        <div class="fg">
+          <label class="fl">Nama">
+        <div class="fg">
+          <label class="fl">Nama Lengkap</label>
+          <input class="fi" id="f-nama" type="text"  placeholder Lengkap</label>
+          <input class="fi" id="f-nama" type="text"  placeholder="Tulis nama kamu..." autocomplete="name" ="Tulis nama kamu..." autocomplete="name"  oninput="f oninput="fval()"/>
+         val()"/>
+          <div class="fe" id="e-nama"></div>
+        </div>
+        <div class="fg <div class="fe" id="e-nama"></div>
+        </div>
+        <div class="fg">
+          <label">
+          <label class=" class="fl">fl">Kelas</label>
+          <input class="Kelas</label>
+          <input class="fi" id="fi" id="f-kelas" type="text" placeholder="f-kelas" type="text" placeholder="Contoh: XI IPA Contoh: XI IPA 2" autocomplete="off"   oninput="f2" autocomplete="off"   oninput="fval()val()"/>
+          <div class=""/>
+          <div class="fe"fe" id=" id="e-kelas"></e-kelas"></divdiv>
+        </div>
+        <div class="fg">
+          <label class="fl">No. HP / WhatsApp</label>
+          <input class>
+        </div>
+        <div class="fg">
+          <label class="fl">No. HP / WhatsApp</label>
+          <input class="fi="fi" id="f-hp"  " id="f-hp"   type="tel"  placeholder="08xxxxxxxxxx type="tel"  placeholder="08xxxxxxxxxx" inputmode="" inputmode="numeric"numeric" autocomplete autocomplete="tel" on="tel" oninput="fvalinput="fval()()"/>
+         "/>
+          <div class="fe" id="e-hp"></div>
+        </div>
+        <!-- Order summary -->
+        <div class="fe" id="e-hp"></div>
+        </div>
+        <!-- Order summary <div class="ord-sum" id="ord-sum -->
+        <div class="ord-sum" id="ord-sum">
+          <div">
+          <div class="ord-sum class="ord-sum-ttl">📦-ttl">📦 Ringkasan Pesanan</div>
+          <div id="sum-items"></div Ringkasan Pesanan</div>
+          <div id="sum-items"></div>
+          <div class="ord-total">
+            <span class="ord-total-l>
+          <div class="ord-total">
+            <span class="ord-total-l">Total</span">Total</span>
+            <span class="ord-total-v" id="f>
+            <span class="ord-total-v" id="f-total">Rp0</span>
+          </div>
+        </div-total">Rp0</span>
           </div>
         </div>
+      </div>
 
-        <!-- Input fields -->
-        <div class="form-panel">
-          <div class="f-group">
-            <label class="f-label" for="i-nama">👤 Nama Lengkap</label>
-            <input type="text" id="i-nama" class="f-input"
-                   placeholder="Nama kamu..." oninput="validateForm()" autocomplete="name">
-            <div class="f-error" id="e-nama">Nama tidak boleh kosong</div>
-          </div>
+     >
+      </div>
 
-          <div class="f-group">
-            <label class="f-label" for="i-kelas">🏫 Kelas</label>
-            <input type="text" id="i-kelas" class="f-input"
-                   placeholder="Contoh: X IPA 1" oninput="validateForm()" autocomplete="off">
-            <div class="f-error" id="e-kelas">Kelas tidak boleh kosong</div>
-          </div>
-
-          <div class="f-group" style="margin-bottom:0">
-            <label class="f-label" for="i-hp">📱 No HP (WhatsApp)</label>
-            <input type="tel" id="i-hp" class="f-input"
-                   placeholder="08xxxxxxxxxx" oninput="onHpInput()" autocomplete="tel">
-            <div class="f-error" id="e-hp">Harus diawali "08", minimal 10 digit, angka saja</div>
-          </div>
+      <div class <div class="form-acts">
+        <button class="btn-p" id="btn-submit" onclick="submit()"="form-acts">
+        <button class="btn-p" id="btn-submit" onclick="submit()" disabled style="width:100%;padding disabled style="width:100%;padding:15px;font-size:15px;font-size:1rem;">
+          Kir:1rem;">
+          Kirim ke WhatsApp 📲im ke WhatsApp
+        </button>
+        <div class="form-acts-row">
+          <button class="btn-s" onclick="copyOrd()">📋 Salin Pesanan</button>
+          <button class="btn-s 📲
+        </button>
+        <div class="form-acts-row">
+          <button class="btn-s" onclick="copyOrd()">📋 Salin Pesanan</button>
+          <button class="btn-s btn-danger" onclick="reset btn-danger" onclick="resetOrd()">🗑️ Reset</Ord()">🗑️ Reset</buttonbutton>
         </div>
-
-        <!-- Action buttons -->
-        <div class="form-actions">
-          <button class="btn btn-primary" id="btn-submit"
-                  onclick="submitOrder()" disabled style="width:100%;">
-            📤 Kirim Pesanan ke WhatsApp
-          </button>
-          <div class="btn-row">
-            <button class="btn btn-secondary" onclick="copyOrder()" style="flex:1; font-size:8px;">
-              📋 Copy Pesanan
-            </button>
-            <button class="btn btn-ghost" onclick="resetAll()" style="flex:1;">
-              🗑️ Reset
-            </button>
-          </div>
+      </div>
         </div>
+      </>
 
-      </div><!-- /form-scroll -->
+    </divdiv>
+
     </div>
-  </div>
+  </div><!-- /s>
+  </div><!-- /s-form-form -->
 
+  <!-- ===== STEP 4: -->
 
-  <!-- ==================== STEP 4: REDIRECT ==================== -->
-  <div class="step" id="step-redirect">
-    <div class="card">
-      <span class="success-icon">🎉</span>
-      <div class="redir-title">Terima kasih!</div>
-      <p class="redir-sub">
-        Pesanan sedang dibuka<br>di WhatsApp...
-      </p>
-      <div class="dots">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </div>
-      <button class="btn btn-primary" id="btn-open-wa"
-              onclick="openWA()" style="width:100%; display:none; margin-bottom:10px;">
+  <!-- ===== STEP 4: REDIRECT ===== -->
+  <div class="step" id="s-redirect REDIRECT ===== -->
+  <div class="step" id="s-redirect">
+   ">
+    <div class="redir-card gc <div class="redir-card gc">
+     ">
+      <span class=" <span class="redir-icoredir-ico">🎉</span">🎉</span>
+     >
+      <h2 class=" <h2 class="redir-title">redir-title">Terima kasih!</h2>
+      <p classTerima kasih!</h2>
+      <p class="redir-sub">Pesanan sedang dibuka<br="redir-sub">Pesanan sedang dibuka<br>di WhatsApp<span>di WhatsApp<span class=" class="ld"></ld"></span></span></p>
+      <button class="btn-p" id="btn-wp>
+      <button class="btn-p" id="a" onclick="openWA()" style="btn-wa" onclick="openWA()" style="display:ndisplay:none;margin-top:6pxone;margin-top:6px;">
         📲 Buka WhatsApp
       </button>
-      <button class="btn btn-ghost" onclick="resetAll()" style="width:100%;">
-        🔄 Pesan Lagi
-      </button>
+     ;">
+        📲 Buka WhatsApp
+      </button <p class="redir>
+      <p class="-meta">Konfirmasi pembredir-meta">Konfirmasi pembayaranayaran di tempat di tempat saat bazar berlangsung</p>
+    </div>
+  </div saat bazar berlangsung</p>
     </div>
   </div>
 
 </div><!-- /app -->
 
+<!-->
 
+</div><!-- /app -->
+
+<!-- ================================= ==========================================================================
+    =
+     SCRIPT
+================================ SCRIPT
+====================================================== -->
 <script>
-/* ============================================================
-   CONFIG — ⚠️ Ganti WA_NUMBER dengan nomor penjual
-============================================================ */
-const WA_NUMBER = '6285694458024';   // format internasional, tanpa +
+/*====================== -->
+<script>
+/* ================================= ============================================================
+===========================
+     CONFIG CONFIG
+================================
+======================================================================================== */
+const WA  */
+const WA = '6281234567890'; // nomor lain
+const PRD
+const PRD = {
+  ore = {
+  oreo: { nameo: { name:'B:'Bola Oreo Susu',ola Oreo Susu',  desc  desc:'B:'Bola Oreo Susola Oreo Susu / Porsiu / Porsi (5 pcs (5 pcs)', price:800)', price:8000,  stock0,  stock0:20 },
+  mac0:20 },
+  mac:  { name:  { name:'Mac and Cheese:'Mac and Cheese',  desc:'',  desc:'Mac and Cheese /Mac and Cheese / 1 Porsi 1 Porsi',        price:',        price:10000, stock10000, stock0:0:1515 },
+};
+const },
+};
+const STEPS STEPS = ['home',' = ['menu','home','menu','form','form','redirectredirect'];
 
-const PRODUCTS = [
-  { name: 'Bola Oreo Susu', tag: '(5 pcs)', price: 8000  },
-  { name: 'Mac and Cheese',  tag: '',        price: 10000 },
-];
+/* ='];
 
-
-/* ============================================================
+/* ======================================================================================================================
+   STATE=
    STATE
+============================================================
 ============================================================ */
-let curStep   = 0;
-let qty       = [0, 0];      // quantities per product
-let waUrl     = '';
-let audioCtx  = null;
-let bgNodes   = [];
-let bgRunning = false;
-let muted     = false;
-let touched   = false;       // first user interaction flag
+let */
+let S = {
+  S = {
+  cur:  'home',
+  qty:  { oreo cur:  'home',
+  qty:  { oreo:0, mac:0:0, mac:0 },
+  },
+  stk stk: :  { ore { oreo:20,o:20, mac:15 mac:15 },
+  form: { nama:'', kelas },
+  form: { nama:'', kelas:'',:'', hp:'' hp:'' },
+  wa },
+  waUrl:'',
+  audOkUrl:'',
+  audOk:false:false,
+ ,
+  muted: muted:false,
+};
 
+/* ===========================================================false,
+};
 
 /* ============================================================
-   LOCAL STORAGE
+   PERS=
+   PERSISTIST
+============================================================
 ============================================================ */
-function saveLS() {
+function save */
+function save(){
   try {
-    localStorage.setItem('bazar_qty',  JSON.stringify(qty));
-    localStorage.setItem('bazar_form', JSON.stringify({
-      nama:  document.getElementById('i-nama').value,
-      kelas: document.getElementById('i-kelas').value,
-      hp:    document.getElementById('i-hp').value,
-    }));
-  } catch(e) {}
+    localStorage(){
+  try {
+    localStorage.setItem('b.setItem('bazar_qazar_qty',  JSONty',  JSON.stringify(S.q.stringify(S.qty));
+   ty));
+    localStorage.setItem(' localStorage.setItem('bazar_stk',  JSON.stringify(S.stbazar_stk',  JSON.stringify(S.stk));
+    localStoragek));
+    localStorage.setItem('b.setItem('bazar_form', JSON.stringify(S.formazar_form', JSON.stringify(S.form));
+  }));
+  } catch(e catch(e){){}
+}
+}
+function}
+function load(){
+  try {
+    load(){
+  try {
+    const q const q=localStorage.getItem('bazar_qty=localStorage.getItem('bazar_qty');
+    const k=');
+    const k=localStoragelocalStorage.getItem('bazar.getItem('bazar_stk_stk');
+    const f');
+    const f=local=localStorage.getItem('bStorage.getItem('bazar_form');
+    if(qazar_form');
+    if(q) S.qty  =) S.qty  = JSON.parse JSON.parse(q(q);
+    if);
+    if(k) S.st(k) S.stk  = JSONk  = JSON.parse(k);
+   .parse(k);
+    if(f if(f) S.form = JSON.parse) S.form = JSON.parse(f(f);
+  });
+  } catch(e catch(e){}
 }
 
-function loadLS() {
-  try {
-    const q = localStorage.getItem('bazar_qty');
-    if (q) qty = JSON.parse(q);
-
-    const f = localStorage.getItem('bazar_form');
-    if (f) {
-      const { nama, kelas, hp } = JSON.parse(f);
-      document.getElementById('i-nama').value  = nama  || '';
-      document.getElementById('i-kelas').value = kelas || '';
-      document.getElementById('i-hp').value    = hp    || '';
-    }
-  } catch(e) {}
-  refreshMenu();
+/* ============================================================
+   STEP NAVIGATION
+================================){}
 }
-
 
 /* ============================================================
    STEP NAVIGATION
 ============================================================ */
-function goStep(n) {
-  if (n === curStep) return;
-  playClick();
+function nav(to){
+  if(S.cur===to) return;
+  click();
+  const fi = STEPS============================ */
+function nav(to){
+  if(S.cur===to) return;
+  click();
+  const fi = STEPS.indexOf(S.indexOf(S.cur);
+  const ti.cur);
+  const ti = ST = STEPS.indexOf(to);
+  const fwdEPS.indexOf(to);
+  const fwd = ti > fi;
 
-  const steps = document.querySelectorAll('.step');
-  const from  = steps[curStep];
-  const to    = steps[n];
+  const ce = ti > fi;
 
-  const dir = n > curStep ? 'left' : 'right';
+  const ce = id('s = id('s-'+-'+S.S.cur);
+  constcur);
+  const ne = id('s- ne = id('s-'+to);
 
-  // Exit current
-  from.classList.remove('active');
-  from.classList.add(dir === 'left' ? 'go-left' : 'go-right');
+  ce.classList'+to);
 
-  // Prepare incoming (off-screen on opposite side)
-  to.classList.remove('go-left', 'go-right', 'active');
-  to.style.transform = dir === 'left' ? 'translateX(48px)' : 'translateX(-48px)';
-  to.style.opacity   = '0';
+  ce.classList.remove('active.remove('active');
+  ce');
+  ce.classList.add(fwd ? '.classList.add(fwdlf' : ' ? 'lf' : 'lblb');
+  ce.addEventListener('animationend');
+  ce.addEventListener('animationend', (', ()=> ce.classList.remove('lf)=> ce.classList.remove('lf','lb'),','lb'), { {once:true});
 
-  // Force reflow then animate in
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      from.classList.remove('go-left', 'go-right');
-      to.style.transform = '';
-      to.style.opacity   = '';
-      to.classList.add('active');
+  neonce:true});
 
-      curStep = n;
-      updateDots();
+  ne.style.css.style.cssText = '';
+ Text = '';
+  ne.classList.remove(' ne.classList.remove('ef','ef','eb','eb','lf','lf','lb','activelb','active');
+  requestAnimationFrame(()=>');
+  requestAnimationFrame(()=>{
+    ne.classList{
+    ne.classList.add('active',.add('active', fwd ? ' fwd ? 'ef'ef' : 'eb');
+    ne : 'eb');
+    ne.addEventListener('.addEventListener('animationend', ()=> neanimationend', ()=> ne.classList.remove.classList.remove('ef','eb('ef','eb'), {once:'), {once:true});
+ true});
+  });
 
-      // Step-specific side effects
-      if (n === 2) {
-        renderSummary();
-        setTimeout(() => document.getElementById('i-nama').focus(), 350);
+  S });
+
+  S.cur.cur = to;
+
+  = to if(to==='form'){
+    setTimeout;
+
+  if(to==='form'){
+    setTimeout(()=>(()=>{
+     {
+      renderForm();
+      renderForm();
+      id(' id('f-nf-nama').value ama').value  = S.form.nama = S.form.nama;
+      id;
+      id('f('f-kelas').value-kelas').value = S.form.k = S.form.kelas;
+      idelas;
+      id('f('f-hp-hp').value').value    = S.form.hp    = S.form.hp;
+     ;
+      fval();
+      fval();
+      id(' id('f-nama').focusf-nama').focus();
+    }, 120);
+  }
+();
+    }, 120);
+  }
+}
+
+/* =========================================================}
+
+/* ============================================================
+   HELP===
+   HELPERSERS
+============================================================
+============================================================ */
+const id */
+const id  = (s  = (s) => document.getElementById) => document.getElementById(s(s);
+const rp  = (n) => 'Rp' + n.toLocale);
+const rp  = (n) => 'Rp' + n.toLocaleString('id-IDString('id-ID');
+function total(){ return Object.keys(PRD).reduce((a');
+function total(){ return Object.keys(PRD).reduce((a,k)=>a+S,k)=>a+S.qty[k]*.qty[k]*PRD[k].PRD[k].price,price,0); }
+
+function bump(el){
+  el.classList0); }
+
+function bump(el){
+  el.classList.remove('bump');
+  void el.remove('bump');
+  void el.offset.offsetWidthWidth;
+  el.classList.add('b;
+  el.classList.addump('bump');
+  setTimeout(()=>el.classList');
+  setTimeout(()=>el.classList.remove('bump.remove('bump'),280);
+'),280}
+
+/* =);
+}
+
+/* ======================================================================================================================
+   QTY / STOCK
+=============================================================
+   QTY / STOCK
+============================================================ */
+function chg */
+function chg(pid, d){
+ (pid, d){
+  const q const q  = S.qty[pid  = S.qty[pid];
+  const];
+  const nq nq = q + d;
+  = q + d;
+  if(n if(nqq < 0) return;
+  < 0) return;
+  if(d > 0 && if(d > 0 && S.st S.stk[pid]k[pid] <=  <= 0)0) return return;
+  S.stk;
+  S.stk[pid] -=[pid] -= d;
+  S.qty d;
+  S.qty[pid[pid] ]  = n = nqq;
+  click();
+ ;
+  click();
+  save();
+  render save();
+  renderMenu();
+}
+
+functionMenu();
+}
+
+function renderMenu(){
+  Object.keys renderMenu(){
+  Object.keys((PRPRD).D).forEach(forEach(pid=>pid=>{
+    const q{
+    const q = S = S.qty.qty[pid];
+   [pid];
+    const s = S const s = S.stk[pid.stk[pid];
+    // q];
+    // qty displayty display
+    if(id
+    if(id('qn('qn-'+-'+pid)) id('qn-'+pidpid)) id('qn-'+pid).text).textContent =Content = q q;
+    // buttons;
+    //
+    const bm buttons
+    const = id('btn bm = id('btn-'+pid+'-m-'+pid+'-m');
+   ');
+    const bp = id const bp = id('btn('btn-'+-'+pid+'-ppid+'-p');
+   ');
+    if(b if(bm)m) bm.disabled = (q<= bm.disabled = (0q<=0);
+    if);
+    if(bp) bp(bp) bp.disabled = (s<=.disabled = (s<=0);
+    //0);
+    // stock badge stock badge
+    const sb = id
+    const sb('sb-'+ = id('sb-'+pid);
+    ifpid);
+    if(sb){
+      if(s<=0){
+       (sb){
+      if(s<=0){
+        sb.text sb.textContent = 'HContent = 'Habis';
+        sbabis';
+        sb.className.className   =   = 'bad 'badge-outge-out';
+     ';
+      } else } else {
+        sb.textContent = 'S {
+        sb.textContent = 'Sisa:isa: '+s;
+        sb.className   = 'badge '+s;
+        sb.className   = 'badge-stock-stock';
       }
-    });
-  });
-}
-
-function updateDots() {
-  document.querySelectorAll('.pdot').forEach((d, i) => {
-    d.classList.toggle('active', i === curStep);
-  });
-}
-
-
-/* ============================================================
-   QUANTITY MANAGEMENT
-============================================================ */
-function changeQty(idx, delta) {
-  playClick();
-  qty[idx] = Math.max(0, qty[idx] + delta);
-  refreshMenu();
-  saveLS();
-}
-
-function refreshMenu() {
-  qty.forEach((q, i) => {
-    document.getElementById(`qty-${i}`).textContent = q;
-  });
-  const total = calcTotal();
-  document.getElementById('subtotal').textContent = formatRp(total);
-
-  const hasOrder = qty.some(q => q > 0);
-  document.getElementById('btn-next').disabled = !hasOrder;
-  document.getElementById('empty-hint').style.display = 'none';
-}
-
-function calcTotal() {
-  return qty.reduce((s, q, i) => s + q * PRODUCTS[i].price, 0);
-}
-
-function proceedToForm() {
-  if (!qty.some(q => q > 0)) {
-    document.getElementById('empty-hint').style.display = 'block';
-    return;
-  }
-  goStep(2);
-}
-
-
-/* ============================================================
-   FORMAT RUPIAH
-============================================================ */
-function formatRp(n) {
-  return 'Rp' + n.toLocaleString('id-ID');
-}
-
-
-/* ============================================================
-   ORDER SUMMARY (Step 3 mini view)
-============================================================ */
-function renderSummary() {
-  const container = document.getElementById('summary-items');
-  container.innerHTML = '';
-  let total = 0;
-
-  qty.forEach((q, i) => {
-    if (q < 1) return;
-    const sub = q * PRODUCTS[i].price;
-    total += sub;
-
-    container.insertAdjacentHTML('beforeend', `
-      <div class="os-item">
-        <span class="os-name">${PRODUCTS[i].name}</span>
-        <div class="mini-stepper">
-          <button class="mstp" onclick="changeQtyForm(${i},-1)">−</button>
-          <span class="mq" id="mq-${i}">${q}</span>
-          <button class="mstp" onclick="changeQtyForm(${i},1)">+</button>
-        </div>
-        <span class="os-price" id="mp-${i}">${formatRp(sub)}</span>
-      </div>
-    `);
-  });
-
-  document.getElementById('summary-total').textContent = formatRp(total);
-}
-
-function changeQtyForm(idx, delta) {
-  playClick();
-  qty[idx] = Math.max(0, qty[idx] + delta);
-  refreshMenu();
-  renderSummary();
-  saveLS();
-  validateForm();
-  if (!qty.some(q => q > 0)) {
-    toast('Tambah menu dulu ya! 🛒');
-    goStep(1);
-  }
-}
-
-
-/* ============================================================
-   FORM VALIDATION
-============================================================ */
-function onHpInput() {
-  // Strip non-digits
-  const el = document.getElementById('i-hp');
-  el.value = el.value.replace(/\D/g, '');
-  validateForm();
-}
-
-function validateForm() {
-  saveLS();
-
-  const nama  = document.getElementById('i-nama').value.trim();
-  const kelas = document.getElementById('i-kelas').value.trim();
-  const hp    = document.getElementById('i-hp').value.trim();
-
-  function check(val, errId, inputId, ok) {
-    const dirty = document.getElementById(inputId) !== document.activeElement;
-    document.getElementById(errId).classList.toggle('show', !ok && val.length > 0 && dirty);
-    document.getElementById(inputId).classList.toggle('err', !ok && val.length > 0 && dirty);
-    return ok;
-  }
-
-  const hpOk = /^\d+$/.test(hp) && hp.startsWith('08') && hp.length >= 10;
-
-  const allOk =
-    check(nama,  'e-nama',  'i-nama',  nama.length  > 0) &&
-    check(kelas, 'e-kelas', 'i-kelas', kelas.length > 0) &&
-    check(hp,    'e-hp',    'i-hp',    hpOk);
-
-  document.getElementById('btn-submit').disabled = !allOk;
-}
-
-// Also validate on blur to show inline errors
-['i-nama','i-kelas','i-hp'].forEach(id => {
-  document.getElementById(id).addEventListener('blur', validateForm);
-});
-
-
-/* ============================================================
-   SUBMIT ORDER → WhatsApp
-============================================================ */
-function buildMsg() {
-  const nama  = document.getElementById('i-nama').value.trim();
-  const kelas = document.getElementById('i-kelas').value.trim();
-  const hp    = document.getElementById('i-hp').value.trim();
-
-  let lines = '';
-  qty.forEach((q, i) => {
-    if (q > 0) {
-      const tag = PRODUCTS[i].tag ? ` ${PRODUCTS[i].tag}` : '';
-      lines += `- ${PRODUCTS[i].name}${tag} x${q}\n`;
     }
+    // card';
+      }
+    }
+    // card opacity
+    const card = id('card-'+pid opacity
+    const card = id('card-'+pid);
+    if(card));
+    if(card) card.classList.toggle card.classList.toggle('s('sold-outold-out', s', s<=0 && q<=0);
   });
+ <=0 && q<=0);
+  });
+  // subtotal // subtotal
+  const
+  const t  t  = total();
+  = total();
+  const sa = id const sa = id('sub-amt('sub-amt');
+ ');
+  if(sa){ if(sa){ sa.textContent = sa.textContent = rp rp(t);(t); bump(s bump(sa);a); }
+  const ok }
+  const ok = t>0 = t>0;
+ ;
+  const se const se = id('sub-empty');
+  const = id('sub-empty');
+  const bf = id bf = id('btn-to-form('btn-to-form');
+ ');
+  if(se) se.style if(se) se.style.display =.display = ok ? 'none ok ? 'none' :' : 'block 'block';
+  if(bf)';
+  if(bf) bf.disabled bf.disabled = ! = !ok;
+}
 
-  return `Halo, saya mau pre-order Bazar 22 Mei 🎪
+/*ok;
+}
 
-Nama: ${nama}
-Kelas: ${kelas}
-No HP: ${hp}
+/* ================================= ======================================================================================
+  =
+   FORM RENDER + FORM RENDER + VALID VALIDATION
+========================================================ATION
+================================================================ */
+function renderForm */
+function renderForm(){
+  const si =(){
+  const si = id(' id('sum-items');
+ sum-items');
+  if(!si) if(!si) return return;
+  let;
+  let html=' html='', has', has=false;
+  Object=false.keys(;
+  Object.keys(PRDPRD).forEach(pid=>).forEach(pid=>{
+    const q=S{
+    const q=S.qty.qty[pid[pid]; if]; if(!q(!q) return) return;
+   ;
+    has=true;
+    has=true;
+    html+= html+=``<div class="ord-line">
+     <div class="ord-line">
+      <span class="ord-line-n">${ <span class="ord-line-n">${PRDPRD[pid[pid].name].name}</span>
+     }</span>
+      <div <div class=" class="ord-line-s">
+       ord-line-s <button class">
+        <button class="sp-btn"="sp-btn" onclick="fch onclick="fchg('g('${pid${pid}',-1)}',-1)">−">−</button>
+       </button <span>
+        <span class="sp-n" id class="sp-n" id="fqn-="fqn-${pid}">${q${pid}">${q}</span>
+        <button}</span>
+        <button class="sp-btn" onclick class="sp-btn" onclick="fchg="fchg('${pid}',1)">+</button>
+     ('${pid}',1)">+</button>
+      </div>
+      <span style=" </div>
+      <span style="font-size:.8font-size:.8rem;color:var(--rem;color:var(--gold);min-widthgold);min-width:72:72px;text-alignpx;text-align:right">${:right">${rp(q*PRrp(q*PRD[pid].price)}D[pid].price)}</span</span>
+    </div>>
+    </div>`;
+  });
+  if(!has) html`;
+  });
+  if(!has) html='<div style="text='<div style="text-align:center;padding:-align:center;padding:6px6px;font-size:.78rem;font-size:.78rem;color;color:rg:rgba(ba(255,255,255,255,.35)255,255,.35)">Tidak ada pesanan">Tidak ada pesanan</div>';
+ </div>';
+  si.innerHTML = html si.innerHTML = html;
+ ;
+  const ft=id('f-total');
+  const ft=id('f-total');
+  if(ft) if(ft) ft.textContent = ft.textContent = rp(total rp(total());
+}
+
+function());
+}
+
+function fch fchg(pid, dg(pid, d){
+  chg(pid,){
+  chg(pid, d);
+  render d);
+  renderFormForm();
+  fval();
+  fval();
+  if(total()();
+  if(total()<=0<=0) setTimeout) setTimeout(()=>nav('(()=>nav('menu'),280menu'),280);
+}
+
+function fval(){
+ );
+}
+
+function fval(){
+  const nm  = const nm  = id('f-n id('f-nama').ama').value.trim();
+ value.trim();
+  const kl  = id(' const kl  = id('f-kelas').value.trimf-kelas').();
+  const hp  =value.trim();
+  const hp  = id('f-h id('f-hp').value.trim();
+  S.formp').value.trim();
+  S.form = { = {nama:nm,nama:nm, kelas:kl, kelas:kl, hp hp};
+  save};
+  save();
+
+ ();
+
+  let ok let ok=true;
+  function err(fid,eid,msg){ id(fid).=true;
+  function err(fid,eid,msg){ id(fid).classList.toggle('err',!!classList.toggle('err',!!msg); id(emsg); id(eid).id).textContent=msgtextContent=msg||''; if||''; if(msg) ok=false;(msg) ok=false; }
+
+  err('f }
+
+  err('f-nama','e-nama','e-nama', !-nama', !nm?'Nama wajib diisi': nm.length<2?'Nama terlalu pendnm?'Nama wajib diisi': nm.length<2?'Nama terlalu pendek':'');
+  err('f-kek':'');
+  err('f-kelas','elas','e-ke-kelas',!klelas',!kl?'Kelas wajib diisi':'?'Kelas wajib diisi':'');
+  const hp');
+  const hpErr = !hp?'No. HP wajib diisi':!/^Err = !hp?'No. HP wajib diisi':!/^[0-9]+$/.[0-9]+$/.test(htest(hp)?'Hanya angka':
+               p)?'Hanya angka !hp.startsWith':
+                !hp.startsWith('08('08')?'Harus')?'Harus diawali "08"': hp.length<10?'Minimal  diawali "08"': hp.length<10?'Minimal 10 digit':'';
+  err('f-hp','e10 digit':'';
+  err('f-hp','e-hp', hpErr);
+
+  const-hp', hpErr);
+
+  const bs=id(' bs=btn-submit'); if(bs) bs.disabled=id('btn-submit'); if(bs) bs.disabled=!ok;
+  return ok;
+!ok;
+  return ok;
+}
+
+/* =========================================================}
+
+/* ============================================================
+   SUBMIT===
+   SUBMIT
+========================================================
+============================================================ */
+function submit==== */
+function submit(){
+ (){
+  if(!fval()) return;
+  const bs=id('btn-submit');
+  bs.disabled=true if(!fval()) return;
+  const bs=id('btn-submit');
+  bs.disabled=true; bs.textContent='Mengirim...';
+  click; bs.textContent='Mengirim...';
+  click();
+
+  let lines();
+
+  let lines='';
+  Object.keys(='';
+  Object.keys(PRD).forEach(pid=>{ if(S.qty[pid]) linesPRD).forEach(pid=>{ if(S.qty[pid]) lines+=`- ${PRD[pid].name} x${S.qty[pid+=`- ${PRD[pid].name} x${S.qty[pid]}\n`;]}\n`; });
+
+  const msg=
+`Halo, saya ingin pre-order Bazar 22 });
+
+  const msg=
+`Halo, saya ingin pre-order Bazar 22 Mei! Mei! 🎪
+
+Nama  : 🎪
+
+Nama  : ${S.form.n ${Sama}
+Kelas.form.nama}
+Kelas : ${S.form.kelas}
+No HP : ${S : ${S.form.kelas}
+No HP : ${S.form.hp}
 
 Pesanan:
-${lines}
-Total: ${formatRp(calcTotal())}`;
+${lines.trim().form.hp}
+
+Pesanan:
+${lines.trim()}
+
+Total: ${rp(total())}
+
+Total: ${rp(total())}
+
+Terima kasih!}
+
+Terima kasih!`;
+
+  S.wa`;
+
+  S.waUrl = `httpsUrl = `https://wa.me/${WA}://wa.me/${WA}?text?text=${encodeURIComponent=${encodeURIComponent(msg)}(msg)}`;
+
+  setTimeout(()`;
+
+  setTimeout(()=>{=>{ nav('redirect'); nav('redirect'); openWA(); }, 750 openWA(); }, 750);
 }
 
-function submitOrder() {
-  playClick();
-
-  waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(buildMsg())}`;
-
-  // Loading state
-  const btn = document.getElementById('btn-submit');
-  btn.textContent = '⏳ Mengirim...';
-  btn.disabled = true;
-
-  goStep(3);
-
-  // Auto open WA after 1.5s
-  setTimeout(() => {
-    try {
-      const win = window.open(waUrl, '_blank');
-      if (!win) throw new Error('popup blocked');
-    } catch(e) {
-      document.getElementById('btn-open-wa').style.display = 'block';
-    }
-    // Show fallback button regardless (for popup blockers)
-    setTimeout(() => {
-      document.getElementById('btn-open-wa').style.display = 'block';
-    }, 2800);
-  }, 1500);
-
-  // Reset submit button state after small delay
-  setTimeout(() => {
-    btn.textContent = '📤 Kirim Pesanan ke WhatsApp';
-    btn.disabled = false;
-  }, 800);
+function open);
 }
 
-function openWA() {
-  playClick();
-  window.open(waUrl, '_blank');
+function openWAWA(){
+  if(){
+  if(!S.waUrl)(!S.waUrl) return;
+  return;
+  window window.open(S.open(S.wa.waUrl,'_blankUrl,'_blank');
+  setTimeout(()');
+  setTimeout(()=>{ const b=id=>{ const b=id('btn-wa('btn'); if-wa'); if(b)(b) b.style b.style.display='.display=''; },'; }, 2600);
+}
+
+/* ================================= 2600);
 }
 
 /* ============================================================
-   COPY ORDER TEXT
+  ===========================
+   COPY + COPY + RESET RESET
+============================================================
 ============================================================ */
-function copyOrder() {
-  playClick();
-  navigator.clipboard.writeText(buildMsg())
-    .then(() => toast('✅ Teks pesanan berhasil dicopy!'))
-    .catch(() => toast('❌ Gagal copy, coba manual'));
+function copyOrd(){
+  let lines=' */
+function copyOrd(){
+  let lines='';
+  Object';
+  Object.keys(PR.keys(D).forEachPRD).forEach(pid(pid=>{ if(S=>{ if(S.qty.qty[pid]) lines[pid]) lines+=`+=`- ${PRD- ${PRD[pid[pid].name].name} x${S.qty} x${S.qty[pid[pid]}\]}\n`; });
+  const txtn`; });
+  const txt=
+`Nama =
+`Nama  : ${ : ${S.formS.form.nama||'-'}
+K.nama||'-'}
+Kelas : ${Selas : ${S.form.kelas||'-.form.kelas||'-'}
+No HP'}
+No HP : ${ : ${S.formS.form.hp||'-'.hp||'-'}
+
+Pesanan:
+${lines.trim()}
+
+Pesanan:
+${lines.trim()||'(||'(kosong)'}
+
+Total:kosong)'}
+
+Total: ${rp ${rp(total())(total())}`;
+
+  const write =}`;
+
+  const write = () => {
+    () => {
+    if(n if(navigator.clipboard)avigator.clipboard) navigator.clipboard.write navigator.clipboard.writeText(txt).Text(txt).then(toastthen(toast);
+    else);
+    else { const { const t= t=document.createElement('textareadocument.createElement('textarea'); t'); t.value=txt;.value=txt; document.body document.body.appendChild(t); t.appendChild(t); t.select();.select(); document.execCommand(' document.execCommand('copy'); document.bodycopy'); document.body.removeChild(t);.removeChild(t); toast(); toast(); }
+  };
+  }
+  };
+  write(); write(); click click();
 }
+
+function();
+}
+
+function resetOrd resetOrd(){
+  if(!(){
+  if(!confirm('Reset semuaconfirm('Reset semua pesanan pesanan & data?')) return;
+  Object & data?')) return;
+  Object.keys(.keys(PRD).forEach(pidPRD).forEach(pid=>{=>{ S.stk S.stk[pid]+[pid]+=S.qty[pid]; S=S.qty[pid]; S.qty.qty[pid[pid]=0; });
+  S]=0; });
+  S.form={nama:'.form={nama:'',kel',kelas:'as:'',hp',hp:''};
+ :''};
+  save(); renderMenu();
+  id(' save(); renderMenu();
+  id('f-nama').value='f-nama').value=''; id'; id('f('f-kelas-kelas').value='';').value=''; id('f-h id('f-hp').value='';
+ p').value='';
+  fval fval(); render(); renderFormForm();
+  nav();
+  nav('menu('menu');
+}
+
+function toast');
+}
+
+function toast(){
+  const t(){
+  const t=id('toast'); t.classList.add('=id('toast'); t.classList.add('showshow');
+  setTimeout');
+  setTimeout(()=>(()=>t.classListt.classList.remove('show'),.remove('show'),26002600);
+}
+
+/* =);
+==========================================================}
 
 /* ============================================================
-   RESET ALL
+   AUDIO (=
+   AUDIO (Web AudioWeb Audio API API)
 ============================================================ */
-function resetAll() {
-  playClick();
-  qty = [0, 0];
-  ['i-nama','i-kelas','i-hp'].forEach(id => {
-    document.getElementById(id).value = '';
-  });
-  document.getElementById('btn-open-wa').style.display = 'none';
-  waUrl = '';
-  try {
-    localStorage.removeItem('bazar_qty');
-    localStorage.removeItem('bazar_form');
-  } catch(e) {}
-  refreshMenu();
-  goStep(0);
-}
-
-/* ============================================================
-   TOAST
+let AC)
 ============================================================ */
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2600);
+let AC=null=null, MG=null, MG=null;
+const;
+const NOTES NOTES=[261.63,=[261.63,293.66,329.293.66,329.63,63,392,392,440,523.440,25,587.523.25,33,659.587.33,659.25];
+const PAT=[025];
+const PAT=[0,2,4,2,5,2,4,2,5,4,4,2,0,2,0];
+let];
+let melTime=0, melTmr melTime=0, melTmr=null=null;
+
+function initAudio;
+
+function initAudio(){
+ (){
+  if(S.aud if(SOk) return.audOk) return;
+  try{
+    AC = new (;
+  try{
+    AC = new (window.Awindow.AudioContext||window.webkitudioContext||window.webkitAudioContext)AudioContext)();
+    MG = AC.createGain();();
+    MG = AC.createGain(); MG.g MG.gain.value=S.main.value=S.muted?0:.uted?0:.55; MG.connect55; MG.connect(AC(AC.destination.destination);
+    makeNoise(); scheduleMel);
+    makeNoise(); scheduleMel();
+    S.();
+    S.audOkaudOk=true;
+  }=true;
+  }catch(ecatch(e){){}
 }
 
-/* ============================================================
-   AUDIO ENGINE (Web Audio API)
-============================================================ */
-function initAudio() {
-  if (audioCtx) return;
-  try {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (!muted) startBg();
-  } catch(e) {}
+function}
 }
 
-/* Click SFX — short pixel blip */
-function playClick() {
-  try {
-    if (!audioCtx || muted) return;
-    const osc  = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(480, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(720, audioCtx.currentTime + 0.06);
-    gain.gain.setValueAtTime(0.07, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.13);
-    osc.start(audioCtx.currentTime);
-    osc.stop(audioCtx.currentTime + 0.14);
-  } catch(e) {}
+function makeNo makeNoiseise(){
+  const sr=AC.sampleRate(){
+  const sr=AC.sampleRate, buf, buf=AC.createBuffer=AC.createBuffer(2(2,sr,sr*3,sr*3,sr);
+ );
+  for(let c= for(let c=0;0;c<2;c++){ constc<2;c++){ const d=buf.get d=buf.getChannelDataChannelData(c);(c); for(let for(let i= i=0;i<d.length;i++) d0;i<d.length;i++) d[i][i]=(Math=(Math.random().random()*2*2-1-1);); }
+  const src=AC.create }
+  const src=AC.createBufferSource(); srcBufferSource(); src.buffer=buf; src.loop.buffer=buf; src.loop=true=true;
+  const bp=AC.create;
+  const bp=AC.createBiquBiquadFilter(); bp.type='bandpass'; bpadFilter(); bp.type='bandpass'; bp.frequency.frequency.value=700; bp.Q.value=700; bp.Q.value=.28.value=.28;
+  const lp=;
+  const lp=AC.createBiquadFilterAC.createBiquadFilter(); lp.type='(); lp.type='lowpasslowpass';  lp.frequency.value';  lp.frequency.value=1100=1100;
+  const g=AC.createGain(); g.gain;
+  const g=AC.createGain(); g.gain.value=..value=.034034;
+  src;
+  src.connect(bp);.connect(bp); bp.connect(lp bp.connect(lp); lp.connect(g); g); lp.connect(g); g.connect(MG.connect(MG);
+  src);
+  src.start();
 }
 
-/* Ambient background drone */
-function startBg() {
-  if (!audioCtx || bgRunning) return;
-  bgRunning = true;
-
-  // Two soft sine drones (A3 + E4)
-  [[220, -0.3], [329.63, 0.3]].forEach(([freq, pan]) => {
-    const osc    = audioCtx.createOscillator();
-    const gain   = audioCtx.createGain();
-    const panner = audioCtx.createStereoPanner();
-    osc.connect(gain); gain.connect(panner); panner.connect(audioCtx.destination);
-    osc.type = 'sine';
-    osc.frequency.value = freq;
-    panner.pan.value    = pan;
-    gain.gain.setValueAtTime(0, audioCtx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.035, audioCtx.currentTime + 2.5);
-    osc.start();
-    bgNodes.push({ osc, gain });
-  });
-
-  // Gentle looping melody
-  loopMelody();
+function pNote.start();
 }
 
-function loopMelody() {
-  if (!audioCtx || muted) return;
-  // E4 F#4 G#4 A4 G#4 F#4
-  const notes  = [329.63, 369.99, 415.30, 440, 415.30, 369.99];
-  let t = audioCtx.currentTime + 0.1;
-  notes.forEach(freq => {
-    const osc  = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    osc.type = 'triangle';
-    osc.frequency.value = freq;
-    gain.gain.setValueAtTime(0, t);
-    gain.gain.linearRampToValueAtTime(0.022, t + 0.1);
-    gain.gain.linearRampToValueAtTime(0, t + 0.7);
-    osc.start(t); osc.stop(t + 0.75);
-    t += 0.82;
-  });
-  // Schedule next loop
-  setTimeout(loopMelody, notes.length * 820 + 1200);
+function pNote(freq,t,dur,(freq,t,dur,vol=.048){
+  const osc=vol=.048){
+  const osc=AC.createOscAC.createOscillator(),illator(), g= g=AC.createGainAC.createGain(), lp(), lp=AC=AC.createBiquad.createBFilter();
+  osciquadFilter.type='();
+  osc.type='sinesine'; osc'; osc.frequency.value=f.frequency.value=freq;
+  oscreq;
+  osc.det.detune.valueune.value=(Math=(Math.random()-.5.random()-.5)*18;
+  g.g)*18;
+  g.gain.setain.setValueAtValueAtTime(0,tTime(0,t);
+  g.g);
+  g.gain.ain.linearRlinearRampToampToValueAtValueAtTime(vol,t+.06);
+  g.gain.exponentialRampToValueAtTime(vol,t+.06);
+  g.gain.exponentialRampToValueAtTime(.Time(.001,t+dur001,t+dur);
+  lp.type='low);
+  lp.type='lowpass'; lp.fpass'; lp.frequency.valuerequency.value=1700;
+  osc=1700;
+  osc.connect(l.connect(lp);p); lp.connect(g); lp.connect g.connect(g); g.connect(MG(MG);
+  osc.start);
+  osc.start(t); osc.stop(t); osc.stop(t+d(t+dur+.ur+.1);
 }
 
-function stopBg() {
-  bgNodes.forEach(({ osc, gain }) => {
-    try {
-      gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
-      osc.stop(audioCtx.currentTime + 0.45);
-    } catch(e) {}
-  });
-  bgNodes = [];
-  bgRunning = false;
+function1);
 }
 
-/* Audio toggle button */
-document.getElementById('audio-toggle').addEventListener('click', () => {
-  initAudio();
-  muted = !muted;
-  document.getElementById('audio-toggle').textContent = muted ? '🔇' : '🔊';
-  if (muted) stopBg();
-  else       startBg();
+function scheduleMel(){
+  if(!AC) scheduleMel(){
+  if(!AC) return return;
+  const now=AC.current;
+  const now=AC.currentTime,Time, ahead= ahead=2.2;
+  if(!melTime) melTime=now+.5;
+  const sp=.422.2;
+  if(!melTime) melTime=now+.5;
+  const sp=.42;
+ ;
+  while(melTime < now+ahead while(melTime < now+ahead){
+   ){
+    PAT.forEach((ni PAT.forEach((ni,i)=>,i)=> pNote pNote(NOTES[ni](NOTES[ni]*(Math.random()*(Math.random()>.9>.9?2?2:1), mel:1), melTime+i*sp, sp*.72Time+i*sp, sp*.72, .044+Math.random, .044+Math.random()*.()*.022022));
+    melTime +=));
+    melTime += PAT.length*sp PAT.length + *sp + 1.8 + Math.random()*.1.8 + Math.random()*.8;
+  }
+  mel8;
+  }
+  melTmrTmr = setTimeout(schedule = setTimeout(scheduleMel,Mel, 500);
+}
+
+function click 500);
+}
+
+function click(){
+  if(!(){
+  if(!AC||AC||S.muted)S.m returnuted) return;
+  try{
+   ;
+  try const o{
+    const o=AC.createOscillator=AC.createOscillator(), g(), g=AC=AC.createG.createGain();
+    oain();
+    o.type='.type='sine'; osine'; o.frequency.setValue.frequencyAtTime(900,AC.setValueAtTime(900,AC.currentTime);
+   .currentTime);
+    o.f o.frequency.exrequency.exponentialRampToValueAtponentialRampToValueAtTime(440,Time(440,AC.currentAC.currentTime+.Time+.0909);
+    g);
+    g.gain.gain.setValue.setValueAtTimeAtTime(.18,AC.currentTime(.18,AC.currentTime);
+    g.g);
+    g.gain.exponentialRain.exponentialRampToValueAtTime(.001,AC.currentTime+.13ampToValueAtTime(.001,AC.currentTime+.13);
+    o.connect(g);
+    o.connect(g); g.connect(); g.connect(AC.destination);
+    oAC.destination);
+    o.start(); o.stop.start(); o.stop(AC.currentTime(AC.currentTime+.16+.16);
+  }catch);
+  }catch(e){(e){}
+}
+}
+
+id('aud-btn').addEventListener('}
+
+id('aud-btn').addEventListener('click',()=>click',()=>{
+ {
+  if(! if(!S.audOk){ initS.audOk){ initAudio(); S.muted=falseAudio(); S.muted=false;; }
+  else { S.muted=!S.m }
+  else { S.muted=!S.muted; if(MG) MG.guted; if(MG) MG.gain.setain.setTargetAtTime(STargetAtTime(S.muted?0.muted?0:.55,AC:.55,AC.currentTime.currentTime,.1,.1); }
+  id); }
+  id('aud('aud-btn').-btn').textContent = StextContent = S.muted.muted ? ' ? '🔇' : '🔇' : '🔊🔊';
 });
 
-/* Init audio on first user gesture */
-document.addEventListener('pointerdown', () => {
-  if (!touched) { touched = true; initAudio(); }
-}, { passive: true });
+/* ===========================================================';
+});
 
-
-/* ============================================================
-   PIXEL ART CANVAS BACKGROUND
+/* ==================================
+  ===========================
+   PARAL PARALLAXLAX
+================================
 ============================================================ */
-(function initCanvas() {
-  const canvas = document.getElementById('bg-canvas');
-  const ctx    = canvas.getContext('2d');
+function============================ */
+function initPx initPx(){
+  const LS=[
+    {(){
+  const LS=[
+    {el:idel:id('l1'),('l1'), str:. str:.008},
+    {008},
+    {el:id('lel:id('l2'), str:.2'), str:.0202},
+    {el:id},
+    {el:id('l3'),('l3'), str:.034},
+    { str:.034},
+    {el:idel:id('l('l4'),4'), str:. str:.054},
+  ];
+  let tx=054},
+  ];
+  let tx=0,0,ty=0,cty=0,cx=0,x=0,cy=cy=0;
 
-  /* Polyfill roundRect for older browsers */
-  if (!ctx.roundRect) {
-    ctx.roundRect = function(x,y,w,h,r) {
-      const rad = typeof r === 'number' ? r : (r[0] || 0);
-      this.beginPath();
-      this.moveTo(x+rad, y);
-      this.lineTo(x+w-rad, y);
-      this.quadraticCurveTo(x+w,y,x+w,y+rad);
-      this.lineTo(x+w,y+h-rad);
-      this.quadraticCurveTo(x+w,y+h,x+w-rad,y+h);
-      this.lineTo(x+rad,y+h);
-      this.quadraticCurveTo(x,y+h,x,y+h-rad);
-      this.lineTo(x,y+rad);
-      this.quadraticCurveTo(x,y,x+rad,y);
-      this.closePath();
-    };
-  }
+  document0;
 
-  function draw() {
-    const W = canvas.width, H = canvas.height;
-    const bh = H * 0.72;  // horizon baseline
+  document.addEventListener('mousemove.addEventListener('mousemove',e=>',e=>{
+    const w={
+    constinnerWidth w=innerWidth/2, h/2, h=inner=innerHeight/2;
+    tx=(e.clientX-w)/w; ty=(e.clientHeight/2;
+    tx=(e.clientX-w)/w; ty=(e.clientY-h)/h;
+ Y-h)/h;
+  });
+  });
+  document.addEventListener('touch document.addEventListener('touchmove',move',e=>{
+   e=>{
+    const t=e.t const t=e.touchesouches[0[0], w], w=inner=innerWidth/2,Width/2, h=innerHeight h=innerHeight/2/2;
+    tx=(;
+    tx=(t.clientXt.client-w)/w; tyX-w)/w; ty=(t=(t.clientY-h)/h;
+  },.clientY-h)/h;
+  },{pass{passive:trueive:true});
 
-    /* --- SKY gradient (sunset) --- */
-    const sky = ctx.createLinearGradient(0, 0, 0, bh);
-    sky.addColorStop(0,    '#07051e');
-    sky.addColorStop(0.22, '#1e0850');
-    sky.addColorStop(0.48, '#5c1f3c');
-    sky.addColorStop(0.68, '#b03820');
-    sky.addColorStop(0.85, '#d46020');
-    sky.addColorStop(1,    '#e88830');
-    ctx.fillStyle = sky;
-    ctx.fillRect(0, 0, W, bh);
+  (});
 
-    /* --- GROUND --- */
-    const grd = ctx.createLinearGradient(0, bh, 0, H);
-    grd.addColorStop(0, '#180a28');
-    grd.addColorStop(1, '#080614');
-    ctx.fillStyle = grd;
-    ctx.fillRect(0, bh, W, H - bh);
-
-    /* --- SUN glow --- */
-    const sx = W * 0.64, sy = H * 0.50;
-    const sunG = ctx.createRadialGradient(sx, sy, 0, sx, sy, H * 0.38);
-    sunG.addColorStop(0,   'rgba(255,200,70,.55)');
-    sunG.addColorStop(0.28,'rgba(240,110,40,.28)');
-    sunG.addColorStop(1,   'rgba(0,0,0,0)');
-    ctx.fillStyle = sunG;
-    ctx.fillRect(0, 0, W, H);
-
-    /* Sun disk */
-    ctx.fillStyle = '#ffd166';
-    ctx.beginPath(); ctx.arc(sx, sy, 30, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = '#fff8dc';
-    ctx.beginPath(); ctx.arc(sx-8, sy-7, 11, 0, Math.PI*2); ctx.fill();
-
-    /* --- PIXEL CLOUDS --- */
-    function cloud(x, y, s, a) {
-      ctx.save(); ctx.globalAlpha = a;
-      ctx.fillStyle = 'rgba(255,160,100,.38)';
-      [[0,0,44,18],[14,-11,32,16],[-6,-7,26,14],[34,-10,22,14]].forEach(
-        ([dx,dy,w,h]) => {
-          ctx.beginPath();
-          ctx.roundRect(x+dx*s, y+dy*s, w*s, h*s, 8*s);
-          ctx.fill();
-        }
-      );
-      ctx.restore();
-    }
-    cloud(W*.08,  H*.16, 1.2, .5);
-    cloud(W*.38,  H*.10, .9,  .35);
-    cloud(W*.70,  H*.20, 1.0, .42);
-    cloud(W*.88,  H*.13, .72, .3);
-
-    /* --- STARS --- */
-    const starPos = [
-      [.07,.05],[.14,.11],[.21,.04],[.33,.07],[.47,.03],
-      [.54,.09],[.71,.05],[.77,.13],[.87,.06],[.93,.03],
-      [.04,.19],[.29,.17],[.62,.08],[.18,.16],[.40,.06],
-    ];
-    ctx.globalAlpha = .75;
-    starPos.forEach(([fx,fy]) => {
-      const x = fx*W, y = fy*H;
-      ctx.fillStyle = '#ffe8c8';
-      ctx.fillRect(x,   y,   2, 2);
-      ctx.globalAlpha = .25;
-      ctx.fillRect(x-1, y,   1, 2);
-      ctx.fillRect(x+2, y,   1, 2);
-      ctx.fillRect(x,   y-1, 2, 1);
-      ctx.fillRect(x,   y+2, 2, 1);
-      ctx.globalAlpha = .75;
+  (function tickfunction tick(){
+    cx+=(tx-cx)*.(){
+    cx+=(tx-cx)*.055;055; cy+=(ty-cy cy+=(ty-cy)*.)*.055055;
+    LS.forEach(l=>{
+      if(!l;
+    LS.forEach(l=>{
+      if(!l.el).el) return;
+      l.el.style.transform=`translate(${cx*l.str*130}px return;
+      l.el.style.transform=`translate(${cx*l.str*130,${cy*l.str*64}px)}px,${cy*l.str*64}px)`;
+   `;
     });
-    ctx.globalAlpha = 1;
-
-    /* --- BUILDINGS (silhouette) --- */
-    function building(x, w, h, flag) {
-      ctx.fillStyle = '#0b061a';
-      ctx.fillRect(x, bh-h, w, h);
-      // Windows
-      for (let wy = bh-h+10; wy < bh-8; wy += 15) {
-        for (let wx = x+7; wx < x+w-7; wx += 15) {
-          if (Math.random() > .28) {
-            ctx.fillStyle = `rgba(255,200,80,${.15+Math.random()*.2})`;
-            ctx.fillRect(wx, wy, 8, 8);
-          }
-        }
-      }
-      ctx.fillStyle = '#0b061a';
-      if (flag) {
-        ctx.fillRect(x+w/2-2, bh-h-18, 3, 18);
-        ctx.fillStyle = '#ff6b35';
-        ctx.fillRect(x+w/2+1, bh-h-18, 14, 9);
-        ctx.fillStyle = '#0b061a';
-      }
-    }
-
-    // Left cluster
-    building(W*.01, W*.07, H*.18, false);
-    building(W*.09, W*.055,H*.14, false);
-    building(W*.16, W*.10, H*.26, true);
-    // Right cluster
-    building(W*.74, W*.065,H*.20, false);
-    building(W*.82, W*.09, H*.15, false);
-    building(W*.92, W*.07, H*.23, true);
-
-    /* --- TREES --- */
-    function tree(x, y, h) {
-      ctx.fillStyle = '#0a1808';
-      ctx.fillRect(x-3, y, 6, h*.3);
-      ctx.fillStyle = '#0d2010';
-      ctx.beginPath();
-      ctx.moveTo(x, y-h*.68);
-      ctx.lineTo(x-h*.34, y); ctx.lineTo(x+h*.34, y);
-      ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#152818';
-      ctx.beginPath();
-      ctx.moveTo(x, y-h*.9);
-      ctx.lineTo(x-h*.22, y-h*.32); ctx.lineTo(x+h*.22, y-h*.32);
-      ctx.closePath(); ctx.fill();
-    }
-    tree(W*.30, bh, 72);
-    tree(W*.34, bh, 56);
-    tree(W*.66, bh, 68);
-    tree(W*.70, bh, 52);
-
-    /* --- BAZAR TENTS --- */
-    function tent(x, col1, col2) {
-      const tw = W*.075, ty = bh;
-      ctx.fillStyle = '#160824';
-      ctx.fillRect(x, ty-36, tw, 36);
-      // Roof
-      ctx.fillStyle = col1;
-      ctx.beginPath();
-      ctx.moveTo(x-8, ty-36);
-      ctx.lineTo(x+tw/2, ty-58);
-      ctx.lineTo(x+tw+8, ty-36);
-      ctx.closePath(); ctx.fill();
-      // Stripe
-      ctx.fillStyle = col2;
-      ctx.beginPath();
-      ctx.moveTo(x+tw*.2,   ty-36);
-      ctx.lineTo(x+tw*.5,   ty-58);
-      ctx.lineTo(x+tw*.42,  ty-58);
-      ctx.lineTo(x+tw*.12,  ty-36);
-      ctx.closePath(); ctx.fill();
-      // Counter glow
-      ctx.fillStyle = 'rgba(255,200,80,.1)';
-      ctx.fillRect(x+4, ty-30, tw-8, 20);
-    }
-    tent(W*.36, '#b02828', '#ffd166');
-    tent(W*.46, '#3d2278', '#ff6b35');
-    tent(W*.56, '#1e5438', '#ffa552');
-
-    /* --- LANTERN STRING --- */
-    ctx.strokeStyle = 'rgba(255,200,100,.25)';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    for (let lx = W*.30; lx <= W*.70; lx += 4) {
-      const ly = bh - 62 + Math.sin(lx * .055) * 9;
-      if (lx === W*.30) ctx.moveTo(lx, ly);
-      else ctx.lineTo(lx, ly);
-    }
-    ctx.stroke();
-
-    // Lantern bulbs
-    for (let lx = W*.30; lx < W*.70; lx += 28) {
-      const ly = bh - 62 + Math.sin(lx * .055) * 9;
-      const col = lx % 56 < 28 ? '#ff6b35' : '#6b2d8b';
-      ctx.fillStyle = col;
-      ctx.globalAlpha = .72;
-      ctx.beginPath(); ctx.roundRect(lx-4, ly-9, 8, 13, 2); ctx.fill();
-      ctx.globalAlpha = .18;
-      ctx.fillStyle = col;
-      ctx.beginPath(); ctx.arc(lx, ly, 11, 0, Math.PI*2); ctx.fill();
-      ctx.globalAlpha = 1;
-    }
-
-    /* --- GROUND GLOW --- */
-    const gg = ctx.createLinearGradient(0, bh, 0, H);
-    gg.addColorStop(0, 'rgba(180,90,30,.06)');
-    gg.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = gg;
-    ctx.fillRect(0, bh, W, H-bh);
-  }
-
-  function resize() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    draw();
-  }
-
-  window.addEventListener('resize', resize);
-  resize();
-})();
-
+    });
+    requestAnimation requestAnimationFrame(tick);
+  })();
+}
 
 /* ============================================================
-   TWINKLING PIXEL STARS (DOM layer, animated)
+   DOTS ANFrame(tick);
+  })();
+}
+
+/* ===========================================================IMATION FALLBACK (cross-browser)
 ============================================================ */
-(function spawnStars() {
-  const layer = document.getElementById('star-layer');
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes twinkle {
-      0%,100% { opacity:.18; transform:scale(1); }
-      50%      { opacity:1;   transform:scale(1.6); }
-    }
-  `;
-  document.head.appendChild(style);
-
-  for (let i = 0; i < 22; i++) {
-    const s = document.createElement('div');
-    const left = Math.random() * 100;
-    const top  = Math.random() * 28;
-    const dur  = 2 + Math.random() * 3.2;
-    const del  = Math.random() * 3.5;
-    s.style.cssText = `
-      position:absolute;
-      left:${left}%;top:${top}%;
-      width:2px;height:2px;
-      background:#ffe8c8;
-      animation:twinkle ${dur}s ${del}s infinite;
-    `;
-    layer.appendChild(s);
-  }
+(function=
+   DOTS ANIMATION FALLBACK (cross-browser)
+============================================================ init */
+(functionDots initDots(){
+ (){
+  const ld const ld = document.querySelector('.ld');
+  if(!ld) return;
+  let step = 0;
+  setInterval(()=>{
+    const dots = ['.','..','...'];
+    ld.textContent = dots[step % dots.length];
+    step++;
+  },  = document.querySelector('.ld');
+  if(!ld) return;
+  let step = 0;
+  setInterval(()=>{
+    const dots = ['.','..','...'];
+    ld.textContent = dots[step % dots.length];
+    step++;
+  }, 500);
 })();
-
 
 /* ============================================================
    INIT
 ============================================================ */
-document.addEventListener('DOMContentLoaded', loadLS);
-</script>
+document.addEventListener('DOMContentLoaded',()=>{
+  load();
+  renderMenu();
+  initPx();
 
+  id('btn-start').addEventListener('click',()=>{ initAudio(); nav('menu'); });
+});
+</script>
+</body>
+</html>
+```500);
+})();
+
+/* ============================================================
+   INIT
+============================================================ */
+document.addEventListener('DOMContentLoaded',()=>{
+  load();
+  renderMenu();
+  initPx();
+
+  id('btn-start').addEventListener('click',()=>{ initAudio(); nav('menu'); });
+});
+</script>
 </body>
 </html>
