@@ -1,2896 +1,1519 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pre-Order Bazar 22 Mei</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Sawarabi+Mincho&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
-
-<style>
-/* ============================================================
-   GLOBAL VARIABLES & RESET
-   ============================================================ */
-:root {
-  --sky-top: #1a0a2e;
-  --sky-mid: #3d1a5e;
-  --sky-low: #7b3f8a;
-  --horizon: #e8714a;
-  --sunset-gold: #f5a623;
-  --sunset-pink: #ff6b9d;
-  --warm-cream: #fdf0d5;
-  --warm-orange: #ff8c42;
-  --ground-dark: #1a1225;
-  --ground-mid: #2d1f3d;
-  --leaf-dark: #1b4332;
-  --leaf-mid: #2d6a4f;
-  --leaf-light: #52b788;
-  --pixel-glow: #ffce00;
-  --ui-bg: rgba(10, 5, 20, 0.85);
-  --ui-border: rgba(255, 140, 66, 0.4);
-  --ui-accent: #ff8c42;
-  --ui-accent2: #ffce00;
-  --ui-text: #fdf0d5;
-  --ui-muted: rgba(253, 240, 213, 0.6);
-  --card-bg: rgba(20, 10, 35, 0.9);
-  --success: #52b788;
-  --danger: #ff6b6b;
-  --pixel-size: 2px;
-  --font-pixel: 'Press Start 2P', monospace;
-  --font-body: 'Noto Sans JP', sans-serif;
-  --font-serif: 'Sawarabi Mincho', serif;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: var(--font-body);
-  background: var(--ground-dark);
-  color: var(--ui-text);
-  overflow-x: hidden;
-  image-rendering: pixelated;
-  cursor: default;
-}
-
-/* ============================================================
-   PIXEL ART UTILITY
-   ============================================================ */
-.pixel-border {
-  box-shadow:
-    2px 0 0 0 var(--ui-border),
-    -2px 0 0 0 var(--ui-border),
-    0 2px 0 0 var(--ui-border),
-    0 -2px 0 0 var(--ui-border);
-}
-
-.pixel-box {
-  border: 2px solid var(--ui-border);
-  box-shadow:
-    inset 0 0 0 1px rgba(255,140,66,0.1),
-    4px 4px 0 0 rgba(0,0,0,0.5);
-}
-
-/* ============================================================
-   SCROLLBAR
-   ============================================================ */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--ground-dark); }
-::-webkit-scrollbar-thumb { background: var(--ui-accent); border-radius: 0; }
-
-/* ============================================================
-   SECTION 1: HERO — FULL PIXEL ENVIRONMENT SCENE
-   ============================================================ */
-#hero {
-  position: relative;
-  width: 100%;
-  height: 100svh;
-  min-height: 600px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-/* === Sky Gradient (multi-layer sunset) === */
-.sky-layer {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    #0d0520 0%,
-    #1a0a2e 15%,
-    #3d1a5e 35%,
-    #7b3f8a 52%,
-    #c0556b 65%,
-    #e8714a 75%,
-    #f5a623 85%,
-    #fdf0d5 100%
-  );
-  z-index: 0;
-}
-
-/* === Stars === */
-.stars-layer {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 55%;
-  z-index: 1;
-  overflow: hidden;
-}
-.star {
-  position: absolute;
-  background: #fff;
-  border-radius: 50%;
-  animation: starTwinkle var(--dur, 3s) ease-in-out infinite var(--delay, 0s);
-}
-@keyframes starTwinkle {
-  0%, 100% { opacity: var(--opacity-min, 0.3); transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.4); }
-}
-
-/* === Sun / Moon pixel === */
-.sun {
-  position: absolute;
-  width: 40px; height: 40px;
-  bottom: 26%;
-  right: 20%;
-  z-index: 2;
-  image-rendering: pixelated;
-}
-.sun::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(var(--sunset-gold), #fff8b0);
-  clip-path: polygon(
-    20% 0%, 80% 0%,
-    100% 20%, 100% 80%,
-    80% 100%, 20% 100%,
-    0% 80%, 0% 20%
-  );
-  box-shadow: 0 0 30px 15px rgba(245,166,35,0.6), 0 0 60px 30px rgba(232,113,74,0.3);
-  animation: sunPulse 4s ease-in-out infinite;
-}
-@keyframes sunPulse {
-  0%,100% { box-shadow: 0 0 30px 15px rgba(245,166,35,0.6), 0 0 60px 30px rgba(232,113,74,0.3); }
-  50% { box-shadow: 0 0 40px 20px rgba(245,166,35,0.8), 0 0 80px 40px rgba(232,113,74,0.5); }
-}
-
-/* === Cloud Layer === */
-.clouds-layer {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 60%;
-  z-index: 3;
-  pointer-events: none;
-}
-.cloud {
-  position: absolute;
-  image-rendering: pixelated;
-}
-/* Pixel clouds built via box-shadow blocks */
-.cloud-1 { top: 20%; left: -60px; animation: cloudDrift 40s linear infinite; }
-.cloud-2 { top: 30%; left: 30%; animation: cloudDrift 55s linear infinite 10s; opacity: 0.6; }
-.cloud-3 { top: 15%; right: -80px; animation: cloudDriftR 48s linear infinite 5s; opacity: 0.8; }
-
-@keyframes cloudDrift {
-  from { transform: translateX(0); }
-  to { transform: translateX(calc(100vw + 200px)); }
-}
-@keyframes cloudDriftR {
-  from { transform: translateX(0); }
-  to { transform: translateX(calc(-100vw - 200px)); }
-}
-
-/* Cloud shape via CSS pixel blocks */
-.cloud-shape {
-  position: relative;
-  display: inline-block;
-}
-.cloud-shape::before, .cloud-shape::after {
-  content: '';
-  position: absolute;
-}
-
-/* === Mountains / Far BG === */
-.mountains-far {
-  position: absolute;
-  bottom: 30%;
-  left: 0; right: 0;
-  height: 25%;
-  z-index: 4;
-  background:
-    /* mountain silhouettes via gradients */
-    linear-gradient(transparent 60%, #2d1255 60%) 0/180px 100%,
-    linear-gradient(transparent 40%, #3d1a5e 40%) 90px/240px 100%,
-    linear-gradient(transparent 50%, #251040 50%) 200px/200px 100%;
-  background-repeat: repeat-x;
-  opacity: 0.7;
-}
-
-/* === City Silhouette (pixel buildings) === */
-.city-layer {
-  position: absolute;
-  bottom: 22%;
-  left: 0; right: 0;
-  height: 20%;
-  z-index: 5;
-}
-.city-svg {
-  width: 100%;
-  height: 100%;
-}
-
-/* === Treeline Foreground === */
-.trees-back {
-  position: absolute;
-  bottom: 18%;
-  left: 0; right: 0;
-  height: 18%;
-  z-index: 6;
-}
-.trees-front {
-  position: absolute;
-  bottom: 10%;
-  left: 0; right: 0;
-  height: 22%;
-  z-index: 9;
-}
-
-/* === Ground layers === */
-.ground-layer {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  z-index: 8;
-}
-.ground-1 {
-  height: 18%;
-  background: linear-gradient(180deg, #1b4332 0%, #155d27 50%, #1a1225 100%);
-}
-.ground-2 {
-  height: 12%;
-  background: linear-gradient(180deg, #2d6a4f 0%, #1b4332 100%);
-  bottom: 14%;
-}
-.ground-path {
-  position: absolute;
-  bottom: 6%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60%;
-  height: 12%;
-  background: linear-gradient(180deg, #c8a97e 0%, #a07850 100%);
-  clip-path: polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%);
-  z-index: 10;
-}
-
-/* === Lanterns / string lights === */
-.lights-string {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 100%;
-  z-index: 11;
-  pointer-events: none;
-}
-.light-dot {
-  position: absolute;
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--pixel-glow);
-  box-shadow: 0 0 8px 3px rgba(255,206,0,0.7);
-  animation: lightBlink var(--dur, 2s) ease-in-out infinite var(--delay, 0s);
-}
-@keyframes lightBlink {
-  0%,100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-/* === Characters === */
-.characters-layer {
-  position: absolute;
-  bottom: 14%;
-  left: 0; right: 0;
-  height: 28%;
-  z-index: 12;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 0;
-  pointer-events: none;
-}
-.character {
-  position: relative;
-  image-rendering: pixelated;
-  flex-shrink: 0;
-}
-
-/* === Character SVG pixel art === */
-.char-svg {
-  display: block;
-  image-rendering: pixelated;
-  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.6));
-}
-
-/* === Hero UI Overlay === */
-.hero-ui {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: 20;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.hero-title-wrap {
-  text-align: center;
-  animation: heroFadeIn 1.5s ease forwards;
-  pointer-events: all;
-}
-
-@keyframes heroFadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.hero-eyebrow {
-  font-family: var(--font-pixel);
-  font-size: 7px;
-  letter-spacing: 4px;
-  color: var(--sunset-gold);
-  text-transform: uppercase;
-  margin-bottom: 12px;
-  text-shadow: 0 0 10px rgba(245,166,35,0.8);
-  animation: heroFadeIn 1.5s ease 0.3s both;
-}
-
-.hero-title {
-  font-family: var(--font-pixel);
-  font-size: clamp(12px, 3vw, 20px);
-  line-height: 1.8;
-  color: var(--warm-cream);
-  text-shadow:
-    2px 2px 0 #1a0a2e,
-    0 0 20px rgba(253,240,213,0.5),
-    0 0 40px rgba(232,113,74,0.3);
-  margin-bottom: 6px;
-  animation: heroFadeIn 1.5s ease 0.6s both;
-}
-
-.hero-subtitle {
-  font-family: var(--font-body);
-  font-size: clamp(11px, 2.5vw, 14px);
-  color: rgba(253,240,213,0.8);
-  letter-spacing: 1px;
-  margin-bottom: 32px;
-  animation: heroFadeIn 1.5s ease 0.9s both;
-}
-
-/* Dialog box style subtitle */
-.dialog-box {
-  display: inline-block;
-  background: var(--ui-bg);
-  border: 2px solid var(--ui-border);
-  padding: 10px 18px;
-  font-family: var(--font-body);
-  font-size: 12px;
-  color: var(--ui-muted);
-  letter-spacing: 0.5px;
-  position: relative;
-  margin-bottom: 28px;
-  animation: heroFadeIn 1.5s ease 1.2s both;
-  max-width: 340px;
-}
-.dialog-box::before {
-  content: '▶';
-  margin-right: 6px;
-  color: var(--ui-accent);
-  font-size: 8px;
-  animation: dialogBlink 1s step-end infinite;
-}
-@keyframes dialogBlink {
-  0%,100% { opacity: 1; } 50% { opacity: 0; }
-}
-
-/* Countdown timer */
-.hero-countdown {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-bottom: 28px;
-  animation: heroFadeIn 1.5s ease 1.5s both;
-}
-.countdown-unit {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-.countdown-num {
-  font-family: var(--font-pixel);
-  font-size: clamp(14px, 3vw, 20px);
-  color: var(--pixel-glow);
-  text-shadow: 0 0 12px rgba(255,206,0,0.8);
-  background: var(--ui-bg);
-  border: 2px solid rgba(255,206,0,0.4);
-  padding: 6px 10px;
-  min-width: 48px;
-  text-align: center;
-  transition: all 0.3s ease;
-}
-.countdown-num.flip {
-  animation: numFlip 0.3s ease;
-}
-@keyframes numFlip {
-  0% { transform: scaleY(1); }
-  50% { transform: scaleY(0); opacity: 0.5; }
-  100% { transform: scaleY(1); }
-}
-.countdown-label {
-  font-family: var(--font-pixel);
-  font-size: 5px;
-  color: var(--ui-muted);
-  letter-spacing: 1px;
-}
-.countdown-sep {
-  font-family: var(--font-pixel);
-  font-size: 20px;
-  color: var(--ui-accent);
-  align-self: center;
-  padding-bottom: 12px;
-  animation: sepBlink 1s step-end infinite;
-}
-@keyframes sepBlink { 0%,100% { opacity:1; } 50% { opacity:0; } }
-
-/* Hero CTA */
-.hero-ctas {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-  animation: heroFadeIn 1.5s ease 1.8s both;
-}
-
-.btn-primary {
-  font-family: var(--font-pixel);
-  font-size: 8px;
-  letter-spacing: 1px;
-  background: var(--ui-accent);
-  color: #0d0520;
-  border: none;
-  padding: 12px 22px;
-  cursor: pointer;
-  position: relative;
-  transition: transform 0.1s, box-shadow 0.2s;
-  box-shadow: 4px 4px 0 #7a3500, 0 0 20px rgba(255,140,66,0.4);
-  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
-}
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 4px 6px 0 #7a3500, 0 0 30px rgba(255,140,66,0.6);
-}
-.btn-primary:active {
-  transform: translateY(1px) scale(0.97);
-  box-shadow: 2px 2px 0 #7a3500;
-}
-
-.btn-ghost {
-  font-family: var(--font-pixel);
-  font-size: 8px;
-  letter-spacing: 1px;
-  background: transparent;
-  color: var(--ui-text);
-  border: 2px solid var(--ui-border);
-  padding: 12px 20px;
-  cursor: pointer;
-  transition: all 0.2s;
-  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
-}
-.btn-ghost:hover {
-  border-color: var(--ui-accent);
-  color: var(--ui-accent);
-  box-shadow: 0 0 15px rgba(255,140,66,0.3);
-}
-
-/* ============================================================
-   SECTION 2: MENU — IN-WORLD SELECTION
-   ============================================================ */
-#menu-section {
-  position: relative;
-  background: linear-gradient(180deg, #1a1225 0%, #0d0520 100%);
-  padding: 60px 20px 80px;
-  overflow: hidden;
-}
-
-/* Section backdrop texture */
-#menu-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(ellipse at 20% 50%, rgba(125,63,138,0.15) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(232,113,74,0.1) 0%, transparent 50%);
-  pointer-events: none;
-}
-
-/* Pixel grid overlay */
-#menu-section::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255,140,66,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,140,66,0.03) 1px, transparent 1px);
-  background-size: 32px 32px;
-  pointer-events: none;
-}
-
-.section-header {
-  text-align: center;
-  margin-bottom: 40px;
-  position: relative;
-  z-index: 1;
-}
-
-.section-tag {
-  font-family: var(--font-pixel);
-  font-size: 7px;
-  letter-spacing: 4px;
-  color: var(--ui-accent);
-  text-transform: uppercase;
-  display: block;
-  margin-bottom: 10px;
-}
-
-.section-title {
-  font-family: var(--font-pixel);
-  font-size: clamp(10px, 2.5vw, 15px);
-  color: var(--warm-cream);
-  text-shadow: 0 0 20px rgba(253,240,213,0.4);
-  line-height: 2;
-  margin-bottom: 8px;
-}
-
-.section-line {
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--ui-accent), transparent);
-  margin: 12px auto 0;
-}
-
-/* Menu Items Layout — organic, game-like */
-.menu-grid {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
-  max-width: 700px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
-
-/* Menu Item Card — immersive style */
-.menu-item {
-  background: var(--card-bg);
-  border: 2px solid var(--ui-border);
-  padding: 0;
-  width: 280px;
-  cursor: pointer;
-  position: relative;
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 6px 6px 0 rgba(0,0,0,0.5);
-  overflow: hidden;
-}
-.menu-item::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(135deg, rgba(255,140,66,0.05) 0%, transparent 60%);
-  z-index: 0;
-}
-.menu-item:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: 6px 10px 0 rgba(0,0,0,0.6), 0 0 30px rgba(255,140,66,0.2);
-  border-color: var(--ui-accent);
-}
-.menu-item.added {
-  animation: itemAdded 0.4s ease;
-  border-color: var(--pixel-glow);
-  box-shadow: 6px 6px 0 rgba(0,0,0,0.5), 0 0 20px rgba(255,206,0,0.4);
-}
-@keyframes itemAdded {
-  0% { transform: scale(1); }
-  30% { transform: scale(1.04); }
-  60% { transform: scale(0.99); }
-  100% { transform: scale(1); }
-}
-
-/* Food illustration area */
-.menu-illustration {
-  width: 100%;
-  height: 130px;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(180deg, #1a0a2e 0%, #2d1040 100%);
-}
-
-.food-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-/* Ambient light effect */
-.menu-illustration::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 40%;
-  background: linear-gradient(transparent, var(--card-bg));
-}
-
-.menu-content {
-  padding: 16px;
-  position: relative;
-  z-index: 1;
-}
-
-.menu-name {
-  font-family: var(--font-pixel);
-  font-size: 9px;
-  color: var(--warm-cream);
-  margin-bottom: 6px;
-  line-height: 1.6;
-}
-
-.menu-desc {
-  font-family: var(--font-body);
-  font-size: 11px;
-  color: var(--ui-muted);
-  margin-bottom: 14px;
-  line-height: 1.6;
-}
-
-.menu-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.menu-price {
-  font-family: var(--font-pixel);
-  font-size: 11px;
-  color: var(--pixel-glow);
-  text-shadow: 0 0 10px rgba(255,206,0,0.6);
-}
-
-/* Stepper control */
-.stepper {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  background: rgba(255,140,66,0.1);
-  border: 1px solid var(--ui-border);
-}
-
-.stepper-btn {
-  width: 30px; height: 30px;
-  background: transparent;
-  border: none;
-  color: var(--ui-accent);
-  font-family: var(--font-pixel);
-  font-size: 14px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s, transform 0.1s;
-  line-height: 1;
-}
-.stepper-btn:hover { background: rgba(255,140,66,0.2); }
-.stepper-btn:active { transform: scale(0.9); background: rgba(255,140,66,0.35); }
-
-.stepper-val {
-  font-family: var(--font-pixel);
-  font-size: 10px;
-  color: var(--warm-cream);
-  min-width: 28px;
-  text-align: center;
-  padding: 0 4px;
-  transition: color 0.2s;
-}
-.stepper-val.changed {
-  color: var(--pixel-glow);
-  animation: valPop 0.3s ease;
-}
-@keyframes valPop {
-  0% { transform: scale(1.4); }
-  100% { transform: scale(1); }
-}
-
-/* ============================================================
-   SECTION 3: SMART CART PANEL
-   ============================================================ */
-.cart-panel {
-  position: fixed;
-  bottom: 20px;
-  right: 16px;
-  z-index: 100;
-  width: min(340px, calc(100vw - 32px));
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.cart-toggle {
-  position: absolute;
-  top: -48px;
-  right: 0;
-  background: var(--ui-accent);
-  border: none;
-  padding: 10px 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
-  box-shadow: 4px 4px 0 #7a3500;
-  transition: all 0.15s;
-}
-.cart-toggle:hover { box-shadow: 4px 6px 0 #7a3500; transform: translateY(-1px); }
-.cart-toggle:active { transform: scale(0.96); }
-
-.cart-icon-wrap {
-  position: relative;
-}
-.cart-icon {
-  font-size: 16px;
-  display: block;
-}
-.cart-badge {
-  position: absolute;
-  top: -6px; right: -8px;
-  background: var(--pixel-glow);
-  color: #0d0520;
-  font-family: var(--font-pixel);
-  font-size: 6px;
-  width: 16px; height: 16px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  transition: transform 0.2s;
-}
-.cart-badge.bump { animation: badgeBump 0.3s ease; }
-@keyframes badgeBump { 0% { transform: scale(1.6); } 100% { transform: scale(1); } }
-
-.cart-toggle-text {
-  font-family: var(--font-pixel);
-  font-size: 7px;
-  color: #0d0520;
-  letter-spacing: 0.5px;
-}
-
-/* Cart body */
-.cart-body {
-  background: var(--ui-bg);
-  border: 2px solid var(--ui-border);
-  box-shadow: 8px 8px 0 rgba(0,0,0,0.6), 0 0 30px rgba(255,140,66,0.15);
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
-  opacity: 0;
-}
-.cart-body.open {
-  max-height: 500px;
-  opacity: 1;
-}
-
-.cart-header {
-  padding: 14px 16px 10px;
-  border-bottom: 1px solid var(--ui-border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.cart-title {
-  font-family: var(--font-pixel);
-  font-size: 8px;
-  color: var(--ui-accent);
-  letter-spacing: 1px;
-}
-
-.cart-items-list {
-  padding: 12px 16px;
-  max-height: 180px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.cart-item-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
-  background: rgba(255,140,66,0.05);
-  border: 1px solid rgba(255,140,66,0.15);
-  transition: background 0.2s, border-color 0.2s;
-}
-.cart-item-row.highlight {
-  background: rgba(255,206,0,0.1);
-  border-color: rgba(255,206,0,0.4);
-  animation: rowHighlight 0.5s ease;
-}
-@keyframes rowHighlight {
-  0% { background: rgba(255,206,0,0.3); }
-  100% { background: rgba(255,206,0,0.1); }
-}
-
-.cart-item-name {
-  font-family: var(--font-body);
-  font-size: 11px;
-  color: var(--ui-text);
-  flex: 1;
-}
-.cart-item-qty {
-  font-family: var(--font-pixel);
-  font-size: 8px;
-  color: var(--ui-muted);
-}
-.cart-item-price {
-  font-family: var(--font-pixel);
-  font-size: 8px;
-  color: var(--pixel-glow);
-  text-align: right;
-}
-
-/* Promo input */
-.cart-promo {
-  padding: 10px 16px;
-  border-top: 1px solid var(--ui-border);
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-.promo-input {
-  flex: 1;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--ui-border);
-  color: var(--ui-text);
-  font-family: var(--font-pixel);
-  font-size: 7px;
-  padding: 8px 10px;
-  letter-spacing: 1px;
-  outline: none;
-  transition: border-color 0.2s;
-  text-transform: uppercase;
-}
-.promo-input:focus { border-color: var(--ui-accent); }
-.promo-input.valid { border-color: var(--success); color: var(--success); }
-.promo-input.invalid { border-color: var(--danger); color: var(--danger); }
-.promo-status {
-  font-family: var(--font-pixel);
-  font-size: 6px;
-  padding: 4px 8px;
-  transition: all 0.2s;
-}
-.promo-status.valid { color: var(--success); }
-.promo-status.invalid { color: var(--danger); }
-
-/* Cart totals */
-.cart-totals {
-  padding: 10px 16px;
-  border-top: 1px solid var(--ui-border);
-}
-.total-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 3px 0;
-}
-.total-label {
-  font-family: var(--font-body);
-  font-size: 11px;
-  color: var(--ui-muted);
-}
-.total-val {
-  font-family: var(--font-pixel);
-  font-size: 8px;
-  color: var(--ui-text);
-}
-.total-row.final .total-label {
-  font-family: var(--font-pixel);
-  font-size: 8px;
-  color: var(--warm-cream);
-}
-.total-row.final .total-val {
-  font-size: 11px;
-  color: var(--pixel-glow);
-  text-shadow: 0 0 10px rgba(255,206,0,0.6);
-  transition: all 0.3s;
-}
-.total-row.discount .total-val { color: var(--success); }
-
-.cart-cta {
-  padding: 12px 16px;
-  border-top: 1px solid var(--ui-border);
-}
-
-/* ============================================================
-   SECTION 4: ORDER FORM — MODERN DIALOG
-   ============================================================ */
-#form-section {
-  background: linear-gradient(180deg, #0d0520 0%, #12082b 100%);
-  padding: 60px 20px 80px;
-  position: relative;
-  overflow: hidden;
-}
-
-#form-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle at 70% 30%, rgba(125,63,138,0.2) 0%, transparent 50%),
-    radial-gradient(circle at 20% 80%, rgba(232,113,74,0.1) 0%, transparent 40%);
-  pointer-events: none;
-}
-
-.form-container {
-  max-width: 480px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
-
-.form-card {
-  background: var(--card-bg);
-  border: 2px solid var(--ui-border);
-  box-shadow: 8px 8px 0 rgba(0,0,0,0.5);
-  overflow: hidden;
-}
-
-.form-card-header {
-  padding: 16px 20px;
-  border-bottom: 2px solid var(--ui-border);
-  background: linear-gradient(90deg, rgba(255,140,66,0.1) 0%, transparent 100%);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.form-card-title {
-  font-family: var(--font-pixel);
-  font-size: 9px;
-  color: var(--ui-accent);
-  letter-spacing: 1px;
-}
-.form-card-icon {
-  font-size: 14px;
-}
-
-.form-fields {
-  padding: 24px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.field-group {
-  position: relative;
-}
-
-.field-label {
-  font-family: var(--font-pixel);
-  font-size: 6px;
-  color: var(--ui-accent);
-  letter-spacing: 2px;
-  display: block;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-}
-
-.field-input {
-  width: 100%;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--ui-border);
-  border-bottom: 2px solid var(--ui-border);
-  color: var(--ui-text);
-  font-family: var(--font-body);
-  font-size: 13px;
-  padding: 10px 14px;
-  outline: none;
-  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
-  border-radius: 0;
-  -webkit-appearance: none;
-}
-.field-input:focus {
-  border-color: var(--ui-accent);
-  background: rgba(255,140,66,0.05);
-  box-shadow: 0 0 15px rgba(255,140,66,0.15);
-}
-.field-input.valid { border-color: var(--success); }
-.field-input.invalid { border-color: var(--danger); }
-
-.field-hint {
-  font-family: var(--font-body);
-  font-size: 10px;
-  margin-top: 5px;
-  display: block;
-  height: 14px;
-  transition: all 0.2s;
-}
-.field-hint.valid { color: var(--success); }
-.field-hint.invalid { color: var(--danger); }
-
-/* Autocomplete suggestions */
-.suggestions-list {
-  position: absolute;
-  top: 100%;
-  left: 0; right: 0;
-  background: #1a0a2e;
-  border: 1px solid var(--ui-accent);
-  border-top: none;
-  z-index: 50;
-  display: none;
-}
-.suggestions-list.show { display: block; }
-.suggestion-item {
-  padding: 8px 14px;
-  font-family: var(--font-body);
-  font-size: 12px;
-  color: var(--ui-muted);
-  cursor: pointer;
-  transition: background 0.15s;
-}
-.suggestion-item:hover {
-  background: rgba(255,140,66,0.15);
-  color: var(--ui-text);
-}
-
-/* CTA — context aware */
-.form-cta-wrap {
-  padding: 0 20px 24px;
-}
-
-.btn-cta-main {
-  width: 100%;
-  font-family: var(--font-pixel);
-  font-size: 9px;
-  letter-spacing: 1px;
-  background: var(--ui-accent);
-  color: #0d0520;
-  border: none;
-  padding: 16px;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.15s;
-  box-shadow: 4px 4px 0 #7a3500, 0 0 20px rgba(255,140,66,0.3);
-  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
-}
-.btn-cta-main:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 4px 6px 0 #7a3500, 0 0 30px rgba(255,140,66,0.5);
-}
-.btn-cta-main:active:not(:disabled) {
-  transform: translateY(1px) scale(0.98);
-  box-shadow: 2px 2px 0 #7a3500;
-}
-.btn-cta-main:disabled {
-  background: rgba(255,140,66,0.3);
-  color: rgba(13,5,32,0.5);
-  cursor: not-allowed;
-  box-shadow: none;
-}
-.btn-cta-main.state-idle { background: rgba(255,140,66,0.4); }
-.btn-cta-main.state-ready { background: var(--ui-accent); }
-.btn-cta-main.state-complete { background: var(--success); color: #fff; box-shadow: 4px 4px 0 #1b4332; }
-
-/* ============================================================
-   SECTION 5: PREVIEW MODAL
-   ============================================================ */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
-  backdrop-filter: blur(4px);
-}
-.modal-overlay.open {
-  opacity: 1;
-  pointer-events: all;
-}
-
-.modal-box {
-  background: var(--card-bg);
-  border: 2px solid var(--ui-accent);
-  box-shadow: 10px 10px 0 rgba(0,0,0,0.7), 0 0 40px rgba(255,140,66,0.2);
-  width: min(480px, 100%);
-  max-height: 90svh;
-  overflow-y: auto;
-  transform: translateY(20px);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.modal-overlay.open .modal-box {
-  transform: translateY(0);
-}
-
-.modal-header {
-  padding: 16px 20px;
-  border-bottom: 2px solid var(--ui-border);
-  display: flex; align-items: center; justify-content: space-between;
-  background: linear-gradient(90deg, rgba(255,140,66,0.1) 0%, transparent 100%);
-}
-.modal-title {
-  font-family: var(--font-pixel);
-  font-size: 9px;
-  color: var(--ui-accent);
-}
-.modal-close {
-  background: none;
-  border: 1px solid var(--ui-border);
-  color: var(--ui-muted);
-  width: 28px; height: 28px;
-  cursor: pointer;
-  font-family: var(--font-pixel);
-  font-size: 10px;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.15s;
-}
-.modal-close:hover { border-color: var(--danger); color: var(--danger); }
-
-.modal-body { padding: 20px; }
-
-.preview-section-title {
-  font-family: var(--font-pixel);
-  font-size: 7px;
-  color: var(--ui-muted);
-  letter-spacing: 2px;
-  margin-bottom: 10px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--ui-border);
-}
-
-.preview-info-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-.preview-field {
-  background: rgba(255,140,66,0.05);
-  border: 1px solid var(--ui-border);
-  padding: 10px 12px;
-}
-.preview-field-label {
-  font-family: var(--font-pixel);
-  font-size: 6px;
-  color: var(--ui-accent);
-  letter-spacing: 1px;
-  margin-bottom: 5px;
-}
-.preview-field-value {
-  font-family: var(--font-body);
-  font-size: 13px;
-  color: var(--ui-text);
-}
-
-.preview-order-list { margin-bottom: 16px; }
-.preview-order-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 12px;
-  background: rgba(255,255,255,0.03);
-  border-bottom: 1px solid rgba(255,140,66,0.1);
-}
-.preview-order-item-name {
-  font-family: var(--font-body);
-  font-size: 12px;
-  color: var(--ui-text);
-}
-.preview-order-item-detail {
-  font-family: var(--font-pixel);
-  font-size: 7px;
-  color: var(--ui-muted);
-  text-align: right;
-}
-
-.preview-total-box {
-  background: rgba(255,206,0,0.05);
-  border: 2px solid rgba(255,206,0,0.3);
-  padding: 14px 16px;
-  margin-bottom: 20px;
-}
-.preview-total-final {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.preview-total-label {
-  font-family: var(--font-pixel);
-  font-size: 9px;
-  color: var(--warm-cream);
-}
-.preview-total-value {
-  font-family: var(--font-pixel);
-  font-size: 14px;
-  color: var(--pixel-glow);
-  text-shadow: 0 0 10px rgba(255,206,0,0.6);
-}
-
-.preview-wa-preview {
-  background: #1b2b1e;
-  border: 1px solid #2d5a32;
-  border-radius: 2px;
-  padding: 14px;
-  margin-bottom: 16px;
-  font-family: monospace;
-  font-size: 11px;
-  color: #c8f5d0;
-  white-space: pre-line;
-  line-height: 1.7;
-  max-height: 160px;
-  overflow-y: auto;
-}
-.wa-label {
-  font-family: var(--font-pixel);
-  font-size: 6px;
-  color: #2d5a32;
-  letter-spacing: 2px;
-  margin-bottom: 8px;
-  display: block;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 10px;
-}
-.modal-actions .btn-primary { flex: 1; }
-.modal-actions .btn-ghost { flex: 1; }
-
-/* ============================================================
-   SUCCESS SCREEN
-   ============================================================ */
-.success-overlay {
-  position: fixed;
-  inset: 0;
-  background: #0d0520;
-  z-index: 300;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.5s;
-  text-align: center;
-  padding: 20px;
-}
-.success-overlay.show {
-  opacity: 1;
-  pointer-events: all;
-}
-
-.success-pixel-anim {
-  font-size: 48px;
-  margin-bottom: 24px;
-  animation: successBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-@keyframes successBounce {
-  from { transform: scale(0) rotate(-20deg); opacity: 0; }
-  to { transform: scale(1) rotate(0); opacity: 1; }
-}
-
-.success-title {
-  font-family: var(--font-pixel);
-  font-size: clamp(11px, 2.5vw, 16px);
-  color: var(--pixel-glow);
-  text-shadow: 0 0 20px rgba(255,206,0,0.6);
-  margin-bottom: 12px;
-  line-height: 2;
-}
-
-.success-subtitle {
-  font-family: var(--font-body);
-  font-size: 13px;
-  color: var(--ui-muted);
-  margin-bottom: 30px;
-  line-height: 1.7;
-  max-width: 320px;
-}
-
-.success-progress {
-  width: 200px;
-  height: 4px;
-  background: rgba(255,255,255,0.1);
-  margin: 0 auto 16px;
-  overflow: hidden;
-}
-.success-bar {
-  height: 100%;
-  background: var(--ui-accent);
-  width: 0;
-  transition: width 3s linear;
-}
-.success-bar.go { width: 100%; }
-
-.success-info {
-  font-family: var(--font-pixel);
-  font-size: 6px;
-  color: var(--ui-muted);
-  letter-spacing: 2px;
-  animation: infoFade 1s ease-in-out infinite alternate;
-}
-@keyframes infoFade { from { opacity: 0.4; } to { opacity: 1; } }
-
-/* ============================================================
-   EXPIRED STATE
-   ============================================================ */
-.expired-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.9);
-  z-index: 500;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 20px;
-}
-.expired-overlay.show { display: flex; }
-.expired-title {
-  font-family: var(--font-pixel);
-  font-size: clamp(10px, 2.5vw, 14px);
-  color: var(--danger);
-  margin-bottom: 16px;
-  line-height: 2;
-}
-.expired-sub {
-  font-family: var(--font-body);
-  font-size: 14px;
-  color: var(--ui-muted);
-}
-
-/* ============================================================
-   FOOTER
-   ============================================================ */
-footer {
-  background: #080312;
-  padding: 30px 20px;
-  text-align: center;
-  border-top: 2px solid var(--ui-border);
-}
-.footer-text {
-  font-family: var(--font-pixel);
-  font-size: 6px;
-  color: var(--ui-muted);
-  letter-spacing: 2px;
-  line-height: 2.5;
-}
-.footer-glow {
-  color: var(--ui-accent);
-}
-
-/* ============================================================
-   UTILITY / ANIMATIONS
-   ============================================================ */
-.fade-in { animation: fadeIn 0.5s ease; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-/* Number counting animation helper */
-.counting { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-
-/* Scrolled-into-view animations */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Mobile responsiveness */
-@media (max-width: 480px) {
-  .menu-item { width: 100%; max-width: 320px; }
-  .preview-info-grid { grid-template-columns: 1fr; }
-  .cart-panel { right: 12px; bottom: 12px; width: calc(100vw - 24px); }
-  .hero-countdown { gap: 6px; }
-  .countdown-num { min-width: 38px; font-size: 14px; }
-}
-
-/* Custom pixel cursor */
-@media (pointer: fine) {
-  * { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect x='0' y='0' width='4' height='4' fill='%23ff8c42'/%3E%3Crect x='4' y='4' width='4' height='4' fill='%23ff8c42'/%3E%3Crect x='8' y='8' width='4' height='4' fill='%23ff8c42'/%3E%3C/svg%3E") 0 0, auto; }
-  button, a, [role="button"], .menu-item, .stepper-btn, .suggestion-item {
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect x='0' y='0' width='4' height='4' fill='%23ffce00'/%3E%3Crect x='4' y='4' width='4' height='4' fill='%23ffce00'/%3E%3Crect x='8' y='8' width='4' height='4' fill='%23ffce00'/%3E%3C/svg%3E") 0 0, pointer;
-  }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>🎪 Bazar 22 Mei — Pre-Order</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       RESET & CSS VARIABLES
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange:      #ff6b35;
+      --amber:       #ffa552;
+      --gold:        #ffd166;
+      --deep-purple: #1a0a2e;
+      --mid-purple:  #6b2d8b;
+      --dark-navy:   #0a0818;
+      --card-bg:     rgba(18, 8, 36, 0.75);
+      --card-border: rgba(255, 165, 82, 0.28);
+      --text:        #ffe8c8;
+      --text-dim:    rgba(255, 232, 200, 0.55);
+      --err:         #ff6b7a;
+      --pixel:       'Press Start 2P', monospace;
+      --body:        'M PLUS Rounded 1c', sans-serif;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      font-family: var(--body);
+      color: var(--text);
+      background: var(--dark-navy);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============================================================
+       CANVAS BACKGROUND + OVERLAY
+    ============================================================ */
+    #bg-canvas {
+      position: fixed; inset: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      image-rendering: pixelated;
+    }
+
+    .scene-overlay {
+      position: fixed; inset: 0;
+      background: linear-gradient(to bottom, transparent 55%, rgba(8,5,20,.65) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       PIXEL STAR LAYER (animated, injected by JS)
+    ============================================================ */
+    #star-layer {
+      position: fixed; inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       AUDIO TOGGLE BUTTON
+    ============================================================ */
+    #audio-toggle {
+      position: fixed; top: 14px; right: 14px;
+      z-index: 200;
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: rgba(18, 8, 36, 0.75);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      transition: transform .2s, background .2s;
+    }
+    #audio-toggle:hover { transform: scale(1.12); background: rgba(255,165,82,.15); }
+
+    /* ============================================================
+       PROGRESS DOTS
+    ============================================================ */
+    #progress-dots {
+      position: fixed; bottom: 18px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 8px;
+      z-index: 200;
+    }
+    .pdot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,232,200,.22);
+      transition: all .35s cubic-bezier(.4,0,.2,1);
+    }
+    .pdot.active {
+      background: var(--orange);
+      width: 22px;
+      border-radius: 3px;
+    }
+
+    /* ============================================================
+       TOAST
+    ============================================================ */
+    #toast {
+      position: fixed; bottom: 52px; left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: rgba(18,8,36,.96);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 9px 20px;
+      font-size: 12px; color: var(--text);
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s, transform .3s;
+      z-index: 300; white-space: nowrap;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ============================================================
+       APP CONTAINER
+    ============================================================ */
+    #app {
+      position: fixed; inset: 0;
+      z-index: 10;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ============================================================
+       STEP SYSTEM
+    ============================================================ */
+    .step {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+      padding: 16px;
+      opacity: 0; pointer-events: none;
+      transform: translateX(48px);
+      transition:
+        opacity .48s cubic-bezier(.4,0,.2,1),
+        transform .48s cubic-bezier(.4,0,.2,1);
+    }
+    .step.active   { opacity: 1; pointer-events: all; transform: translateX(0); }
+    .step.go-left  { opacity: 0; transform: translateX(-48px); }
+    .step.go-right { opacity: 0; transform: translateX(48px); }
+
+    /* ============================================================
+       CARD
+    ============================================================ */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 8px 36px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,200,100,.08);
+      padding: 30px 26px;
+      width: 100%; max-width: 460px;
+    }
+
+    /* ============================================================
+       PIXEL TITLE
+    ============================================================ */
+    .pixel-title {
+      font-family: var(--pixel);
+      color: var(--gold);
+      text-shadow: 3px 3px 0 var(--deep-purple), 0 0 24px var(--orange);
+      line-height: 1.7; letter-spacing: 1px;
+    }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn {
+      font-family: var(--pixel);
+      font-size: 10px;
+      cursor: pointer;
+      border: none; border-radius: 10px;
+      padding: 14px 24px;
+      transition: transform .12s, box-shadow .12s, opacity .2s;
+      letter-spacing: .5px;
+      position: relative; overflow: hidden;
+    }
+    .btn::after {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(255,255,255,.1);
+      opacity: 0; transition: opacity .15s;
+    }
+    .btn:hover::after { opacity: 1; }
+    .btn:active  { transform: scale(.95) !important; }
+    .btn:disabled { opacity: .38; cursor: not-allowed; }
+    .btn:disabled:active { transform: none !important; }
+
+    /* Primary */
+    .btn-primary {
+      background: linear-gradient(135deg, #ff7040, #d04818);
+      color: #fff;
+      box-shadow: 0 4px 0 #8c2a08, 0 6px 20px rgba(255,107,53,.38);
+    }
+    .btn-primary:not(:disabled):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #8c2a08, 0 10px 26px rgba(255,107,53,.48);
+    }
+
+    /* Secondary */
+    .btn-secondary {
+      background: rgba(255,255,255,.07);
+      color: var(--text);
+      border: 1px solid rgba(255,200,100,.22);
+    }
+
+    /* Ghost */
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 9px;
+      padding: 10px 18px;
+      border: 1px dashed rgba(255,200,100,.2);
+    }
+
+    /* ============================================================
+       STEP 1 — HOME
+    ============================================================ */
+    #step-home { gap: 0; text-align: center; }
+
+    .lanterns {
+      display: flex; gap: 18px; justify-content: center;
+      margin-bottom: 22px;
+      animation: lanternFloat 3.2s ease-in-out infinite;
+    }
+    @keyframes lanternFloat {
+      0%,100% { transform: translateY(0) rotate(0deg); }
+      50%      { transform: translateY(-10px) rotate(.8deg); }
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: var(--pixel); font-size: 8px;
+      color: var(--gold);
+      background: rgba(255,165,53,.13);
+      border: 1px solid rgba(255,165,53,.4);
+      border-radius: 20px;
+      padding: 6px 16px;
+      margin-bottom: 18px;
+      letter-spacing: 1px;
+    }
+
+    .home-title { font-size: clamp(16px, 4.5vw, 26px); margin-bottom: 12px; }
+
+    .home-sub {
+      font-size: 13px; color: var(--text-dim);
+      line-height: 1.7; margin-bottom: 30px;
+    }
+
+    /* ============================================================
+       STEP 2 — MENU
+    ============================================================ */
+    #step-menu { justify-content: flex-start; align-items: center; }
+
+    .menu-wrapper {
+      width: 100%; max-width: 460px;
+      height: 100%;
+      display: flex; flex-direction: column;
+      padding: 18px 0;
+    }
+
+    .step-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .back-btn {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,200,100,.2);
+      border-radius: 8px;
+      color: var(--text); cursor: pointer;
+      padding: 8px 13px; font-size: 15px;
+      transition: background .15s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,.14); }
+
+    .step-label { font-family: var(--pixel); font-size: 11px; color: var(--gold); }
+
+    /* Scrollable menu list */
+    .menu-scroll {
+      flex: 1; overflow-y: auto; overflow-x: hidden;
+      padding-right: 4px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .menu-scroll::-webkit-scrollbar { width: 4px; }
+    .menu-scroll::-webkit-scrollbar-thumb { background: rgba(255,165,82,.28); border-radius: 4px; }
+
+    /* Product card */
+    .product-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      backdrop-filter: blur(12px);
+      padding: 14px;
+      display: flex; gap: 12px; align-items: center;
+      transition: border-color .22s, box-shadow .22s;
+    }
+    .product-card:hover {
+      border-color: rgba(255,165,82,.55);
+      box-shadow: 0 4px 24px rgba(255,107,53,.13);
+    }
+
+    .product-art {
+      width: 82px; height: 82px;
+      flex-shrink: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(0,0,0,.35);
+    }
+    .product-art svg { width: 100%; height: 100%; }
+
+    .product-info { flex: 1; }
+
+    .product-name {
+      font-family: var(--pixel); font-size: 8px;
+      color: var(--gold); margin-bottom: 4px; line-height: 1.7;
+    }
+    .product-desc {
+      font-size: 11px; color: var(--text-dim);
+      margin-bottom: 6px; line-height: 1.5;
+    }
+    .product-price {
+      font-family: var(--pixel); font-size: 9px;
+      color: var(--orange);
+    }
+
+    /* Stepper */
+    .stepper { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+    .stp-btn {
+      width: 30px; height: 30px; border-radius: 8px;
+      border: 1px solid rgba(255,165,82,.35);
+      background: rgba(255,165,82,.09);
+      color: var(--text); font-size: 18px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .15s, transform .1s;
+      line-height: 1;
+    }
+    .stp-btn:hover  { background: rgba(255,165,82,.2); }
+    .stp-btn:active { transform: scale(.88); }
+    .stp-qty {
+      font-family: var(--pixel); font-size: 12px;
+      color: var(--text); min-width: 24px; text-align: center;
+    }
+
+    /* Footer bar */
+    .menu-footer { margin-top: 14px; }
+
+    .subtotal-bar {
+      background: rgba(255,165,82,.07);
+      border: 1px solid rgba(255,165,82,.2);
+      border-radius: 10px;
+      padding: 11px 16px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px;
+    }
+    .subtotal-label { font-size: 12px; color: var(--text-dim); }
+    .subtotal-amount { font-family: var(--pixel); font-size: 11px; color: var(--gold); }
+
+    .empty-hint {
+      text-align: center; font-size: 12px;
+      color: rgba(255,107,53,.75);
+      margin-bottom: 8px; display: none;
+    }
+
+    /* ============================================================
+       STEP 3 — FORM
+    ============================================================ */
+    #step-form { justify-content: flex-start; align-items: center; }
+
+    .form-wrapper {
+      width: 100%; max-width: 460px;
+      height: 100%;
+      display: flex; flex-direction: column;
+      padding: 18px 0;
+    }
+
+    .form-scroll { flex: 1; overflow-y: auto; }
+    .form-scroll::-webkit-scrollbar { width: 4px; }
+    .form-scroll::-webkit-scrollbar-thumb { background: rgba(255,165,82,.25); border-radius: 4px; }
+
+    /* Order summary block */
+    .order-summary {
+      background: rgba(255,165,82,.06);
+      border: 1px solid rgba(255,165,82,.2);
+      border-radius: 12px;
+      padding: 13px 14px;
+      margin-bottom: 16px;
+    }
+    .os-title {
+      font-family: var(--pixel); font-size: 8px;
+      color: var(--gold); margin-bottom: 10px;
+    }
+    .os-item {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+    }
+    .os-name { flex: 1; font-size: 12px; }
+    .mini-stepper { display: flex; align-items: center; gap: 5px; }
+    .mstp {
+      width: 22px; height: 22px; border-radius: 6px;
+      border: 1px solid rgba(255,165,82,.3);
+      background: rgba(255,165,82,.08);
+      color: var(--text); font-size: 14px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+    }
+    .mstp:hover  { background: rgba(255,165,82,.2); }
+    .mstp:active { transform: scale(.88); }
+    .mq {
+      font-family: var(--pixel); font-size: 9px;
+      min-width: 18px; text-align: center;
+    }
+    .os-price { font-family: var(--pixel); font-size: 8px; color: var(--orange); }
+    .os-total-row {
+      border-top: 1px dashed rgba(255,165,82,.2);
+      padding-top: 9px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 4px;
+    }
+    .os-total-label { font-family: var(--pixel); font-size: 8px; color: var(--text-dim); }
+    .os-total-val   { font-family: var(--pixel); font-size: 10px; color: var(--gold); }
+
+    /* Form fields panel */
+    .form-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      backdrop-filter: blur(14px);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .f-group { margin-bottom: 14px; }
+    .f-label {
+      display: block;
+      font-family: var(--pixel); font-size: 7px;
+      color: var(--gold); margin-bottom: 8px; letter-spacing: .5px;
+    }
+    .f-input {
+      width: 100%;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,200,100,.18);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-family: var(--body); font-size: 14px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .f-input:focus {
+      border-color: rgba(255,165,82,.6);
+      box-shadow: 0 0 0 3px rgba(255,107,53,.1);
+    }
+    .f-input.err {
+      border-color: var(--err);
+      box-shadow: 0 0 0 3px rgba(255,71,87,.1);
+    }
+    .f-input::placeholder { color: rgba(255,232,200,.28); }
+
+    .f-error {
+      font-size: 11px; color: var(--err);
+      margin-top: 5px; display: none;
+    }
+    .f-error.show { display: block; }
+
+    /* Form actions */
+    .form-actions {
+      display: flex; flex-direction: column;
+      gap: 9px; padding-bottom: 20px;
+    }
+    .btn-row { display: flex; gap: 9px; }
+
+    /* ============================================================
+       STEP 4 — REDIRECT
+    ============================================================ */
+    #step-redirect .card { text-align: center; max-width: 380px; }
+
+    .success-icon {
+      font-size: 62px; margin-bottom: 18px;
+      display: block;
+      animation: popIn .55s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes popIn {
+      from { transform: scale(0) rotate(-18deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0);      opacity: 1; }
+    }
+
+    .redir-title {
+      font-family: var(--pixel); font-size: 13px;
+      color: var(--gold); margin-bottom: 10px;
+      text-shadow: 2px 2px 0 var(--deep-purple);
+    }
+    .redir-sub {
+      font-size: 13px; color: var(--text-dim);
+      line-height: 1.7; margin-bottom: 22px;
+    }
+
+    .dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 22px; }
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--orange);
+      animation: dotBounce 1.2s infinite;
+    }
+    .dot:nth-child(2) { animation-delay: .2s; }
+    .dot:nth-child(3) { animation-delay: .4s; }
+    @keyframes dotBounce {
+      0%,80%,100% { transform: scale(.55); opacity: .35; }
+      40%          { transform: scale(1.2); opacity: 1;   }
+    }
+
+    /* ============================================================
+       RESPONSIVE TWEAKS
+    ============================================================ */
+    @media (max-height: 580px) {
+      .lanterns  { display: none; }
+      .card      { padding: 18px 16px; }
+      .home-sub  { margin-bottom: 18px; }
+    }
+    @media (max-width: 380px) {
+      .card { padding: 20px 14px; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- ============================================================
-     EXPIRED STATE OVERLAY (hidden unless past 22 May)
-     ============================================================ -->
-<div class="expired-overlay" id="expiredOverlay">
-  <div style="font-size:48px;margin-bottom:20px;">🌑</div>
-  <div class="expired-title">Pre-Order Telah Ditutup</div>
-  <div class="expired-sub">Bazar sudah selesai. Terima kasih!</div>
+<!-- ========== CANVAS BACKGROUND ========== -->
+<canvas id="bg-canvas"></canvas>
+<div class="scene-overlay"></div>
+<div id="star-layer"></div>
+
+<!-- ========== AUDIO TOGGLE ========== -->
+<div id="audio-toggle" title="Toggle suara">🔊</div>
+
+<!-- ========== PROGRESS DOTS ========== -->
+<div id="progress-dots">
+  <div class="pdot active"></div>
+  <div class="pdot"></div>
+  <div class="pdot"></div>
+  <div class="pdot"></div>
 </div>
 
-<!-- ============================================================
-     SECTION 1: HERO — CINEMATIC PIXEL SCENE
-     ============================================================ -->
-<section id="hero">
+<!-- ========== TOAST ========== -->
+<div id="toast"></div>
 
-  <!-- Sky gradient -->
-  <div class="sky-layer"></div>
+<!-- ========== APP ========== -->
+<div id="app">
 
-  <!-- Stars -->
-  <div class="stars-layer" id="starsContainer"></div>
+  <!-- ==================== STEP 1: HOME ==================== -->
+  <div class="step active" id="step-home">
 
-  <!-- Sun -->
-  <div class="sun"></div>
-
-  <!-- Pixel clouds -->
-  <div class="clouds-layer">
-    <div class="cloud cloud-1">
-      <svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;opacity:0.7">
-        <rect x="20" y="24" width="80" height="12" fill="#b19cd9"/>
-        <rect x="12" y="16" width="96" height="12" fill="#c4aee8"/>
-        <rect x="28" y="8" width="64" height="12" fill="#d4bef0"/>
-        <rect x="44" y="4" width="32" height="8" fill="#e0d0f8"/>
+    <!-- Lanterns decoration -->
+    <div class="lanterns" aria-hidden="true">
+      <!-- Lantern orange -->
+      <svg width="26" height="38" viewBox="0 0 26 38">
+        <rect x="9" y="0" width="8" height="4" fill="#ffd166" rx="1"/>
+        <rect x="7" y="4" width="12" height="26" fill="#ff6b35" rx="3"/>
+        <rect x="9" y="7" width="8" height="2" fill="#ffa552" opacity=".5"/>
+        <rect x="9" y="12" width="8" height="2" fill="#ffa552" opacity=".35"/>
+        <rect x="9" y="17" width="8" height="2" fill="#ffa552" opacity=".35"/>
+        <rect x="10" y="30" width="6" height="6" fill="#ffd166" rx="1"/>
+        <ellipse cx="13" cy="33" rx="3" ry="2.5" fill="#fff8dc" opacity=".8"/>
+      </svg>
+      <!-- Lantern purple -->
+      <svg width="26" height="38" viewBox="0 0 26 38">
+        <rect x="9" y="0" width="8" height="4" fill="#ffd166" rx="1"/>
+        <rect x="7" y="4" width="12" height="26" fill="#6b2d8b" rx="3"/>
+        <rect x="9" y="7" width="8" height="2" fill="#9b4dca" opacity=".5"/>
+        <rect x="9" y="12" width="8" height="2" fill="#9b4dca" opacity=".35"/>
+        <rect x="9" y="17" width="8" height="2" fill="#9b4dca" opacity=".35"/>
+        <rect x="10" y="30" width="6" height="6" fill="#ffd166" rx="1"/>
+        <ellipse cx="13" cy="33" rx="3" ry="2.5" fill="#fff8dc" opacity=".8"/>
+      </svg>
+      <!-- Lantern orange-red -->
+      <svg width="26" height="38" viewBox="0 0 26 38">
+        <rect x="9" y="0" width="8" height="4" fill="#ffd166" rx="1"/>
+        <rect x="7" y="4" width="12" height="26" fill="#c03028" rx="3"/>
+        <rect x="9" y="7" width="8" height="2" fill="#e05040" opacity=".5"/>
+        <rect x="9" y="12" width="8" height="2" fill="#e05040" opacity=".35"/>
+        <rect x="9" y="17" width="8" height="2" fill="#e05040" opacity=".35"/>
+        <rect x="10" y="30" width="6" height="6" fill="#ffd166" rx="1"/>
+        <ellipse cx="13" cy="33" rx="3" ry="2.5" fill="#fff8dc" opacity=".8"/>
       </svg>
     </div>
-    <div class="cloud cloud-2">
-      <svg width="80" height="28" viewBox="0 0 80 28" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;opacity:0.5">
-        <rect x="8" y="16" width="64" height="10" fill="#c4aee8"/>
-        <rect x="16" y="8" width="48" height="12" fill="#d4bef0"/>
-        <rect x="28" y="4" width="24" height="8" fill="#e0d0f8"/>
-      </svg>
-    </div>
-    <div class="cloud cloud-3">
-      <svg width="100" height="36" viewBox="0 0 100 36" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;opacity:0.6">
-        <rect x="12" y="20" width="76" height="12" fill="#e8a87c"/>
-        <rect x="20" y="12" width="60" height="12" fill="#f0bc94"/>
-        <rect x="32" y="4" width="36" height="12" fill="#f8d0ac"/>
-      </svg>
-    </div>
-  </div>
 
-  <!-- Far city silhouette -->
-  <div class="city-layer">
-    <svg class="city-svg" viewBox="0 0 800 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
-      <!-- Buildings far layer -->
-      <rect x="0" y="60" width="800" height="60" fill="#0d0520"/>
-      <rect x="10" y="30" width="30" height="50" fill="#1a0a2e"/>
-      <rect x="14" y="20" width="8" height="12" fill="#1a0a2e"/>
-      <rect x="50" y="40" width="40" height="40" fill="#12082b"/>
-      <rect x="55" y="32" width="12" height="10" fill="#12082b"/>
-      <rect x="100" y="20" width="20" height="60" fill="#1a0a2e"/>
-      <rect x="104" y="10" width="6" height="12" fill="#1a0a2e"/>
-      <rect x="130" y="50" width="50" height="30" fill="#0f061f"/>
-      <rect x="140" y="38" width="16" height="14" fill="#0f061f"/>
-      <rect x="200" y="35" width="25" height="45" fill="#1a0a2e"/>
-      <rect x="230" y="25" width="35" height="55" fill="#12082b"/>
-      <rect x="235" y="14" width="10" height="13" fill="#12082b"/>
-      <rect x="280" y="45" width="45" height="35" fill="#0d0520"/>
-      <rect x="340" y="30" width="22" height="50" fill="#1a0a2e"/>
-      <rect x="370" y="20" width="15" height="60" fill="#12082b"/>
-      <rect x="373" y="10" width="5" height="12" fill="#12082b"/>
-      <rect x="400" y="40" width="55" height="40" fill="#0d0520"/>
-      <rect x="410" y="28" width="20" height="14" fill="#0d0520"/>
-      <rect x="465" y="25" width="28" height="55" fill="#1a0a2e"/>
-      <rect x="500" y="35" width="40" height="45" fill="#12082b"/>
-      <rect x="510" y="22" width="12" height="15" fill="#12082b"/>
-      <rect x="550" y="50" width="60" height="30" fill="#0f061f"/>
-      <rect x="560" y="36" width="18" height="16" fill="#0f061f"/>
-      <rect x="620" y="30" width="22" height="50" fill="#1a0a2e"/>
-      <rect x="650" y="40" width="35" height="40" fill="#12082b"/>
-      <rect x="690" y="20" width="18" height="60" fill="#1a0a2e"/>
-      <rect x="715" y="35" width="45" height="45" fill="#0d0520"/>
-      <rect x="760" y="45" width="40" height="35" fill="#12082b"/>
-      <!-- Tiny window lights -->
-      <rect x="16" y="35" width="4" height="3" fill="#ffce00" opacity="0.6"/>
-      <rect x="22" y="35" width="4" height="3" fill="#ffce00" opacity="0.4"/>
-      <rect x="56" y="46" width="4" height="3" fill="#ff8c42" opacity="0.5"/>
-      <rect x="64" y="46" width="4" height="3" fill="#ffce00" opacity="0.6"/>
-      <rect x="102" y="28" width="3" height="3" fill="#ffce00" opacity="0.7"/>
-      <rect x="234" y="28" width="4" height="3" fill="#ff8c42" opacity="0.5"/>
-      <rect x="242" y="38" width="4" height="3" fill="#ffce00" opacity="0.5"/>
-      <rect x="374" y="18" width="3" height="3" fill="#ffce00" opacity="0.8"/>
-      <rect x="466" y="32" width="4" height="3" fill="#ff8c42" opacity="0.6"/>
-      <rect x="511" y="30" width="4" height="3" fill="#ffce00" opacity="0.5"/>
-      <rect x="622" y="38" width="4" height="3" fill="#ff8c42" opacity="0.7"/>
-      <rect x="692" y="28" width="3" height="3" fill="#ffce00" opacity="0.6"/>
-    </svg>
-  </div>
-
-  <!-- Trees background layer -->
-  <div class="trees-back">
-    <svg viewBox="0 0 800 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;image-rendering:pixelated">
-      <!-- Dense tree silhouettes -->
-      <rect x="0" y="30" width="800" height="70" fill="#1b4332"/>
-      <!-- Tree tops (dark treetops) -->
-      <polygon points="0,30 20,0 40,30" fill="#155d27"/>
-      <polygon points="30,30 55,5 80,30" fill="#1b4332"/>
-      <polygon points="70,30 90,8 110,30" fill="#155d27"/>
-      <polygon points="100,30 125,2 150,30" fill="#1b4332"/>
-      <polygon points="140,30 160,10 180,30" fill="#1b5e20"/>
-      <polygon points="170,30 200,0 230,30" fill="#155d27"/>
-      <polygon points="220,30 245,6 270,30" fill="#1b4332"/>
-      <polygon points="260,30 285,4 310,30" fill="#155d27"/>
-      <polygon points="300,30 330,0 360,30" fill="#1b4332"/>
-      <polygon points="350,30 375,8 400,30" fill="#1b5e20"/>
-      <polygon points="390,30 415,2 440,30" fill="#155d27"/>
-      <polygon points="430,30 460,0 490,30" fill="#1b4332"/>
-      <polygon points="480,30 505,5 530,30" fill="#155d27"/>
-      <polygon points="520,30 545,3 570,30" fill="#1b4332"/>
-      <polygon points="560,30 585,8 610,30" fill="#1b5e20"/>
-      <polygon points="600,30 625,0 650,30" fill="#155d27"/>
-      <polygon points="640,30 665,6 690,30" fill="#1b4332"/>
-      <polygon points="680,30 705,2 730,30" fill="#155d27"/>
-      <polygon points="720,30 750,0 780,30" fill="#1b4332"/>
-      <polygon points="760,30 785,8 800,30" fill="#1b5e20"/>
-    </svg>
-  </div>
-
-  <!-- Ground layers -->
-  <div class="ground-layer ground-2"></div>
-  <div class="ground-layer ground-1"></div>
-
-  <!-- Path -->
-  <div class="ground-path"></div>
-
-  <!-- Characters layer -->
-  <div class="characters-layer">
-
-    <!-- Character 1: Cowok rambut curly -->
-    <svg class="char-svg" width="52" height="100" viewBox="0 0 52 100" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;margin-right:-4px">
-      <!-- Hair curly -->
-      <rect x="14" y="8" width="24" height="4" fill="#3d2006"/>
-      <rect x="10" y="12" width="32" height="10" fill="#4a2c08"/>
-      <rect x="8" y="14" width="4" height="6" fill="#5c3610"/>
-      <rect x="40" y="14" width="4" height="6" fill="#5c3610"/>
-      <rect x="6" y="16" width="4" height="4" fill="#3d2006"/>
-      <rect x="42" y="16" width="4" height="4" fill="#3d2006"/>
-      <rect x="8" y="20" width="4" height="4" fill="#4a2c08"/>
-      <rect x="40" y="20" width="4" height="4" fill="#4a2c08"/>
-      <!-- Face -->
-      <rect x="14" y="18" width="24" height="20" fill="#f5c5a3"/>
-      <!-- Ears -->
-      <rect x="10" y="22" width="4" height="8" fill="#f0b898"/>
-      <rect x="38" y="22" width="4" height="8" fill="#f0b898"/>
-      <!-- Eyes -->
-      <rect x="18" y="24" width="5" height="4" fill="#fff"/>
-      <rect x="29" y="24" width="5" height="4" fill="#fff"/>
-      <rect x="19" y="25" width="3" height="3" fill="#2d1a00"/>
-      <rect x="30" y="25" width="3" height="3" fill="#2d1a00"/>
-      <rect x="19" y="25" width="1" height="1" fill="#fff"/>
-      <rect x="30" y="25" width="1" height="1" fill="#fff"/>
-      <!-- Eyebrows -->
-      <rect x="17" y="22" width="7" height="2" fill="#3d2006"/>
-      <rect x="28" y="22" width="7" height="2" fill="#3d2006"/>
-      <!-- Nose -->
-      <rect x="25" y="29" width="2" height="3" fill="#e0a88a"/>
-      <!-- Mouth smile -->
-      <rect x="20" y="33" width="12" height="2" fill="#c0725a"/>
-      <rect x="20" y="35" width="3" height="2" fill="#c0725a"/>
-      <rect x="29" y="35" width="3" height="2" fill="#c0725a"/>
-      <!-- Neck -->
-      <rect x="21" y="38" width="10" height="6" fill="#f0b898"/>
-      <!-- Uniform (putih) -->
-      <rect x="10" y="44" width="32" height="28" fill="#e8eaf0"/>
-      <!-- Collar (biru) -->
-      <rect x="21" y="44" width="10" height="4" fill="#1a237e"/>
-      <!-- Shirt details -->
-      <rect x="10" y="44" width="4" height="28" fill="#d8dae8"/>
-      <rect x="38" y="44" width="4" height="28" fill="#d8dae8"/>
-      <!-- Pants (biru gelap) -->
-      <rect x="12" y="72" width="28" height="20" fill="#283593"/>
-      <rect x="22" y="72" width="8" height="20" fill="#1a237e"/>
-      <!-- Legs -->
-      <rect x="12" y="90" width="10" height="10" fill="#283593"/>
-      <rect x="30" y="90" width="10" height="10" fill="#283593"/>
-      <!-- Shoes -->
-      <rect x="10" y="96" width="14" height="4" fill="#1a1a1a"/>
-      <rect x="28" y="96" width="14" height="4" fill="#1a1a1a"/>
-      <!-- Arms -->
-      <rect x="2" y="44" width="8" height="22" fill="#e8eaf0"/>
-      <rect x="42" y="44" width="8" height="22" fill="#e8eaf0"/>
-      <!-- Hands -->
-      <rect x="2" y="66" width="8" height="6" fill="#f5c5a3"/>
-      <rect x="42" y="66" width="8" height="6" fill="#f5c5a3"/>
-      <!-- Bag -->
-      <rect x="42" y="50" width="10" height="18" fill="#5c4a1e"/>
-      <rect x="44" y="52" width="6" height="14" fill="#7a6030"/>
-      <rect x="46" y="56" width="2" height="4" fill="#ff8c42"/>
-    </svg>
-
-    <!-- Character 2: Cewek hijab -->
-    <svg class="char-svg" width="52" height="108" viewBox="0 0 52 108" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;margin-right:-6px">
-      <!-- Hijab (biru gelap) -->
-      <rect x="8" y="6" width="36" height="38" fill="#1565c0"/>
-      <rect x="4" y="14" width="8" height="30" fill="#1565c0"/>
-      <rect x="40" y="14" width="8" height="30" fill="#1565c0"/>
-      <rect x="6" y="8" width="40" height="8" fill="#1976d2"/>
-      <!-- Face -->
-      <rect x="14" y="14" width="24" height="22" fill="#f5c5a3"/>
-      <!-- Ears (covered by hijab) -->
-      <!-- Eyes -->
-      <rect x="17" y="20" width="5" height="4" fill="#fff"/>
-      <rect x="30" y="20" width="5" height="4" fill="#fff"/>
-      <rect x="18" y="21" width="3" height="3" fill="#1a0a00"/>
-      <rect x="31" y="21" width="3" height="3" fill="#1a0a00"/>
-      <rect x="18" y="21" width="1" height="1" fill="#fff"/>
-      <rect x="31" y="21" width="1" height="1" fill="#fff"/>
-      <!-- Eyelashes -->
-      <rect x="17" y="20" width="6" height="1" fill="#1a0a00"/>
-      <rect x="30" y="20" width="6" height="1" fill="#1a0a00"/>
-      <!-- Eyebrows -->
-      <rect x="17" y="18" width="6" height="2" fill="#3d2006"/>
-      <rect x="29" y="18" width="6" height="2" fill="#3d2006"/>
-      <!-- Nose -->
-      <rect x="25" y="25" width="2" height="3" fill="#e0a88a"/>
-      <!-- Mouth smile (small cute) -->
-      <rect x="21" y="30" width="10" height="2" fill="#c0725a"/>
-      <rect x="21" y="32" width="3" height="2" fill="#c0725a"/>
-      <rect x="28" y="32" width="3" height="2" fill="#c0725a"/>
-      <!-- Hijab chin wrap -->
-      <rect x="10" y="36" width="32" height="8" fill="#1565c0"/>
-      <!-- Neck covered by hijab -->
-      <!-- Uniform (putih) -->
-      <rect x="10" y="44" width="32" height="32" fill="#e8eaf0"/>
-      <!-- Collar (hijab drapes over) -->
-      <rect x="4" y="44" width="10" height="20" fill="#1565c0"/>
-      <rect x="38" y="44" width="10" height="20" fill="#1565c0"/>
-      <!-- Shirt details -->
-      <rect x="10" y="44" width="4" height="32" fill="#d8dae8"/>
-      <rect x="38" y="44" width="4" height="32" fill="#d8dae8"/>
-      <!-- Skirt (blue) -->
-      <rect x="10" y="76" width="32" height="24" fill="#1565c0"/>
-      <!-- Skirt fold detail -->
-      <rect x="10" y="82" width="32" height="2" fill="#1976d2"/>
-      <rect x="10" y="88" width="32" height="2" fill="#1976d2"/>
-      <!-- Legs -->
-      <rect x="14" y="98" width="10" height="8" fill="#f5c5a3"/>
-      <rect x="28" y="98" width="10" height="8" fill="#f5c5a3"/>
-      <!-- Shoes -->
-      <rect x="12" y="104" width="14" height="4" fill="#1a1a1a"/>
-      <rect x="26" y="104" width="14" height="4" fill="#1a1a1a"/>
-      <!-- Arms -->
-      <rect x="2" y="44" width="8" height="24" fill="#e8eaf0"/>
-      <rect x="42" y="44" width="8" height="24" fill="#e8eaf0"/>
-      <!-- Hands -->
-      <rect x="2" y="68" width="8" height="6" fill="#f5c5a3"/>
-      <rect x="42" y="68" width="8" height="6" fill="#f5c5a3"/>
-      <!-- Book/notes in hand -->
-      <rect x="42" y="60" width="12" height="16" fill="#ff8c42"/>
-      <rect x="44" y="62" width="8" height="12" fill="#ffd090"/>
-      <rect x="45" y="64" width="6" height="1" fill="#aaa"/>
-      <rect x="45" y="66" width="6" height="1" fill="#aaa"/>
-      <rect x="45" y="68" width="4" height="1" fill="#aaa"/>
-    </svg>
-
-    <!-- Character 3: Cewek (tanpa hijab, rambut panjang) -->
-    <svg class="char-svg" width="50" height="106" viewBox="0 0 50 106" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;margin-right:-4px">
-      <!-- Long hair back -->
-      <rect x="10" y="8" width="30" height="54" fill="#2d1a00"/>
-      <!-- Hair top -->
-      <rect x="14" y="4" width="22" height="6" fill="#4a2c08"/>
-      <rect x="10" y="8" width="4" height="48" fill="#3d2006"/>
-      <rect x="36" y="8" width="4" height="48" fill="#3d2006"/>
-      <!-- Face -->
-      <rect x="14" y="12" width="22" height="22" fill="#f8d0b0"/>
-      <!-- Ears -->
-      <rect x="10" y="18" width="4" height="6" fill="#f0b898"/>
-      <rect x="36" y="18" width="4" height="6" fill="#f0b898"/>
-      <!-- Eyes (sparkly) -->
-      <rect x="16" y="18" width="5" height="4" fill="#fff"/>
-      <rect x="29" y="18" width="5" height="4" fill="#fff"/>
-      <rect x="17" y="19" width="3" height="3" fill="#1a4a7a"/>
-      <rect x="30" y="19" width="3" height="3" fill="#1a4a7a"/>
-      <rect x="17" y="19" width="1" height="1" fill="#fff"/>
-      <rect x="30" y="19" width="1" height="1" fill="#fff"/>
-      <!-- Eyelashes -->
-      <rect x="16" y="18" width="6" height="1" fill="#1a0a00"/>
-      <rect x="29" y="18" width="6" height="1" fill="#1a0a00"/>
-      <!-- Eyebrows -->
-      <rect x="16" y="16" width="6" height="2" fill="#3d2006"/>
-      <rect x="28" y="16" width="6" height="2" fill="#3d2006"/>
-      <!-- Nose -->
-      <rect x="24" y="24" width="2" height="2" fill="#e0a88a"/>
-      <!-- Mouth big smile -->
-      <rect x="19" y="28" width="12" height="2" fill="#c05040"/>
-      <rect x="19" y="30" width="3" height="2" fill="#c05040"/>
-      <rect x="28" y="30" width="3" height="2" fill="#c05040"/>
-      <rect x="22" y="30" width="6" height="2" fill="#ff8a8a"/>
-      <!-- Hair front strands -->
-      <rect x="14" y="12" width="4" height="10" fill="#4a2c08"/>
-      <rect x="32" y="12" width="4" height="10" fill="#4a2c08"/>
-      <!-- Neck -->
-      <rect x="21" y="34" width="8" height="6" fill="#f0b898"/>
-      <!-- Uniform (putih) -->
-      <rect x="10" y="40" width="30" height="32" fill="#e8eaf0"/>
-      <!-- Collar blue -->
-      <rect x="20" y="40" width="10" height="4" fill="#1a237e"/>
-      <!-- Shirt details -->
-      <rect x="10" y="40" width="4" height="32" fill="#d8dae8"/>
-      <rect x="36" y="40" width="4" height="32" fill="#d8dae8"/>
-      <!-- Skirt -->
-      <rect x="10" y="72" width="30" height="26" fill="#283593"/>
-      <rect x="10" y="78" width="30" height="2" fill="#3949ab"/>
-      <rect x="10" y="84" width="30" height="2" fill="#3949ab"/>
-      <!-- Legs -->
-      <rect x="12" y="96" width="10" height="8" fill="#f8d0b0"/>
-      <rect x="28" y="96" width="10" height="8" fill="#f8d0b0"/>
-      <!-- Shoes -->
-      <rect x="10" y="102" width="14" height="4" fill="#1a1a1a"/>
-      <rect x="26" y="102" width="14" height="4" fill="#1a1a1a"/>
-      <!-- Arms -->
-      <rect x="1" y="40" width="9" height="24" fill="#e8eaf0"/>
-      <rect x="40" y="40" width="9" height="24" fill="#e8eaf0"/>
-      <!-- Hands -->
-      <rect x="1" y="64" width="9" height="6" fill="#f8d0b0"/>
-      <rect x="40" y="64" width="9" height="6" fill="#f8d0b0"/>
-      <!-- Small object in hand (phone) -->
-      <rect x="1" y="58" width="7" height="11" fill="#222"/>
-      <rect x="2" y="59" width="5" height="9" fill="#4a9fff"/>
-    </svg>
-
-    <!-- Character 4: Cowok rambut messy -->
-    <svg class="char-svg" width="50" height="100" viewBox="0 0 50 100" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
-      <!-- Hair messy -->
-      <rect x="12" y="6" width="26" height="4" fill="#1a0a00"/>
-      <rect x="10" y="10" width="30" height="10" fill="#2d1a00"/>
-      <rect x="8" y="10" width="4" height="6" fill="#1a0a00"/>
-      <rect x="38" y="10" width="4" height="6" fill="#1a0a00"/>
-      <rect x="6" y="12" width="4" height="4" fill="#3d2006"/>
-      <rect x="40" y="12" width="4" height="4" fill="#3d2006"/>
-      <rect x="10" y="6" width="4" height="4" fill="#3d2006"/>
-      <rect x="32" y="4" width="4" height="6" fill="#2d1a00"/>
-      <rect x="22" y="2" width="6" height="4" fill="#2d1a00"/>
-      <!-- Face -->
-      <rect x="14" y="18" width="22" height="20" fill="#f5c5a3"/>
-      <!-- Ears -->
-      <rect x="10" y="22" width="4" height="7" fill="#f0b898"/>
-      <rect x="36" y="22" width="4" height="7" fill="#f0b898"/>
-      <!-- Eyes -->
-      <rect x="17" y="24" width="5" height="4" fill="#fff"/>
-      <rect x="28" y="24" width="5" height="4" fill="#fff"/>
-      <rect x="18" y="25" width="3" height="3" fill="#3d2006"/>
-      <rect x="29" y="25" width="3" height="3" fill="#3d2006"/>
-      <rect x="18" y="25" width="1" height="1" fill="#fff"/>
-      <rect x="29" y="25" width="1" height="1" fill="#fff"/>
-      <!-- Eyebrows (messy) -->
-      <rect x="16" y="22" width="7" height="2" fill="#1a0a00"/>
-      <rect x="27" y="22" width="8" height="2" fill="#1a0a00"/>
-      <rect x="23" y="21" width="2" height="2" fill="#1a0a00"/>
-      <!-- Nose -->
-      <rect x="24" y="29" width="2" height="3" fill="#e0a88a"/>
-      <!-- Mouth slight smirk -->
-      <rect x="20" y="33" width="10" height="2" fill="#c0725a"/>
-      <rect x="28" y="35" width="4" height="2" fill="#c0725a"/>
-      <!-- Neck -->
-      <rect x="21" y="38" width="8" height="6" fill="#f0b898"/>
-      <!-- Uniform (putih, un-tucked vibe) -->
-      <rect x="10" y="44" width="30" height="28" fill="#e8eaf0"/>
-      <rect x="20" y="44" width="10" height="4" fill="#1a237e"/>
-      <rect x="10" y="44" width="4" height="28" fill="#d8dae8"/>
-      <rect x="36" y="44" width="4" height="28" fill="#d8dae8"/>
-      <!-- Shirt un-tucked bottom -->
-      <rect x="8" y="68" width="34" height="4" fill="#e8eaf0"/>
-      <!-- Pants -->
-      <rect x="12" y="72" width="26" height="20" fill="#283593"/>
-      <rect x="22" y="72" width="6" height="20" fill="#1a237e"/>
-      <!-- Legs -->
-      <rect x="12" y="90" width="10" height="10" fill="#283593"/>
-      <rect x="28" y="90" width="10" height="10" fill="#283593"/>
-      <!-- Shoes -->
-      <rect x="10" y="96" width="14" height="4" fill="#1a1a1a"/>
-      <rect x="26" y="96" width="14" height="4" fill="#1a1a1a"/>
-      <!-- Arms -->
-      <rect x="1" y="44" width="9" height="22" fill="#e8eaf0"/>
-      <rect x="40" y="44" width="9" height="22" fill="#e8eaf0"/>
-      <!-- Hands (one waving) -->
-      <rect x="40" y="38" width="9" height="8" fill="#f5c5a3"/>
-      <rect x="1" y="66" width="9" height="6" fill="#f5c5a3"/>
-      <!-- Bag on back shoulder -->
-      <rect x="1" y="44" width="12" height="20" fill="#1b4332"/>
-      <rect x="3" y="46" width="8" height="16" fill="#2d6a4f"/>
-      <rect x="4" y="50" width="6" height="2" fill="#ffce00"/>
-    </svg>
-
-  </div>
-
-  <!-- Trees front layer -->
-  <div class="trees-front">
-    <svg viewBox="0 0 800 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;image-rendering:pixelated">
-      <!-- Foreground dark trees (close up, larger, darker) -->
-      <rect x="0" y="40" width="800" height="80" fill="#0a1f14"/>
-      <!-- Large tree silhouettes -->
-      <polygon points="-10,40 30,0 70,40" fill="#0d2818"/>
-      <polygon points="50,40 100,-10 150,40" fill="#0a1f14"/>
-      <polygon points="120,40 165,5 210,40" fill="#0d2818"/>
-      <polygon points="200,40 250,-5 300,40" fill="#0a1f14"/>
-      <polygon points="280,40 320,10 360,40" fill="#0d2818"/>
-      <polygon points="350,40 400,-10 450,40" fill="#0a1f14"/>
-      <polygon points="440,40 480,5 520,40" fill="#0d2818"/>
-      <polygon points="510,40 555,-5 600,40" fill="#0a1f14"/>
-      <polygon points="590,40 635,8 680,40" fill="#0d2818"/>
-      <polygon points="670,40 720,-10 770,40" fill="#0a1f14"/>
-      <polygon points="750,40 790,5 820,40" fill="#0d2818"/>
-      <!-- Tree trunks -->
-      <rect x="25" y="38" width="10" height="20" fill="#0a1208"/>
-      <rect x="95" y="38" width="10" height="20" fill="#0a1208"/>
-      <rect x="160" y="38" width="10" height="20" fill="#0a1208"/>
-      <rect x="245" y="38" width="10" height="20" fill="#0a1208"/>
-      <rect x="315" y="38" width="10" height="20" fill="#0a1208"/>
-      <rect x="395" y="38" width="10" height="20" fill="#0a1208"/>
-      <rect x="475" y="38" width="10" height="20" fill="#0a1208"/>
-      <rect x="550" y="38" width="10" height="20" fill="#0a1208"/>
-      <rect x="630" y="38" width="10" height="20" fill="#0a1208"/>
-      <rect x="715" y="38" width="10" height="20" fill="#0a1208"/>
-    </svg>
-  </div>
-
-  <!-- String lights -->
-  <div class="lights-string" id="lightsContainer"></div>
-
-  <!-- ===== HERO UI OVERLAY ===== -->
-  <div class="hero-ui">
-    <div class="hero-title-wrap">
-      <span class="hero-eyebrow">★ Bazar Sekolah 2025 ★</span>
-      <h1 class="hero-title">Pre-Order Bazar<br>22 Mei</h1>
-      <div class="dialog-box">Yuk pesan sekarang sebelum kehabisan!</div>
-
-      <!-- Countdown -->
-      <div class="hero-countdown">
-        <div class="countdown-unit">
-          <div class="countdown-num" id="cdDays">00</div>
-          <div class="countdown-label">HARI</div>
-        </div>
-        <div class="countdown-sep">:</div>
-        <div class="countdown-unit">
-          <div class="countdown-num" id="cdHours">00</div>
-          <div class="countdown-label">JAM</div>
-        </div>
-        <div class="countdown-sep">:</div>
-        <div class="countdown-unit">
-          <div class="countdown-num" id="cdMins">00</div>
-          <div class="countdown-label">MENIT</div>
-        </div>
-        <div class="countdown-sep">:</div>
-        <div class="countdown-unit">
-          <div class="countdown-num" id="cdSecs">00</div>
-          <div class="countdown-label">DETIK</div>
-        </div>
-      </div>
-
-      <!-- CTAs -->
-      <div class="hero-ctas">
-        <button class="btn-primary" onclick="document.getElementById('menu-section').scrollIntoView({behavior:'smooth'})">
-          ▶ Lihat Menu
-        </button>
-        <button class="btn-ghost" onclick="document.getElementById('form-section').scrollIntoView({behavior:'smooth'})">
-          ✎ Isi Data
-        </button>
-      </div>
-    </div>
-  </div>
-
-</section>
-
-<!-- ============================================================
-     SECTION 2: MENU — IN-WORLD SELECTION
-     ============================================================ -->
-<section id="menu-section">
-  <div class="section-header reveal">
-    <span class="section-tag">✦ Pilih Menu</span>
-    <h2 class="section-title">Menu Hari Ini</h2>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="menu-grid">
-
-    <!-- Item 1: Bola Oreo Susu -->
-    <div class="menu-item reveal" id="item-bola-oreo" data-id="bola-oreo" data-name="Bola Oreo Susu" data-price="8000">
-      <div class="menu-illustration">
-        <svg class="food-svg" viewBox="0 0 280 130" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
-          <!-- Background glow -->
-          <radialGradient id="glowBola" cx="50%" cy="60%" r="50%">
-            <stop offset="0%" stop-color="#6a3c2e" stop-opacity="0.8"/>
-            <stop offset="100%" stop-color="#1a0a2e" stop-opacity="0"/>
-          </radialGradient>
-          <rect width="280" height="130" fill="url(#glowBola)"/>
-          <!-- Plate/surface -->
-          <ellipse cx="140" cy="110" rx="80" ry="12" fill="#2d1f3d"/>
-          <ellipse cx="140" cy="108" rx="78" ry="10" fill="#3d2f4d"/>
-          <!-- Bola-bola (pixel balls) -->
-          <!-- Ball 1 -->
-          <rect x="82" y="60" width="40" height="40" rx="0" fill="#1a1a1a"/>
-          <rect x="84" y="58" width="36" height="4" fill="#2d2d2d"/>
-          <rect x="80" y="64" width="4" height="28" fill="#2d2d2d"/>
-          <rect x="116" y="64" width="4" height="28" fill="#111"/>
-          <rect x="84" y="96" width="36" height="4" fill="#111"/>
-          <!-- Oreo pattern lines -->
-          <rect x="88" y="70" width="24" height="2" fill="#333"/>
-          <rect x="88" y="74" width="24" height="2" fill="#333"/>
-          <rect x="88" y="78" width="24" height="2" fill="#333"/>
-          <rect x="88" y="82" width="24" height="2" fill="#333"/>
-          <!-- Cream center of ball 1 -->
-          <rect x="94" y="70" width="12" height="20" fill="#f5f5dc"/>
-          <rect x="92" y="72" width="16" height="16" fill="#f5f5dc"/>
-          <!-- Milk drizzle -->
-          <rect x="90" y="58" width="4" height="8" fill="#fff9f0"/>
-          <rect x="94" y="54" width="4" height="6" fill="#fff9f0"/>
-          <rect x="98" y="56" width="6" height="5" fill="#fff9f0"/>
-          <!-- Ball 2 -->
-          <rect x="138" y="56" width="42" height="42" fill="#1a1a1a"/>
-          <rect x="140" y="54" width="38" height="4" fill="#2d2d2d"/>
-          <rect x="136" y="60" width="4" height="30" fill="#2d2d2d"/>
-          <rect x="176" y="60" width="4" height="30" fill="#111"/>
-          <rect x="140" y="94" width="38" height="4" fill="#111"/>
-          <rect x="144" y="66" width="28" height="2" fill="#333"/>
-          <rect x="144" y="70" width="28" height="2" fill="#333"/>
-          <rect x="144" y="74" width="28" height="2" fill="#333"/>
-          <rect x="144" y="78" width="28" height="2" fill="#333"/>
-          <rect x="144" y="82" width="28" height="2" fill="#333"/>
-          <rect x="150" y="66" width="14" height="22" fill="#f5f5dc"/>
-          <rect x="148" y="68" width="18" height="18" fill="#f5f5dc"/>
-          <!-- Ball 3 small -->
-          <rect x="60" y="72" width="30" height="30" fill="#1a1a1a"/>
-          <rect x="62" y="70" width="26" height="4" fill="#2d2d2d"/>
-          <rect x="56" y="76" width="4" height="20" fill="#2d2d2d"/>
-          <rect x="86" y="76" width="4" height="20" fill="#111"/>
-          <rect x="62" y="98" width="26" height="4" fill="#111"/>
-          <rect x="66" y="78" width="18" height="2" fill="#333"/>
-          <rect x="66" y="82" width="18" height="2" fill="#333"/>
-          <rect x="66" y="86" width="18" height="2" fill="#333"/>
-          <rect x="70" y="78" width="10" height="14" fill="#f5f5dc"/>
-          <rect x="68" y="80" width="14" height="10" fill="#f5f5dc"/>
-          <!-- Milk pool -->
-          <ellipse cx="130" cy="108" rx="60" ry="6" fill="#fff9e6" opacity="0.3"/>
-          <!-- Steam particles -->
-          <rect x="100" y="44" width="2" height="8" fill="#fff" opacity="0.2"/>
-          <rect x="110" y="38" width="2" height="12" fill="#fff" opacity="0.15"/>
-          <rect x="120" y="42" width="2" height="8" fill="#fff" opacity="0.2"/>
-          <rect x="155" y="38" width="2" height="10" fill="#fff" opacity="0.15"/>
-          <rect x="165" y="42" width="2" height="8" fill="#fff" opacity="0.2"/>
-        </svg>
-      </div>
-      <div class="menu-content">
-        <div class="menu-name">Bola Oreo Susu</div>
-        <div class="menu-desc">Bulatan cokelat lembut isi krim, dibalut susu manis. Nostalgia dalam sekali gigit.</div>
-        <div class="menu-bottom">
-          <div class="menu-price">Rp 8.000</div>
-          <div class="stepper" data-id="bola-oreo">
-            <button class="stepper-btn" onclick="changeQty('bola-oreo', -1)">−</button>
-            <span class="stepper-val" id="qty-bola-oreo">0</span>
-            <button class="stepper-btn" onclick="changeQty('bola-oreo', 1)">+</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Item 2: Mac and Cheese -->
-    <div class="menu-item reveal" id="item-mac-cheese" data-id="mac-cheese" data-name="Mac and Cheese" data-price="10000">
-      <div class="menu-illustration">
-        <svg class="food-svg" viewBox="0 0 280 130" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
-          <radialGradient id="glowMac" cx="50%" cy="60%" r="50%">
-            <stop offset="0%" stop-color="#5a3a0a" stop-opacity="0.8"/>
-            <stop offset="100%" stop-color="#1a0a2e" stop-opacity="0"/>
-          </radialGradient>
-          <rect width="280" height="130" fill="url(#glowMac)"/>
-          <!-- Bowl shadow -->
-          <ellipse cx="140" cy="112" rx="75" ry="8" fill="#2d1f3d"/>
-          <!-- Bowl pixel -->
-          <rect x="65" y="85" width="150" height="30" fill="#c8864a"/>
-          <rect x="60" y="80" width="160" height="10" fill="#d4924e"/>
-          <rect x="55" y="75" width="170" height="8" fill="#e09e5a"/>
-          <rect x="60" y="105" width="160" height="6" fill="#b07030"/>
-          <rect x="65" y="111" width="150" height="4" fill="#9a6028"/>
-          <!-- Mac pasta (pixel macaroni) -->
-          <!-- Cheese sauce base -->
-          <rect x="65" y="50" width="150" height="40" fill="#f5a623"/>
-          <rect x="60" y="55" width="160" height="32" fill="#f5a623"/>
-          <rect x="58" y="60" width="164" height="26" fill="#ffc048"/>
-          <!-- Individual macaroni pieces -->
-          <rect x="75" y="58" width="14" height="8" fill="#f0d060" rx="0"/>
-          <rect x="77" y="60" width="10" height="4" fill="#e8c040"/>
-          <rect x="78" y="61" width="8" height="2" fill="#a86010"/>
-          <rect x="95" y="62" width="14" height="8" fill="#f0d060"/>
-          <rect x="97" y="64" width="10" height="4" fill="#e8c040"/>
-          <rect x="98" y="65" width="8" height="2" fill="#a86010"/>
-          <rect x="118" y="58" width="14" height="8" fill="#f0d060"/>
-          <rect x="120" y="60" width="10" height="4" fill="#e8c040"/>
-          <rect x="140" y="62" width="14" height="8" fill="#f0d060"/>
-          <rect x="142" y="64" width="10" height="4" fill="#e8c040"/>
-          <rect x="163" y="58" width="14" height="8" fill="#f0d060"/>
-          <rect x="165" y="60" width="10" height="4" fill="#e8c040"/>
-          <rect x="185" y="62" width="14" height="8" fill="#f0d060"/>
-          <rect x="187" y="64" width="10" height="4" fill="#e8c040"/>
-          <rect x="82" y="72" width="14" height="8" fill="#f0d060"/>
-          <rect x="84" y="74" width="10" height="4" fill="#e8c040"/>
-          <rect x="108" y="70" width="14" height="8" fill="#f0d060"/>
-          <rect x="110" y="72" width="10" height="4" fill="#e8c040"/>
-          <rect x="132" y="72" width="14" height="8" fill="#f0d060"/>
-          <rect x="155" y="70" width="14" height="8" fill="#f0d060"/>
-          <rect x="175" y="72" width="14" height="8" fill="#f0d060"/>
-          <!-- Cheese drip on bowl edge -->
-          <rect x="90" y="80" width="4" height="8" fill="#f5a623"/>
-          <rect x="150" y="80" width="4" height="10" fill="#ffc048"/>
-          <rect x="190" y="82" width="4" height="6" fill="#f5a623"/>
-          <!-- Steam -->
-          <rect x="110" y="36" width="2" height="12" fill="#fff" opacity="0.2"/>
-          <rect x="130" y="30" width="2" height="18" fill="#fff" opacity="0.15"/>
-          <rect x="150" y="34" width="2" height="14" fill="#fff" opacity="0.2"/>
-          <rect x="170" y="38" width="2" height="10" fill="#fff" opacity="0.15"/>
-          <!-- Cheese pull highlight -->
-          <rect x="58" y="70" width="6" height="16" fill="#ffc048" opacity="0.7"/>
-          <rect x="216" y="68" width="6" height="18" fill="#ffc048" opacity="0.7"/>
-        </svg>
-      </div>
-      <div class="menu-content">
-        <div class="menu-name">Mac and Cheese</div>
-        <div class="menu-desc">Makaroni premium dengan saus keju lumer creamy. Comfort food sejati dari dapur kita.</div>
-        <div class="menu-bottom">
-          <div class="menu-price">Rp 10.000</div>
-          <div class="stepper" data-id="mac-cheese">
-            <button class="stepper-btn" onclick="changeQty('mac-cheese', -1)">−</button>
-            <span class="stepper-val" id="qty-mac-cheese">0</span>
-            <button class="stepper-btn" onclick="changeQty('mac-cheese', 1)">+</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ============================================================
-     SECTION 3: ORDER FORM — MODERN DIALOG STYLE
-     ============================================================ -->
-<section id="form-section">
-  <div class="section-header reveal" style="margin-bottom:30px;">
-    <span class="section-tag">✎ Data Pemesan</span>
-    <h2 class="section-title">Lengkapi Informasi</h2>
-    <div class="section-line"></div>
-  </div>
-
-  <div class="form-container reveal">
-    <div class="form-card">
-      <div class="form-card-header">
-        <span class="form-card-icon">📋</span>
-        <span class="form-card-title">Form Pre-Order</span>
-      </div>
-      <div class="form-fields">
-
-        <!-- Nama -->
-        <div class="field-group" id="group-nama">
-          <label class="field-label" for="inputNama">Nama Lengkap</label>
-          <input
-            class="field-input"
-            type="text"
-            id="inputNama"
-            placeholder="Masukkan nama kamu..."
-            autocomplete="off"
-            oninput="handleNameInput(this)"
-            onfocus="showSuggestions('nama')"
-            onblur="hideSuggestions('nama', 300)"
-          />
-          <div class="suggestions-list" id="suggest-nama"></div>
-          <span class="field-hint" id="hint-nama"></span>
-        </div>
-
-        <!-- Kelas -->
-        <div class="field-group" id="group-kelas">
-          <label class="field-label" for="inputKelas">Kelas</label>
-          <input
-            class="field-input"
-            type="text"
-            id="inputKelas"
-            placeholder="Contoh: XI IPA 2"
-            autocomplete="off"
-            oninput="handleKelasInput(this)"
-            onfocus="showSuggestions('kelas')"
-            onblur="hideSuggestions('kelas', 300)"
-          />
-          <div class="suggestions-list" id="suggest-kelas"></div>
-          <span class="field-hint" id="hint-kelas"></span>
-        </div>
-
-        <!-- No HP -->
-        <div class="field-group" id="group-hp">
-          <label class="field-label" for="inputHP">Nomor WhatsApp</label>
-          <input
-            class="field-input"
-            type="tel"
-            id="inputHP"
-            placeholder="08xx-xxxx-xxxx"
-            autocomplete="off"
-            oninput="handleHPInput(this)"
-            maxlength="16"
-          />
-          <span class="field-hint" id="hint-hp"></span>
-        </div>
-
-      </div>
-
-      <!-- Context-aware CTA -->
-      <div class="form-cta-wrap">
-        <button class="btn-cta-main state-idle" id="ctaBtn" onclick="handleCTA()" disabled>
-          <span id="ctaBtnText">✦ Pilih menu dulu</span>
-        </button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     SMART CART PANEL (Fixed floating)
-     ============================================================ -->
-<div class="cart-panel" id="cartPanel">
-  <button class="cart-toggle" id="cartToggle" onclick="toggleCart()">
-    <div class="cart-icon-wrap">
-      <span class="cart-icon">🛒</span>
-      <span class="cart-badge" id="cartBadge">0</span>
-    </div>
-    <span class="cart-toggle-text">Pesanan</span>
-  </button>
-
-  <div class="cart-body" id="cartBody">
-    <div class="cart-header">
-      <span class="cart-title">⚡ Smart Cart</span>
-      <span style="font-family:var(--font-pixel);font-size:7px;color:var(--ui-muted)" id="cartItemCount">0 item</span>
-    </div>
-
-    <div class="cart-items-list" id="cartItemsList">
-      <div style="font-family:var(--font-body);font-size:11px;color:var(--ui-muted);text-align:center;padding:12px 0;">
-        Belum ada item dipilih
-      </div>
-    </div>
-
-    <!-- Promo code -->
-    <div class="cart-promo">
-      <input
-        class="promo-input"
-        type="text"
-        id="promoInput"
-        placeholder="KODE PROMO"
-        maxlength="12"
-        oninput="handlePromoInput(this)"
-      />
-      <span class="promo-status" id="promoStatus"></span>
-    </div>
-
-    <!-- Totals -->
-    <div class="cart-totals">
-      <div class="total-row">
-        <span class="total-label">Subtotal</span>
-        <span class="total-val" id="subtotalVal">Rp 0</span>
-      </div>
-      <div class="total-row discount" id="discountRow" style="display:none">
-        <span class="total-label">Diskon HEMAT2K</span>
-        <span class="total-val" id="discountVal" style="color:var(--success)">-Rp 2.000</span>
-      </div>
-      <div class="total-row final" style="margin-top:6px;padding-top:8px;border-top:1px solid var(--ui-border)">
-        <span class="total-label">Total</span>
-        <span class="total-val" id="totalVal">Rp 0</span>
-      </div>
-    </div>
-
-    <div class="cart-cta">
-      <button class="btn-primary" style="width:100%;font-size:7px" onclick="document.getElementById('form-section').scrollIntoView({behavior:'smooth'});toggleCart();">
-        ✎ Lengkapi Data →
+    <div class="card" style="text-align:center;">
+      <div class="badge">📅 22 MEI 2025</div>
+      <div class="pixel-title home-title">Bazar 22 Mei</div>
+      <p class="home-sub">
+        Pre-order sekarang, ambil di hari bazar! 🎪<br>
+        Stok terbatas — jangan sampai kehabisan.
+      </p>
+      <button class="btn btn-primary" onclick="goStep(1)" style="width:100%;">
+        🛒 Mulai Pesan
       </button>
     </div>
   </div>
-</div>
 
-<!-- ============================================================
-     PREVIEW MODAL
-     ============================================================ -->
-<div class="modal-overlay" id="previewModal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <span class="modal-title">🧾 Preview Pesanan</span>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+
+  <!-- ==================== STEP 2: MENU ==================== -->
+  <div class="step" id="step-menu">
+    <div class="menu-wrapper">
+
+      <!-- Header -->
+      <div class="step-header">
+        <button class="back-btn" onclick="goStep(0)">←</button>
+        <span class="step-label">Menu Bazar</span>
+      </div>
+
+      <!-- Product list -->
+      <div class="menu-scroll">
+
+        <!-- PRODUCT 1: Bola Oreo Susu -->
+        <div class="product-card">
+          <div class="product-art">
+            <svg viewBox="0 0 82 82" xmlns="http://www.w3.org/2000/svg">
+              <!-- Background -->
+              <rect width="82" height="82" fill="#14091c" rx="10"/>
+              <!-- Drop shadow -->
+              <ellipse cx="41" cy="62" rx="28" ry="7" fill="rgba(0,0,0,.5)"/>
+              <!-- Ball back-left -->
+              <circle cx="22" cy="53" r="16" fill="#181818"/>
+              <circle cx="17" cy="48" r="5" fill="#222" opacity=".6"/>
+              <!-- Powder on back-left -->
+              <ellipse cx="22" cy="39" rx="9" ry="4" fill="#eee" opacity=".85"/>
+              <ellipse cx="20" cy="38" rx="5" ry="2.2" fill="#fff" opacity=".65"/>
+              <!-- Ball back-right -->
+              <circle cx="60" cy="53" r="16" fill="#181818"/>
+              <circle cx="55" cy="48" r="5" fill="#222" opacity=".6"/>
+              <!-- Powder on back-right -->
+              <ellipse cx="60" cy="39" rx="9" ry="4" fill="#eee" opacity=".85"/>
+              <ellipse cx="58" cy="38" rx="5" ry="2.2" fill="#fff" opacity=".65"/>
+              <!-- Ball front-center -->
+              <circle cx="41" cy="49" r="20" fill="#111"/>
+              <circle cx="35" cy="43" r="6" fill="#1e1e1e" opacity=".7"/>
+              <!-- Cream powder top -->
+              <ellipse cx="41" cy="31" rx="12" ry="5.5" fill="#f2f2f2" opacity=".95"/>
+              <ellipse cx="38" cy="30" rx="7"  ry="3"   fill="#fff"    opacity=".8"/>
+              <ellipse cx="43" cy="29" rx="3.5" ry="2"  fill="#fff"    opacity=".55"/>
+              <!-- Milk drips -->
+              <line x1="31" y1="33" x2="34" y2="29" stroke="#fff" stroke-width="1.5" opacity=".4"/>
+              <line x1="47" y1="32" x2="50" y2="29" stroke="#fff" stroke-width="1.5" opacity=".4"/>
+              <line x1="40" y1="27" x2="41" y2="23" stroke="#fff" stroke-width="1.5" opacity=".35"/>
+            </svg>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Bola Oreo<br>Susu</div>
+            <div class="product-desc">5 pcs / porsi — bulat, lembut, taburan susu 🤍</div>
+            <div class="product-price">Rp8.000</div>
+            <div class="stepper">
+              <button class="stp-btn" onclick="changeQty(0,-1)">−</button>
+              <span class="stp-qty" id="qty-0">0</span>
+              <button class="stp-btn" onclick="changeQty(0,1)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRODUCT 2: Mac and Cheese -->
+        <div class="product-card">
+          <div class="product-art">
+            <svg viewBox="0 0 82 82" xmlns="http://www.w3.org/2000/svg">
+              <!-- Background -->
+              <rect width="82" height="82" fill="#180d06" rx="10"/>
+              <!-- Bowl shadow -->
+              <ellipse cx="41" cy="70" rx="27" ry="6" fill="rgba(0,0,0,.5)"/>
+              <!-- Bowl body -->
+              <path d="M14 43 Q14 68 41 68 Q68 68 68 43 Z" fill="#b86830"/>
+              <path d="M14 43 Q14 66 41 66 Q68 66 68 43 Z" fill="#c8783c"/>
+              <!-- Bowl rim -->
+              <ellipse cx="41" cy="43" rx="27" ry="8.5" fill="#d8885a"/>
+              <ellipse cx="41" cy="43" rx="24"  ry="7"   fill="#2c1008"/>
+              <!-- Cheese base -->
+              <ellipse cx="41" cy="43" rx="24"  ry="7"   fill="#f0c030"/>
+              <!-- Macaroni pieces (hollow ellipses) -->
+              <ellipse cx="29" cy="41" rx="5.5" ry="3.2" fill="none" stroke="#d4941c" stroke-width="2.5"/>
+              <ellipse cx="41" cy="40" rx="5.5" ry="3.2" fill="none" stroke="#c8881a" stroke-width="2.5"/>
+              <ellipse cx="53" cy="41" rx="5.5" ry="3.2" fill="none" stroke="#d4941c" stroke-width="2.5"/>
+              <ellipse cx="35" cy="45" rx="5.5" ry="3.2" fill="none" stroke="#c07e18" stroke-width="2.5"/>
+              <ellipse cx="47" cy="45" rx="5.5" ry="3.2" fill="none" stroke="#c07e18" stroke-width="2.5"/>
+              <!-- Cheese drizzle -->
+              <path d="M24 43 Q30 38 37 43 Q43 48 49 43 Q55 38 60 43"
+                    stroke="#fad84a" stroke-width="2.2" fill="none" opacity=".85"/>
+              <!-- Creamy pool -->
+              <ellipse cx="41" cy="44.5" rx="15" ry="4.2" fill="#f5c840" opacity=".35"/>
+              <!-- Steam wisps -->
+              <path d="M31 31 Q29 24 31 17" stroke="#fff" stroke-width="1.4" fill="none"
+                    opacity=".22" stroke-linecap="round"/>
+              <path d="M41 29 Q39 22 41 15" stroke="#fff" stroke-width="1.4" fill="none"
+                    opacity=".22" stroke-linecap="round"/>
+              <path d="M51 31 Q49 24 51 17" stroke="#fff" stroke-width="1.4" fill="none"
+                    opacity=".22" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Mac and<br>Cheese</div>
+            <div class="product-desc">1 porsi — makaroni creamy, saus keju melimpah 🧀</div>
+            <div class="product-price">Rp10.000</div>
+            <div class="stepper">
+              <button class="stp-btn" onclick="changeQty(1,-1)">−</button>
+              <span class="stp-qty" id="qty-1">0</span>
+              <button class="stp-btn" onclick="changeQty(1,1)">+</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /menu-scroll -->
+
+      <!-- Footer -->
+      <div class="menu-footer">
+        <div class="subtotal-bar">
+          <span class="subtotal-label">Subtotal</span>
+          <span class="subtotal-amount" id="subtotal">Rp0</span>
+        </div>
+        <div class="empty-hint" id="empty-hint">⚠️ Pilih menu dulu ya!</div>
+        <button class="btn btn-primary" id="btn-next"
+                onclick="proceedToForm()" style="width:100%;" disabled>
+          Lanjut ke Pemesanan →
+        </button>
+      </div>
+
     </div>
-    <div class="modal-body">
+  </div>
 
-      <div class="preview-section-title">INFORMASI PEMESAN</div>
-      <div class="preview-info-grid">
-        <div class="preview-field">
-          <div class="preview-field-label">NAMA</div>
-          <div class="preview-field-value" id="previewNama">—</div>
-        </div>
-        <div class="preview-field">
-          <div class="preview-field-label">KELAS</div>
-          <div class="preview-field-value" id="previewKelas">—</div>
-        </div>
-        <div class="preview-field" style="grid-column:1/-1">
-          <div class="preview-field-label">NO. WHATSAPP</div>
-          <div class="preview-field-value" id="previewHP">—</div>
-        </div>
+
+  <!-- ==================== STEP 3: FORM ==================== -->
+  <div class="step" id="step-form">
+    <div class="form-wrapper">
+
+      <!-- Header -->
+      <div class="step-header">
+        <button class="back-btn" onclick="goStep(1)">←</button>
+        <span class="step-label">Detail Pesanan</span>
       </div>
 
-      <div class="preview-section-title">DETAIL PESANAN</div>
-      <div class="preview-order-list" id="previewOrderList"></div>
+      <div class="form-scroll">
 
-      <div class="preview-total-box">
-        <div class="total-row" id="previewDiscRow" style="display:none;margin-bottom:8px">
-          <span style="font-family:var(--font-body);font-size:12px;color:var(--ui-muted)">Diskon</span>
-          <span style="font-family:var(--font-pixel);font-size:8px;color:var(--success)">-Rp 2.000</span>
+        <!-- Mini order summary -->
+        <div class="order-summary">
+          <div class="os-title">📋 Ringkasan Pesanan</div>
+          <div id="summary-items"></div>
+          <div class="os-total-row">
+            <span class="os-total-label">Total</span>
+            <span class="os-total-val" id="summary-total">Rp0</span>
+          </div>
         </div>
-        <div class="preview-total-final">
-          <span class="preview-total-label">TOTAL BAYAR</span>
-          <span class="preview-total-value" id="previewTotal">Rp 0</span>
+
+        <!-- Input fields -->
+        <div class="form-panel">
+          <div class="f-group">
+            <label class="f-label" for="i-nama">👤 Nama Lengkap</label>
+            <input type="text" id="i-nama" class="f-input"
+                   placeholder="Nama kamu..." oninput="validateForm()" autocomplete="name">
+            <div class="f-error" id="e-nama">Nama tidak boleh kosong</div>
+          </div>
+
+          <div class="f-group">
+            <label class="f-label" for="i-kelas">🏫 Kelas</label>
+            <input type="text" id="i-kelas" class="f-input"
+                   placeholder="Contoh: X IPA 1" oninput="validateForm()" autocomplete="off">
+            <div class="f-error" id="e-kelas">Kelas tidak boleh kosong</div>
+          </div>
+
+          <div class="f-group" style="margin-bottom:0">
+            <label class="f-label" for="i-hp">📱 No HP (WhatsApp)</label>
+            <input type="tel" id="i-hp" class="f-input"
+                   placeholder="08xxxxxxxxxx" oninput="onHpInput()" autocomplete="tel">
+            <div class="f-error" id="e-hp">Harus diawali "08", minimal 10 digit, angka saja</div>
+          </div>
         </div>
-      </div>
 
-      <span class="wa-label">📲 PREVIEW PESAN WHATSAPP</span>
-      <div class="preview-wa-preview" id="waPreview"></div>
+        <!-- Action buttons -->
+        <div class="form-actions">
+          <button class="btn btn-primary" id="btn-submit"
+                  onclick="submitOrder()" disabled style="width:100%;">
+            📤 Kirim Pesanan ke WhatsApp
+          </button>
+          <div class="btn-row">
+            <button class="btn btn-secondary" onclick="copyOrder()" style="flex:1; font-size:8px;">
+              📋 Copy Pesanan
+            </button>
+            <button class="btn btn-ghost" onclick="resetAll()" style="flex:1;">
+              🗑️ Reset
+            </button>
+          </div>
+        </div>
 
-      <div class="modal-actions">
-        <button class="btn-ghost" onclick="closeModal()">← Edit</button>
-        <button class="btn-primary" id="sendBtn" onclick="sendOrder()">📲 Kirim via WA</button>
-      </div>
+      </div><!-- /form-scroll -->
     </div>
   </div>
-</div>
 
-<!-- ============================================================
-     SUCCESS OVERLAY
-     ============================================================ -->
-<div class="success-overlay" id="successOverlay">
-  <div class="success-pixel-anim">✅</div>
-  <div class="success-title">Pesanan Terkirim!</div>
-  <div class="success-subtitle">
-    Terima kasih sudah pre-order.<br>
-    Kami akan konfirmasi via WhatsApp kamu ya!
-  </div>
-  <div class="success-progress">
-    <div class="success-bar" id="successBar"></div>
-  </div>
-  <div class="success-info">MENGALIHKAN KE WHATSAPP...</div>
-</div>
 
-<!-- ============================================================
-     FOOTER
-     ============================================================ -->
-<footer>
-  <div class="footer-text">
-    ★ <span class="footer-glow">Bazar Sekolah 22 Mei</span> ★<br>
-    Pre-Order ditutup saat hari bazar tiba<br>
-    Hubungi panitia untuk info lebih lanjut
+  <!-- ==================== STEP 4: REDIRECT ==================== -->
+  <div class="step" id="step-redirect">
+    <div class="card">
+      <span class="success-icon">🎉</span>
+      <div class="redir-title">Terima kasih!</div>
+      <p class="redir-sub">
+        Pesanan sedang dibuka<br>di WhatsApp...
+      </p>
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <button class="btn btn-primary" id="btn-open-wa"
+              onclick="openWA()" style="width:100%; display:none; margin-bottom:10px;">
+        📲 Buka WhatsApp
+      </button>
+      <button class="btn btn-ghost" onclick="resetAll()" style="width:100%;">
+        🔄 Pesan Lagi
+      </button>
+    </div>
   </div>
-</footer>
 
-<!-- ============================================================
-     JAVASCRIPT — ALL FEATURES
-     ============================================================ -->
+</div><!-- /app -->
+
+
 <script>
-/* ====================================================
-   STATE MANAGEMENT — persists to localStorage
-   ==================================================== */
-const STORE_KEY = 'bazar_state_v2';
-const PROMO_CODE = 'HEMAT1K';
-const PROMO_DISCOUNT = 1000;
-const WA_NUMBER = '6285694458024'; // Ganti dengan nomor WA panitia
-const BAZAR_DATE = new Date('2025-05-30T08:00:00');
+/* ============================================================
+   CONFIG — ⚠️ Ganti WA_NUMBER dengan nomor penjual
+============================================================ */
+const WA_NUMBER = '6285694458024';   // format internasional, tanpa +
 
-const MENU_DATA = {
-  'bola-oreo': { name: 'Bola Oreo Susu', price: 8000 },
-  'mac-cheese': { name: 'Mac and Cheese', price: 10000 }
-};
+const PRODUCTS = [
+  { name: 'Bola Oreo Susu', tag: '(5 pcs)', price: 8000  },
+  { name: 'Mac and Cheese',  tag: '',        price: 10000 },
+];
 
-// Load state from localStorage
-function loadState() {
+
+/* ============================================================
+   STATE
+============================================================ */
+let curStep   = 0;
+let qty       = [0, 0];      // quantities per product
+let waUrl     = '';
+let audioCtx  = null;
+let bgNodes   = [];
+let bgRunning = false;
+let muted     = false;
+let touched   = false;       // first user interaction flag
+
+
+/* ============================================================
+   LOCAL STORAGE
+============================================================ */
+function saveLS() {
   try {
-    const raw = localStorage.getItem(STORE_KEY);
-    if (raw) return JSON.parse(raw);
+    localStorage.setItem('bazar_qty',  JSON.stringify(qty));
+    localStorage.setItem('bazar_form', JSON.stringify({
+      nama:  document.getElementById('i-nama').value,
+      kelas: document.getElementById('i-kelas').value,
+      hp:    document.getElementById('i-hp').value,
+    }));
   } catch(e) {}
-  return {
-    cart: { 'bola-oreo': 0, 'mac-cheese': 0 },
-    form: { nama: '', kelas: '', hp: '' },
-    promo: '',
-    promoValid: false,
-    history: { names: [], classes: [] }
-  };
 }
 
-function saveState() {
-  try { localStorage.setItem(STORE_KEY, JSON.stringify(appState)); } catch(e) {}
+function loadLS() {
+  try {
+    const q = localStorage.getItem('bazar_qty');
+    if (q) qty = JSON.parse(q);
+
+    const f = localStorage.getItem('bazar_form');
+    if (f) {
+      const { nama, kelas, hp } = JSON.parse(f);
+      document.getElementById('i-nama').value  = nama  || '';
+      document.getElementById('i-kelas').value = kelas || '';
+      document.getElementById('i-hp').value    = hp    || '';
+    }
+  } catch(e) {}
+  refreshMenu();
 }
 
-let appState = loadState();
 
-/* ====================================================
-   STARS GENERATOR
-   ==================================================== */
-(function generateStars() {
-  const container = document.getElementById('starsContainer');
-  for (let i = 0; i < 60; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    const size = Math.random() * 2 + 1;
-    s.style.cssText = `
-      width:${size}px;height:${size}px;
-      left:${Math.random()*100}%;top:${Math.random()*100}%;
-      --dur:${2+Math.random()*4}s;
-      --delay:${Math.random()*5}s;
-      --opacity-min:${0.1+Math.random()*0.4};
-    `;
-    container.appendChild(s);
-  }
-})();
+/* ============================================================
+   STEP NAVIGATION
+============================================================ */
+function goStep(n) {
+  if (n === curStep) return;
+  playClick();
 
-/* ====================================================
-   STRING LIGHTS GENERATOR
-   ==================================================== */
-(function generateLights() {
-  const container = document.getElementById('lightsContainer');
-  const count = 20;
-  for (let i = 0; i < count; i++) {
-    const d = document.createElement('div');
-    d.className = 'light-dot';
-    const xPct = (i / (count-1)) * 100;
-    // Catenary-ish y
-    const yCtr = 8;
-    const sag = 6;
-    const t = (i / (count-1)) * 2 - 1;
-    const yPct = yCtr + sag * t * t;
-    d.style.cssText = `
-      left:${xPct}%;top:${yPct}%;
-      --dur:${1.5+Math.random()*2}s;
-      --delay:${Math.random()*3}s;
-    `;
-    container.appendChild(d);
-  }
-})();
+  const steps = document.querySelectorAll('.step');
+  const from  = steps[curStep];
+  const to    = steps[n];
 
-/* ====================================================
-   COUNTDOWN ENGINE
-   ==================================================== */
-function updateCountdown() {
-  const now = new Date();
-  const diff = BAZAR_DATE - now;
+  const dir = n > curStep ? 'left' : 'right';
 
-  if (diff <= 0) {
-    // Event sudah lewat
-    document.getElementById('expiredOverlay').classList.add('show');
-    document.getElementById('ctaBtn').disabled = true;
-    return;
-  }
+  // Exit current
+  from.classList.remove('active');
+  from.classList.add(dir === 'left' ? 'go-left' : 'go-right');
 
-  const days = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  const mins = Math.floor((diff % 3600000) / 60000);
-  const secs = Math.floor((diff % 60000) / 1000);
+  // Prepare incoming (off-screen on opposite side)
+  to.classList.remove('go-left', 'go-right', 'active');
+  to.style.transform = dir === 'left' ? 'translateX(48px)' : 'translateX(-48px)';
+  to.style.opacity   = '0';
 
-  function pad(n) { return String(n).padStart(2, '0'); }
+  // Force reflow then animate in
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      from.classList.remove('go-left', 'go-right');
+      to.style.transform = '';
+      to.style.opacity   = '';
+      to.classList.add('active');
 
-  function setNum(id, val) {
-    const el = document.getElementById(id);
-    if (el && el.textContent !== pad(val)) {
-      el.textContent = pad(val);
-      el.classList.remove('flip');
-      void el.offsetWidth;
-      el.classList.add('flip');
-    }
-  }
+      curStep = n;
+      updateDots();
 
-  setNum('cdDays', days);
-  setNum('cdHours', hours);
-  setNum('cdMins', mins);
-  setNum('cdSecs', secs);
-}
-updateCountdown();
-setInterval(updateCountdown, 1000);
-
-/* ====================================================
-   SCROLL REVEAL ANIMATION
-   ==================================================== */
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.15 });
-
-document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-/* ====================================================
-   CART SYSTEM
-   ==================================================== */
-function changeQty(id, delta) {
-  appState.cart[id] = Math.max(0, (appState.cart[id] || 0) + delta);
-  saveState();
-
-  // Update stepper display
-  const valEl = document.getElementById(`qty-${id}`);
-  if (valEl) {
-    valEl.textContent = appState.cart[id];
-    valEl.classList.remove('changed');
-    void valEl.offsetWidth;
-    valEl.classList.add('changed');
-  }
-
-  // Animate menu item
-  if (delta > 0) {
-    const card = document.getElementById(`item-${id}`);
-    if (card) {
-      card.classList.remove('added');
-      void card.offsetWidth;
-      card.classList.add('added');
-    }
-  }
-
-  updateCart();
-  updateCTA();
-}
-
-function updateCart() {
-  let totalItems = 0;
-  let subtotal = 0;
-  const rows = [];
-
-  Object.entries(appState.cart).forEach(([id, qty]) => {
-    if (qty > 0) {
-      const item = MENU_DATA[id];
-      totalItems += qty;
-      subtotal += item.price * qty;
-      rows.push({ id, name: item.name, qty, price: item.price, total: item.price * qty });
-    }
-  });
-
-  const discount = appState.promoValid ? PROMO_DISCOUNT : 0;
-  const total = Math.max(0, subtotal - discount);
-
-  // Badge
-  const badge = document.getElementById('cartBadge');
-  const prevBadge = parseInt(badge.textContent);
-  badge.textContent = totalItems;
-  if (totalItems !== prevBadge) {
-    badge.classList.remove('bump');
-    void badge.offsetWidth;
-    badge.classList.add('bump');
-  }
-
-  document.getElementById('cartItemCount').textContent = `${totalItems} item`;
-
-  // Items list
-  const list = document.getElementById('cartItemsList');
-  if (rows.length === 0) {
-    list.innerHTML = `<div style="font-family:var(--font-body);font-size:11px;color:var(--ui-muted);text-align:center;padding:12px 0;">Belum ada item dipilih</div>`;
-  } else {
-    list.innerHTML = rows.map(r => `
-      <div class="cart-item-row" id="cart-row-${r.id}">
-        <span class="cart-item-name">${r.name}</span>
-        <span class="cart-item-qty">×${r.qty}</span>
-        <span class="cart-item-price">${formatRp(r.total)}</span>
-      </div>
-    `).join('');
-
-    // Highlight last changed
-    rows.forEach(r => {
-      const row = document.getElementById(`cart-row-${r.id}`);
-      if (row) {
-        row.classList.remove('highlight');
-        void row.offsetWidth;
-        row.classList.add('highlight');
+      // Step-specific side effects
+      if (n === 2) {
+        renderSummary();
+        setTimeout(() => document.getElementById('i-nama').focus(), 350);
       }
     });
-  }
-
-  // Animate totals
-  animateNum('subtotalVal', subtotal, formatRp);
-
-  const discRow = document.getElementById('discountRow');
-  if (appState.promoValid && subtotal > 0) {
-    discRow.style.display = 'flex';
-  } else {
-    discRow.style.display = 'none';
-  }
-
-  animateNum('totalVal', total, formatRp);
-
-  // Auto open cart if first item added
-  if (totalItems === 1 && rows.length === 1 && rows[0].qty === 1) {
-    const cartBody = document.getElementById('cartBody');
-    if (!cartBody.classList.contains('open')) toggleCart();
-  }
+  });
 }
 
-function animateNum(id, targetVal, formatter) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const startVal = el._currentVal || 0;
-  const duration = 300;
-  const start = performance.now();
-
-  function step(now) {
-    const progress = Math.min((now - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - progress, 3);
-    const current = Math.round(startVal + (targetVal - startVal) * ease);
-    el.textContent = formatter(current);
-    if (progress < 1) requestAnimationFrame(step);
-    else el._currentVal = targetVal;
-  }
-  requestAnimationFrame(step);
+function updateDots() {
+  document.querySelectorAll('.pdot').forEach((d, i) => {
+    d.classList.toggle('active', i === curStep);
+  });
 }
 
-function formatRp(n) {
-  return 'Rp ' + n.toLocaleString('id-ID');
+
+/* ============================================================
+   QUANTITY MANAGEMENT
+============================================================ */
+function changeQty(idx, delta) {
+  playClick();
+  qty[idx] = Math.max(0, qty[idx] + delta);
+  refreshMenu();
+  saveLS();
 }
 
-function toggleCart() {
-  const body = document.getElementById('cartBody');
-  body.classList.toggle('open');
+function refreshMenu() {
+  qty.forEach((q, i) => {
+    document.getElementById(`qty-${i}`).textContent = q;
+  });
+  const total = calcTotal();
+  document.getElementById('subtotal').textContent = formatRp(total);
+
+  const hasOrder = qty.some(q => q > 0);
+  document.getElementById('btn-next').disabled = !hasOrder;
+  document.getElementById('empty-hint').style.display = 'none';
 }
 
-/* ====================================================
-   PROMO VALIDATION — real-time, no click needed
-   ==================================================== */
-function handlePromoInput(el) {
-  const val = el.value.trim().toUpperCase();
-  el.value = val;
-  appState.promo = val;
-
-  const statusEl = document.getElementById('promoStatus');
-
-  if (val === '') {
-    el.className = 'promo-input';
-    statusEl.textContent = '';
-    statusEl.className = 'promo-status';
-    appState.promoValid = false;
-  } else if (val === PROMO_CODE) {
-    el.className = 'promo-input valid';
-    statusEl.textContent = '✓ -Rp2.000';
-    statusEl.className = 'promo-status valid';
-    appState.promoValid = true;
-  } else {
-    el.className = 'promo-input invalid';
-    statusEl.textContent = '✗ Salah';
-    statusEl.className = 'promo-status invalid';
-    appState.promoValid = false;
-  }
-
-  saveState();
-  updateCart();
+function calcTotal() {
+  return qty.reduce((s, q, i) => s + q * PRODUCTS[i].price, 0);
 }
 
-/* ====================================================
-   FORM — PREDICTIVE INPUT & VALIDATION
-   ==================================================== */
-function handleNameInput(el) {
-  appState.form.nama = el.value;
-  saveState();
-  validateField('nama', el.value.trim().length >= 3, 'Nama terlalu pendek', '✓ Oke!');
-  updateSuggestions('nama', el.value, appState.history.names);
-  updateCTA();
-}
-
-function handleKelasInput(el) {
-  appState.form.kelas = el.value;
-  saveState();
-  validateField('kelas', el.value.trim().length >= 3, 'Format kelas tidak valid', '✓ Oke!');
-  updateSuggestions('kelas', el.value, appState.history.classes);
-  updateCTA();
-}
-
-function handleHPInput(el) {
-  let val = el.value.replace(/\D/g, '');
-  // Auto format: 08xx-xxxx-xxxx
-  let formatted = '';
-  if (val.length > 0) formatted += val.substring(0, 4);
-  if (val.length > 4) formatted += '-' + val.substring(4, 8);
-  if (val.length > 8) formatted += '-' + val.substring(8, 13);
-  el.value = formatted;
-  appState.form.hp = formatted;
-  saveState();
-
-  const clean = val.replace(/\D/g, '');
-  const valid = clean.length >= 9 && clean.length <= 13 && clean.startsWith('08');
-  validateField('hp', valid, 'Format: 08xx-xxxx-xxxx', '✓ Nomor valid');
-  updateCTA();
-}
-
-function validateField(field, isValid, errorMsg, okMsg) {
-  const input = document.getElementById(`input${field.charAt(0).toUpperCase()+field.slice(1)}`);
-  const hint = document.getElementById(`hint-${field}`);
-  if (!input || !hint) return;
-
-  if (!input.value.trim()) {
-    input.className = 'field-input';
-    hint.textContent = '';
-    hint.className = 'field-hint';
+function proceedToForm() {
+  if (!qty.some(q => q > 0)) {
+    document.getElementById('empty-hint').style.display = 'block';
     return;
   }
-  if (isValid) {
-    input.className = 'field-input valid';
-    hint.textContent = okMsg;
-    hint.className = 'field-hint valid';
-  } else {
-    input.className = 'field-input invalid';
-    hint.textContent = errorMsg;
-    hint.className = 'field-hint invalid';
-  }
+  goStep(2);
 }
 
-/* ====================================================
-   AUTOCOMPLETE / SUGGESTIONS
-   ==================================================== */
-function updateSuggestions(field, value, historyArr) {
-  const listEl = document.getElementById(`suggest-${field}`);
-  if (!listEl || !value.trim()) { listEl.classList.remove('show'); return; }
 
-  const matches = historyArr.filter(h =>
-    h.toLowerCase().includes(value.toLowerCase()) && h !== value
-  );
-  if (matches.length === 0) { listEl.classList.remove('show'); return; }
-
-  listEl.innerHTML = matches.slice(0, 3).map(m =>
-    `<div class="suggestion-item" onclick="fillSuggestion('${field}', '${m.replace(/'/g,"\\'")}')">
-      <span style="color:var(--ui-accent)">▶</span> ${m}
-    </div>`
-  ).join('');
-  listEl.classList.add('show');
+/* ============================================================
+   FORMAT RUPIAH
+============================================================ */
+function formatRp(n) {
+  return 'Rp' + n.toLocaleString('id-ID');
 }
 
-function fillSuggestion(field, value) {
-  const inputMap = { nama: 'inputNama', kelas: 'inputKelas' };
-  const el = document.getElementById(inputMap[field]);
-  if (el) {
-    el.value = value;
-    appState.form[field] = value;
-    saveState();
-    document.getElementById(`suggest-${field}`).classList.remove('show');
-    if (field === 'nama') validateField('nama', value.trim().length >= 3, 'Nama terlalu pendek', '✓ Oke!');
-    if (field === 'kelas') validateField('kelas', value.trim().length >= 3, 'Format tidak valid', '✓ Oke!');
-    updateCTA();
-  }
-}
 
-function showSuggestions(field) {
-  const el = document.getElementById(field === 'nama' ? 'inputNama' : 'inputKelas');
-  if (el) updateSuggestions(field, el.value, field === 'nama' ? appState.history.names : appState.history.classes);
-}
+/* ============================================================
+   ORDER SUMMARY (Step 3 mini view)
+============================================================ */
+function renderSummary() {
+  const container = document.getElementById('summary-items');
+  container.innerHTML = '';
+  let total = 0;
 
-function hideSuggestions(field, delay) {
-  setTimeout(() => {
-    const listEl = document.getElementById(`suggest-${field}`);
-    if (listEl) listEl.classList.remove('show');
-  }, delay);
-}
+  qty.forEach((q, i) => {
+    if (q < 1) return;
+    const sub = q * PRODUCTS[i].price;
+    total += sub;
 
-/* ====================================================
-   CONTEXT-AWARE CTA
-   ==================================================== */
-function updateCTA() {
-  const btn = document.getElementById('ctaBtn');
-  const txt = document.getElementById('ctaBtnText');
-  if (!btn || !txt) return;
-
-  const hasItem = Object.values(appState.cart).some(q => q > 0);
-  const nama = document.getElementById('inputNama')?.value.trim() || '';
-  const kelas = document.getElementById('inputKelas')?.value.trim() || '';
-  const hp = document.getElementById('inputHP')?.value.replace(/\D/g,'') || '';
-  const validHP = hp.length >= 9 && hp.startsWith('08');
-  const formComplete = nama.length >= 3 && kelas.length >= 3 && validHP;
-
-  if (!hasItem) {
-    btn.disabled = true;
-    btn.className = 'btn-cta-main state-idle';
-    txt.textContent = '✦ Pilih menu dulu';
-  } else if (!formComplete) {
-    btn.disabled = true;
-    btn.className = 'btn-cta-main state-idle';
-    txt.textContent = '✎ Lengkapi data kamu';
-  } else {
-    btn.disabled = false;
-    btn.className = 'btn-cta-main state-ready';
-    txt.textContent = '📋 Preview & Kirim Pesanan →';
-  }
-}
-
-/* ====================================================
-   CTA HANDLER — show preview modal
-   ==================================================== */
-function handleCTA() {
-  const nama = document.getElementById('inputNama').value.trim();
-  const kelas = document.getElementById('inputKelas').value.trim();
-  const hp = document.getElementById('inputHP').value.trim();
-
-  // Populate preview
-  document.getElementById('previewNama').textContent = nama;
-  document.getElementById('previewKelas').textContent = kelas;
-  document.getElementById('previewHP').textContent = hp;
-
-  // Order list
-  let subtotal = 0;
-  const orderRows = [];
-  Object.entries(appState.cart).forEach(([id, qty]) => {
-    if (qty > 0) {
-      const item = MENU_DATA[id];
-      subtotal += item.price * qty;
-      orderRows.push({ name: item.name, qty, price: item.price, total: item.price * qty });
-    }
-  });
-
-  document.getElementById('previewOrderList').innerHTML = orderRows.map(r => `
-    <div class="preview-order-item">
-      <span class="preview-order-item-name">${r.name}</span>
-      <div class="preview-order-item-detail">
-        <div>${r.qty} × ${formatRp(r.price)}</div>
-        <div style="color:var(--pixel-glow)">${formatRp(r.total)}</div>
+    container.insertAdjacentHTML('beforeend', `
+      <div class="os-item">
+        <span class="os-name">${PRODUCTS[i].name}</span>
+        <div class="mini-stepper">
+          <button class="mstp" onclick="changeQtyForm(${i},-1)">−</button>
+          <span class="mq" id="mq-${i}">${q}</span>
+          <button class="mstp" onclick="changeQtyForm(${i},1)">+</button>
+        </div>
+        <span class="os-price" id="mp-${i}">${formatRp(sub)}</span>
       </div>
-    </div>
-  `).join('');
-
-  const discount = appState.promoValid ? PROMO_DISCOUNT : 0;
-  const total = Math.max(0, subtotal - discount);
-
-  const discRow = document.getElementById('previewDiscRow');
-  discRow.style.display = appState.promoValid ? 'flex' : 'none';
-  document.getElementById('previewTotal').textContent = formatRp(total);
-
-  // WA message preview
-  let waMsg = `🎪 *PRE-ORDER BAZAR 22 MEI*\n`;
-  waMsg += `${'─'.repeat(28)}\n`;
-  waMsg += `👤 Nama: ${nama}\n`;
-  waMsg += `🏫 Kelas: ${kelas}\n`;
-  waMsg += `📱 No. HP: ${hp}\n\n`;
-  waMsg += `🛒 *PESANAN:*\n`;
-  orderRows.forEach(r => {
-    waMsg += `  • ${r.name} ×${r.qty} = ${formatRp(r.total)}\n`;
-  });
-  waMsg += `${'─'.repeat(28)}\n`;
-  if (appState.promoValid) waMsg += `🎟 Promo: ${PROMO_CODE} (-${formatRp(PROMO_DISCOUNT)})\n`;
-  waMsg += `💰 *Total: ${formatRp(total)}*\n\n`;
-  waMsg += `_Dikirim via pre-order website_`;
-
-  document.getElementById('waPreview').textContent = waMsg;
-
-  // Save WA message for send
-  window._pendingWAMsg = waMsg;
-  window._pendingNama = nama;
-  window._pendingKelas = kelas;
-
-  // Open modal
-  document.getElementById('previewModal').classList.add('open');
-}
-
-function closeModal() {
-  document.getElementById('previewModal').classList.remove('open');
-}
-
-/* ====================================================
-   SEND ORDER — WA auto redirect
-   ==================================================== */
-function sendOrder() {
-  // Save to history
-  const nama = document.getElementById('inputNama').value.trim();
-  const kelas = document.getElementById('inputKelas').value.trim();
-  if (nama && !appState.history.names.includes(nama)) {
-    appState.history.names.unshift(nama);
-    appState.history.names = appState.history.names.slice(0, 5);
-  }
-  if (kelas && !appState.history.classes.includes(kelas)) {
-    appState.history.classes.unshift(kelas);
-    appState.history.classes = appState.history.classes.slice(0, 5);
-  }
-  saveState();
-
-  closeModal();
-
-  // Show success overlay
-  const overlay = document.getElementById('successOverlay');
-  overlay.classList.add('show');
-
-  // Animate progress bar
-  setTimeout(() => {
-    const bar = document.getElementById('successBar');
-    bar.classList.add('go');
-  }, 100);
-
-  // Redirect after 3 seconds
-  const waMsg = encodeURIComponent(window._pendingWAMsg || '');
-  setTimeout(() => {
-    const url = `https://wa.me/${WA_NUMBER}?text=${waMsg}`;
-    window.open(url, '_blank');
-    overlay.classList.remove('show');
-
-    // Reset cart
-    appState.cart = { 'bola-oreo': 0, 'mac-cheese': 0 };
-    appState.promo = '';
-    appState.promoValid = false;
-    saveState();
-    restoreState();
-  }, 3200);
-}
-
-/* ====================================================
-   RESTORE STATE ON LOAD
-   ==================================================== */
-function restoreState() {
-  // Cart quantities
-  Object.entries(appState.cart).forEach(([id, qty]) => {
-    const el = document.getElementById(`qty-${id}`);
-    if (el) el.textContent = qty;
+    `);
   });
 
-  // Form fields
-  if (appState.form.nama) document.getElementById('inputNama').value = appState.form.nama;
-  if (appState.form.kelas) document.getElementById('inputKelas').value = appState.form.kelas;
-  if (appState.form.hp) document.getElementById('inputHP').value = appState.form.hp;
+  document.getElementById('summary-total').textContent = formatRp(total);
+}
 
-  // Promo
-  if (appState.promo) {
-    const pi = document.getElementById('promoInput');
-    if (pi) {
-      pi.value = appState.promo;
-      handlePromoInput(pi);
+function changeQtyForm(idx, delta) {
+  playClick();
+  qty[idx] = Math.max(0, qty[idx] + delta);
+  refreshMenu();
+  renderSummary();
+  saveLS();
+  validateForm();
+  if (!qty.some(q => q > 0)) {
+    toast('Tambah menu dulu ya! 🛒');
+    goStep(1);
+  }
+}
+
+
+/* ============================================================
+   FORM VALIDATION
+============================================================ */
+function onHpInput() {
+  // Strip non-digits
+  const el = document.getElementById('i-hp');
+  el.value = el.value.replace(/\D/g, '');
+  validateForm();
+}
+
+function validateForm() {
+  saveLS();
+
+  const nama  = document.getElementById('i-nama').value.trim();
+  const kelas = document.getElementById('i-kelas').value.trim();
+  const hp    = document.getElementById('i-hp').value.trim();
+
+  function check(val, errId, inputId, ok) {
+    const dirty = document.getElementById(inputId) !== document.activeElement;
+    document.getElementById(errId).classList.toggle('show', !ok && val.length > 0 && dirty);
+    document.getElementById(inputId).classList.toggle('err', !ok && val.length > 0 && dirty);
+    return ok;
+  }
+
+  const hpOk = /^\d+$/.test(hp) && hp.startsWith('08') && hp.length >= 10;
+
+  const allOk =
+    check(nama,  'e-nama',  'i-nama',  nama.length  > 0) &&
+    check(kelas, 'e-kelas', 'i-kelas', kelas.length > 0) &&
+    check(hp,    'e-hp',    'i-hp',    hpOk);
+
+  document.getElementById('btn-submit').disabled = !allOk;
+}
+
+// Also validate on blur to show inline errors
+['i-nama','i-kelas','i-hp'].forEach(id => {
+  document.getElementById(id).addEventListener('blur', validateForm);
+});
+
+
+/* ============================================================
+   SUBMIT ORDER → WhatsApp
+============================================================ */
+function buildMsg() {
+  const nama  = document.getElementById('i-nama').value.trim();
+  const kelas = document.getElementById('i-kelas').value.trim();
+  const hp    = document.getElementById('i-hp').value.trim();
+
+  let lines = '';
+  qty.forEach((q, i) => {
+    if (q > 0) {
+      const tag = PRODUCTS[i].tag ? ` ${PRODUCTS[i].tag}` : '';
+      lines += `- ${PRODUCTS[i].name}${tag} x${q}\n`;
     }
-  }
+  });
 
-  updateCart();
-  updateCTA();
+  return `Halo, saya mau pre-order Bazar 22 Mei 🎪
+
+Nama: ${nama}
+Kelas: ${kelas}
+No HP: ${hp}
+
+Pesanan:
+${lines}
+Total: ${formatRp(calcTotal())}`;
 }
 
-// Initial restore
-restoreState();
+function submitOrder() {
+  playClick();
 
-/* ====================================================
-   PARALLAX — subtle hero parallax on scroll
-   ==================================================== */
-window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY;
-  const hero = document.getElementById('hero');
-  if (!hero) return;
-  const heroH = hero.offsetHeight;
-  if (scrollY > heroH) return;
+  waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(buildMsg())}`;
 
-  const factor = scrollY / heroH;
+  // Loading state
+  const btn = document.getElementById('btn-submit');
+  btn.textContent = '⏳ Mengirim...';
+  btn.disabled = true;
 
-  const sky = hero.querySelector('.sky-layer');
-  const stars = hero.querySelector('.stars-layer');
-  const sun = hero.querySelector('.sun');
-  const treesBack = hero.querySelector('.trees-back');
-  const city = hero.querySelector('.city-layer');
-  const chars = hero.querySelector('.characters-layer');
+  goStep(3);
 
-  if (sky) sky.style.transform = `translateY(${scrollY * 0.1}px)`;
-  if (stars) stars.style.transform = `translateY(${scrollY * 0.15}px)`;
-  if (sun) sun.style.transform = `translateY(${scrollY * 0.2}px)`;
-  if (city) city.style.transform = `translateY(${scrollY * 0.3}px)`;
-  if (treesBack) treesBack.style.transform = `translateY(${scrollY * 0.35}px)`;
-  if (chars) chars.style.transform = `translateY(${scrollY * 0.05}px)`;
+  // Auto open WA after 1.5s
+  setTimeout(() => {
+    try {
+      const win = window.open(waUrl, '_blank');
+      if (!win) throw new Error('popup blocked');
+    } catch(e) {
+      document.getElementById('btn-open-wa').style.display = 'block';
+    }
+    // Show fallback button regardless (for popup blockers)
+    setTimeout(() => {
+      document.getElementById('btn-open-wa').style.display = 'block';
+    }, 2800);
+  }, 1500);
 
-  // Fade hero UI as scroll
-  const heroUI = hero.querySelector('.hero-ui');
-  if (heroUI) heroUI.style.opacity = 1 - factor * 2;
+  // Reset submit button state after small delay
+  setTimeout(() => {
+    btn.textContent = '📤 Kirim Pesanan ke WhatsApp';
+    btn.disabled = false;
+  }, 800);
+}
+
+function openWA() {
+  playClick();
+  window.open(waUrl, '_blank');
+}
+
+/* ============================================================
+   COPY ORDER TEXT
+============================================================ */
+function copyOrder() {
+  playClick();
+  navigator.clipboard.writeText(buildMsg())
+    .then(() => toast('✅ Teks pesanan berhasil dicopy!'))
+    .catch(() => toast('❌ Gagal copy, coba manual'));
+}
+
+/* ============================================================
+   RESET ALL
+============================================================ */
+function resetAll() {
+  playClick();
+  qty = [0, 0];
+  ['i-nama','i-kelas','i-hp'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('btn-open-wa').style.display = 'none';
+  waUrl = '';
+  try {
+    localStorage.removeItem('bazar_qty');
+    localStorage.removeItem('bazar_form');
+  } catch(e) {}
+  refreshMenu();
+  goStep(0);
+}
+
+/* ============================================================
+   TOAST
+============================================================ */
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+/* ============================================================
+   AUDIO ENGINE (Web Audio API)
+============================================================ */
+function initAudio() {
+  if (audioCtx) return;
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (!muted) startBg();
+  } catch(e) {}
+}
+
+/* Click SFX — short pixel blip */
+function playClick() {
+  try {
+    if (!audioCtx || muted) return;
+    const osc  = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(480, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(720, audioCtx.currentTime + 0.06);
+    gain.gain.setValueAtTime(0.07, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.13);
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.14);
+  } catch(e) {}
+}
+
+/* Ambient background drone */
+function startBg() {
+  if (!audioCtx || bgRunning) return;
+  bgRunning = true;
+
+  // Two soft sine drones (A3 + E4)
+  [[220, -0.3], [329.63, 0.3]].forEach(([freq, pan]) => {
+    const osc    = audioCtx.createOscillator();
+    const gain   = audioCtx.createGain();
+    const panner = audioCtx.createStereoPanner();
+    osc.connect(gain); gain.connect(panner); panner.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    panner.pan.value    = pan;
+    gain.gain.setValueAtTime(0, audioCtx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.035, audioCtx.currentTime + 2.5);
+    osc.start();
+    bgNodes.push({ osc, gain });
+  });
+
+  // Gentle looping melody
+  loopMelody();
+}
+
+function loopMelody() {
+  if (!audioCtx || muted) return;
+  // E4 F#4 G#4 A4 G#4 F#4
+  const notes  = [329.63, 369.99, 415.30, 440, 415.30, 369.99];
+  let t = audioCtx.currentTime + 0.1;
+  notes.forEach(freq => {
+    const osc  = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = 'triangle';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(0.022, t + 0.1);
+    gain.gain.linearRampToValueAtTime(0, t + 0.7);
+    osc.start(t); osc.stop(t + 0.75);
+    t += 0.82;
+  });
+  // Schedule next loop
+  setTimeout(loopMelody, notes.length * 820 + 1200);
+}
+
+function stopBg() {
+  bgNodes.forEach(({ osc, gain }) => {
+    try {
+      gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
+      osc.stop(audioCtx.currentTime + 0.45);
+    } catch(e) {}
+  });
+  bgNodes = [];
+  bgRunning = false;
+}
+
+/* Audio toggle button */
+document.getElementById('audio-toggle').addEventListener('click', () => {
+  initAudio();
+  muted = !muted;
+  document.getElementById('audio-toggle').textContent = muted ? '🔇' : '🔊';
+  if (muted) stopBg();
+  else       startBg();
 });
 
-/* ====================================================
-   CLOSE MODAL ON BACKDROP CLICK
-   ==================================================== */
-document.getElementById('previewModal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
+/* Init audio on first user gesture */
+document.addEventListener('pointerdown', () => {
+  if (!touched) { touched = true; initAudio(); }
+}, { passive: true });
+
+
+/* ============================================================
+   PIXEL ART CANVAS BACKGROUND
+============================================================ */
+(function initCanvas() {
+  const canvas = document.getElementById('bg-canvas');
+  const ctx    = canvas.getContext('2d');
+
+  /* Polyfill roundRect for older browsers */
+  if (!ctx.roundRect) {
+    ctx.roundRect = function(x,y,w,h,r) {
+      const rad = typeof r === 'number' ? r : (r[0] || 0);
+      this.beginPath();
+      this.moveTo(x+rad, y);
+      this.lineTo(x+w-rad, y);
+      this.quadraticCurveTo(x+w,y,x+w,y+rad);
+      this.lineTo(x+w,y+h-rad);
+      this.quadraticCurveTo(x+w,y+h,x+w-rad,y+h);
+      this.lineTo(x+rad,y+h);
+      this.quadraticCurveTo(x,y+h,x,y+h-rad);
+      this.lineTo(x,y+rad);
+      this.quadraticCurveTo(x,y,x+rad,y);
+      this.closePath();
+    };
+  }
+
+  function draw() {
+    const W = canvas.width, H = canvas.height;
+    const bh = H * 0.72;  // horizon baseline
+
+    /* --- SKY gradient (sunset) --- */
+    const sky = ctx.createLinearGradient(0, 0, 0, bh);
+    sky.addColorStop(0,    '#07051e');
+    sky.addColorStop(0.22, '#1e0850');
+    sky.addColorStop(0.48, '#5c1f3c');
+    sky.addColorStop(0.68, '#b03820');
+    sky.addColorStop(0.85, '#d46020');
+    sky.addColorStop(1,    '#e88830');
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, W, bh);
+
+    /* --- GROUND --- */
+    const grd = ctx.createLinearGradient(0, bh, 0, H);
+    grd.addColorStop(0, '#180a28');
+    grd.addColorStop(1, '#080614');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, bh, W, H - bh);
+
+    /* --- SUN glow --- */
+    const sx = W * 0.64, sy = H * 0.50;
+    const sunG = ctx.createRadialGradient(sx, sy, 0, sx, sy, H * 0.38);
+    sunG.addColorStop(0,   'rgba(255,200,70,.55)');
+    sunG.addColorStop(0.28,'rgba(240,110,40,.28)');
+    sunG.addColorStop(1,   'rgba(0,0,0,0)');
+    ctx.fillStyle = sunG;
+    ctx.fillRect(0, 0, W, H);
+
+    /* Sun disk */
+    ctx.fillStyle = '#ffd166';
+    ctx.beginPath(); ctx.arc(sx, sy, 30, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#fff8dc';
+    ctx.beginPath(); ctx.arc(sx-8, sy-7, 11, 0, Math.PI*2); ctx.fill();
+
+    /* --- PIXEL CLOUDS --- */
+    function cloud(x, y, s, a) {
+      ctx.save(); ctx.globalAlpha = a;
+      ctx.fillStyle = 'rgba(255,160,100,.38)';
+      [[0,0,44,18],[14,-11,32,16],[-6,-7,26,14],[34,-10,22,14]].forEach(
+        ([dx,dy,w,h]) => {
+          ctx.beginPath();
+          ctx.roundRect(x+dx*s, y+dy*s, w*s, h*s, 8*s);
+          ctx.fill();
+        }
+      );
+      ctx.restore();
+    }
+    cloud(W*.08,  H*.16, 1.2, .5);
+    cloud(W*.38,  H*.10, .9,  .35);
+    cloud(W*.70,  H*.20, 1.0, .42);
+    cloud(W*.88,  H*.13, .72, .3);
+
+    /* --- STARS --- */
+    const starPos = [
+      [.07,.05],[.14,.11],[.21,.04],[.33,.07],[.47,.03],
+      [.54,.09],[.71,.05],[.77,.13],[.87,.06],[.93,.03],
+      [.04,.19],[.29,.17],[.62,.08],[.18,.16],[.40,.06],
+    ];
+    ctx.globalAlpha = .75;
+    starPos.forEach(([fx,fy]) => {
+      const x = fx*W, y = fy*H;
+      ctx.fillStyle = '#ffe8c8';
+      ctx.fillRect(x,   y,   2, 2);
+      ctx.globalAlpha = .25;
+      ctx.fillRect(x-1, y,   1, 2);
+      ctx.fillRect(x+2, y,   1, 2);
+      ctx.fillRect(x,   y-1, 2, 1);
+      ctx.fillRect(x,   y+2, 2, 1);
+      ctx.globalAlpha = .75;
+    });
+    ctx.globalAlpha = 1;
+
+    /* --- BUILDINGS (silhouette) --- */
+    function building(x, w, h, flag) {
+      ctx.fillStyle = '#0b061a';
+      ctx.fillRect(x, bh-h, w, h);
+      // Windows
+      for (let wy = bh-h+10; wy < bh-8; wy += 15) {
+        for (let wx = x+7; wx < x+w-7; wx += 15) {
+          if (Math.random() > .28) {
+            ctx.fillStyle = `rgba(255,200,80,${.15+Math.random()*.2})`;
+            ctx.fillRect(wx, wy, 8, 8);
+          }
+        }
+      }
+      ctx.fillStyle = '#0b061a';
+      if (flag) {
+        ctx.fillRect(x+w/2-2, bh-h-18, 3, 18);
+        ctx.fillStyle = '#ff6b35';
+        ctx.fillRect(x+w/2+1, bh-h-18, 14, 9);
+        ctx.fillStyle = '#0b061a';
+      }
+    }
+
+    // Left cluster
+    building(W*.01, W*.07, H*.18, false);
+    building(W*.09, W*.055,H*.14, false);
+    building(W*.16, W*.10, H*.26, true);
+    // Right cluster
+    building(W*.74, W*.065,H*.20, false);
+    building(W*.82, W*.09, H*.15, false);
+    building(W*.92, W*.07, H*.23, true);
+
+    /* --- TREES --- */
+    function tree(x, y, h) {
+      ctx.fillStyle = '#0a1808';
+      ctx.fillRect(x-3, y, 6, h*.3);
+      ctx.fillStyle = '#0d2010';
+      ctx.beginPath();
+      ctx.moveTo(x, y-h*.68);
+      ctx.lineTo(x-h*.34, y); ctx.lineTo(x+h*.34, y);
+      ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#152818';
+      ctx.beginPath();
+      ctx.moveTo(x, y-h*.9);
+      ctx.lineTo(x-h*.22, y-h*.32); ctx.lineTo(x+h*.22, y-h*.32);
+      ctx.closePath(); ctx.fill();
+    }
+    tree(W*.30, bh, 72);
+    tree(W*.34, bh, 56);
+    tree(W*.66, bh, 68);
+    tree(W*.70, bh, 52);
+
+    /* --- BAZAR TENTS --- */
+    function tent(x, col1, col2) {
+      const tw = W*.075, ty = bh;
+      ctx.fillStyle = '#160824';
+      ctx.fillRect(x, ty-36, tw, 36);
+      // Roof
+      ctx.fillStyle = col1;
+      ctx.beginPath();
+      ctx.moveTo(x-8, ty-36);
+      ctx.lineTo(x+tw/2, ty-58);
+      ctx.lineTo(x+tw+8, ty-36);
+      ctx.closePath(); ctx.fill();
+      // Stripe
+      ctx.fillStyle = col2;
+      ctx.beginPath();
+      ctx.moveTo(x+tw*.2,   ty-36);
+      ctx.lineTo(x+tw*.5,   ty-58);
+      ctx.lineTo(x+tw*.42,  ty-58);
+      ctx.lineTo(x+tw*.12,  ty-36);
+      ctx.closePath(); ctx.fill();
+      // Counter glow
+      ctx.fillStyle = 'rgba(255,200,80,.1)';
+      ctx.fillRect(x+4, ty-30, tw-8, 20);
+    }
+    tent(W*.36, '#b02828', '#ffd166');
+    tent(W*.46, '#3d2278', '#ff6b35');
+    tent(W*.56, '#1e5438', '#ffa552');
+
+    /* --- LANTERN STRING --- */
+    ctx.strokeStyle = 'rgba(255,200,100,.25)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let lx = W*.30; lx <= W*.70; lx += 4) {
+      const ly = bh - 62 + Math.sin(lx * .055) * 9;
+      if (lx === W*.30) ctx.moveTo(lx, ly);
+      else ctx.lineTo(lx, ly);
+    }
+    ctx.stroke();
+
+    // Lantern bulbs
+    for (let lx = W*.30; lx < W*.70; lx += 28) {
+      const ly = bh - 62 + Math.sin(lx * .055) * 9;
+      const col = lx % 56 < 28 ? '#ff6b35' : '#6b2d8b';
+      ctx.fillStyle = col;
+      ctx.globalAlpha = .72;
+      ctx.beginPath(); ctx.roundRect(lx-4, ly-9, 8, 13, 2); ctx.fill();
+      ctx.globalAlpha = .18;
+      ctx.fillStyle = col;
+      ctx.beginPath(); ctx.arc(lx, ly, 11, 0, Math.PI*2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    /* --- GROUND GLOW --- */
+    const gg = ctx.createLinearGradient(0, bh, 0, H);
+    gg.addColorStop(0, 'rgba(180,90,30,.06)');
+    gg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = gg;
+    ctx.fillRect(0, bh, W, H-bh);
+  }
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    draw();
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+})();
+
+
+/* ============================================================
+   TWINKLING PIXEL STARS (DOM layer, animated)
+============================================================ */
+(function spawnStars() {
+  const layer = document.getElementById('star-layer');
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes twinkle {
+      0%,100% { opacity:.18; transform:scale(1); }
+      50%      { opacity:1;   transform:scale(1.6); }
+    }
+  `;
+  document.head.appendChild(style);
+
+  for (let i = 0; i < 22; i++) {
+    const s = document.createElement('div');
+    const left = Math.random() * 100;
+    const top  = Math.random() * 28;
+    const dur  = 2 + Math.random() * 3.2;
+    const del  = Math.random() * 3.5;
+    s.style.cssText = `
+      position:absolute;
+      left:${left}%;top:${top}%;
+      width:2px;height:2px;
+      background:#ffe8c8;
+      animation:twinkle ${dur}s ${del}s infinite;
+    `;
+    layer.appendChild(s);
+  }
+})();
+
+
+/* ============================================================
+   INIT
+============================================================ */
+document.addEventListener('DOMContentLoaded', loadLS);
 </script>
 
 </body>
-         </html>
+</html>
