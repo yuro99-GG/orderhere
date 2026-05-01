@@ -841,499 +841,250 @@ input { font-family: inherit; }
 
       <!-- Speech bubble -->
       <g transform="translate(608,468)">
-        <rect x="0" y="0" width="158" height="46" rx="14" fill="rgba(255, transform="translate(608,468)">
         <rect x="0" y="0" width="158" height="46" rx="14" fill="rgba(255,255,255,.86)"/>
-        <polygon points255,255,.86)"/>
-        <polygon points="28="28,46 52,46 52,46,46 40,62 40" fill="rg,62" fill="rgba(ba(255,255,255,.86)"/>
-        <text255,255,255,.86)"/>
-        <text x=" x="79" y="19"79" y=" text-an19" text-anchor="middle"chor="middle" font-size="11" fill font-size="11" fill="#333="#333" font" font-family="monospace-family="">Eh, udah pesen</monospace">Eh, udah pesen</text>
-       text>
-        <text x="79 <text x="79" y" y="35="35" text" text-anchor="middle-anchor="middle" font-size="11" fill="#" font-size="11" fill="#333" font-family333"="mon font-family="monospace">ospace">OreOreo-nya belum? 🍪o-nya belum? 🍪</text>
-      </g>
-
-    </svg</text>
+        <polygon points="28,46 52,46 40,62" fill="rgba(255,255,255,.86)"/>
+        <text x="79" y="19" text-anchor="middle" font-size="11" fill="#333" font-family="monospace">Eh, udah pesen</text>
+        <text x="79" y="35" text-anchor="middle" font-size="11" fill="#333" font-family="monospace">Oreo-nya belum? 🍪</text>
       </g>
 
     </svg>
- >
-  </div </div>
-
-</>
-
-</div><!-- /scenediv><!-- /scene -->
-
-<!-- ===================================================== -->
-
-<!-- ======================================================
-    =
-     AUDIO AUDIO TOGG TOGGLE
-================================================LE
-====================================================== -->
-<button====== -->
-<button id=" id="aud-btnaud-btn" title="Toggle" title="Toggle suara"> suara">🔊</🔊</buttonbutton>
-
-<!-- =================================================>
-
-<!-- ==========================================================
-     TO=
-     TOAST
-================================================AST
-============================================================ -->
-<div id="to -->
-<div id="toast">✅ Pesast">✅ Pesanananan berhasil disalin!</ berhasil disalin!</divdiv>
-
-<!-- =================================================>
-
-<!-- ======================================================
-     APP=====
-     APP
-======================================================
-====================================================== -->
-<div -->
-<div id=" id="appapp">
-
-  <!--">
-
-  <!-- ===== ===== STEP 1: HOME = STEP 1: HOME ========= -->
-  <div class -->
-  <div class="step="step active" id="s-home active" id="s-home">
-    <div">
-    <div class="home-card class="home-card gc gc">
-     ">
-      <div class="home <div class="home-chip">📅-chip">📅 22 22 Mei · OSIS SMA Nusantara Mei · OSIS SMA Nusantara</div</div>
-     >
-      <h <h1 class1 class="home-title">Bazar<br="home-title">Bazar<br><span>22 Mei><span>22 Mei</span></h</span1></h1>
-     >
-      <p class="home-sub"> <p class="home-sub">Pre-order makanan favorPre-order makanan favoritmuitmu<br>sebel<br>sebelum kehabisan!um kehabisan! 🎪</p 🎪</p>
-      <button>
-      <button class=" class="btn-pbtn-p" id" id="btn-start"="btn-start" style="min-width:210 style="min-width:210px;font-sizepx;:1.1font-size:1.1rem;rem;padding:padding:17px 17px 44px44px;">
-        Mulai Pes;">
-        Mulai Pesanan 🛒
-      🛒
-      </button </button>
-     >
-      <p class=" <p class="home-meta">Stokhome-meta">Stok terbat terbatas ·as · Bayar di tempat Bayar di tempat saat b saat bazar</pazar</>
-    </p>
-    </divdiv>
-  </>
   </div>
 
-  <!-- =====div>
+</div><!-- /scene -->
 
-  <!-- ===== STEP  STEP 2: MENU2: MENU ===== ===== -->
-  <div -->
-  <div class="step" id=" class="step" id="s-menus-menu">
-    <button class="btn-back">
-    <button class="btn-back" onclick="nav" onclick="nav('home')">← K('home')">← Kembaliembali</button</button>
-   >
-    <div class="menu-wrap <div class="menu-wrap gc gc">
+<!-- ======================================================
+     AUDIO TOGGLE
+====================================================== -->
+<button id="aud-btn" title="Toggle suara">🔊</button>
 
-     ">
+<!-- ======================================================
+     TOAST
+====================================================== -->
+<div id="toast">✅ Pesanan berhasil disalin!</div>
 
-      <div class <div class="menu-head="menu-head">
-        <h2">
-       > <h2>🍽️ Menu B🍽️azar</h2 Menu Bazar</h2>
-       >
-        <p>Pilih makanan favorit <p>Pilih makanan favoritmu</pmu</p>
+<!-- ======================================================
+     APP
+====================================================== -->
+<div id="app">
+
+  <!-- ===== STEP 1: HOME ===== -->
+  <div class="step active" id="s-home">
+    <div class="home-card gc">
+      <div class="home-chip">📅 22 Mei · OSIS SMA Nusantara</div>
+      <h1 class="home-title">Bazar<br><span>22 Mei</span></h1>
+      <p class="home-sub">Pre-order makanan favoritmu<br>sebelum kehabisan! 🎪</p>
+      <button class="btn-p" id="btn-start" style="min-width:210px;font-size:1.1rem;padding:17px 44px;">
+        Mulai Pesan 🛒
+      </button>
+      <p class="home-meta">Stok terbatas · Bayar di tempat saat bazar</p>
+    </div>
+  </div>
+
+  <!-- ===== STEP 2: MENU ===== -->
+  <div class="step" id="s-menu">
+    <button class="btn-back" onclick="nav('home')">← Kembali</button>
+    <div class="menu-wrap gc">
+
+      <div class="menu-head">
+        <h2>🍽️ Menu Bazar</h2>
+        <p>Pilih makanan favoritmu</p>
       </div>
 
-     >
-      </div>
+      <div class="menu-list">
 
-      <div class="menu <div class="menu-list">
-
-        <!---list">
-
-        <!-- Product: Bola Oreo Product: Bola Oreo -->
-        <div -->
-        <div class=" class="pc" id="pc" id="card-oreo">
-          <divcard-oreo">
-          <div class=" class="pc-vispc-vis">
-           ">
-            <svg <svg viewBox="0 0 68 68" xmlns="http viewBox="0 0 68 68" xmlns="http://www.w3://www.w3.org/2000.org/2000/svg">
-             /svg">
-              <rect <rect width=" width="68"68" height="68" height="68" rx="12" rx="12" fill="# fill="#140A04140A04"/>
-              <circle cx"/>
-              <circle cx="22="22" cy" cy="44" r="44" r="13" fill="13" fill="#1C0="#1C0C06C06"/><circle cx"/><circle cx="22" cy="22" cy="44="44" r" r="13="13" fill="none" fill="none" stroke" stroke="#3="#3C181C1810"0" stroke-width stroke-width="2="2"/>
-              <circle cx=""/>
-              <circle cx="46" cy="46" cy="42"42" r=" r="13"13" fill="# fill="#1C1C0C0C06"/06"/><circle cx="><circle cx="46"46" cy=" cy="42" r="42"13" fill="none" stroke="# r="13" fill="none" stroke="#3C18103C1810" stroke-width="2" stroke-width="2"/>
-              <circle cx="34"/>
-              <circle cx="34" cy="29" r" cy="29" r="13="13" fill="#220" fill="#220E08"/E08><circle cx="34" cy"/><circle cx="34" cy="29" r="29" r="13" fill="13" fill="none" stroke="none" stroke="#3C1810" stroke-width="#3C1810" stroke-width="2"/>
-              <ell="2"/>
-              <ellipse cxipse cx="22" cy="36="22" cy="36" rx="7" rx="7" ry="3" ry="3"  fill=""  fill="white" opacity="white" opacity=".42" transform.42" transform="rotate="rotate(-12,22(-12,36,22,36)"/>
-             )"/>
-              <ellipse <ellipse cx="46" cx="46" cy=" cy="34"34" rx=" rx="7"7" ry="3"  fill ry="3"  fill="white="white" opacity=".42"" opacity=".42" transform="rotate( transform="rotate(9,9,46,46,34)34)"/>
-              <ellipse cx"/>
-              <ellipse cx="34="34" cy="22" rx="6" ry" cy="22" rx="6" ry="2.5="2.5" fill="white" opacity" fill="white" opacity=".=".46" transform="46" transform="rotate(-5,34,22)"/>
-             rotate(-5,34,22)"/>
-              <circle cx=" <circle cx="25" cy="26"25" cy="26" r="3" fill="white" r="3" fill="white" opacity=" opacity=".14"/>
-              <circle cx="49" cy="37" r="2.5" fill=".14"/>
+        <!-- Product: Bola Oreo -->
+        <div class="pc" id="card-oreo">
+          <div class="pc-vis">
+            <svg viewBox="0 0 68 68" xmlns="http://www.w3.org/2000/svg">
+              <rect width="68" height="68" rx="12" fill="#140A04"/>
+              <circle cx="22" cy="44" r="13" fill="#1C0C06"/><circle cx="22" cy="44" r="13" fill="none" stroke="#3C1810" stroke-width="2"/>
+              <circle cx="46" cy="42" r="13" fill="#1C0C06"/><circle cx="46" cy="42" r="13" fill="none" stroke="#3C1810" stroke-width="2"/>
+              <circle cx="34" cy="29" r="13" fill="#220E08"/><circle cx="34" cy="29" r="13" fill="none" stroke="#3C1810" stroke-width="2"/>
+              <ellipse cx="22" cy="36" rx="7" ry="3"  fill="white" opacity=".42" transform="rotate(-12,22,36)"/>
+              <ellipse cx="46" cy="34" rx="7" ry="3"  fill="white" opacity=".42" transform="rotate(9,46,34)"/>
+              <ellipse cx="34" cy="22" rx="6" ry="2.5" fill="white" opacity=".46" transform="rotate(-5,34,22)"/>
+              <circle cx="25" cy="26" r="3" fill="white" opacity=".14"/>
               <circle cx="49" cy="37" r="2.5" fill="white" opacity=".14"/>
-           white" opacity=".14"/>
             </svg>
           </div>
-          <div class=" </svg>
-          </div>
           <div class="pc-info">
             <div class="pc-badges">
-              <span class="pc-info">
-            <div class="pc-badges">
-              <span class="badge-hot">🔥 Best Seller</badge-hot">🔥 Best Seller</span>
-              <span class="badspan>
-              <span class="badge-stock" id="sb-oreo">Sisa:ge-stock" id="sb-oreo">S 20</span>
+              <span class="badge-hot">🔥 Best Seller</span>
+              <span class="badge-stock" id="sb-oreo">Sisa: 20</span>
             </div>
-            <div class="isa: 20</span>
-            </div>
-            <div class="pc-name">Bola Orepc-name">Bola Oreo Suso Susu</div>
-            <div class="pc-desc">Per porsi (5 pcs) · susu bubu</div>
-            <div class="pc-desc">Per porsi (5 pcs) · susu bubuk</divuk</div>
+            <div class="pc-name">Bola Oreo Susu</div>
+            <div class="pc-desc">Per porsi (5 pcs) · susu bubuk</div>
             <div class="pc-price">Rp8.000</div>
           </div>
           <div class="stepper">
-            <button class="sp-btn>
-            <div class="pc-price">Rp8.000</div>
-          </div>
-          <div class="stepper">
-            <button class="sp-btn" id="btn-ore" id="btn-oreo-m" onclick="chg('oreo',-1)">−o-m" onclick="chg('oreo',-1)">−</button>
-            <span class="sp-n" id</button>
+            <button class="sp-btn" id="btn-oreo-m" onclick="chg('oreo',-1)">−</button>
             <span class="sp-n" id="qn-oreo">0</span>
-           ="qn-oreo">0</span>
-            <button class="sp-btn" id=" <button class="sp-btn" id="btn-oreo-p" onclick="chg('oreo',1)">+</button>
-         btn-oreo-p" onclick="chg('oreo',1)">+</button>
+            <button class="sp-btn" id="btn-oreo-p" onclick="chg('oreo',1)">+</button>
           </div>
         </div>
-        </div>
-
-        <!-- Product </div>
 
         <!-- Product: Mac and Cheese -->
-       : Mac and Cheese -->
-        <div class=" <div class="pc" id="card-mac">
-         pc" id="card-mac">
+        <div class="pc" id="card-mac">
           <div class="pc-vis">
-            <svg viewBox="0  <div class="pc-vis">
-            <svg viewBox="0 0 68 68" xmlns="http://www.w3.org0 68 68" xmlns="http://www.w3.org/2000/svg">
-              <rect width="68" height="68" rx/2000/svg">
+            <svg viewBox="0 0 68 68" xmlns="http://www.w3.org/2000/svg">
               <rect width="68" height="68" rx="12" fill="#341E08"/>
-              <ellipse cx="12" fill="#341E08"/>
-              <ellipse cx="34" cy="54" rx="23="34" cy="54" rx="23" ry" ry="8" fill="#C07820"/>
-              <path d="M11,38 Q9,54 34,62="8" fill="#C07820"/>
-              <path d="M11,38 Q9,54 34,62 Q59,54 57 Q59,54 57,38,38 Z" fill="#D48830"/>
-              <ellipse cx="34" cy=" Z" fill="#D48830"/>
-              <ellipse cx="34" cy="38" rx="23" ry="9" fill="#E0983038" rx="23" ry="9" fill="#E09830"/>
-              <ellipse cx="34""/>
-              <ellipse cx="34" cy="36" rx="19" cy="36" rx="19" ry="7" fill="#F2C040"/>
+              <ellipse cx="34" cy="54" rx="23" ry="8" fill="#C07820"/>
+              <path d="M11,38 Q9,54 34,62 Q59,54 57,38 Z" fill="#D48830"/>
+              <ellipse cx="34" cy="38" rx="23" ry="9" fill="#E09830"/>
+              <ellipse cx="34" cy="36" rx="19" ry="7" fill="#F2C040"/>
               <ellipse cx="34" cy="33" rx="16" ry="5.5" fill="#FAD060"/>
-              <path d="M24 ry="7" fill="#F2C040"/>
-              <ellipse cx="34" cy="33" rx="16" ry="5.5" fill="#FAD060"/>
-              <path d="M24,31 Q27,26 30,31,31 Q27,26 30,31 Q33,36 36,31" fill="none Q33,36 36,31" fill="none" stroke" stroke="#D4A020" stroke-width="2.2" stroke-linecap="#D4A020" stroke-width="2.2" stroke-linecap="round"/>
-              <path d="M34="round"/>
-              <path d="M34,32,32 Q37,27 40,32 Q43 Q37,27 40,32 Q43,37,37 46,32" fill="none" stroke="#C89018" stroke-width="2. 46,32" fill="none" stroke="#C89018" stroke-width="2.2" stroke-linecap="2" stroke-linecap="round"/>
-              <path dround"/>
-              <path d="M26,24 Q="M26,24 Q24,18 24,18 26,12 Q28,6 26,2"  fill="none26,12 Q28,6 26,2"  fill="none" stroke="white" stroke-width="" stroke="white" stroke-width="1.1.4" opacity=".38" stroke4" opacity=".38" stroke-linecap="round"/>
-              <path d="M34,22 Q32-linecap="round"/>
-              <path d="M34,22 Q32,16 34,10 Q36,4 34,16 34,10 Q36,4 34,1"  fill=",1" none" stroke=" fill="none" stroke="white" stroke-width="1.4" opacity=".38" stroke-linecap="white" stroke-width="1.4" opacity=".38" stroke-lineround"/>
-              <path d="M42,24 Q40,18 cap="round"/>
-              <path d="M42,24 Q40,18 42,12" fill="none"42,12" fill="none" stroke="white" stroke="white" stroke-width stroke-width="1="1.4" opacity.4" opacity=".=".38" stroke-line38" stroke-linecap="round"/>
-              <path d="M52,40 Q54,46 cap="round"/>
-              <path d="M52,40 Q54,46 52,54" fill="none" stroke="#F052,54" fill="none" stroke="#F0C040C040" stroke-width="2." stroke-width="2.8"8" stroke-linecap="round"/>
-              <circle cx="52" cy="56" r stroke-linecap="round"/>
+              <path d="M24,31 Q27,26 30,31 Q33,36 36,31" fill="none" stroke="#D4A020" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M34,32 Q37,27 40,32 Q43,37 46,32" fill="none" stroke="#C89018" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M26,24 Q24,18 26,12 Q28,6 26,2"  fill="none" stroke="white" stroke-width="1.4" opacity=".38" stroke-linecap="round"/>
+              <path d="M34,22 Q32,16 34,10 Q36,4 34,1"  fill="none" stroke="white" stroke-width="1.4" opacity=".38" stroke-linecap="round"/>
+              <path d="M42,24 Q40,18 42,12" fill="none" stroke="white" stroke-width="1.4" opacity=".38" stroke-linecap="round"/>
+              <path d="M52,40 Q54,46 52,54" fill="none" stroke="#F0C040" stroke-width="2.8" stroke-linecap="round"/>
               <circle cx="52" cy="56" r="3.5" fill="#F0C040"/>
-            </svg="3.5" fill="#F0C040"/>
-            </>
-          </div>
-          <div class="pc-info">
-            <div class="pc-badgessvg>
+            </svg>
           </div>
           <div class="pc-info">
             <div class="pc-badges">
-              <span class="badge-stock"">
-              <span class="badge-stock" id="sb-mac"> id="sb-mac">SisaSisa: 15</span>
-            </: 15</span>
+              <span class="badge-stock" id="sb-mac">Sisa: 15</span>
             </div>
-            <div class="pc-name">Mac and Cheese</divdiv>
             <div class="pc-name">Mac and Cheese</div>
-            <div class="pc-desc">1 porsi · saus keju>
-            <div class="pc-desc">1 porsi · saus keju creamy</ creamy</div>
-           div <div class="pc-price">Rp10.000</div>
-          </div>
-          <div class="stepper">
-            <button>
+            <div class="pc-desc">1 porsi · saus keju creamy</div>
             <div class="pc-price">Rp10.000</div>
           </div>
           <div class="stepper">
-            <button class="sp-btn class="sp-btn" id" id="btn-mac-m" onclick="chg('mac',-="btn-mac-m" onclick="chg('mac',-1)">−1)">−</button</button>
-           >
-            <span class=" <span class="sp-n" id="qnsp-n" id-mac">0="qn-mac">0</span>
-            <button class="sp-btn" id="btn</span>
-            <button class="sp-btn" id="btn-mac-p" onclick="chg-mac-p" onclick="chg('mac',1)">('mac',1)">+</button>
-          </+</button>
+            <button class="sp-btn" id="btn-mac-m" onclick="chg('mac',-1)">−</button>
+            <span class="sp-n" id="qn-mac">0</span>
+            <button class="sp-btn" id="btn-mac-p" onclick="chg('mac',1)">+</button>
           </div>
-        </div>
-
-      </div><!-- /menu-listdiv>
         </div>
 
       </div><!-- /menu-list -->
 
       <!-- Footer -->
-      <div class="menu -->
-
-      <!-- Footer -->
-      <div class="menu-foot-foot">
-        <div>
-         ">
+      <div class="menu-foot">
         <div>
           <div class="sub-lbl">Total Pesanan</div>
-          <div <div class="sub-lbl">Total Pesanan</div>
-          <div class="sub- class="sub-amt" id="sub-amt">Rp0</div>
+          <div class="sub-amt" id="sub-amt">Rp0</div>
           <div class="sub-empty" id="sub-empty">Pilih menu dulu 👆</div>
         </div>
-        <button class="btn-p"amt" id="sub-amt">Rp0</div>
-          <div class="sub-empty" id="sub-empty">Pilih menu dulu 👆</div>
-        </div>
-        <button class="btn-p" id="btn-to-form" onclick="nav('form')" disabled style=" id="btn-to-form" onclick="nav('form')" disabled style="padding:13pxpadding:13px 26px;">
-          Pesan →
-        </button>
-      </div>
-
-    </ 26px;">
+        <button class="btn-p" id="btn-to-form" onclick="nav('form')" disabled style="padding:13px 26px;">
           Pesan →
         </button>
       </div>
 
     </div>
-  </div>
   </div><!-- /s-menu -->
 
   <!-- ===== STEP 3: FORM ===== -->
- div><!-- /s-menu -->
+  <div class="step" id="s-form">
+    <button class="btn-back" onclick="nav('menu')">← Ubah Pesanan</button>
+    <div class="form-wrap gc" style="width:calc(100% - 32px);max-width:460px;">
 
-  <!-- ===== STEP 3: FORM ===== -->
-  <div class="step" id="s <div class="step" id="s-form">
-    <button class-form">
-    <button class="btn-back"="btn-back" onclick="nav(' onclick="nav('menu')">← Ubah Pesanan</button>
-    <div class="form-wrap gc" style="width:calc(menu')">← Ubah Pesanan</button>
-    <div class="form-wrap gc" style="width:calc(100% - 32px100% - 32px);max);max-width:460px;">
-
-     -width:460px;">
-
-      <div class="form <div class="form-head">
-       -head">
-        <h2 <h2>📋 Detail Pemesan</h2>
-       >📋 Detail Pemesan</h2>
-        <p> <p>Isi data diri untuk konfirmasi pesanan</p>
+      <div class="form-head">
+        <h2>📋 Detail Pemesan</h2>
+        <p>Isi data diri untuk konfirmasi pesanan</p>
       </div>
 
-      <div classIsi data diri untuk konfirmasi pesanan</p>
-      </div>
-
-      <div class="form-body="form-body">
-        <div class="fg">
-          <label class="fl">Nama">
+      <div class="form-body">
         <div class="fg">
           <label class="fl">Nama Lengkap</label>
-          <input class="fi" id="f-nama" type="text"  placeholder Lengkap</label>
-          <input class="fi" id="f-nama" type="text"  placeholder="Tulis nama kamu..." autocomplete="name" ="Tulis nama kamu..." autocomplete="name"  oninput="f oninput="fval()"/>
-         val()"/>
+          <input class="fi" id="f-nama" type="text"  placeholder="Tulis nama kamu..." autocomplete="name"  oninput="fval()"/>
           <div class="fe" id="e-nama"></div>
         </div>
-        <div class="fg <div class="fe" id="e-nama"></div>
-        </div>
         <div class="fg">
-          <label">
-          <label class=" class="fl">fl">Kelas</label>
-          <input class="Kelas</label>
-          <input class="fi" id="fi" id="f-kelas" type="text" placeholder="f-kelas" type="text" placeholder="Contoh: XI IPA Contoh: XI IPA 2" autocomplete="off"   oninput="f2" autocomplete="off"   oninput="fval()val()"/>
-          <div class=""/>
-          <div class="fe"fe" id=" id="e-kelas"></e-kelas"></divdiv>
+          <label class="fl">Kelas</label>
+          <input class="fi" id="f-kelas" type="text" placeholder="Contoh: XI IPA 2" autocomplete="off"   oninput="fval()"/>
+          <div class="fe" id="e-kelas"></div>
         </div>
         <div class="fg">
           <label class="fl">No. HP / WhatsApp</label>
-          <input class>
-        </div>
-        <div class="fg">
-          <label class="fl">No. HP / WhatsApp</label>
-          <input class="fi="fi" id="f-hp"  " id="f-hp"   type="tel"  placeholder="08xxxxxxxxxx type="tel"  placeholder="08xxxxxxxxxx" inputmode="" inputmode="numeric"numeric" autocomplete autocomplete="tel" on="tel" oninput="fvalinput="fval()()"/>
-         "/>
+          <input class="fi" id="f-hp"   type="tel"  placeholder="08xxxxxxxxxx" inputmode="numeric" autocomplete="tel" oninput="fval()"/>
           <div class="fe" id="e-hp"></div>
         </div>
         <!-- Order summary -->
-        <div class="fe" id="e-hp"></div>
-        </div>
-        <!-- Order summary <div class="ord-sum" id="ord-sum -->
         <div class="ord-sum" id="ord-sum">
-          <div">
-          <div class="ord-sum class="ord-sum-ttl">📦-ttl">📦 Ringkasan Pesanan</div>
-          <div id="sum-items"></div Ringkasan Pesanan</div>
+          <div class="ord-sum-ttl">📦 Ringkasan Pesanan</div>
           <div id="sum-items"></div>
           <div class="ord-total">
-            <span class="ord-total-l>
-          <div class="ord-total">
-            <span class="ord-total-l">Total</span">Total</span>
-            <span class="ord-total-v" id="f>
+            <span class="ord-total-l">Total</span>
             <span class="ord-total-v" id="f-total">Rp0</span>
           </div>
-        </div-total">Rp0</span>
-          </div>
         </div>
       </div>
 
-     >
-      </div>
-
-      <div class <div class="form-acts">
-        <button class="btn-p" id="btn-submit" onclick="submit()"="form-acts">
-        <button class="btn-p" id="btn-submit" onclick="submit()" disabled style="width:100%;padding disabled style="width:100%;padding:15px;font-size:15px;font-size:1rem;">
-          Kir:1rem;">
-          Kirim ke WhatsApp 📲im ke WhatsApp
+      <div class="form-acts">
+        <button class="btn-p" id="btn-submit" onclick="submit()" disabled style="width:100%;padding:15px;font-size:1rem;">
+          Kirim ke WhatsApp 📲
         </button>
         <div class="form-acts-row">
           <button class="btn-s" onclick="copyOrd()">📋 Salin Pesanan</button>
-          <button class="btn-s 📲
-        </button>
-        <div class="form-acts-row">
-          <button class="btn-s" onclick="copyOrd()">📋 Salin Pesanan</button>
-          <button class="btn-s btn-danger" onclick="reset btn-danger" onclick="resetOrd()">🗑️ Reset</Ord()">🗑️ Reset</buttonbutton>
+          <button class="btn-s btn-danger" onclick="resetOrd()">🗑️ Reset</button>
         </div>
       </div>
-        </div>
-      </>
-
-    </divdiv>
 
     </div>
-  </div><!-- /s>
-  </div><!-- /s-form-form -->
-
-  <!-- ===== STEP 4: -->
+  </div><!-- /s-form -->
 
   <!-- ===== STEP 4: REDIRECT ===== -->
-  <div class="step" id="s-redirect REDIRECT ===== -->
   <div class="step" id="s-redirect">
-   ">
-    <div class="redir-card gc <div class="redir-card gc">
-     ">
-      <span class=" <span class="redir-icoredir-ico">🎉</span">🎉</span>
-     >
-      <h2 class=" <h2 class="redir-title">redir-title">Terima kasih!</h2>
-      <p classTerima kasih!</h2>
-      <p class="redir-sub">Pesanan sedang dibuka<br="redir-sub">Pesanan sedang dibuka<br>di WhatsApp<span>di WhatsApp<span class=" class="ld"></ld"></span></span></p>
-      <button class="btn-p" id="btn-wp>
-      <button class="btn-p" id="a" onclick="openWA()" style="btn-wa" onclick="openWA()" style="display:ndisplay:none;margin-top:6pxone;margin-top:6px;">
+    <div class="redir-card gc">
+      <span class="redir-ico">🎉</span>
+      <h2 class="redir-title">Terima kasih!</h2>
+      <p class="redir-sub">Pesanan sedang dibuka<br>di WhatsApp<span class="ld"></span></p>
+      <button class="btn-p" id="btn-wa" onclick="openWA()" style="display:none;margin-top:6px;">
         📲 Buka WhatsApp
       </button>
-     ;">
-        📲 Buka WhatsApp
-      </button <p class="redir>
-      <p class="-meta">Konfirmasi pembredir-meta">Konfirmasi pembayaranayaran di tempat di tempat saat bazar berlangsung</p>
-    </div>
-  </div saat bazar berlangsung</p>
+      <p class="redir-meta">Konfirmasi pembayaran di tempat saat bazar berlangsung</p>
     </div>
   </div>
 
 </div><!-- /app -->
 
-<!-->
-
-</div><!-- /app -->
-
-<!-- ================================= ==========================================================================
-    =
+<!-- ======================================================
      SCRIPT
-================================ SCRIPT
 ====================================================== -->
 <script>
-/*====================== -->
-<script>
-/* ================================= ============================================================
-===========================
-     CONFIG CONFIG
-================================
-======================================================================================== */
-const WA  */
-const WA = '6281234567890'; // nomor lain
-const PRD
-const PRD = {
-  ore = {
-  oreo: { nameo: { name:'B:'Bola Oreo Susu',ola Oreo Susu',  desc  desc:'B:'Bola Oreo Susola Oreo Susu / Porsiu / Porsi (5 pcs (5 pcs)', price:800)', price:8000,  stock0,  stock0:20 },
-  mac0:20 },
-  mac:  { name:  { name:'Mac and Cheese:'Mac and Cheese',  desc:'',  desc:'Mac and Cheese /Mac and Cheese / 1 Porsi 1 Porsi',        price:',        price:10000, stock10000, stock0:0:1515 },
-};
-const },
-};
-const STEPS STEPS = ['home',' = ['menu','home','menu','form','form','redirectredirect'];
-
-/* ='];
-
-/* ======================================================================================================================
-   STATE=
-   STATE
-============================================================
+/* ============================================================
+   CONFIG
 ============================================================ */
-let */
-let S = {
-  S = {
-  cur:  'home',
-  qty:  { oreo cur:  'home',
-  qty:  { oreo:0, mac:0:0, mac:0 },
-  },
-  stk stk: :  { ore { oreo:20,o:20, mac:15 mac:15 },
-  form: { nama:'', kelas },
-  form: { nama:'', kelas:'',:'', hp:'' hp:'' },
-  wa },
-  waUrl:'',
-  audOkUrl:'',
-  audOk:false:false,
- ,
-  muted: muted:false,
+const WA  = '6281234567890'; // ← Ganti nomor WA tujuan
+const PRD = {
+  oreo: { name:'Bola Oreo Susu',  desc:'Bola Oreo Susu / Porsi (5 pcs)', price:8000,  stock0:20 },
+  mac:  { name:'Mac and Cheese',  desc:'Mac and Cheese / 1 Porsi',        price:10000, stock0:15 },
 };
+const STEPS = ['home','menu','form','redirect'];
 
-/* ===========================================================false,
+/* ============================================================
+   STATE
+============================================================ */
+let S = {
+  cur:  'home',
+  qty:  { oreo:0, mac:0 },
+  stk:  { oreo:20, mac:15 },
+  form: { nama:'', kelas:'', hp:'' },
+  waUrl:'',
+  audOk:false,
+  muted:false,
 };
 
 /* ============================================================
-   PERS=
-   PERSISTIST
-============================================================
+   PERSIST
 ============================================================ */
-function save */
 function save(){
   try {
-    localStorage(){
-  try {
-    localStorage.setItem('b.setItem('bazar_qazar_qty',  JSONty',  JSON.stringify(S.q.stringify(S.qty));
-   ty));
-    localStorage.setItem(' localStorage.setItem('bazar_stk',  JSON.stringify(S.stbazar_stk',  JSON.stringify(S.stk));
-    localStoragek));
-    localStorage.setItem('b.setItem('bazar_form', JSON.stringify(S.formazar_form', JSON.stringify(S.form));
-  }));
-  } catch(e catch(e){){}
+    localStorage.setItem('bazar_qty',  JSON.stringify(S.qty));
+    localStorage.setItem('bazar_stk',  JSON.stringify(S.stk));
+    localStorage.setItem('bazar_form', JSON.stringify(S.form));
+  } catch(e){}
 }
-}
-function}
 function load(){
   try {
-    load(){
-  try {
-    const q const q=localStorage.getItem('bazar_qty=localStorage.getItem('bazar_qty');
-    const k=');
-    const k=localStoragelocalStorage.getItem('bazar.getItem('bazar_stk_stk');
-    const f');
-    const f=local=localStorage.getItem('bStorage.getItem('bazar_form');
-    if(qazar_form');
-    if(q) S.qty  =) S.qty  = JSON.parse JSON.parse(q(q);
-    if);
-    if(k) S.st(k) S.stk  = JSONk  = JSON.parse(k);
-   .parse(k);
-    if(f if(f) S.form = JSON.parse) S.form = JSON.parse(f(f);
-  });
-  } catch(e catch(e){}
-}
-
-/* ============================================================
-   STEP NAVIGATION
-================================){}
+    const q=localStorage.getItem('bazar_qty');
+    const k=localStorage.getItem('bazar_stk');
+    const f=localStorage.getItem('bazar_form');
+    if(q) S.qty  = JSON.parse(q);
+    if(k) S.stk  = JSON.parse(k);
+    if(f) S.form = JSON.parse(f);
+  } catch(e){}
 }
 
 /* ============================================================
@@ -1342,684 +1093,340 @@ function load(){
 function nav(to){
   if(S.cur===to) return;
   click();
-  const fi = STEPS============================ */
-function nav(to){
-  if(S.cur===to) return;
-  click();
-  const fi = STEPS.indexOf(S.indexOf(S.cur);
-  const ti.cur);
-  const ti = ST = STEPS.indexOf(to);
-  const fwdEPS.indexOf(to);
+  const fi = STEPS.indexOf(S.cur);
+  const ti = STEPS.indexOf(to);
   const fwd = ti > fi;
 
-  const ce = ti > fi;
+  const ce = id('s-'+S.cur);
+  const ne = id('s-'+to);
 
-  const ce = id('s = id('s-'+-'+S.S.cur);
-  constcur);
-  const ne = id('s- ne = id('s-'+to);
+  ce.classList.remove('active');
+  ce.classList.add(fwd ? 'lf' : 'lb');
+  ce.addEventListener('animationend', ()=> ce.classList.remove('lf','lb'), {once:true});
 
-  ce.classList'+to);
-
-  ce.classList.remove('active.remove('active');
-  ce');
-  ce.classList.add(fwd ? '.classList.add(fwdlf' : ' ? 'lf' : 'lblb');
-  ce.addEventListener('animationend');
-  ce.addEventListener('animationend', (', ()=> ce.classList.remove('lf)=> ce.classList.remove('lf','lb'),','lb'), { {once:true});
-
-  neonce:true});
-
-  ne.style.css.style.cssText = '';
- Text = '';
-  ne.classList.remove(' ne.classList.remove('ef','ef','eb','eb','lf','lf','lb','activelb','active');
-  requestAnimationFrame(()=>');
+  ne.style.cssText = '';
+  ne.classList.remove('ef','eb','lf','lb','active');
   requestAnimationFrame(()=>{
-    ne.classList{
-    ne.classList.add('active',.add('active', fwd ? ' fwd ? 'ef'ef' : 'eb');
-    ne : 'eb');
-    ne.addEventListener('.addEventListener('animationend', ()=> neanimationend', ()=> ne.classList.remove.classList.remove('ef','eb('ef','eb'), {once:'), {once:true});
- true});
+    ne.classList.add('active', fwd ? 'ef' : 'eb');
+    ne.addEventListener('animationend', ()=> ne.classList.remove('ef','eb'), {once:true});
   });
 
-  S });
-
-  S.cur.cur = to;
-
-  = to if(to==='form'){
-    setTimeout;
+  S.cur = to;
 
   if(to==='form'){
-    setTimeout(()=>(()=>{
-     {
+    setTimeout(()=>{
       renderForm();
-      renderForm();
-      id(' id('f-nf-nama').value ama').value  = S.form.nama = S.form.nama;
-      id;
-      id('f('f-kelas').value-kelas').value = S.form.k = S.form.kelas;
-      idelas;
-      id('f('f-hp-hp').value').value    = S.form.hp    = S.form.hp;
-     ;
+      id('f-nama').value  = S.form.nama;
+      id('f-kelas').value = S.form.kelas;
+      id('f-hp').value    = S.form.hp;
       fval();
-      fval();
-      id(' id('f-nama').focusf-nama').focus();
-    }, 120);
-  }
-();
+      id('f-nama').focus();
     }, 120);
   }
 }
 
-/* =========================================================}
-
 /* ============================================================
-   HELP===
-   HELPERSERS
-============================================================
+   HELPERS
 ============================================================ */
-const id */
-const id  = (s  = (s) => document.getElementById) => document.getElementById(s(s);
-const rp  = (n) => 'Rp' + n.toLocale);
-const rp  = (n) => 'Rp' + n.toLocaleString('id-IDString('id-ID');
-function total(){ return Object.keys(PRD).reduce((a');
-function total(){ return Object.keys(PRD).reduce((a,k)=>a+S,k)=>a+S.qty[k]*.qty[k]*PRD[k].PRD[k].price,price,0); }
-
-function bump(el){
-  el.classList0); }
+const id  = (s) => document.getElementById(s);
+const rp  = (n) => 'Rp' + n.toLocaleString('id-ID');
+function total(){ return Object.keys(PRD).reduce((a,k)=>a+S.qty[k]*PRD[k].price,0); }
 
 function bump(el){
   el.classList.remove('bump');
-  void el.remove('bump');
-  void el.offset.offsetWidthWidth;
-  el.classList.add('b;
-  el.classList.addump('bump');
-  setTimeout(()=>el.classList');
-  setTimeout(()=>el.classList.remove('bump.remove('bump'),280);
-'),280}
-
-/* =);
+  void el.offsetWidth;
+  el.classList.add('bump');
+  setTimeout(()=>el.classList.remove('bump'),280);
 }
 
-/* ======================================================================================================================
-   QTY / STOCK
-=============================================================
+/* ============================================================
    QTY / STOCK
 ============================================================ */
-function chg */
 function chg(pid, d){
- (pid, d){
-  const q const q  = S.qty[pid  = S.qty[pid];
-  const];
-  const nq nq = q + d;
-  = q + d;
-  if(n if(nqq < 0) return;
-  < 0) return;
-  if(d > 0 && if(d > 0 && S.st S.stk[pid]k[pid] <=  <= 0)0) return return;
-  S.stk;
-  S.stk[pid] -=[pid] -= d;
-  S.qty d;
-  S.qty[pid[pid] ]  = n = nqq;
-  click();
- ;
+  const q  = S.qty[pid];
+  const nq = q + d;
+  if(nq < 0) return;
+  if(d > 0 && S.stk[pid] <= 0) return;
+  S.stk[pid] -= d;
+  S.qty[pid]  = nq;
   click();
   save();
-  render save();
   renderMenu();
 }
 
-functionMenu();
-}
-
 function renderMenu(){
-  Object.keys renderMenu(){
-  Object.keys((PRPRD).D).forEach(forEach(pid=>pid=>{
-    const q{
-    const q = S = S.qty.qty[pid];
-   [pid];
-    const s = S const s = S.stk[pid.stk[pid];
-    // q];
-    // qty displayty display
-    if(id
-    if(id('qn('qn-'+-'+pid)) id('qn-'+pidpid)) id('qn-'+pid).text).textContent =Content = q q;
-    // buttons;
-    //
-    const bm buttons
-    const = id('btn bm = id('btn-'+pid+'-m-'+pid+'-m');
-   ');
-    const bp = id const bp = id('btn('btn-'+-'+pid+'-ppid+'-p');
-   ');
-    if(b if(bm)m) bm.disabled = (q<= bm.disabled = (0q<=0);
-    if);
-    if(bp) bp(bp) bp.disabled = (s<=.disabled = (s<=0);
-    //0);
-    // stock badge stock badge
-    const sb = id
-    const sb('sb-'+ = id('sb-'+pid);
-    ifpid);
+  Object.keys(PRD).forEach(pid=>{
+    const q = S.qty[pid];
+    const s = S.stk[pid];
+    // qty display
+    if(id('qn-'+pid)) id('qn-'+pid).textContent = q;
+    // buttons
+    const bm = id('btn-'+pid+'-m');
+    const bp = id('btn-'+pid+'-p');
+    if(bm) bm.disabled = (q<=0);
+    if(bp) bp.disabled = (s<=0);
+    // stock badge
+    const sb = id('sb-'+pid);
     if(sb){
       if(s<=0){
-       (sb){
-      if(s<=0){
-        sb.text sb.textContent = 'HContent = 'Habis';
-        sbabis';
-        sb.className.className   =   = 'bad 'badge-outge-out';
-     ';
-      } else } else {
-        sb.textContent = 'S {
-        sb.textContent = 'Sisa:isa: '+s;
-        sb.className   = 'badge '+s;
-        sb.className   = 'badge-stock-stock';
-      }
-    }
-    // card';
+        sb.textContent = 'Habis';
+        sb.className   = 'badge-out';
+      } else {
+        sb.textContent = 'Sisa: '+s;
+        sb.className   = 'badge-stock';
       }
     }
     // card opacity
-    const card = id('card-'+pid opacity
     const card = id('card-'+pid);
-    if(card));
-    if(card) card.classList.toggle card.classList.toggle('s('sold-outold-out', s', s<=0 && q<=0);
+    if(card) card.classList.toggle('sold-out', s<=0 && q<=0);
   });
- <=0 && q<=0);
-  });
-  // subtotal // subtotal
-  const
-  const t  t  = total();
-  = total();
-  const sa = id const sa = id('sub-amt('sub-amt');
- ');
-  if(sa){ if(sa){ sa.textContent = sa.textContent = rp rp(t);(t); bump(s bump(sa);a); }
-  const ok }
-  const ok = t>0 = t>0;
- ;
-  const se const se = id('sub-empty');
-  const = id('sub-empty');
-  const bf = id bf = id('btn-to-form('btn-to-form');
- ');
-  if(se) se.style if(se) se.style.display =.display = ok ? 'none ok ? 'none' :' : 'block 'block';
-  if(bf)';
-  if(bf) bf.disabled bf.disabled = ! = !ok;
+  // subtotal
+  const t  = total();
+  const sa = id('sub-amt');
+  if(sa){ sa.textContent = rp(t); bump(sa); }
+  const ok = t>0;
+  const se = id('sub-empty');
+  const bf = id('btn-to-form');
+  if(se) se.style.display = ok ? 'none' : 'block';
+  if(bf) bf.disabled = !ok;
 }
-
-/*ok;
-}
-
-/* ================================= ======================================================================================
-  =
-   FORM RENDER + FORM RENDER + VALID VALIDATION
-========================================================ATION
-================================================================ */
-function renderForm */
-function renderForm(){
-  const si =(){
-  const si = id(' id('sum-items');
- sum-items');
-  if(!si) if(!si) return return;
-  let;
-  let html=' html='', has', has=false;
-  Object=false.keys(;
-  Object.keys(PRDPRD).forEach(pid=>).forEach(pid=>{
-    const q=S{
-    const q=S.qty.qty[pid[pid]; if]; if(!q(!q) return) return;
-   ;
-    has=true;
-    has=true;
-    html+= html+=``<div class="ord-line">
-     <div class="ord-line">
-      <span class="ord-line-n">${ <span class="ord-line-n">${PRDPRD[pid[pid].name].name}</span>
-     }</span>
-      <div <div class=" class="ord-line-s">
-       ord-line-s <button class">
-        <button class="sp-btn"="sp-btn" onclick="fch onclick="fchg('g('${pid${pid}',-1)}',-1)">−">−</button>
-       </button <span>
-        <span class="sp-n" id class="sp-n" id="fqn-="fqn-${pid}">${q${pid}">${q}</span>
-        <button}</span>
-        <button class="sp-btn" onclick class="sp-btn" onclick="fchg="fchg('${pid}',1)">+</button>
-     ('${pid}',1)">+</button>
-      </div>
-      <span style=" </div>
-      <span style="font-size:.8font-size:.8rem;color:var(--rem;color:var(--gold);min-widthgold);min-width:72:72px;text-alignpx;text-align:right">${:right">${rp(q*PRrp(q*PRD[pid].price)}D[pid].price)}</span</span>
-    </div>>
-    </div>`;
-  });
-  if(!has) html`;
-  });
-  if(!has) html='<div style="text='<div style="text-align:center;padding:-align:center;padding:6px6px;font-size:.78rem;font-size:.78rem;color;color:rg:rgba(ba(255,255,255,255,.35)255,255,.35)">Tidak ada pesanan">Tidak ada pesanan</div>';
- </div>';
-  si.innerHTML = html si.innerHTML = html;
- ;
-  const ft=id('f-total');
-  const ft=id('f-total');
-  if(ft) if(ft) ft.textContent = ft.textContent = rp(total rp(total());
-}
-
-function());
-}
-
-function fch fchg(pid, dg(pid, d){
-  chg(pid,){
-  chg(pid, d);
-  render d);
-  renderFormForm();
-  fval();
-  fval();
-  if(total()();
-  if(total()<=0<=0) setTimeout) setTimeout(()=>nav('(()=>nav('menu'),280menu'),280);
-}
-
-function fval(){
- );
-}
-
-function fval(){
-  const nm  = const nm  = id('f-n id('f-nama').ama').value.trim();
- value.trim();
-  const kl  = id(' const kl  = id('f-kelas').value.trimf-kelas').();
-  const hp  =value.trim();
-  const hp  = id('f-h id('f-hp').value.trim();
-  S.formp').value.trim();
-  S.form = { = {nama:nm,nama:nm, kelas:kl, kelas:kl, hp hp};
-  save};
-  save();
-
- ();
-
-  let ok let ok=true;
-  function err(fid,eid,msg){ id(fid).=true;
-  function err(fid,eid,msg){ id(fid).classList.toggle('err',!!classList.toggle('err',!!msg); id(emsg); id(eid).id).textContent=msgtextContent=msg||''; if||''; if(msg) ok=false;(msg) ok=false; }
-
-  err('f }
-
-  err('f-nama','e-nama','e-nama', !-nama', !nm?'Nama wajib diisi': nm.length<2?'Nama terlalu pendnm?'Nama wajib diisi': nm.length<2?'Nama terlalu pendek':'');
-  err('f-kek':'');
-  err('f-kelas','elas','e-ke-kelas',!klelas',!kl?'Kelas wajib diisi':'?'Kelas wajib diisi':'');
-  const hp');
-  const hpErr = !hp?'No. HP wajib diisi':!/^Err = !hp?'No. HP wajib diisi':!/^[0-9]+$/.[0-9]+$/.test(htest(hp)?'Hanya angka':
-               p)?'Hanya angka !hp.startsWith':
-                !hp.startsWith('08('08')?'Harus')?'Harus diawali "08"': hp.length<10?'Minimal  diawali "08"': hp.length<10?'Minimal 10 digit':'';
-  err('f-hp','e10 digit':'';
-  err('f-hp','e-hp', hpErr);
-
-  const-hp', hpErr);
-
-  const bs=id(' bs=btn-submit'); if(bs) bs.disabled=id('btn-submit'); if(bs) bs.disabled=!ok;
-  return ok;
-!ok;
-  return ok;
-}
-
-/* =========================================================}
 
 /* ============================================================
-   SUBMIT===
-   SUBMIT
-========================================================
+   FORM RENDER + VALIDATION
 ============================================================ */
-function submit==== */
+function renderForm(){
+  const si = id('sum-items');
+  if(!si) return;
+  let html='', has=false;
+  Object.keys(PRD).forEach(pid=>{
+    const q=S.qty[pid]; if(!q) return;
+    has=true;
+    html+=`<div class="ord-line">
+      <span class="ord-line-n">${PRD[pid].name}</span>
+      <div class="ord-line-s">
+        <button class="sp-btn" onclick="fchg('${pid}',-1)">−</button>
+        <span class="sp-n" id="fqn-${pid}">${q}</span>
+        <button class="sp-btn" onclick="fchg('${pid}',1)">+</button>
+      </div>
+      <span style="font-size:.8rem;color:var(--gold);min-width:72px;text-align:right">${rp(q*PRD[pid].price)}</span>
+    </div>`;
+  });
+  if(!has) html='<div style="text-align:center;padding:6px;font-size:.78rem;color:rgba(255,255,255,.35)">Tidak ada pesanan</div>';
+  si.innerHTML = html;
+  const ft=id('f-total');
+  if(ft) ft.textContent = rp(total());
+}
+
+function fchg(pid, d){
+  chg(pid, d);
+  renderForm();
+  fval();
+  if(total()<=0) setTimeout(()=>nav('menu'),280);
+}
+
+function fval(){
+  const nm  = id('f-nama').value.trim();
+  const kl  = id('f-kelas').value.trim();
+  const hp  = id('f-hp').value.trim();
+  S.form = {nama:nm, kelas:kl, hp};
+  save();
+
+  let ok=true;
+  function err(fid,eid,msg){ id(fid).classList.toggle('err',!!msg); id(eid).textContent=msg||''; if(msg) ok=false; }
+
+  err('f-nama','e-nama', !nm?'Nama wajib diisi': nm.length<2?'Nama terlalu pendek':'');
+  err('f-kelas','e-kelas',!kl?'Kelas wajib diisi':'');
+  const hpErr = !hp?'No. HP wajib diisi':!/^[0-9]+$/.test(hp)?'Hanya angka':
+                !hp.startsWith('08')?'Harus diawali "08"': hp.length<10?'Minimal 10 digit':'';
+  err('f-hp','e-hp', hpErr);
+
+  const bs=id('btn-submit'); if(bs) bs.disabled=!ok;
+  return ok;
+}
+
+/* ============================================================
+   SUBMIT
+============================================================ */
 function submit(){
- (){
   if(!fval()) return;
   const bs=id('btn-submit');
-  bs.disabled=true if(!fval()) return;
-  const bs=id('btn-submit');
   bs.disabled=true; bs.textContent='Mengirim...';
-  click; bs.textContent='Mengirim...';
   click();
 
-  let lines();
-
   let lines='';
-  Object.keys(='';
-  Object.keys(PRD).forEach(pid=>{ if(S.qty[pid]) linesPRD).forEach(pid=>{ if(S.qty[pid]) lines+=`- ${PRD[pid].name} x${S.qty[pid+=`- ${PRD[pid].name} x${S.qty[pid]}\n`;]}\n`; });
+  Object.keys(PRD).forEach(pid=>{ if(S.qty[pid]) lines+=`- ${PRD[pid].name} x${S.qty[pid]}\n`; });
 
   const msg=
-`Halo, saya ingin pre-order Bazar 22 });
+`Halo, saya ingin pre-order Bazar 22 Mei! 🎪
 
-  const msg=
-`Halo, saya ingin pre-order Bazar 22 Mei! Mei! 🎪
-
-Nama  : 🎪
-
-Nama  : ${S.form.n ${Sama}
-Kelas.form.nama}
+Nama  : ${S.form.nama}
 Kelas : ${S.form.kelas}
-No HP : ${S : ${S.form.kelas}
 No HP : ${S.form.hp}
 
 Pesanan:
-${lines.trim().form.hp}
-
-Pesanan:
 ${lines.trim()}
 
 Total: ${rp(total())}
-
-Total: ${rp(total())}
-
-Terima kasih!}
 
 Terima kasih!`;
 
-  S.wa`;
+  S.waUrl = `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
 
-  S.waUrl = `httpsUrl = `https://wa.me/${WA}://wa.me/${WA}?text?text=${encodeURIComponent=${encodeURIComponent(msg)}(msg)}`;
-
-  setTimeout(()`;
-
-  setTimeout(()=>{=>{ nav('redirect'); nav('redirect'); openWA(); }, 750 openWA(); }, 750);
+  setTimeout(()=>{ nav('redirect'); openWA(); }, 750);
 }
 
-function open);
-}
-
-function openWAWA(){
-  if(){
-  if(!S.waUrl)(!S.waUrl) return;
-  return;
-  window window.open(S.open(S.wa.waUrl,'_blankUrl,'_blank');
-  setTimeout(()');
-  setTimeout(()=>{ const b=id=>{ const b=id('btn-wa('btn'); if-wa'); if(b)(b) b.style b.style.display='.display=''; },'; }, 2600);
-}
-
-/* ================================= 2600);
+function openWA(){
+  if(!S.waUrl) return;
+  window.open(S.waUrl,'_blank');
+  setTimeout(()=>{ const b=id('btn-wa'); if(b) b.style.display=''; }, 2600);
 }
 
 /* ============================================================
-  ===========================
-   COPY + COPY + RESET RESET
-============================================================
+   COPY + RESET
 ============================================================ */
 function copyOrd(){
-  let lines=' */
-function copyOrd(){
   let lines='';
-  Object';
-  Object.keys(PR.keys(D).forEachPRD).forEach(pid(pid=>{ if(S=>{ if(S.qty.qty[pid]) lines[pid]) lines+=`+=`- ${PRD- ${PRD[pid[pid].name].name} x${S.qty} x${S.qty[pid[pid]}\]}\n`; });
-  const txtn`; });
+  Object.keys(PRD).forEach(pid=>{ if(S.qty[pid]) lines+=`- ${PRD[pid].name} x${S.qty[pid]}\n`; });
   const txt=
-`Nama =
-`Nama  : ${ : ${S.formS.form.nama||'-'}
-K.nama||'-'}
-Kelas : ${Selas : ${S.form.kelas||'-.form.kelas||'-'}
-No HP'}
-No HP : ${ : ${S.formS.form.hp||'-'.hp||'-'}
+`Nama  : ${S.form.nama||'-'}
+Kelas : ${S.form.kelas||'-'}
+No HP : ${S.form.hp||'-'}
 
 Pesanan:
-${lines.trim()}
+${lines.trim()||'(kosong)'}
 
-Pesanan:
-${lines.trim()||'(||'(kosong)'}
-
-Total:kosong)'}
-
-Total: ${rp ${rp(total())(total())}`;
-
-  const write =}`;
+Total: ${rp(total())}`;
 
   const write = () => {
-    () => {
-    if(n if(navigator.clipboard)avigator.clipboard) navigator.clipboard.write navigator.clipboard.writeText(txt).Text(txt).then(toastthen(toast);
-    else);
-    else { const { const t= t=document.createElement('textareadocument.createElement('textarea'); t'); t.value=txt;.value=txt; document.body document.body.appendChild(t); t.appendChild(t); t.select();.select(); document.execCommand(' document.execCommand('copy'); document.bodycopy'); document.body.removeChild(t);.removeChild(t); toast(); toast(); }
+    if(navigator.clipboard) navigator.clipboard.writeText(txt).then(toast);
+    else { const t=document.createElement('textarea'); t.value=txt; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t); toast(); }
   };
-  }
-  };
-  write(); write(); click click();
+  write(); click();
 }
 
-function();
-}
-
-function resetOrd resetOrd(){
-  if(!(){
-  if(!confirm('Reset semuaconfirm('Reset semua pesanan pesanan & data?')) return;
-  Object & data?')) return;
-  Object.keys(.keys(PRD).forEach(pidPRD).forEach(pid=>{=>{ S.stk S.stk[pid]+[pid]+=S.qty[pid]; S=S.qty[pid]; S.qty.qty[pid[pid]=0; });
-  S]=0; });
-  S.form={nama:'.form={nama:'',kel',kelas:'as:'',hp',hp:''};
- :''};
+function resetOrd(){
+  if(!confirm('Reset semua pesanan & data?')) return;
+  Object.keys(PRD).forEach(pid=>{ S.stk[pid]+=S.qty[pid]; S.qty[pid]=0; });
+  S.form={nama:'',kelas:'',hp:''};
   save(); renderMenu();
-  id(' save(); renderMenu();
-  id('f-nama').value='f-nama').value=''; id'; id('f('f-kelas-kelas').value='';').value=''; id('f-h id('f-hp').value='';
- p').value='';
-  fval fval(); render(); renderFormForm();
-  nav();
-  nav('menu('menu');
-}
-
-function toast');
+  id('f-nama').value=''; id('f-kelas').value=''; id('f-hp').value='';
+  fval(); renderForm();
+  nav('menu');
 }
 
 function toast(){
-  const t(){
-  const t=id('toast'); t.classList.add('=id('toast'); t.classList.add('showshow');
-  setTimeout');
-  setTimeout(()=>(()=>t.classListt.classList.remove('show'),.remove('show'),26002600);
+  const t=id('toast'); t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
 }
-
-/* =);
-==========================================================}
 
 /* ============================================================
-   AUDIO (=
-   AUDIO (Web AudioWeb Audio API API)
+   AUDIO (Web Audio API)
 ============================================================ */
-let AC)
-============================================================ */
-let AC=null=null, MG=null, MG=null;
-const;
-const NOTES NOTES=[261.63,=[261.63,293.66,329.293.66,329.63,63,392,392,440,523.440,25,587.523.25,33,659.587.33,659.25];
-const PAT=[025];
-const PAT=[0,2,4,2,5,2,4,2,5,4,4,2,0,2,0];
-let];
-let melTime=0, melTmr melTime=0, melTmr=null=null;
-
-function initAudio;
+let AC=null, MG=null;
+const NOTES=[261.63,293.66,329.63,392,440,523.25,587.33,659.25];
+const PAT=[0,2,4,2,5,4,2,0];
+let melTime=0, melTmr=null;
 
 function initAudio(){
- (){
-  if(S.aud if(SOk) return.audOk) return;
+  if(S.audOk) return;
   try{
-    AC = new (;
-  try{
-    AC = new (window.Awindow.AudioContext||window.webkitudioContext||window.webkitAudioContext)AudioContext)();
-    MG = AC.createGain();();
-    MG = AC.createGain(); MG.g MG.gain.value=S.main.value=S.muted?0:.uted?0:.55; MG.connect55; MG.connect(AC(AC.destination.destination);
-    makeNoise(); scheduleMel);
+    AC = new (window.AudioContext||window.webkitAudioContext)();
+    MG = AC.createGain(); MG.gain.value=S.muted?0:.55; MG.connect(AC.destination);
     makeNoise(); scheduleMel();
-    S.();
-    S.audOkaudOk=true;
-  }=true;
-  }catch(ecatch(e){){}
+    S.audOk=true;
+  }catch(e){}
 }
 
-function}
-}
-
-function makeNo makeNoiseise(){
-  const sr=AC.sampleRate(){
-  const sr=AC.sampleRate, buf, buf=AC.createBuffer=AC.createBuffer(2(2,sr,sr*3,sr*3,sr);
- );
-  for(let c= for(let c=0;0;c<2;c++){ constc<2;c++){ const d=buf.get d=buf.getChannelDataChannelData(c);(c); for(let for(let i= i=0;i<d.length;i++) d0;i<d.length;i++) d[i][i]=(Math=(Math.random().random()*2*2-1-1);); }
-  const src=AC.create }
-  const src=AC.createBufferSource(); srcBufferSource(); src.buffer=buf; src.loop.buffer=buf; src.loop=true=true;
-  const bp=AC.create;
-  const bp=AC.createBiquBiquadFilter(); bp.type='bandpass'; bpadFilter(); bp.type='bandpass'; bp.frequency.frequency.value=700; bp.Q.value=700; bp.Q.value=.28.value=.28;
-  const lp=;
-  const lp=AC.createBiquadFilterAC.createBiquadFilter(); lp.type='(); lp.type='lowpasslowpass';  lp.frequency.value';  lp.frequency.value=1100=1100;
-  const g=AC.createGain(); g.gain;
-  const g=AC.createGain(); g.gain.value=..value=.034034;
-  src;
-  src.connect(bp);.connect(bp); bp.connect(lp bp.connect(lp); lp.connect(g); g); lp.connect(g); g.connect(MG.connect(MG);
-  src);
+function makeNoise(){
+  const sr=AC.sampleRate, buf=AC.createBuffer(2,sr*3,sr);
+  for(let c=0;c<2;c++){ const d=buf.getChannelData(c); for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1); }
+  const src=AC.createBufferSource(); src.buffer=buf; src.loop=true;
+  const bp=AC.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=700; bp.Q.value=.28;
+  const lp=AC.createBiquadFilter(); lp.type='lowpass';  lp.frequency.value=1100;
+  const g=AC.createGain(); g.gain.value=.034;
+  src.connect(bp); bp.connect(lp); lp.connect(g); g.connect(MG);
   src.start();
 }
 
-function pNote.start();
-}
-
-function pNote(freq,t,dur,(freq,t,dur,vol=.048){
-  const osc=vol=.048){
-  const osc=AC.createOscAC.createOscillator(),illator(), g= g=AC.createGainAC.createGain(), lp(), lp=AC=AC.createBiquad.createBFilter();
-  osciquadFilter.type='();
-  osc.type='sinesine'; osc'; osc.frequency.value=f.frequency.value=freq;
-  oscreq;
-  osc.det.detune.valueune.value=(Math=(Math.random()-.5.random()-.5)*18;
-  g.g)*18;
-  g.gain.setain.setValueAtValueAtTime(0,tTime(0,t);
-  g.g);
-  g.gain.ain.linearRlinearRampToampToValueAtValueAtTime(vol,t+.06);
-  g.gain.exponentialRampToValueAtTime(vol,t+.06);
-  g.gain.exponentialRampToValueAtTime(.Time(.001,t+dur001,t+dur);
-  lp.type='low);
-  lp.type='lowpass'; lp.fpass'; lp.frequency.valuerequency.value=1700;
-  osc=1700;
-  osc.connect(l.connect(lp);p); lp.connect(g); lp.connect g.connect(g); g.connect(MG(MG);
-  osc.start);
-  osc.start(t); osc.stop(t); osc.stop(t+d(t+dur+.ur+.1);
-}
-
-function1);
+function pNote(freq,t,dur,vol=.048){
+  const osc=AC.createOscillator(), g=AC.createGain(), lp=AC.createBiquadFilter();
+  osc.type='sine'; osc.frequency.value=freq;
+  osc.detune.value=(Math.random()-.5)*18;
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(vol,t+.06);
+  g.gain.exponentialRampToValueAtTime(.001,t+dur);
+  lp.type='lowpass'; lp.frequency.value=1700;
+  osc.connect(lp); lp.connect(g); g.connect(MG);
+  osc.start(t); osc.stop(t+dur+.1);
 }
 
 function scheduleMel(){
-  if(!AC) scheduleMel(){
-  if(!AC) return return;
-  const now=AC.current;
-  const now=AC.currentTime,Time, ahead= ahead=2.2;
-  if(!melTime) melTime=now+.5;
-  const sp=.422.2;
+  if(!AC) return;
+  const now=AC.currentTime, ahead=2.2;
   if(!melTime) melTime=now+.5;
   const sp=.42;
- ;
-  while(melTime < now+ahead while(melTime < now+ahead){
-   ){
-    PAT.forEach((ni PAT.forEach((ni,i)=>,i)=> pNote pNote(NOTES[ni](NOTES[ni]*(Math.random()*(Math.random()>.9>.9?2?2:1), mel:1), melTime+i*sp, sp*.72Time+i*sp, sp*.72, .044+Math.random, .044+Math.random()*.()*.022022));
-    melTime +=));
-    melTime += PAT.length*sp PAT.length + *sp + 1.8 + Math.random()*.1.8 + Math.random()*.8;
+  while(melTime < now+ahead){
+    PAT.forEach((ni,i)=> pNote(NOTES[ni]*(Math.random()>.9?2:1), melTime+i*sp, sp*.72, .044+Math.random()*.022));
+    melTime += PAT.length*sp + 1.8 + Math.random()*.8;
   }
-  mel8;
-  }
-  melTmrTmr = setTimeout(schedule = setTimeout(scheduleMel,Mel, 500);
-}
-
-function click 500);
+  melTmr = setTimeout(scheduleMel, 500);
 }
 
 function click(){
-  if(!(){
-  if(!AC||AC||S.muted)S.m returnuted) return;
+  if(!AC||S.muted) return;
   try{
-   ;
-  try const o{
-    const o=AC.createOscillator=AC.createOscillator(), g(), g=AC=AC.createG.createGain();
-    oain();
-    o.type='.type='sine'; osine'; o.frequency.setValue.frequencyAtTime(900,AC.setValueAtTime(900,AC.currentTime);
-   .currentTime);
-    o.f o.frequency.exrequency.exponentialRampToValueAtponentialRampToValueAtTime(440,Time(440,AC.currentAC.currentTime+.Time+.0909);
-    g);
-    g.gain.gain.setValue.setValueAtTimeAtTime(.18,AC.currentTime(.18,AC.currentTime);
-    g.g);
-    g.gain.exponentialRain.exponentialRampToValueAtTime(.001,AC.currentTime+.13ampToValueAtTime(.001,AC.currentTime+.13);
-    o.connect(g);
-    o.connect(g); g.connect(); g.connect(AC.destination);
-    oAC.destination);
-    o.start(); o.stop.start(); o.stop(AC.currentTime(AC.currentTime+.16+.16);
-  }catch);
-  }catch(e){(e){}
-}
+    const o=AC.createOscillator(), g=AC.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(900,AC.currentTime);
+    o.frequency.exponentialRampToValueAtTime(440,AC.currentTime+.09);
+    g.gain.setValueAtTime(.18,AC.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+.13);
+    o.connect(g); g.connect(AC.destination);
+    o.start(); o.stop(AC.currentTime+.16);
+  }catch(e){}
 }
 
-id('aud-btn').addEventListener('}
-
-id('aud-btn').addEventListener('click',()=>click',()=>{
- {
-  if(! if(!S.audOk){ initS.audOk){ initAudio(); S.muted=falseAudio(); S.muted=false;; }
-  else { S.muted=!S.m }
-  else { S.muted=!S.muted; if(MG) MG.guted; if(MG) MG.gain.setain.setTargetAtTime(STargetAtTime(S.muted?0.muted?0:.55,AC:.55,AC.currentTime.currentTime,.1,.1); }
-  id); }
-  id('aud('aud-btn').-btn').textContent = StextContent = S.muted.muted ? ' ? '🔇' : '🔇' : '🔊🔊';
+id('aud-btn').addEventListener('click',()=>{
+  if(!S.audOk){ initAudio(); S.muted=false; }
+  else { S.muted=!S.muted; if(MG) MG.gain.setTargetAtTime(S.muted?0:.55,AC.currentTime,.1); }
+  id('aud-btn').textContent = S.muted ? '🔇' : '🔊';
 });
 
-/* ===========================================================';
-});
-
-/* ==================================
-  ===========================
-   PARAL PARALLAXLAX
-================================
+/* ============================================================
+   PARALLAX
 ============================================================ */
-function============================ */
-function initPx initPx(){
+function initPx(){
   const LS=[
-    {(){
-  const LS=[
-    {el:idel:id('l1'),('l1'), str:. str:.008},
-    {008},
-    {el:id('lel:id('l2'), str:.2'), str:.0202},
-    {el:id},
-    {el:id('l3'),('l3'), str:.034},
-    { str:.034},
-    {el:idel:id('l('l4'),4'), str:. str:.054},
+    {el:id('l1'), str:.008},
+    {el:id('l2'), str:.02},
+    {el:id('l3'), str:.034},
+    {el:id('l4'), str:.054},
   ];
-  let tx=054},
-  ];
-  let tx=0,0,ty=0,cty=0,cx=0,x=0,cy=cy=0;
+  let tx=0,ty=0,cx=0,cy=0;
 
-  document0;
-
-  document.addEventListener('mousemove.addEventListener('mousemove',e=>',e=>{
-    const w={
-    constinnerWidth w=innerWidth/2, h/2, h=inner=innerHeight/2;
-    tx=(e.clientX-w)/w; ty=(e.clientHeight/2;
+  document.addEventListener('mousemove',e=>{
+    const w=innerWidth/2, h=innerHeight/2;
     tx=(e.clientX-w)/w; ty=(e.clientY-h)/h;
- Y-h)/h;
   });
-  });
-  document.addEventListener('touch document.addEventListener('touchmove',move',e=>{
-   e=>{
-    const t=e.t const t=e.touchesouches[0[0], w], w=inner=innerWidth/2,Width/2, h=innerHeight h=innerHeight/2/2;
-    tx=(;
-    tx=(t.clientXt.client-w)/w; tyX-w)/w; ty=(t=(t.clientY-h)/h;
-  },.clientY-h)/h;
-  },{pass{passive:trueive:true});
+  document.addEventListener('touchmove',e=>{
+    const t=e.touches[0], w=innerWidth/2, h=innerHeight/2;
+    tx=(t.clientX-w)/w; ty=(t.clientY-h)/h;
+  },{passive:true});
 
-  (});
-
-  (function tickfunction tick(){
-    cx+=(tx-cx)*.(){
-    cx+=(tx-cx)*.055;055; cy+=(ty-cy cy+=(ty-cy)*.)*.055055;
+  (function tick(){
+    cx+=(tx-cx)*.055; cy+=(ty-cy)*.055;
     LS.forEach(l=>{
-      if(!l;
-    LS.forEach(l=>{
-      if(!l.el).el) return;
-      l.el.style.transform=`translate(${cx*l.str*130}px return;
-      l.el.style.transform=`translate(${cx*l.str*130,${cy*l.str*64}px)}px,${cy*l.str*64}px)`;
-   `;
+      if(!l.el) return;
+      l.el.style.transform=`translate(${cx*l.str*130}px,${cy*l.str*64}px)`;
     });
-    });
-    requestAnimation requestAnimationFrame(tick);
+    requestAnimationFrame(tick);
   })();
 }
 
 /* ============================================================
-   DOTS ANFrame(tick);
-  })();
-}
-
-/* ===========================================================IMATION FALLBACK (cross-browser)
-============================================================ */
-(function=
    DOTS ANIMATION FALLBACK (cross-browser)
-============================================================ init */
-(functionDots initDots(){
- (){
-  const ld const ld = document.querySelector('.ld');
-  if(!ld) return;
-  let step = 0;
-  setInterval(()=>{
-    const dots = ['.','..','...'];
-    ld.textContent = dots[step % dots.length];
-    step++;
-  },  = document.querySelector('.ld');
+============================================================ */
+(function initDots(){
+  const ld = document.querySelector('.ld');
   if(!ld) return;
   let step = 0;
   setInterval(()=>{
@@ -2027,22 +1434,6 @@ function initPx initPx(){
     ld.textContent = dots[step % dots.length];
     step++;
   }, 500);
-})();
-
-/* ============================================================
-   INIT
-============================================================ */
-document.addEventListener('DOMContentLoaded',()=>{
-  load();
-  renderMenu();
-  initPx();
-
-  id('btn-start').addEventListener('click',()=>{ initAudio(); nav('menu'); });
-});
-</script>
-</body>
-</html>
-```500);
 })();
 
 /* ============================================================
