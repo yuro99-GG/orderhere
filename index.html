@@ -1,1519 +1,1569 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>🎪 Bazar 22 Mei — Pre-Order</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bazar Menu – 22 Mei 2025</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  <style>
-    /* ============================================================
-       RESET & CSS VARIABLES
-    ============================================================ */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg:           #F4F2ED;
+            --surface:      #FFFFFF;
+            --border:       #111111;
+            --text:         #111111;
+            --muted:        #666666;
+            --blue:         #1A56DB;
+            --blue-dk:      #1040AA;
+            --blue-lt:      #EEF2FF;
+            --green:        #0B6B42;
+            --green-lt:     #ECFDF5;
+            --orange:       #C96B00;
+            --orange-lt:    #FFF7ED;
+            --red:          #B91C1C;
+            --red-lt:       #FEF2F2;
+            --yellow:       #92400E;
+            --yellow-lt:    #FFFBEB;
+            --shadow:       3px 3px 0 #111;
+            --shadow-lg:    5px 5px 0 #111;
+        }
 
-    :root {
-      --orange:      #ff6b35;
-      --amber:       #ffa552;
-      --gold:        #ffd166;
-      --deep-purple: #1a0a2e;
-      --mid-purple:  #6b2d8b;
-      --dark-navy:   #0a0818;
-      --card-bg:     rgba(18, 8, 36, 0.75);
-      --card-border: rgba(255, 165, 82, 0.28);
-      --text:        #ffe8c8;
-      --text-dim:    rgba(255, 232, 200, 0.55);
-      --err:         #ff6b7a;
-      --pixel:       'Press Start 2P', monospace;
-      --body:        'M PLUS Rounded 1c', sans-serif;
-    }
+        body {
+            font-family: 'Syne', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
 
-    html, body {
-      width: 100%; height: 100%;
-      overflow: hidden;
-      font-family: var(--body);
-      color: var(--text);
-      background: var(--dark-navy);
-      -webkit-font-smoothing: antialiased;
-    }
+        /* ─── HEADER ──────────────────────────────── */
+        .site-header {
+            background: var(--surface);
+            border-bottom: 2px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 14px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .header-brand {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .header-title {
+            font-size: 1.55rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+        .header-date {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            background: var(--text);
+            color: var(--surface);
+            padding: 3px 9px;
+            display: inline-block;
+        }
+        .cart-toggle-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--blue);
+            color: white;
+            border: 2px solid var(--border);
+            padding: 8px 18px;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: transform .12s, box-shadow .12s;
+        }
+        .cart-toggle-btn:hover   { transform: translate(-2px,-2px); box-shadow: var(--shadow-lg); }
+        .cart-toggle-btn:active  { transform: translate(2px,2px);  box-shadow: none; }
+        .cart-badge {
+            background: white;
+            color: var(--blue);
+            font-size: 0.7rem;
+            font-weight: 800;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+        }
 
-    /* ============================================================
-       CANVAS BACKGROUND + OVERLAY
-    ============================================================ */
-    #bg-canvas {
-      position: fixed; inset: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      image-rendering: pixelated;
-    }
+        /* ─── LAYOUT ──────────────────────────────── */
+        .main-layout {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 28px;
+            display: grid;
+            grid-template-columns: 1fr 370px;
+            gap: 32px;
+            align-items: start;
+        }
 
-    .scene-overlay {
-      position: fixed; inset: 0;
-      background: linear-gradient(to bottom, transparent 55%, rgba(8,5,20,.65) 100%);
-      z-index: 1;
-      pointer-events: none;
-    }
+        .section-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #DDD;
+        }
 
-    /* ============================================================
-       PIXEL STAR LAYER (animated, injected by JS)
-    ============================================================ */
-    #star-layer {
-      position: fixed; inset: 0;
-      z-index: 2;
-      pointer-events: none;
-    }
+        /* ─── PRODUCTS ────────────────────────────── */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .product-card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform .15s, box-shadow .15s;
+        }
+        .product-card:hover {
+            transform: translate(-2px,-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        .product-visual {
+            background: #EEEAE2;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 190px;
+        }
+        .product-info {
+            padding: 16px;
+        }
+        .product-name {
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            margin-bottom: 4px;
+        }
+        .product-price {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--blue);
+            margin-bottom: 14px;
+        }
+        .qty-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .qty-control {
+            display: flex;
+            align-items: stretch;
+            border: 2px solid var(--border);
+            width: fit-content;
+        }
+        .qty-btn {
+            background: none;
+            border: none;
+            width: 32px;
+            height: 32px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'Syne', sans-serif;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .1s;
+        }
+        .qty-btn:hover { background: var(--bg); }
+        .qty-num {
+            width: 36px;
+            height: 32px;
+            border-left: 2px solid var(--border);
+            border-right: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 700;
+        }
+        .add-btn {
+            flex: 1;
+            background: var(--orange);
+            color: white;
+            border: 2px solid var(--border);
+            padding: 7px 14px;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: transform .1s, box-shadow .1s;
+        }
+        .add-btn:hover  { transform: translate(-1px,-1px); box-shadow: var(--shadow-lg); }
+        .add-btn:active { transform: translate(2px,2px);  box-shadow: none; }
 
-    /* ============================================================
-       AUDIO TOGGLE BUTTON
-    ============================================================ */
-    #audio-toggle {
-      position: fixed; top: 14px; right: 14px;
-      z-index: 200;
-      width: 42px; height: 42px;
-      border-radius: 50%;
-      background: rgba(18, 8, 36, 0.75);
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(8px);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
-      cursor: pointer;
-      transition: transform .2s, background .2s;
-    }
-    #audio-toggle:hover { transform: scale(1.12); background: rgba(255,165,82,.15); }
+        /* ─── CART PANEL ──────────────────────────── */
+        .cart-panel {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 72px;
+        }
+        .cart-panel-head {
+            padding: 14px 18px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--text);
+            color: white;
+        }
+        .cart-panel-title {
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .cart-count-badge {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            background: var(--blue);
+            color: white;
+            padding: 2px 8px;
+            text-transform: uppercase;
+        }
+        .cart-items-list {
+            padding: 10px 18px;
+            min-height: 100px;
+            max-height: 340px;
+            overflow-y: auto;
+        }
+        .cart-empty-state {
+            padding: 40px 0;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.875rem;
+        }
+        .cart-empty-icon {
+            font-size: 2rem;
+            opacity: 0.2;
+            margin-bottom: 8px;
+        }
+        .cart-item {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 0;
+            border-bottom: 1px solid #EEE;
+        }
+        .cart-item:last-child { border-bottom: none; }
+        .cart-item-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        .cart-item-sub {
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-top: 2px;
+            font-family: 'Space Mono', monospace;
+        }
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .c-qty-btn {
+            width: 22px;
+            height: 22px;
+            border: 1.5px solid var(--border);
+            background: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syne', sans-serif;
+        }
+        .c-qty-num {
+            font-size: 0.8rem;
+            font-weight: 700;
+            min-width: 18px;
+            text-align: center;
+        }
+        .cart-item-total {
+            font-size: 0.82rem;
+            font-weight: 700;
+            font-family: 'Space Mono', monospace;
+            min-width: 70px;
+            text-align: right;
+        }
+        .cart-footer {
+            border-top: 2px solid var(--border);
+            padding: 14px 18px;
+        }
+        .cart-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 12px;
+        }
+        .cart-total-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .cart-total-val {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--blue);
+            font-family: 'Space Mono', monospace;
+        }
+        .checkout-btn {
+            width: 100%;
+            background: var(--green);
+            color: white;
+            border: 2px solid var(--border);
+            padding: 13px;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: transform .1s, box-shadow .1s;
+        }
+        .checkout-btn:hover:not(:disabled)  { transform: translate(-2px,-2px); box-shadow: var(--shadow-lg); }
+        .checkout-btn:active                { transform: translate(2px,2px); box-shadow: none; }
+        .checkout-btn:disabled              { opacity: .45; cursor: not-allowed; }
+        .cash-tag {
+            text-align: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-top: 8px;
+        }
 
-    /* ============================================================
-       PROGRESS DOTS
-    ============================================================ */
-    #progress-dots {
-      position: fixed; bottom: 18px; left: 50%;
-      transform: translateX(-50%);
-      display: flex; gap: 8px;
-      z-index: 200;
-    }
-    .pdot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: rgba(255,232,200,.22);
-      transition: all .35s cubic-bezier(.4,0,.2,1);
-    }
-    .pdot.active {
-      background: var(--orange);
-      width: 22px;
-      border-radius: 3px;
-    }
+        /* ─── MODAL ───────────────────────────────── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.55);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s;
+        }
+        .modal-overlay.open { opacity: 1; pointer-events: all; }
+        .modal-box {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            box-shadow: 8px 8px 0 var(--border);
+            width: 100%;
+            max-width: 520px;
+            max-height: 92vh;
+            overflow-y: auto;
+            transform: translateY(24px);
+            transition: transform .22s;
+        }
+        .modal-overlay.open .modal-box { transform: translateY(0); }
+        .modal-head {
+            padding: 18px 22px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .modal-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .modal-close {
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--border);
+            background: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Syne', sans-serif;
+        }
+        .modal-close:hover { background: var(--bg); }
+        .modal-body { padding: 22px; }
 
-    /* ============================================================
-       TOAST
-    ============================================================ */
-    #toast {
-      position: fixed; bottom: 52px; left: 50%;
-      transform: translateX(-50%) translateY(16px);
-      background: rgba(18,8,36,.96);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 9px 20px;
-      font-size: 12px; color: var(--text);
-      opacity: 0; pointer-events: none;
-      transition: opacity .3s, transform .3s;
-      z-index: 300; white-space: nowrap;
-    }
-    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        /* ─── CHECKOUT FORM ───────────────────────── */
+        .summary-block {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            padding: 14px 16px;
+            margin-bottom: 20px;
+        }
+        .summary-head {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            margin-bottom: 5px;
+        }
+        .summary-row span:last-child { font-weight: 700; font-family: 'Space Mono', monospace; }
+        .summary-divider { border: none; border-top: 1.5px solid var(--border); margin: 10px 0; }
+        .summary-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .summary-total-label { font-size: 0.8rem; font-weight: 700; }
+        .summary-total-val   { font-size: 1.1rem; font-weight: 800; color: var(--blue); font-family: 'Space Mono', monospace; }
 
-    /* ============================================================
-       APP CONTAINER
-    ============================================================ */
-    #app {
-      position: fixed; inset: 0;
-      z-index: 10;
-      display: flex; align-items: center; justify-content: center;
-    }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        .form-group { margin-bottom: 14px; }
+        .form-label {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+            margin-bottom: 5px;
+        }
+        .form-input,
+        .form-select {
+            width: 100%;
+            border: 2px solid var(--border);
+            padding: 9px 12px;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            background: var(--surface);
+            color: var(--text);
+            outline: none;
+            transition: border-color .15s, box-shadow .15s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        .form-input:focus,
+        .form-select:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px var(--blue-lt);
+        }
+        .form-input.err,
+        .form-select.err  { border-color: var(--red); }
+        .form-err {
+            font-size: 0.7rem;
+            color: var(--red);
+            font-weight: 600;
+            margin-top: 3px;
+            display: none;
+        }
+        .form-err.show { display: block; }
+        .sel-wrap { position: relative; }
+        .sel-wrap::after {
+            content: '';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid var(--border);
+            pointer-events: none;
+        }
+        .submit-btn {
+            width: 100%;
+            background: var(--green);
+            color: white;
+            border: 2px solid var(--border);
+            padding: 13px;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: transform .1s, box-shadow .1s;
+            margin-top: 6px;
+        }
+        .submit-btn:hover  { transform: translate(-2px,-2px); box-shadow: var(--shadow-lg); }
+        .submit-btn:active { transform: translate(2px,2px); box-shadow: none; }
 
-    /* ============================================================
-       STEP SYSTEM
-    ============================================================ */
-    .step {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      flex-direction: column;
-      padding: 16px;
-      opacity: 0; pointer-events: none;
-      transform: translateX(48px);
-      transition:
-        opacity .48s cubic-bezier(.4,0,.2,1),
-        transform .48s cubic-bezier(.4,0,.2,1);
-    }
-    .step.active   { opacity: 1; pointer-events: all; transform: translateX(0); }
-    .step.go-left  { opacity: 0; transform: translateX(-48px); }
-    .step.go-right { opacity: 0; transform: translateX(48px); }
+        /* ─── SUCCESS / QR MODAL ──────────────────── */
+        .success-head {
+            text-align: center;
+            padding: 20px 22px;
+            border-bottom: 2px solid var(--border);
+            background: var(--green-lt);
+        }
+        .success-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--green);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .success-orderid {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+        .qr-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 22px;
+            border-bottom: 2px solid var(--border);
+        }
+        .qr-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+        .qr-box {
+            border: 2px solid var(--border);
+            box-shadow: var(--shadow);
+            padding: 10px;
+            background: white;
+        }
+        #qrcode canvas, #qrcode img { display: block; }
+        .qr-url-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--muted);
+            margin-top: 10px;
+            word-break: break-all;
+            text-align: center;
+            max-width: 260px;
+        }
+        .qr-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 14px;
+            width: 100%;
+            max-width: 300px;
+        }
+        .qr-action-btn {
+            border: 2px solid var(--border);
+            padding: 8px 10px;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: var(--shadow);
+            transition: transform .1s, box-shadow .1s;
+        }
+        .qr-action-btn:hover  { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--border); }
+        .qr-action-btn:active { transform: translate(2px,2px); box-shadow: none; }
+        .btn-download { background: var(--blue-lt); color: var(--blue); }
+        .btn-copy     { background: var(--bg);      color: var(--text); }
 
-    /* ============================================================
-       CARD
-    ============================================================ */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      box-shadow: 0 8px 36px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,200,100,.08);
-      padding: 30px 26px;
-      width: 100%; max-width: 460px;
-    }
+        .wa-section { padding: 18px 22px; }
+        .wa-btn {
+            width: 100%;
+            background: #25D366;
+            color: white;
+            border: 2px solid var(--border);
+            padding: 13px;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: transform .1s, box-shadow .1s;
+        }
+        .wa-btn:hover  { transform: translate(-2px,-2px); box-shadow: var(--shadow-lg); }
+        .wa-btn:active { transform: translate(2px,2px); box-shadow: none; }
+        .done-btn {
+            width: 100%;
+            background: var(--text);
+            color: white;
+            border: 2px solid var(--border);
+            padding: 11px;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background .1s;
+        }
+        .done-btn:hover { background: #333; }
 
-    /* ============================================================
-       PIXEL TITLE
-    ============================================================ */
-    .pixel-title {
-      font-family: var(--pixel);
-      color: var(--gold);
-      text-shadow: 3px 3px 0 var(--deep-purple), 0 0 24px var(--orange);
-      line-height: 1.7; letter-spacing: 1px;
-    }
+        /* ─── STATUS BADGE ────────────────────────── */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 9px;
+            font-size: 0.62rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border: 1.5px solid;
+        }
+        .badge-waiting    { background: var(--yellow-lt); color: var(--yellow); border-color: var(--yellow); }
+        .badge-processing { background: var(--blue-lt);   color: var(--blue);   border-color: var(--blue); }
+        .badge-ready      { background: var(--green-lt);  color: var(--green);  border-color: var(--green); }
+        .badge-cancelled  { background: var(--red-lt);    color: var(--red);    border-color: var(--red); }
 
-    /* ============================================================
-       BUTTONS
-    ============================================================ */
-    .btn {
-      font-family: var(--pixel);
-      font-size: 10px;
-      cursor: pointer;
-      border: none; border-radius: 10px;
-      padding: 14px 24px;
-      transition: transform .12s, box-shadow .12s, opacity .2s;
-      letter-spacing: .5px;
-      position: relative; overflow: hidden;
-    }
-    .btn::after {
-      content: ''; position: absolute; inset: 0;
-      background: rgba(255,255,255,.1);
-      opacity: 0; transition: opacity .15s;
-    }
-    .btn:hover::after { opacity: 1; }
-    .btn:active  { transform: scale(.95) !important; }
-    .btn:disabled { opacity: .38; cursor: not-allowed; }
-    .btn:disabled:active { transform: none !important; }
+        /* ─── TOAST ───────────────────────────────── */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--text);
+            color: white;
+            padding: 10px 18px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 2px solid var(--border);
+            box-shadow: var(--shadow);
+            z-index: 999;
+            transform: translateY(80px);
+            opacity: 0;
+            transition: transform .3s, opacity .3s;
+            max-width: 280px;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
 
-    /* Primary */
-    .btn-primary {
-      background: linear-gradient(135deg, #ff7040, #d04818);
-      color: #fff;
-      box-shadow: 0 4px 0 #8c2a08, 0 6px 20px rgba(255,107,53,.38);
-    }
-    .btn-primary:not(:disabled):hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 0 #8c2a08, 0 10px 26px rgba(255,107,53,.48);
-    }
+        /* ─── FOOTER ──────────────────────────────── */
+        footer {
+            text-align: center;
+            padding: 24px;
+            font-size: 0.7rem;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            border-top: 1px solid #DDD;
+            margin-top: 40px;
+        }
 
-    /* Secondary */
-    .btn-secondary {
-      background: rgba(255,255,255,.07);
-      color: var(--text);
-      border: 1px solid rgba(255,200,100,.22);
-    }
-
-    /* Ghost */
-    .btn-ghost {
-      background: transparent;
-      color: var(--text-dim);
-      font-size: 9px;
-      padding: 10px 18px;
-      border: 1px dashed rgba(255,200,100,.2);
-    }
-
-    /* ============================================================
-       STEP 1 — HOME
-    ============================================================ */
-    #step-home { gap: 0; text-align: center; }
-
-    .lanterns {
-      display: flex; gap: 18px; justify-content: center;
-      margin-bottom: 22px;
-      animation: lanternFloat 3.2s ease-in-out infinite;
-    }
-    @keyframes lanternFloat {
-      0%,100% { transform: translateY(0) rotate(0deg); }
-      50%      { transform: translateY(-10px) rotate(.8deg); }
-    }
-
-    .badge {
-      display: inline-block;
-      font-family: var(--pixel); font-size: 8px;
-      color: var(--gold);
-      background: rgba(255,165,53,.13);
-      border: 1px solid rgba(255,165,53,.4);
-      border-radius: 20px;
-      padding: 6px 16px;
-      margin-bottom: 18px;
-      letter-spacing: 1px;
-    }
-
-    .home-title { font-size: clamp(16px, 4.5vw, 26px); margin-bottom: 12px; }
-
-    .home-sub {
-      font-size: 13px; color: var(--text-dim);
-      line-height: 1.7; margin-bottom: 30px;
-    }
-
-    /* ============================================================
-       STEP 2 — MENU
-    ============================================================ */
-    #step-menu { justify-content: flex-start; align-items: center; }
-
-    .menu-wrapper {
-      width: 100%; max-width: 460px;
-      height: 100%;
-      display: flex; flex-direction: column;
-      padding: 18px 0;
-    }
-
-    .step-header {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .back-btn {
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,200,100,.2);
-      border-radius: 8px;
-      color: var(--text); cursor: pointer;
-      padding: 8px 13px; font-size: 15px;
-      transition: background .15s;
-    }
-    .back-btn:hover { background: rgba(255,255,255,.14); }
-
-    .step-label { font-family: var(--pixel); font-size: 11px; color: var(--gold); }
-
-    /* Scrollable menu list */
-    .menu-scroll {
-      flex: 1; overflow-y: auto; overflow-x: hidden;
-      padding-right: 4px;
-      display: flex; flex-direction: column; gap: 14px;
-    }
-    .menu-scroll::-webkit-scrollbar { width: 4px; }
-    .menu-scroll::-webkit-scrollbar-thumb { background: rgba(255,165,82,.28); border-radius: 4px; }
-
-    /* Product card */
-    .product-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      backdrop-filter: blur(12px);
-      padding: 14px;
-      display: flex; gap: 12px; align-items: center;
-      transition: border-color .22s, box-shadow .22s;
-    }
-    .product-card:hover {
-      border-color: rgba(255,165,82,.55);
-      box-shadow: 0 4px 24px rgba(255,107,53,.13);
-    }
-
-    .product-art {
-      width: 82px; height: 82px;
-      flex-shrink: 0;
-      border-radius: 10px;
-      overflow: hidden;
-      background: rgba(0,0,0,.35);
-    }
-    .product-art svg { width: 100%; height: 100%; }
-
-    .product-info { flex: 1; }
-
-    .product-name {
-      font-family: var(--pixel); font-size: 8px;
-      color: var(--gold); margin-bottom: 4px; line-height: 1.7;
-    }
-    .product-desc {
-      font-size: 11px; color: var(--text-dim);
-      margin-bottom: 6px; line-height: 1.5;
-    }
-    .product-price {
-      font-family: var(--pixel); font-size: 9px;
-      color: var(--orange);
-    }
-
-    /* Stepper */
-    .stepper { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
-    .stp-btn {
-      width: 30px; height: 30px; border-radius: 8px;
-      border: 1px solid rgba(255,165,82,.35);
-      background: rgba(255,165,82,.09);
-      color: var(--text); font-size: 18px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: background .15s, transform .1s;
-      line-height: 1;
-    }
-    .stp-btn:hover  { background: rgba(255,165,82,.2); }
-    .stp-btn:active { transform: scale(.88); }
-    .stp-qty {
-      font-family: var(--pixel); font-size: 12px;
-      color: var(--text); min-width: 24px; text-align: center;
-    }
-
-    /* Footer bar */
-    .menu-footer { margin-top: 14px; }
-
-    .subtotal-bar {
-      background: rgba(255,165,82,.07);
-      border: 1px solid rgba(255,165,82,.2);
-      border-radius: 10px;
-      padding: 11px 16px;
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 10px;
-    }
-    .subtotal-label { font-size: 12px; color: var(--text-dim); }
-    .subtotal-amount { font-family: var(--pixel); font-size: 11px; color: var(--gold); }
-
-    .empty-hint {
-      text-align: center; font-size: 12px;
-      color: rgba(255,107,53,.75);
-      margin-bottom: 8px; display: none;
-    }
-
-    /* ============================================================
-       STEP 3 — FORM
-    ============================================================ */
-    #step-form { justify-content: flex-start; align-items: center; }
-
-    .form-wrapper {
-      width: 100%; max-width: 460px;
-      height: 100%;
-      display: flex; flex-direction: column;
-      padding: 18px 0;
-    }
-
-    .form-scroll { flex: 1; overflow-y: auto; }
-    .form-scroll::-webkit-scrollbar { width: 4px; }
-    .form-scroll::-webkit-scrollbar-thumb { background: rgba(255,165,82,.25); border-radius: 4px; }
-
-    /* Order summary block */
-    .order-summary {
-      background: rgba(255,165,82,.06);
-      border: 1px solid rgba(255,165,82,.2);
-      border-radius: 12px;
-      padding: 13px 14px;
-      margin-bottom: 16px;
-    }
-    .os-title {
-      font-family: var(--pixel); font-size: 8px;
-      color: var(--gold); margin-bottom: 10px;
-    }
-    .os-item {
-      display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
-    }
-    .os-name { flex: 1; font-size: 12px; }
-    .mini-stepper { display: flex; align-items: center; gap: 5px; }
-    .mstp {
-      width: 22px; height: 22px; border-radius: 6px;
-      border: 1px solid rgba(255,165,82,.3);
-      background: rgba(255,165,82,.08);
-      color: var(--text); font-size: 14px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: background .15s;
-    }
-    .mstp:hover  { background: rgba(255,165,82,.2); }
-    .mstp:active { transform: scale(.88); }
-    .mq {
-      font-family: var(--pixel); font-size: 9px;
-      min-width: 18px; text-align: center;
-    }
-    .os-price { font-family: var(--pixel); font-size: 8px; color: var(--orange); }
-    .os-total-row {
-      border-top: 1px dashed rgba(255,165,82,.2);
-      padding-top: 9px;
-      display: flex; justify-content: space-between; align-items: center;
-      margin-top: 4px;
-    }
-    .os-total-label { font-family: var(--pixel); font-size: 8px; color: var(--text-dim); }
-    .os-total-val   { font-family: var(--pixel); font-size: 10px; color: var(--gold); }
-
-    /* Form fields panel */
-    .form-panel {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      backdrop-filter: blur(14px);
-      padding: 18px;
-      margin-bottom: 14px;
-    }
-
-    .f-group { margin-bottom: 14px; }
-    .f-label {
-      display: block;
-      font-family: var(--pixel); font-size: 7px;
-      color: var(--gold); margin-bottom: 8px; letter-spacing: .5px;
-    }
-    .f-input {
-      width: 100%;
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,200,100,.18);
-      border-radius: 10px;
-      padding: 12px 14px;
-      color: var(--text);
-      font-family: var(--body); font-size: 14px;
-      outline: none;
-      transition: border-color .2s, box-shadow .2s;
-    }
-    .f-input:focus {
-      border-color: rgba(255,165,82,.6);
-      box-shadow: 0 0 0 3px rgba(255,107,53,.1);
-    }
-    .f-input.err {
-      border-color: var(--err);
-      box-shadow: 0 0 0 3px rgba(255,71,87,.1);
-    }
-    .f-input::placeholder { color: rgba(255,232,200,.28); }
-
-    .f-error {
-      font-size: 11px; color: var(--err);
-      margin-top: 5px; display: none;
-    }
-    .f-error.show { display: block; }
-
-    /* Form actions */
-    .form-actions {
-      display: flex; flex-direction: column;
-      gap: 9px; padding-bottom: 20px;
-    }
-    .btn-row { display: flex; gap: 9px; }
-
-    /* ============================================================
-       STEP 4 — REDIRECT
-    ============================================================ */
-    #step-redirect .card { text-align: center; max-width: 380px; }
-
-    .success-icon {
-      font-size: 62px; margin-bottom: 18px;
-      display: block;
-      animation: popIn .55s cubic-bezier(.34,1.56,.64,1);
-    }
-    @keyframes popIn {
-      from { transform: scale(0) rotate(-18deg); opacity: 0; }
-      to   { transform: scale(1) rotate(0);      opacity: 1; }
-    }
-
-    .redir-title {
-      font-family: var(--pixel); font-size: 13px;
-      color: var(--gold); margin-bottom: 10px;
-      text-shadow: 2px 2px 0 var(--deep-purple);
-    }
-    .redir-sub {
-      font-size: 13px; color: var(--text-dim);
-      line-height: 1.7; margin-bottom: 22px;
-    }
-
-    .dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 22px; }
-    .dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--orange);
-      animation: dotBounce 1.2s infinite;
-    }
-    .dot:nth-child(2) { animation-delay: .2s; }
-    .dot:nth-child(3) { animation-delay: .4s; }
-    @keyframes dotBounce {
-      0%,80%,100% { transform: scale(.55); opacity: .35; }
-      40%          { transform: scale(1.2); opacity: 1;   }
-    }
-
-    /* ============================================================
-       RESPONSIVE TWEAKS
-    ============================================================ */
-    @media (max-height: 580px) {
-      .lanterns  { display: none; }
-      .card      { padding: 18px 16px; }
-      .home-sub  { margin-bottom: 18px; }
-    }
-    @media (max-width: 380px) {
-      .card { padding: 20px 14px; }
-    }
-  </style>
+        /* ─── RESPONSIVE ──────────────────────────── */
+        @media (max-width: 900px) {
+            .main-layout { grid-template-columns: 1fr; }
+            .cart-panel  { position: static; }
+        }
+        @media (max-width: 580px) {
+            .products-grid { grid-template-columns: 1fr; }
+            .header-inner  { padding: 12px 16px; }
+            .main-layout   { padding: 20px 16px; gap: 20px; }
+            .form-row      { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
-<!-- ========== CANVAS BACKGROUND ========== -->
-<canvas id="bg-canvas"></canvas>
-<div class="scene-overlay"></div>
-<div id="star-layer"></div>
+<!-- ═══ HEADER ═══════════════════════════════════════ -->
+<header class="site-header">
+    <div class="header-inner">
+        <div class="header-brand">
+            <span class="header-title">Bazar Menu</span>
+            <span class="header-date">22 Mei 2025</span>
+        </div>
+        <button class="cart-toggle-btn" onclick="scrollToCart()" aria-label="Lihat keranjang">
+            Keranjang
+            <span class="cart-badge" id="headerCartCount">0</span>
+        </button>
+    </div>
+</header>
 
-<!-- ========== AUDIO TOGGLE ========== -->
-<div id="audio-toggle" title="Toggle suara">🔊</div>
+<!-- ═══ MAIN ══════════════════════════════════════════ -->
+<main>
+    <div class="main-layout">
 
-<!-- ========== PROGRESS DOTS ========== -->
-<div id="progress-dots">
-  <div class="pdot active"></div>
-  <div class="pdot"></div>
-  <div class="pdot"></div>
-  <div class="pdot"></div>
+        <!-- PRODUCTS ──────────────────────────────── -->
+        <section aria-label="Daftar menu">
+            <div class="section-label">Menu Tersedia</div>
+
+            <div class="products-grid">
+
+                <!-- ── Product 0: Bola Oreo Susu ───── -->
+                <article class="product-card">
+                    <div class="product-visual">
+                        <svg width="160" height="165" viewBox="0 0 160 165" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <defs>
+                                <radialGradient id="og1" cx="38%" cy="32%" r="72%">
+                                    <stop offset="0%"   stop-color="#2E2010"/>
+                                    <stop offset="100%" stop-color="#090605"/>
+                                </radialGradient>
+                                <radialGradient id="og2" cx="40%" cy="35%" r="72%">
+                                    <stop offset="0%"   stop-color="#2B1E0C"/>
+                                    <stop offset="100%" stop-color="#080504"/>
+                                </radialGradient>
+                                <radialGradient id="og3" cx="36%" cy="30%" r="72%">
+                                    <stop offset="0%"   stop-color="#2D1F0D"/>
+                                    <stop offset="100%" stop-color="#0A0706"/>
+                                </radialGradient>
+                                <radialGradient id="og4" cx="38%" cy="33%" r="70%">
+                                    <stop offset="0%"   stop-color="#2E2010"/>
+                                    <stop offset="100%" stop-color="#090605"/>
+                                </radialGradient>
+                                <radialGradient id="og5" cx="40%" cy="34%" r="70%">
+                                    <stop offset="0%"   stop-color="#2C1E0C"/>
+                                    <stop offset="100%" stop-color="#0A0806"/>
+                                </radialGradient>
+                            </defs>
+                            <!-- Plate shadow -->
+                            <ellipse cx="80" cy="145" rx="62" ry="11" fill="#D4CAB8" opacity="0.55"/>
+                            <!-- Ball back-center -->
+                            <circle cx="80" cy="90" r="28" fill="url(#og1)"/>
+                            <circle cx="80" cy="90" r="20" fill="none" stroke="#3A2810" stroke-width="1.8" opacity="0.55"/>
+                            <circle cx="80" cy="90" r="13" fill="none" stroke="#3A2810" stroke-width="1.2" opacity="0.35"/>
+                            <ellipse cx="80" cy="104" rx="16" ry="4.5" fill="#EDE8DC" opacity="0.35"/>
+                            <circle cx="71" cy="81"  r="5.5" fill="white" opacity="0.1"/>
+                            <!-- Ball back-left -->
+                            <circle cx="43" cy="102" r="24" fill="url(#og2)"/>
+                            <circle cx="43" cy="102" r="16" fill="none" stroke="#3A2810" stroke-width="1.6" opacity="0.5"/>
+                            <ellipse cx="43" cy="114" rx="13" ry="3.8" fill="#EDE8DC" opacity="0.3"/>
+                            <circle cx="36" cy="94"  r="4.5" fill="white" opacity="0.1"/>
+                            <!-- Ball back-right -->
+                            <circle cx="118" cy="102" r="24" fill="url(#og3)"/>
+                            <circle cx="118" cy="102" r="16" fill="none" stroke="#3A2810" stroke-width="1.6" opacity="0.5"/>
+                            <ellipse cx="118" cy="114" rx="13" ry="3.8" fill="#EDE8DC" opacity="0.3"/>
+                            <circle cx="111" cy="94" r="4.5" fill="white" opacity="0.1"/>
+                            <!-- Ball front-left -->
+                            <circle cx="54" cy="120" r="26" fill="url(#og4)"/>
+                            <circle cx="54" cy="120" r="18" fill="none" stroke="#3A2810" stroke-width="1.8" opacity="0.55"/>
+                            <circle cx="54" cy="120" r="11" fill="none" stroke="#3A2810" stroke-width="1" opacity="0.35"/>
+                            <ellipse cx="54" cy="134" rx="15" ry="4" fill="#EDE8DC" opacity="0.38"/>
+                            <circle cx="45" cy="111" r="5" fill="white" opacity="0.11"/>
+                            <!-- Ball front-right -->
+                            <circle cx="107" cy="120" r="26" fill="url(#og5)"/>
+                            <circle cx="107" cy="120" r="18" fill="none" stroke="#3A2810" stroke-width="1.8" opacity="0.55"/>
+                            <circle cx="107" cy="120" r="11" fill="none" stroke="#3A2810" stroke-width="1" opacity="0.35"/>
+                            <ellipse cx="107" cy="134" rx="15" ry="4" fill="#EDE8DC" opacity="0.38"/>
+                            <circle cx="99" cy="111" r="5" fill="white" opacity="0.11"/>
+                            <!-- Milk powder – large soft blobs -->
+                            <ellipse cx="80"  cy="43"  rx="10"  ry="6"   fill="white" opacity="0.75" transform="rotate(-12 80 43)"/>
+                            <ellipse cx="54"  cy="48"  rx="7"   ry="4"   fill="white" opacity="0.68" transform="rotate(8 54 48)"/>
+                            <ellipse cx="107" cy="50"  rx="8.5" ry="5"   fill="white" opacity="0.65" transform="rotate(-6 107 50)"/>
+                            <!-- Mid scattered dots -->
+                            <circle cx="74"  cy="58"  r="2.8"  fill="white" opacity="0.82"/>
+                            <circle cx="89"  cy="62"  r="2.2"  fill="white" opacity="0.78"/>
+                            <circle cx="63"  cy="65"  r="1.9"  fill="white" opacity="0.7"/>
+                            <circle cx="97"  cy="58"  r="2"    fill="white" opacity="0.72"/>
+                            <circle cx="80"  cy="55"  r="3"    fill="white" opacity="0.85"/>
+                            <circle cx="60"  cy="54"  r="2"    fill="white" opacity="0.68"/>
+                            <circle cx="100" cy="68"  r="1.8"  fill="white" opacity="0.65"/>
+                            <!-- Fine dots -->
+                            <circle cx="70"  cy="52"  r="1.2"  fill="white" opacity="0.55"/>
+                            <circle cx="85"  cy="48"  r="1"    fill="white" opacity="0.5"/>
+                            <circle cx="94"  cy="72"  r="1"    fill="white" opacity="0.48"/>
+                            <circle cx="58"  cy="70"  r="1"    fill="white" opacity="0.45"/>
+                            <circle cx="105" cy="60"  r="1.2"  fill="white" opacity="0.5"/>
+                            <circle cx="67"  cy="78"  r="1"    fill="white" opacity="0.4"/>
+                            <!-- SUSU tag -->
+                            <rect x="100" y="18" width="52" height="22" fill="#111" rx="1"/>
+                            <text x="126" y="33" font-family="'Syne',sans-serif" font-size="9" font-weight="700" fill="white" text-anchor="middle">SUSU</text>
+                        </svg>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">Bola Oreo Susu</div>
+                        <div class="product-price">Rp 8.000</div>
+                        <div class="qty-row">
+                            <div class="qty-control">
+                                <button class="qty-btn" onclick="changeQty(0,-1)" aria-label="Kurangi">&#8722;</button>
+                                <div class="qty-num" id="qty0">0</div>
+                                <button class="qty-btn" onclick="changeQty(0,1)"  aria-label="Tambah">&#43;</button>
+                            </div>
+                            <button class="add-btn" onclick="addToCart(0)">+ Keranjang</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- ── Product 1: Mac and Cheese ───── -->
+                <article class="product-card">
+                    <div class="product-visual">
+                        <svg width="160" height="165" viewBox="0 0 160 165" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <defs>
+                                <radialGradient id="bowlG" cx="50%" cy="40%" r="70%">
+                                    <stop offset="0%"   stop-color="#F0E8DA"/>
+                                    <stop offset="100%" stop-color="#BCA98A"/>
+                                </radialGradient>
+                                <linearGradient id="rimG" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%"   stop-color="#D8C8AE"/>
+                                    <stop offset="100%" stop-color="#A8906E"/>
+                                </linearGradient>
+                                <radialGradient id="cheeseG" cx="50%" cy="50%" r="70%">
+                                    <stop offset="0%"   stop-color="#FBCF40"/>
+                                    <stop offset="55%"  stop-color="#F59A18"/>
+                                    <stop offset="100%" stop-color="#E06A00"/>
+                                </radialGradient>
+                            </defs>
+                            <!-- Bowl shadow -->
+                            <ellipse cx="80" cy="148" rx="57" ry="11" fill="#C8B890" opacity="0.45"/>
+                            <!-- Bowl body -->
+                            <path d="M24 82 Q24 138 80 142 Q136 138 136 82 Z" fill="url(#bowlG)"/>
+                            <!-- Bowl inner rim -->
+                            <path d="M24 82 Q24 90 80 90 Q136 90 136 82" fill="#C8B080" opacity="0.3"/>
+                            <!-- Rim top ellipse -->
+                            <ellipse cx="80" cy="82" rx="56" ry="17" fill="url(#rimG)"/>
+                            <!-- Cheese sauce fill -->
+                            <ellipse cx="80" cy="82" rx="52" ry="14" fill="url(#cheeseG)"/>
+                            <!-- Macaroni row 1 -->
+                            <path d="M46 83 Q46 70 57 70 Q68 70 68 83" stroke="#D45A0C" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+                            <path d="M46 83 Q46 70 57 70 Q68 70 68 83" stroke="#FAC040" stroke-width="3"   fill="none" stroke-linecap="round" opacity="0.65"/>
+                            <path d="M71 84 Q71 71 82 71 Q93 71 93 84" stroke="#C4520A" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+                            <path d="M71 84 Q71 71 82 71 Q93 71 93 84" stroke="#FAC040" stroke-width="3"   fill="none" stroke-linecap="round" opacity="0.65"/>
+                            <path d="M96 83 Q96 70 107 70 Q118 70 118 83" stroke="#D45A0C" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+                            <path d="M96 83 Q96 70 107 70 Q118 70 118 83" stroke="#FAC040" stroke-width="3"   fill="none" stroke-linecap="round" opacity="0.65"/>
+                            <!-- Macaroni row 2 (partial) -->
+                            <path d="M34 84 Q34 72 44 72 Q54 72 54 84" stroke="#C4520A" stroke-width="4.5" fill="none" stroke-linecap="round" opacity="0.75"/>
+                            <path d="M109 84 Q109 72 119 72 Q129 72 129 84" stroke="#D45A0C" stroke-width="4.5" fill="none" stroke-linecap="round" opacity="0.75"/>
+                            <!-- Row 1.5 fill -->
+                            <path d="M57 77 Q57 65 66 65 Q75 65 75 77" stroke="#C4520A" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.8"/>
+                            <path d="M86 77 Q86 65 95 65 Q104 65 104 77" stroke="#D45A0C" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.8"/>
+                            <!-- Cheese drips down bowl -->
+                            <path d="M54 80 Q53 94 55 104 Q56 108 54 112" stroke="#F59A18" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+                            <path d="M106 80 Q107 92 105 101 Q104 105 106 109" stroke="#E88C14" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+                            <path d="M78 81 Q77 98 79 110 Q80 115 78 119" stroke="#F59A18" stroke-width="5" fill="none" stroke-linecap="round"/>
+                            <!-- Drip pools -->
+                            <ellipse cx="54"  cy="114" rx="5.5" ry="4"   fill="#F59A18" opacity="0.78"/>
+                            <ellipse cx="106" cy="111" rx="4.5" ry="3.5" fill="#E88C14" opacity="0.72"/>
+                            <ellipse cx="78"  cy="121" rx="5"   ry="4"   fill="#F59A18" opacity="0.78"/>
+                            <!-- Top highlight gloss -->
+                            <ellipse cx="80" cy="76" rx="42" ry="7" fill="#FDE88C" opacity="0.3"/>
+                            <!-- Rim highlight -->
+                            <path d="M34 77 Q60 72 80 72 Q100 72 122 75" stroke="white" stroke-width="2" fill="none" opacity="0.25" stroke-linecap="round"/>
+                            <!-- Steam lines -->
+                            <path d="M63 56 Q61 46 64 36 Q66 28 63 20" stroke="#999" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.35"/>
+                            <path d="M80 52 Q78 42 81 32 Q83 24 80 16" stroke="#999" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.3"/>
+                            <path d="M97 56 Q95 46 98 36 Q100 28 97 20" stroke="#999" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.35"/>
+                        </svg>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">Mac and Cheese</div>
+                        <div class="product-price">Rp 10.000</div>
+                        <div class="qty-row">
+                            <div class="qty-control">
+                                <button class="qty-btn" onclick="changeQty(1,-1)" aria-label="Kurangi">&#8722;</button>
+                                <div class="qty-num" id="qty1">0</div>
+                                <button class="qty-btn" onclick="changeQty(1,1)"  aria-label="Tambah">&#43;</button>
+                            </div>
+                            <button class="add-btn" onclick="addToCart(1)">+ Keranjang</button>
+                        </div>
+                    </div>
+                </article>
+
+            </div><!-- /products-grid -->
+        </section>
+
+        <!-- CART PANEL ─────────────────────────────── -->
+        <aside class="cart-panel" id="cartPanel" aria-label="Keranjang belanja">
+            <div class="cart-panel-head">
+                <span class="cart-panel-title">Keranjang</span>
+                <span class="cart-count-badge" id="cartItemBadge">0 item</span>
+            </div>
+
+            <div class="cart-items-list" id="cartItemsList">
+                <div class="cart-empty-state">
+                    <div class="cart-empty-icon">&#9633;</div>
+                    <div style="font-weight:600;">Cart masih kosong</div>
+                    <div style="font-size:0.75rem;margin-top:4px;opacity:0.65;">Pilih menu di atas</div>
+                </div>
+            </div>
+
+            <div class="cart-footer">
+                <div class="cart-total-row">
+                    <span class="cart-total-label">Total</span>
+                    <span class="cart-total-val" id="cartTotalVal">Rp 0</span>
+                </div>
+                <button class="checkout-btn" id="checkoutBtn" onclick="openCheckout()" disabled>
+                    Pesan Sekarang
+                </button>
+                <div class="cash-tag">Pembayaran: Cash Only</div>
+            </div>
+        </aside>
+
+    </div><!-- /main-layout -->
+</main>
+
+<footer>Bazar Menu &mdash; 22 Mei 2025 &mdash; orderhere.vercel.app</footer>
+
+<!-- ═══ CHECKOUT MODAL ════════════════════════════════ -->
+<div class="modal-overlay" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="checkoutModalTitle">
+    <div class="modal-box">
+        <div class="modal-head">
+            <span class="modal-title" id="checkoutModalTitle">Form Pemesanan</span>
+            <button class="modal-close" onclick="closeModal('checkoutModal')" aria-label="Tutup">&#x2715;</button>
+        </div>
+        <div class="modal-body">
+            <div class="summary-block" id="checkoutSummary" aria-label="Ringkasan pesanan">
+                <!-- Filled by JS -->
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="iName">Nama Lengkap</label>
+                <input class="form-input" id="iName" type="text" placeholder="Masukkan nama lengkap" autocomplete="name">
+                <div class="form-err" id="errName">Nama tidak boleh kosong</div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="iClass">Kelas</label>
+                    <div class="sel-wrap">
+                        <select class="form-select" id="iClass">
+                            <option value="">Pilih Kelas</option>
+                            <option value="X">X</option>
+                            <option value="XI">XI</option>
+                            <option value="XII">XII</option>
+                        </select>
+                    </div>
+                    <div class="form-err" id="errClass">Pilih kelas terlebih dahulu</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="iMajor">Jurusan</label>
+                    <div class="sel-wrap">
+                        <select class="form-select" id="iMajor">
+                            <option value="">Pilih Jurusan</option>
+                            <option value="AK">AK</option>
+                            <option value="MM">MM</option>
+                            <option value="MP">MP</option>
+                            <option value="TKJ">TKJ</option>
+                        </select>
+                    </div>
+                    <div class="form-err" id="errMajor">Pilih jurusan terlebih dahulu</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="iPhone">Nomor WhatsApp</label>
+                <input class="form-input" id="iPhone" type="tel" placeholder="08xxxxxxxxxx" autocomplete="tel">
+                <div class="form-err" id="errPhone">Nomor harus diawali dengan 08</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="iPickup">Waktu Pengambilan</label>
+                <div class="sel-wrap">
+                    <select class="form-select" id="iPickup">
+                        <option value="">Pilih Waktu</option>
+                        <option value="12.00 - 13.00">12.00 – 13.00</option>
+                        <option value="13.00 - 14.00">13.00 – 14.00</option>
+                    </select>
+                </div>
+                <div class="form-err" id="errPickup">Pilih waktu pengambilan</div>
+            </div>
+
+            <button class="submit-btn" onclick="submitOrder()">Konfirmasi Pesanan</button>
+        </div>
+    </div>
 </div>
 
-<!-- ========== TOAST ========== -->
-<div id="toast"></div>
+<!-- ═══ SUCCESS / QR MODAL ═══════════════════════════ -->
+<div class="modal-overlay" id="successModal" role="dialog" aria-modal="true" aria-labelledby="successModalTitle">
+    <div class="modal-box">
+        <div class="success-head">
+            <div class="success-title" id="successModalTitle">Pesanan Berhasil Dibuat</div>
+            <div class="success-orderid" id="successOrderId"></div>
+        </div>
 
-<!-- ========== APP ========== -->
-<div id="app">
-
-  <!-- ==================== STEP 1: HOME ==================== -->
-  <div class="step active" id="step-home">
-
-    <!-- Lanterns decoration -->
-    <div class="lanterns" aria-hidden="true">
-      <!-- Lantern orange -->
-      <svg width="26" height="38" viewBox="0 0 26 38">
-        <rect x="9" y="0" width="8" height="4" fill="#ffd166" rx="1"/>
-        <rect x="7" y="4" width="12" height="26" fill="#ff6b35" rx="3"/>
-        <rect x="9" y="7" width="8" height="2" fill="#ffa552" opacity=".5"/>
-        <rect x="9" y="12" width="8" height="2" fill="#ffa552" opacity=".35"/>
-        <rect x="9" y="17" width="8" height="2" fill="#ffa552" opacity=".35"/>
-        <rect x="10" y="30" width="6" height="6" fill="#ffd166" rx="1"/>
-        <ellipse cx="13" cy="33" rx="3" ry="2.5" fill="#fff8dc" opacity=".8"/>
-      </svg>
-      <!-- Lantern purple -->
-      <svg width="26" height="38" viewBox="0 0 26 38">
-        <rect x="9" y="0" width="8" height="4" fill="#ffd166" rx="1"/>
-        <rect x="7" y="4" width="12" height="26" fill="#6b2d8b" rx="3"/>
-        <rect x="9" y="7" width="8" height="2" fill="#9b4dca" opacity=".5"/>
-        <rect x="9" y="12" width="8" height="2" fill="#9b4dca" opacity=".35"/>
-        <rect x="9" y="17" width="8" height="2" fill="#9b4dca" opacity=".35"/>
-        <rect x="10" y="30" width="6" height="6" fill="#ffd166" rx="1"/>
-        <ellipse cx="13" cy="33" rx="3" ry="2.5" fill="#fff8dc" opacity=".8"/>
-      </svg>
-      <!-- Lantern orange-red -->
-      <svg width="26" height="38" viewBox="0 0 26 38">
-        <rect x="9" y="0" width="8" height="4" fill="#ffd166" rx="1"/>
-        <rect x="7" y="4" width="12" height="26" fill="#c03028" rx="3"/>
-        <rect x="9" y="7" width="8" height="2" fill="#e05040" opacity=".5"/>
-        <rect x="9" y="12" width="8" height="2" fill="#e05040" opacity=".35"/>
-        <rect x="9" y="17" width="8" height="2" fill="#e05040" opacity=".35"/>
-        <rect x="10" y="30" width="6" height="6" fill="#ffd166" rx="1"/>
-        <ellipse cx="13" cy="33" rx="3" ry="2.5" fill="#fff8dc" opacity=".8"/>
-      </svg>
-    </div>
-
-    <div class="card" style="text-align:center;">
-      <div class="badge">📅 22 MEI 2025</div>
-      <div class="pixel-title home-title">Bazar 22 Mei</div>
-      <p class="home-sub">
-        Pre-order sekarang, ambil di hari bazar! 🎪<br>
-        Stok terbatas — jangan sampai kehabisan.
-      </p>
-      <button class="btn btn-primary" onclick="goStep(1)" style="width:100%;">
-        🛒 Mulai Pesan
-      </button>
-    </div>
-  </div>
-
-
-  <!-- ==================== STEP 2: MENU ==================== -->
-  <div class="step" id="step-menu">
-    <div class="menu-wrapper">
-
-      <!-- Header -->
-      <div class="step-header">
-        <button class="back-btn" onclick="goStep(0)">←</button>
-        <span class="step-label">Menu Bazar</span>
-      </div>
-
-      <!-- Product list -->
-      <div class="menu-scroll">
-
-        <!-- PRODUCT 1: Bola Oreo Susu -->
-        <div class="product-card">
-          <div class="product-art">
-            <svg viewBox="0 0 82 82" xmlns="http://www.w3.org/2000/svg">
-              <!-- Background -->
-              <rect width="82" height="82" fill="#14091c" rx="10"/>
-              <!-- Drop shadow -->
-              <ellipse cx="41" cy="62" rx="28" ry="7" fill="rgba(0,0,0,.5)"/>
-              <!-- Ball back-left -->
-              <circle cx="22" cy="53" r="16" fill="#181818"/>
-              <circle cx="17" cy="48" r="5" fill="#222" opacity=".6"/>
-              <!-- Powder on back-left -->
-              <ellipse cx="22" cy="39" rx="9" ry="4" fill="#eee" opacity=".85"/>
-              <ellipse cx="20" cy="38" rx="5" ry="2.2" fill="#fff" opacity=".65"/>
-              <!-- Ball back-right -->
-              <circle cx="60" cy="53" r="16" fill="#181818"/>
-              <circle cx="55" cy="48" r="5" fill="#222" opacity=".6"/>
-              <!-- Powder on back-right -->
-              <ellipse cx="60" cy="39" rx="9" ry="4" fill="#eee" opacity=".85"/>
-              <ellipse cx="58" cy="38" rx="5" ry="2.2" fill="#fff" opacity=".65"/>
-              <!-- Ball front-center -->
-              <circle cx="41" cy="49" r="20" fill="#111"/>
-              <circle cx="35" cy="43" r="6" fill="#1e1e1e" opacity=".7"/>
-              <!-- Cream powder top -->
-              <ellipse cx="41" cy="31" rx="12" ry="5.5" fill="#f2f2f2" opacity=".95"/>
-              <ellipse cx="38" cy="30" rx="7"  ry="3"   fill="#fff"    opacity=".8"/>
-              <ellipse cx="43" cy="29" rx="3.5" ry="2"  fill="#fff"    opacity=".55"/>
-              <!-- Milk drips -->
-              <line x1="31" y1="33" x2="34" y2="29" stroke="#fff" stroke-width="1.5" opacity=".4"/>
-              <line x1="47" y1="32" x2="50" y2="29" stroke="#fff" stroke-width="1.5" opacity=".4"/>
-              <line x1="40" y1="27" x2="41" y2="23" stroke="#fff" stroke-width="1.5" opacity=".35"/>
-            </svg>
-          </div>
-          <div class="product-info">
-            <div class="product-name">Bola Oreo<br>Susu</div>
-            <div class="product-desc">5 pcs / porsi — bulat, lembut, taburan susu 🤍</div>
-            <div class="product-price">Rp8.000</div>
-            <div class="stepper">
-              <button class="stp-btn" onclick="changeQty(0,-1)">−</button>
-              <span class="stp-qty" id="qty-0">0</span>
-              <button class="stp-btn" onclick="changeQty(0,1)">+</button>
+        <div class="qr-section">
+            <div class="qr-label">QR Code Pesanan</div>
+            <div class="qr-box">
+                <div id="qrcode"></div>
             </div>
-          </div>
-        </div>
-
-        <!-- PRODUCT 2: Mac and Cheese -->
-        <div class="product-card">
-          <div class="product-art">
-            <svg viewBox="0 0 82 82" xmlns="http://www.w3.org/2000/svg">
-              <!-- Background -->
-              <rect width="82" height="82" fill="#180d06" rx="10"/>
-              <!-- Bowl shadow -->
-              <ellipse cx="41" cy="70" rx="27" ry="6" fill="rgba(0,0,0,.5)"/>
-              <!-- Bowl body -->
-              <path d="M14 43 Q14 68 41 68 Q68 68 68 43 Z" fill="#b86830"/>
-              <path d="M14 43 Q14 66 41 66 Q68 66 68 43 Z" fill="#c8783c"/>
-              <!-- Bowl rim -->
-              <ellipse cx="41" cy="43" rx="27" ry="8.5" fill="#d8885a"/>
-              <ellipse cx="41" cy="43" rx="24"  ry="7"   fill="#2c1008"/>
-              <!-- Cheese base -->
-              <ellipse cx="41" cy="43" rx="24"  ry="7"   fill="#f0c030"/>
-              <!-- Macaroni pieces (hollow ellipses) -->
-              <ellipse cx="29" cy="41" rx="5.5" ry="3.2" fill="none" stroke="#d4941c" stroke-width="2.5"/>
-              <ellipse cx="41" cy="40" rx="5.5" ry="3.2" fill="none" stroke="#c8881a" stroke-width="2.5"/>
-              <ellipse cx="53" cy="41" rx="5.5" ry="3.2" fill="none" stroke="#d4941c" stroke-width="2.5"/>
-              <ellipse cx="35" cy="45" rx="5.5" ry="3.2" fill="none" stroke="#c07e18" stroke-width="2.5"/>
-              <ellipse cx="47" cy="45" rx="5.5" ry="3.2" fill="none" stroke="#c07e18" stroke-width="2.5"/>
-              <!-- Cheese drizzle -->
-              <path d="M24 43 Q30 38 37 43 Q43 48 49 43 Q55 38 60 43"
-                    stroke="#fad84a" stroke-width="2.2" fill="none" opacity=".85"/>
-              <!-- Creamy pool -->
-              <ellipse cx="41" cy="44.5" rx="15" ry="4.2" fill="#f5c840" opacity=".35"/>
-              <!-- Steam wisps -->
-              <path d="M31 31 Q29 24 31 17" stroke="#fff" stroke-width="1.4" fill="none"
-                    opacity=".22" stroke-linecap="round"/>
-              <path d="M41 29 Q39 22 41 15" stroke="#fff" stroke-width="1.4" fill="none"
-                    opacity=".22" stroke-linecap="round"/>
-              <path d="M51 31 Q49 24 51 17" stroke="#fff" stroke-width="1.4" fill="none"
-                    opacity=".22" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="product-info">
-            <div class="product-name">Mac and<br>Cheese</div>
-            <div class="product-desc">1 porsi — makaroni creamy, saus keju melimpah 🧀</div>
-            <div class="product-price">Rp10.000</div>
-            <div class="stepper">
-              <button class="stp-btn" onclick="changeQty(1,-1)">−</button>
-              <span class="stp-qty" id="qty-1">0</span>
-              <button class="stp-btn" onclick="changeQty(1,1)">+</button>
+            <div class="qr-url-text" id="qrUrlText"></div>
+            <div class="qr-btns">
+                <button class="qr-action-btn btn-download" onclick="downloadQR()">Download QR</button>
+                <button class="qr-action-btn btn-copy"     onclick="copyOrderLink()">Salin Link</button>
             </div>
-          </div>
         </div>
 
-      </div><!-- /menu-scroll -->
-
-      <!-- Footer -->
-      <div class="menu-footer">
-        <div class="subtotal-bar">
-          <span class="subtotal-label">Subtotal</span>
-          <span class="subtotal-amount" id="subtotal">Rp0</span>
+        <div class="wa-section">
+            <button class="wa-btn" onclick="sendWhatsApp()">Kirim ke WhatsApp</button>
+            <button class="done-btn" onclick="closeSuccessModal()">Selesai</button>
         </div>
-        <div class="empty-hint" id="empty-hint">⚠️ Pilih menu dulu ya!</div>
-        <button class="btn btn-primary" id="btn-next"
-                onclick="proceedToForm()" style="width:100%;" disabled>
-          Lanjut ke Pemesanan →
-        </button>
-      </div>
-
     </div>
-  </div>
+</div>
 
+<!-- ═══ TOAST ═════════════════════════════════════════ -->
+<div class="toast" id="toastEl" role="status" aria-live="polite"></div>
 
-  <!-- ==================== STEP 3: FORM ==================== -->
-  <div class="step" id="step-form">
-    <div class="form-wrapper">
-
-      <!-- Header -->
-      <div class="step-header">
-        <button class="back-btn" onclick="goStep(1)">←</button>
-        <span class="step-label">Detail Pesanan</span>
-      </div>
-
-      <div class="form-scroll">
-
-        <!-- Mini order summary -->
-        <div class="order-summary">
-          <div class="os-title">📋 Ringkasan Pesanan</div>
-          <div id="summary-items"></div>
-          <div class="os-total-row">
-            <span class="os-total-label">Total</span>
-            <span class="os-total-val" id="summary-total">Rp0</span>
-          </div>
-        </div>
-
-        <!-- Input fields -->
-        <div class="form-panel">
-          <div class="f-group">
-            <label class="f-label" for="i-nama">👤 Nama Lengkap</label>
-            <input type="text" id="i-nama" class="f-input"
-                   placeholder="Nama kamu..." oninput="validateForm()" autocomplete="name">
-            <div class="f-error" id="e-nama">Nama tidak boleh kosong</div>
-          </div>
-
-          <div class="f-group">
-            <label class="f-label" for="i-kelas">🏫 Kelas</label>
-            <input type="text" id="i-kelas" class="f-input"
-                   placeholder="Contoh: X IPA 1" oninput="validateForm()" autocomplete="off">
-            <div class="f-error" id="e-kelas">Kelas tidak boleh kosong</div>
-          </div>
-
-          <div class="f-group" style="margin-bottom:0">
-            <label class="f-label" for="i-hp">📱 No HP (WhatsApp)</label>
-            <input type="tel" id="i-hp" class="f-input"
-                   placeholder="08xxxxxxxxxx" oninput="onHpInput()" autocomplete="tel">
-            <div class="f-error" id="e-hp">Harus diawali "08", minimal 10 digit, angka saja</div>
-          </div>
-        </div>
-
-        <!-- Action buttons -->
-        <div class="form-actions">
-          <button class="btn btn-primary" id="btn-submit"
-                  onclick="submitOrder()" disabled style="width:100%;">
-            📤 Kirim Pesanan ke WhatsApp
-          </button>
-          <div class="btn-row">
-            <button class="btn btn-secondary" onclick="copyOrder()" style="flex:1; font-size:8px;">
-              📋 Copy Pesanan
-            </button>
-            <button class="btn btn-ghost" onclick="resetAll()" style="flex:1;">
-              🗑️ Reset
-            </button>
-          </div>
-        </div>
-
-      </div><!-- /form-scroll -->
-    </div>
-  </div>
-
-
-  <!-- ==================== STEP 4: REDIRECT ==================== -->
-  <div class="step" id="step-redirect">
-    <div class="card">
-      <span class="success-icon">🎉</span>
-      <div class="redir-title">Terima kasih!</div>
-      <p class="redir-sub">
-        Pesanan sedang dibuka<br>di WhatsApp...
-      </p>
-      <div class="dots">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </div>
-      <button class="btn btn-primary" id="btn-open-wa"
-              onclick="openWA()" style="width:100%; display:none; margin-bottom:10px;">
-        📲 Buka WhatsApp
-      </button>
-      <button class="btn btn-ghost" onclick="resetAll()" style="width:100%;">
-        🔄 Pesan Lagi
-      </button>
-    </div>
-  </div>
-
-</div><!-- /app -->
-
+<!-- QR Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <script>
-/* ============================================================
-   CONFIG — ⚠️ Ganti WA_NUMBER dengan nomor penjual
-============================================================ */
-const WA_NUMBER = '6285694458024';   // format internasional, tanpa +
-
+/* =========================================================
+   PRODUCT DATA
+   ========================================================= */
 const PRODUCTS = [
-  { name: 'Bola Oreo Susu', tag: '(5 pcs)', price: 8000  },
-  { name: 'Mac and Cheese',  tag: '',        price: 10000 },
+    { id: 'bola-oreo-susu', name: 'Bola Oreo Susu', price: 8000 },
+    { id: 'mac-and-cheese',  name: 'Mac and Cheese',  price: 10000 }
 ];
 
+// Temp qty selectors per product
+const qtySelections = [0, 0];
 
-/* ============================================================
-   STATE
-============================================================ */
-let curStep   = 0;
-let qty       = [0, 0];      // quantities per product
-let waUrl     = '';
-let audioCtx  = null;
-let bgNodes   = [];
-let bgRunning = false;
-let muted     = false;
-let touched   = false;       // first user interaction flag
+// Holds the just-created order for WA / QR actions
+let currentOrder = null;
 
-
-/* ============================================================
-   LOCAL STORAGE
-============================================================ */
-function saveLS() {
-  try {
-    localStorage.setItem('bazar_qty',  JSON.stringify(qty));
-    localStorage.setItem('bazar_form', JSON.stringify({
-      nama:  document.getElementById('i-nama').value,
-      kelas: document.getElementById('i-kelas').value,
-      hp:    document.getElementById('i-hp').value,
-    }));
-  } catch(e) {}
-}
-
-function loadLS() {
-  try {
-    const q = localStorage.getItem('bazar_qty');
-    if (q) qty = JSON.parse(q);
-
-    const f = localStorage.getItem('bazar_form');
-    if (f) {
-      const { nama, kelas, hp } = JSON.parse(f);
-      document.getElementById('i-nama').value  = nama  || '';
-      document.getElementById('i-kelas').value = kelas || '';
-      document.getElementById('i-hp').value    = hp    || '';
-    }
-  } catch(e) {}
-  refreshMenu();
-}
-
-
-/* ============================================================
-   STEP NAVIGATION
-============================================================ */
-function goStep(n) {
-  if (n === curStep) return;
-  playClick();
-
-  const steps = document.querySelectorAll('.step');
-  const from  = steps[curStep];
-  const to    = steps[n];
-
-  const dir = n > curStep ? 'left' : 'right';
-
-  // Exit current
-  from.classList.remove('active');
-  from.classList.add(dir === 'left' ? 'go-left' : 'go-right');
-
-  // Prepare incoming (off-screen on opposite side)
-  to.classList.remove('go-left', 'go-right', 'active');
-  to.style.transform = dir === 'left' ? 'translateX(48px)' : 'translateX(-48px)';
-  to.style.opacity   = '0';
-
-  // Force reflow then animate in
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      from.classList.remove('go-left', 'go-right');
-      to.style.transform = '';
-      to.style.opacity   = '';
-      to.classList.add('active');
-
-      curStep = n;
-      updateDots();
-
-      // Step-specific side effects
-      if (n === 2) {
-        renderSummary();
-        setTimeout(() => document.getElementById('i-nama').focus(), 350);
-      }
-    });
-  });
-}
-
-function updateDots() {
-  document.querySelectorAll('.pdot').forEach((d, i) => {
-    d.classList.toggle('active', i === curStep);
-  });
-}
-
-
-/* ============================================================
-   QUANTITY MANAGEMENT
-============================================================ */
-function changeQty(idx, delta) {
-  playClick();
-  qty[idx] = Math.max(0, qty[idx] + delta);
-  refreshMenu();
-  saveLS();
-}
-
-function refreshMenu() {
-  qty.forEach((q, i) => {
-    document.getElementById(`qty-${i}`).textContent = q;
-  });
-  const total = calcTotal();
-  document.getElementById('subtotal').textContent = formatRp(total);
-
-  const hasOrder = qty.some(q => q > 0);
-  document.getElementById('btn-next').disabled = !hasOrder;
-  document.getElementById('empty-hint').style.display = 'none';
-}
-
-function calcTotal() {
-  return qty.reduce((s, q, i) => s + q * PRODUCTS[i].price, 0);
-}
-
-function proceedToForm() {
-  if (!qty.some(q => q > 0)) {
-    document.getElementById('empty-hint').style.display = 'block';
-    return;
-  }
-  goStep(2);
-}
-
-
-/* ============================================================
-   FORMAT RUPIAH
-============================================================ */
-function formatRp(n) {
-  return 'Rp' + n.toLocaleString('id-ID');
-}
-
-
-/* ============================================================
-   ORDER SUMMARY (Step 3 mini view)
-============================================================ */
-function renderSummary() {
-  const container = document.getElementById('summary-items');
-  container.innerHTML = '';
-  let total = 0;
-
-  qty.forEach((q, i) => {
-    if (q < 1) return;
-    const sub = q * PRODUCTS[i].price;
-    total += sub;
-
-    container.insertAdjacentHTML('beforeend', `
-      <div class="os-item">
-        <span class="os-name">${PRODUCTS[i].name}</span>
-        <div class="mini-stepper">
-          <button class="mstp" onclick="changeQtyForm(${i},-1)">−</button>
-          <span class="mq" id="mq-${i}">${q}</span>
-          <button class="mstp" onclick="changeQtyForm(${i},1)">+</button>
-        </div>
-        <span class="os-price" id="mp-${i}">${formatRp(sub)}</span>
-      </div>
-    `);
-  });
-
-  document.getElementById('summary-total').textContent = formatRp(total);
-}
-
-function changeQtyForm(idx, delta) {
-  playClick();
-  qty[idx] = Math.max(0, qty[idx] + delta);
-  refreshMenu();
-  renderSummary();
-  saveLS();
-  validateForm();
-  if (!qty.some(q => q > 0)) {
-    toast('Tambah menu dulu ya! 🛒');
-    goStep(1);
-  }
-}
-
-
-/* ============================================================
-   FORM VALIDATION
-============================================================ */
-function onHpInput() {
-  // Strip non-digits
-  const el = document.getElementById('i-hp');
-  el.value = el.value.replace(/\D/g, '');
-  validateForm();
-}
-
-function validateForm() {
-  saveLS();
-
-  const nama  = document.getElementById('i-nama').value.trim();
-  const kelas = document.getElementById('i-kelas').value.trim();
-  const hp    = document.getElementById('i-hp').value.trim();
-
-  function check(val, errId, inputId, ok) {
-    const dirty = document.getElementById(inputId) !== document.activeElement;
-    document.getElementById(errId).classList.toggle('show', !ok && val.length > 0 && dirty);
-    document.getElementById(inputId).classList.toggle('err', !ok && val.length > 0 && dirty);
-    return ok;
-  }
-
-  const hpOk = /^\d+$/.test(hp) && hp.startsWith('08') && hp.length >= 10;
-
-  const allOk =
-    check(nama,  'e-nama',  'i-nama',  nama.length  > 0) &&
-    check(kelas, 'e-kelas', 'i-kelas', kelas.length > 0) &&
-    check(hp,    'e-hp',    'i-hp',    hpOk);
-
-  document.getElementById('btn-submit').disabled = !allOk;
-}
-
-// Also validate on blur to show inline errors
-['i-nama','i-kelas','i-hp'].forEach(id => {
-  document.getElementById(id).addEventListener('blur', validateForm);
-});
-
-
-/* ============================================================
-   SUBMIT ORDER → WhatsApp
-============================================================ */
-function buildMsg() {
-  const nama  = document.getElementById('i-nama').value.trim();
-  const kelas = document.getElementById('i-kelas').value.trim();
-  const hp    = document.getElementById('i-hp').value.trim();
-
-  let lines = '';
-  qty.forEach((q, i) => {
-    if (q > 0) {
-      const tag = PRODUCTS[i].tag ? ` ${PRODUCTS[i].tag}` : '';
-      lines += `- ${PRODUCTS[i].name}${tag} x${q}\n`;
-    }
-  });
-
-  return `Halo, saya mau pre-order Bazar 22 Mei 🎪
-
-Nama: ${nama}
-Kelas: ${kelas}
-No HP: ${hp}
-
-Pesanan:
-${lines}
-Total: ${formatRp(calcTotal())}`;
-}
-
-function submitOrder() {
-  playClick();
-
-  waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(buildMsg())}`;
-
-  // Loading state
-  const btn = document.getElementById('btn-submit');
-  btn.textContent = '⏳ Mengirim...';
-  btn.disabled = true;
-
-  goStep(3);
-
-  // Auto open WA after 1.5s
-  setTimeout(() => {
+/* =========================================================
+   SAFE LOCALSTORAGE
+   ========================================================= */
+function getCart() {
     try {
-      const win = window.open(waUrl, '_blank');
-      if (!win) throw new Error('popup blocked');
-    } catch(e) {
-      document.getElementById('btn-open-wa').style.display = 'block';
+        const raw = localStorage.getItem('bazarCart_v2');
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+        console.error('[getCart]', e);
+        return [];
     }
-    // Show fallback button regardless (for popup blockers)
-    setTimeout(() => {
-      document.getElementById('btn-open-wa').style.display = 'block';
-    }, 2800);
-  }, 1500);
-
-  // Reset submit button state after small delay
-  setTimeout(() => {
-    btn.textContent = '📤 Kirim Pesanan ke WhatsApp';
-    btn.disabled = false;
-  }, 800);
 }
-
-function openWA() {
-  playClick();
-  window.open(waUrl, '_blank');
-}
-
-/* ============================================================
-   COPY ORDER TEXT
-============================================================ */
-function copyOrder() {
-  playClick();
-  navigator.clipboard.writeText(buildMsg())
-    .then(() => toast('✅ Teks pesanan berhasil dicopy!'))
-    .catch(() => toast('❌ Gagal copy, coba manual'));
-}
-
-/* ============================================================
-   RESET ALL
-============================================================ */
-function resetAll() {
-  playClick();
-  qty = [0, 0];
-  ['i-nama','i-kelas','i-hp'].forEach(id => {
-    document.getElementById(id).value = '';
-  });
-  document.getElementById('btn-open-wa').style.display = 'none';
-  waUrl = '';
-  try {
-    localStorage.removeItem('bazar_qty');
-    localStorage.removeItem('bazar_form');
-  } catch(e) {}
-  refreshMenu();
-  goStep(0);
-}
-
-/* ============================================================
-   TOAST
-============================================================ */
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2600);
-}
-
-/* ============================================================
-   AUDIO ENGINE (Web Audio API)
-============================================================ */
-function initAudio() {
-  if (audioCtx) return;
-  try {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (!muted) startBg();
-  } catch(e) {}
-}
-
-/* Click SFX — short pixel blip */
-function playClick() {
-  try {
-    if (!audioCtx || muted) return;
-    const osc  = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(480, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(720, audioCtx.currentTime + 0.06);
-    gain.gain.setValueAtTime(0.07, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.13);
-    osc.start(audioCtx.currentTime);
-    osc.stop(audioCtx.currentTime + 0.14);
-  } catch(e) {}
-}
-
-/* Ambient background drone */
-function startBg() {
-  if (!audioCtx || bgRunning) return;
-  bgRunning = true;
-
-  // Two soft sine drones (A3 + E4)
-  [[220, -0.3], [329.63, 0.3]].forEach(([freq, pan]) => {
-    const osc    = audioCtx.createOscillator();
-    const gain   = audioCtx.createGain();
-    const panner = audioCtx.createStereoPanner();
-    osc.connect(gain); gain.connect(panner); panner.connect(audioCtx.destination);
-    osc.type = 'sine';
-    osc.frequency.value = freq;
-    panner.pan.value    = pan;
-    gain.gain.setValueAtTime(0, audioCtx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.035, audioCtx.currentTime + 2.5);
-    osc.start();
-    bgNodes.push({ osc, gain });
-  });
-
-  // Gentle looping melody
-  loopMelody();
-}
-
-function loopMelody() {
-  if (!audioCtx || muted) return;
-  // E4 F#4 G#4 A4 G#4 F#4
-  const notes  = [329.63, 369.99, 415.30, 440, 415.30, 369.99];
-  let t = audioCtx.currentTime + 0.1;
-  notes.forEach(freq => {
-    const osc  = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    osc.type = 'triangle';
-    osc.frequency.value = freq;
-    gain.gain.setValueAtTime(0, t);
-    gain.gain.linearRampToValueAtTime(0.022, t + 0.1);
-    gain.gain.linearRampToValueAtTime(0, t + 0.7);
-    osc.start(t); osc.stop(t + 0.75);
-    t += 0.82;
-  });
-  // Schedule next loop
-  setTimeout(loopMelody, notes.length * 820 + 1200);
-}
-
-function stopBg() {
-  bgNodes.forEach(({ osc, gain }) => {
+function saveCart(cart) {
     try {
-      gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
-      osc.stop(audioCtx.currentTime + 0.45);
-    } catch(e) {}
-  });
-  bgNodes = [];
-  bgRunning = false;
+        localStorage.setItem('bazarCart_v2', JSON.stringify(Array.isArray(cart) ? cart : []));
+    } catch (e) {
+        console.error('[saveCart]', e);
+    }
+}
+function getOrders() {
+    try {
+        const raw = localStorage.getItem('bazarOrders_v2');
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+        console.error('[getOrders]', e);
+        return [];
+    }
+}
+function saveNewOrder(order) {
+    try {
+        if (!order || !order.orderId) return false;
+        const orders = getOrders();
+        // Guard: never overwrite existing orderId
+        if (orders.some(o => o && o.orderId === order.orderId)) return false;
+        orders.push(order);
+        localStorage.setItem('bazarOrders_v2', JSON.stringify(orders));
+        return true;
+    } catch (e) {
+        console.error('[saveNewOrder]', e);
+        return false;
+    }
 }
 
-/* Audio toggle button */
-document.getElementById('audio-toggle').addEventListener('click', () => {
-  initAudio();
-  muted = !muted;
-  document.getElementById('audio-toggle').textContent = muted ? '🔇' : '🔊';
-  if (muted) stopBg();
-  else       startBg();
-});
-
-/* Init audio on first user gesture */
-document.addEventListener('pointerdown', () => {
-  if (!touched) { touched = true; initAudio(); }
-}, { passive: true });
-
-
-/* ============================================================
-   PIXEL ART CANVAS BACKGROUND
-============================================================ */
-(function initCanvas() {
-  const canvas = document.getElementById('bg-canvas');
-  const ctx    = canvas.getContext('2d');
-
-  /* Polyfill roundRect for older browsers */
-  if (!ctx.roundRect) {
-    ctx.roundRect = function(x,y,w,h,r) {
-      const rad = typeof r === 'number' ? r : (r[0] || 0);
-      this.beginPath();
-      this.moveTo(x+rad, y);
-      this.lineTo(x+w-rad, y);
-      this.quadraticCurveTo(x+w,y,x+w,y+rad);
-      this.lineTo(x+w,y+h-rad);
-      this.quadraticCurveTo(x+w,y+h,x+w-rad,y+h);
-      this.lineTo(x+rad,y+h);
-      this.quadraticCurveTo(x,y+h,x,y+h-rad);
-      this.lineTo(x,y+rad);
-      this.quadraticCurveTo(x,y,x+rad,y);
-      this.closePath();
+/* =========================================================
+   UTILITIES
+   ========================================================= */
+function generateOrderId() {
+    const ts  = Date.now().toString(36).toUpperCase();
+    const rnd = Math.floor(Math.random() * 10000).toString(36).toUpperCase().padStart(4,'0');
+    return `BZR-${ts}-${rnd}`;
+}
+function formatRp(amount) {
+    try {
+        const n = Number(amount) || 0;
+        return 'Rp ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    } catch (e) { return 'Rp 0'; }
+}
+function calcTotal(cart) {
+    if (!Array.isArray(cart)) return 0;
+    return cart.reduce((s, i) => s + (i ? (i.price || 0) * (i.qty || 0) : 0), 0);
+}
+function getStatus(order) {
+    try {
+        if (!order) return 'MENUNGGU';
+        if (order.status === 'DIBATALKAN') return 'DIBATALKAN';
+        const eventDate = new Date('2025-05-22T00:00:00');
+        const now = new Date(); now.setHours(0,0,0,0);
+        if (now >= eventDate) return 'SIAP DIAMBIL';
+        return order.status || 'MENUNGGU';
+    } catch (e) { return 'MENUNGGU'; }
+}
+function badgeHtml(status) {
+    const map = {
+        'MENUNGGU':    'badge-waiting',
+        'DIPROSES':    'badge-processing',
+        'SIAP DIAMBIL':'badge-ready',
+        'DIBATALKAN':  'badge-cancelled'
     };
-  }
+    const cls = map[status] || 'badge-waiting';
+    return `<span class="status-badge ${cls}">${status}</span>`;
+}
+function showToast(msg) {
+    try {
+        const el = document.getElementById('toastEl');
+        if (!el) return;
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(el._tid);
+        el._tid = setTimeout(() => el.classList.remove('show'), 2800);
+    } catch (e) {}
+}
 
-  function draw() {
-    const W = canvas.width, H = canvas.height;
-    const bh = H * 0.72;  // horizon baseline
+/* =========================================================
+   QTY CONTROLS
+   ========================================================= */
+function changeQty(idx, delta) {
+    try {
+        qtySelections[idx] = Math.max(0, (qtySelections[idx] || 0) + delta);
+        const el = document.getElementById(`qty${idx}`);
+        if (el) el.textContent = qtySelections[idx];
+    } catch (e) { console.error('[changeQty]', e); }
+}
 
-    /* --- SKY gradient (sunset) --- */
-    const sky = ctx.createLinearGradient(0, 0, 0, bh);
-    sky.addColorStop(0,    '#07051e');
-    sky.addColorStop(0.22, '#1e0850');
-    sky.addColorStop(0.48, '#5c1f3c');
-    sky.addColorStop(0.68, '#b03820');
-    sky.addColorStop(0.85, '#d46020');
-    sky.addColorStop(1,    '#e88830');
-    ctx.fillStyle = sky;
-    ctx.fillRect(0, 0, W, bh);
-
-    /* --- GROUND --- */
-    const grd = ctx.createLinearGradient(0, bh, 0, H);
-    grd.addColorStop(0, '#180a28');
-    grd.addColorStop(1, '#080614');
-    ctx.fillStyle = grd;
-    ctx.fillRect(0, bh, W, H - bh);
-
-    /* --- SUN glow --- */
-    const sx = W * 0.64, sy = H * 0.50;
-    const sunG = ctx.createRadialGradient(sx, sy, 0, sx, sy, H * 0.38);
-    sunG.addColorStop(0,   'rgba(255,200,70,.55)');
-    sunG.addColorStop(0.28,'rgba(240,110,40,.28)');
-    sunG.addColorStop(1,   'rgba(0,0,0,0)');
-    ctx.fillStyle = sunG;
-    ctx.fillRect(0, 0, W, H);
-
-    /* Sun disk */
-    ctx.fillStyle = '#ffd166';
-    ctx.beginPath(); ctx.arc(sx, sy, 30, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = '#fff8dc';
-    ctx.beginPath(); ctx.arc(sx-8, sy-7, 11, 0, Math.PI*2); ctx.fill();
-
-    /* --- PIXEL CLOUDS --- */
-    function cloud(x, y, s, a) {
-      ctx.save(); ctx.globalAlpha = a;
-      ctx.fillStyle = 'rgba(255,160,100,.38)';
-      [[0,0,44,18],[14,-11,32,16],[-6,-7,26,14],[34,-10,22,14]].forEach(
-        ([dx,dy,w,h]) => {
-          ctx.beginPath();
-          ctx.roundRect(x+dx*s, y+dy*s, w*s, h*s, 8*s);
-          ctx.fill();
+/* =========================================================
+   CART OPERATIONS
+   ========================================================= */
+function addToCart(idx) {
+    try {
+        const qty = qtySelections[idx] || 0;
+        if (qty <= 0) { showToast('Pilih jumlah terlebih dahulu'); return; }
+        const product = PRODUCTS[idx];
+        if (!product) return;
+        let cart = getCart();
+        const existing = cart.find(i => i && i.id === product.id);
+        if (existing) {
+            existing.qty = (existing.qty || 0) + qty;
+        } else {
+            cart.push({ id: product.id, name: product.name, price: product.price, qty });
         }
-      );
-      ctx.restore();
+        saveCart(cart);
+        qtySelections[idx] = 0;
+        const numEl = document.getElementById(`qty${idx}`);
+        if (numEl) numEl.textContent = '0';
+        renderCart();
+        showToast(`${product.name} ditambahkan`);
+    } catch (e) {
+        console.error('[addToCart]', e);
+        showToast('Terjadi kesalahan');
     }
-    cloud(W*.08,  H*.16, 1.2, .5);
-    cloud(W*.38,  H*.10, .9,  .35);
-    cloud(W*.70,  H*.20, 1.0, .42);
-    cloud(W*.88,  H*.13, .72, .3);
+}
+function removeCartItem(productId) {
+    try {
+        let cart = getCart().filter(i => i && i.id !== productId);
+        saveCart(cart);
+        renderCart();
+        showToast('Item dihapus');
+    } catch (e) { console.error('[removeCartItem]', e); }
+}
+function adjustCartQty(productId, delta) {
+    try {
+        let cart = getCart();
+        const item = cart.find(i => i && i.id === productId);
+        if (!item) return;
+        item.qty = Math.max(0, (item.qty || 0) + delta);
+        if (item.qty === 0) cart = cart.filter(i => i && i.id !== productId);
+        saveCart(cart);
+        renderCart();
+    } catch (e) { console.error('[adjustCartQty]', e); }
+}
 
-    /* --- STARS --- */
-    const starPos = [
-      [.07,.05],[.14,.11],[.21,.04],[.33,.07],[.47,.03],
-      [.54,.09],[.71,.05],[.77,.13],[.87,.06],[.93,.03],
-      [.04,.19],[.29,.17],[.62,.08],[.18,.16],[.40,.06],
-    ];
-    ctx.globalAlpha = .75;
-    starPos.forEach(([fx,fy]) => {
-      const x = fx*W, y = fy*H;
-      ctx.fillStyle = '#ffe8c8';
-      ctx.fillRect(x,   y,   2, 2);
-      ctx.globalAlpha = .25;
-      ctx.fillRect(x-1, y,   1, 2);
-      ctx.fillRect(x+2, y,   1, 2);
-      ctx.fillRect(x,   y-1, 2, 1);
-      ctx.fillRect(x,   y+2, 2, 1);
-      ctx.globalAlpha = .75;
-    });
-    ctx.globalAlpha = 1;
+/* =========================================================
+   RENDER CART
+   ========================================================= */
+function renderCart() {
+    try {
+        const cart   = getCart();
+        const listEl = document.getElementById('cartItemsList');
+        const totEl  = document.getElementById('cartTotalVal');
+        const btnEl  = document.getElementById('checkoutBtn');
+        const hdrEl  = document.getElementById('headerCartCount');
+        const bdgEl  = document.getElementById('cartItemBadge');
 
-    /* --- BUILDINGS (silhouette) --- */
-    function building(x, w, h, flag) {
-      ctx.fillStyle = '#0b061a';
-      ctx.fillRect(x, bh-h, w, h);
-      // Windows
-      for (let wy = bh-h+10; wy < bh-8; wy += 15) {
-        for (let wx = x+7; wx < x+w-7; wx += 15) {
-          if (Math.random() > .28) {
-            ctx.fillStyle = `rgba(255,200,80,${.15+Math.random()*.2})`;
-            ctx.fillRect(wx, wy, 8, 8);
-          }
+        if (!listEl) return;
+
+        if (!cart.length) {
+            listEl.innerHTML = `
+                <div class="cart-empty-state">
+                    <div class="cart-empty-icon">&#9633;</div>
+                    <div style="font-weight:600;">Cart masih kosong</div>
+                    <div style="font-size:.75rem;margin-top:4px;opacity:.65;">Pilih menu di atas</div>
+                </div>`;
+            if (totEl) totEl.textContent = 'Rp 0';
+            if (btnEl) btnEl.disabled = true;
+            if (hdrEl) hdrEl.textContent = '0';
+            if (bdgEl) bdgEl.textContent = '0 item';
+            return;
         }
-      }
-      ctx.fillStyle = '#0b061a';
-      if (flag) {
-        ctx.fillRect(x+w/2-2, bh-h-18, 3, 18);
-        ctx.fillStyle = '#ff6b35';
-        ctx.fillRect(x+w/2+1, bh-h-18, 14, 9);
-        ctx.fillStyle = '#0b061a';
-      }
+
+        let html = '';
+        cart.forEach(item => {
+            if (!item) return;
+            const subtotal = (item.price || 0) * (item.qty || 0);
+            html += `
+                <div class="cart-item">
+                    <div>
+                        <div class="cart-item-name">${item.name || '-'}</div>
+                        <div class="cart-item-sub">${formatRp(item.price)} &times; ${item.qty}</div>
+                    </div>
+                    <div class="cart-item-controls">
+                        <button class="c-qty-btn" onclick="adjustCartQty('${item.id}',-1)" aria-label="Kurangi">&#8722;</button>
+                        <span class="c-qty-num">${item.qty}</span>
+                        <button class="c-qty-btn" onclick="adjustCartQty('${item.id}',1)"  aria-label="Tambah">&#43;</button>
+                    </div>
+                    <div class="cart-item-total">${formatRp(subtotal)}</div>
+                </div>`;
+        });
+
+        listEl.innerHTML = html;
+
+        const total      = calcTotal(cart);
+        const totalItems = cart.reduce((s, i) => s + (i ? (i.qty || 0) : 0), 0);
+
+        if (totEl) totEl.textContent = formatRp(total);
+        if (btnEl) btnEl.disabled = false;
+        if (hdrEl) hdrEl.textContent = totalItems;
+        if (bdgEl) bdgEl.textContent = `${totalItems} item`;
+
+    } catch (e) {
+        console.error('[renderCart]', e);
+        const listEl = document.getElementById('cartItemsList');
+        if (listEl) listEl.innerHTML = '<div class="cart-empty-state">Cart masih kosong</div>';
     }
+}
 
-    // Left cluster
-    building(W*.01, W*.07, H*.18, false);
-    building(W*.09, W*.055,H*.14, false);
-    building(W*.16, W*.10, H*.26, true);
-    // Right cluster
-    building(W*.74, W*.065,H*.20, false);
-    building(W*.82, W*.09, H*.15, false);
-    building(W*.92, W*.07, H*.23, true);
+/* =========================================================
+   MODAL HELPERS
+   ========================================================= */
+function openModal(id) {
+    try {
+        const el = document.getElementById(id);
+        if (el) { el.classList.add('open'); document.body.style.overflow = 'hidden'; }
+    } catch (e) {}
+}
+function closeModal(id) {
+    try {
+        const el = document.getElementById(id);
+        if (el) { el.classList.remove('open'); document.body.style.overflow = ''; }
+    } catch (e) {}
+}
 
-    /* --- TREES --- */
-    function tree(x, y, h) {
-      ctx.fillStyle = '#0a1808';
-      ctx.fillRect(x-3, y, 6, h*.3);
-      ctx.fillStyle = '#0d2010';
-      ctx.beginPath();
-      ctx.moveTo(x, y-h*.68);
-      ctx.lineTo(x-h*.34, y); ctx.lineTo(x+h*.34, y);
-      ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#152818';
-      ctx.beginPath();
-      ctx.moveTo(x, y-h*.9);
-      ctx.lineTo(x-h*.22, y-h*.32); ctx.lineTo(x+h*.22, y-h*.32);
-      ctx.closePath(); ctx.fill();
+/* =========================================================
+   CHECKOUT
+   ========================================================= */
+function openCheckout() {
+    try {
+        const cart = getCart();
+        if (!cart.length) { showToast('Keranjang masih kosong'); return; }
+
+        const summEl = document.getElementById('checkoutSummary');
+        if (summEl) {
+            let html = '<div class="summary-head">Ringkasan Pesanan</div>';
+            cart.forEach(item => {
+                if (!item) return;
+                html += `<div class="summary-row"><span>${item.name} &times;${item.qty}</span><span>${formatRp((item.price||0)*(item.qty||0))}</span></div>`;
+            });
+            html += `<hr class="summary-divider">
+                     <div class="summary-total-row">
+                       <span class="summary-total-label">Total Pembayaran</span>
+                       <span class="summary-total-val">${formatRp(calcTotal(cart))}</span>
+                     </div>`;
+            summEl.innerHTML = html;
+        }
+
+        clearErrors();
+        openModal('checkoutModal');
+    } catch (e) { console.error('[openCheckout]', e); showToast('Terjadi kesalahan'); }
+}
+
+/* =========================================================
+   FORM VALIDATION
+   ========================================================= */
+function clearErrors() {
+    try {
+        document.querySelectorAll('.form-err').forEach(el => el.classList.remove('show'));
+        document.querySelectorAll('.form-input,.form-select').forEach(el => el.classList.remove('err'));
+    } catch (e) {}
+}
+function flagError(fieldId, errId) {
+    try {
+        const f = document.getElementById(fieldId);
+        const e = document.getElementById(errId);
+        if (f) f.classList.add('err');
+        if (e) e.classList.add('show');
+    } catch (e) {}
+}
+function validateForm() {
+    clearErrors();
+    let ok = true;
+    const name   = (document.getElementById('iName')?.value  || '').trim();
+    const cls    =  document.getElementById('iClass')?.value  || '';
+    const major  =  document.getElementById('iMajor')?.value  || '';
+    const phone  = (document.getElementById('iPhone')?.value || '').trim();
+    const pickup =  document.getElementById('iPickup')?.value || '';
+
+    if (!name)                            { flagError('iName',  'errName');  ok = false; }
+    if (!cls)                             { flagError('iClass', 'errClass'); ok = false; }
+    if (!major)                           { flagError('iMajor', 'errMajor'); ok = false; }
+    if (!phone || !phone.startsWith('08')){ flagError('iPhone', 'errPhone'); ok = false; }
+    if (!pickup)                          { flagError('iPickup','errPickup');ok = false; }
+    return ok;
+}
+
+/* =========================================================
+   SUBMIT ORDER
+   ========================================================= */
+function submitOrder() {
+    try {
+        if (!validateForm()) return;
+        const cart = getCart();
+        if (!cart.length) { showToast('Keranjang kosong'); return; }
+
+        const orderId = generateOrderId();
+        const order = {
+            orderId,
+            name   : document.getElementById('iName').value.trim(),
+            class  : document.getElementById('iClass').value,
+            major  : document.getElementById('iMajor').value,
+            phone  : document.getElementById('iPhone').value.trim(),
+            pickup : document.getElementById('iPickup').value,
+            items  : cart.map(i => ({ ...i })),        // shallow copy
+            total  : calcTotal(cart),
+            status : 'MENUNGGU',
+            createdAt: new Date().toISOString()
+        };
+
+        const saved = saveNewOrder(order);
+        if (!saved) { showToast('Gagal menyimpan pesanan, silakan coba lagi'); return; }
+
+        currentOrder = order;
+        saveCart([]);
+        renderCart();
+        closeModal('checkoutModal');
+        openSuccessModal(order);
+
+    } catch (e) {
+        console.error('[submitOrder]', e);
+        showToast('Terjadi kesalahan saat memesan');
     }
-    tree(W*.30, bh, 72);
-    tree(W*.34, bh, 56);
-    tree(W*.66, bh, 68);
-    tree(W*.70, bh, 52);
+}
 
-    /* --- BAZAR TENTS --- */
-    function tent(x, col1, col2) {
-      const tw = W*.075, ty = bh;
-      ctx.fillStyle = '#160824';
-      ctx.fillRect(x, ty-36, tw, 36);
-      // Roof
-      ctx.fillStyle = col1;
-      ctx.beginPath();
-      ctx.moveTo(x-8, ty-36);
-      ctx.lineTo(x+tw/2, ty-58);
-      ctx.lineTo(x+tw+8, ty-36);
-      ctx.closePath(); ctx.fill();
-      // Stripe
-      ctx.fillStyle = col2;
-      ctx.beginPath();
-      ctx.moveTo(x+tw*.2,   ty-36);
-      ctx.lineTo(x+tw*.5,   ty-58);
-      ctx.lineTo(x+tw*.42,  ty-58);
-      ctx.lineTo(x+tw*.12,  ty-36);
-      ctx.closePath(); ctx.fill();
-      // Counter glow
-      ctx.fillStyle = 'rgba(255,200,80,.1)';
-      ctx.fillRect(x+4, ty-30, tw-8, 20);
+/* =========================================================
+   SUCCESS MODAL + QR
+   ========================================================= */
+function openSuccessModal(order) {
+    try {
+        if (!order || !order.orderId) { showToast('Data pesanan tidak valid'); return; }
+
+        const safeId   = order.orderId || 'invalid-order';
+        const orderUrl = `https://orderhere.vercel.app/order.html?id=${encodeURIComponent(safeId)}`;
+
+        const idEl = document.getElementById('successOrderId');
+        if (idEl) idEl.textContent = safeId;
+
+        const urlEl = document.getElementById('qrUrlText');
+        if (urlEl) urlEl.textContent = orderUrl;
+
+        // Generate QR
+        const qrEl = document.getElementById('qrcode');
+        if (qrEl) {
+            qrEl.innerHTML = '';
+            try {
+                new QRCode(qrEl, {
+                    text: orderUrl,
+                    width: 180, height: 180,
+                    colorDark: '#111111', colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            } catch (qrErr) {
+                console.error('[QR gen]', qrErr);
+                qrEl.innerHTML = '<div style="padding:20px;text-align:center;font-size:.75rem;color:#888;">QR tidak tersedia</div>';
+            }
+        }
+
+        openModal('successModal');
+    } catch (e) {
+        console.error('[openSuccessModal]', e);
+        showToast('Terjadi kesalahan');
     }
-    tent(W*.36, '#b02828', '#ffd166');
-    tent(W*.46, '#3d2278', '#ff6b35');
-    tent(W*.56, '#1e5438', '#ffa552');
+}
+function closeSuccessModal() {
+    try {
+        closeModal('successModal');
+        currentOrder = null;
+        ['iName','iPhone'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+        ['iClass','iMajor','iPickup'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+        clearErrors();
+    } catch (e) {}
+}
 
-    /* --- LANTERN STRING --- */
-    ctx.strokeStyle = 'rgba(255,200,100,.25)';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    for (let lx = W*.30; lx <= W*.70; lx += 4) {
-      const ly = bh - 62 + Math.sin(lx * .055) * 9;
-      if (lx === W*.30) ctx.moveTo(lx, ly);
-      else ctx.lineTo(lx, ly);
-    }
-    ctx.stroke();
+/* =========================================================
+   QR DOWNLOAD
+   ========================================================= */
+function downloadQR() {
+    try {
+        const qrEl  = document.getElementById('qrcode');
+        if (!qrEl) { showToast('QR tidak ditemukan'); return; }
+        const canvas = qrEl.querySelector('canvas');
+        const img    = qrEl.querySelector('img');
+        const fname  = `QR-${(currentOrder && currentOrder.orderId) || 'order'}.png`;
+        if (canvas) {
+            const a = document.createElement('a');
+            a.download = fname;
+            a.href = canvas.toDataURL('image/png');
+            a.click();
+            showToast('QR Code berhasil diunduh');
+        } else if (img && img.src) {
+            const a = document.createElement('a');
+            a.download = fname;
+            a.href = img.src;
+            a.click();
+            showToast('QR Code berhasil diunduh');
+        } else {
+            showToast('QR belum siap, tunggu sebentar lagi');
+        }
+    } catch (e) { console.error('[downloadQR]', e); showToast('Gagal mengunduh QR'); }
+}
 
-    // Lantern bulbs
-    for (let lx = W*.30; lx < W*.70; lx += 28) {
-      const ly = bh - 62 + Math.sin(lx * .055) * 9;
-      const col = lx % 56 < 28 ? '#ff6b35' : '#6b2d8b';
-      ctx.fillStyle = col;
-      ctx.globalAlpha = .72;
-      ctx.beginPath(); ctx.roundRect(lx-4, ly-9, 8, 13, 2); ctx.fill();
-      ctx.globalAlpha = .18;
-      ctx.fillStyle = col;
-      ctx.beginPath(); ctx.arc(lx, ly, 11, 0, Math.PI*2); ctx.fill();
-      ctx.globalAlpha = 1;
-    }
+/* =========================================================
+   COPY LINK
+   ========================================================= */
+function copyOrderLink() {
+    try {
+        if (!currentOrder || !currentOrder.orderId) { showToast('Order ID tidak ditemukan'); return; }
+        const url = `https://orderhere.vercel.app/order.html?id=${encodeURIComponent(currentOrder.orderId)}`;
+        const doCopy = () => {
+            try {
+                const ta = document.createElement('textarea');
+                ta.value = url;
+                ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+                document.body.appendChild(ta);
+                ta.focus(); ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast('Link berhasil disalin');
+            } catch (e2) { showToast('Gagal menyalin link'); }
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(() => showToast('Link berhasil disalin')).catch(doCopy);
+        } else { doCopy(); }
+    } catch (e) { console.error('[copyOrderLink]', e); showToast('Gagal menyalin link'); }
+}
 
-    /* --- GROUND GLOW --- */
-    const gg = ctx.createLinearGradient(0, bh, 0, H);
-    gg.addColorStop(0, 'rgba(180,90,30,.06)');
-    gg.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = gg;
-    ctx.fillRect(0, bh, W, H-bh);
-  }
+/* =========================================================
+   WHATSAPP
+   ========================================================= */
+function sendWhatsApp() {
+    try {
+        if (!currentOrder) { showToast('Data pesanan tidak ditemukan'); return; }
+        const o = currentOrder;
+        const status = getStatus(o);
+        const lines = (o.items || []).map(i =>
+            `  - ${i.name} x${i.qty} = ${formatRp((i.price||0)*(i.qty||0))}`
+        ).join('\n');
 
-  function resize() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    draw();
-  }
+        const msg = [
+            '=== KONFIRMASI PESANAN BAZAR ===',
+            '',
+            `Order ID : ${o.orderId || '-'}`,
+            `Nama     : ${o.name || '-'}`,
+            `Kelas    : ${o.class || '-'} ${o.major || ''}`.trim(),
+            `No. WA   : ${o.phone || '-'}`,
+            '',
+            'Rincian Pesanan:',
+            lines,
+            '',
+            `Total    : ${formatRp(o.total || 0)}`,
+            `Ambil    : ${o.pickup || '-'}`,
+            `Status   : ${status}`,
+            '',
+            'Pembayaran: CASH ONLY',
+            '',
+            'Link Pesanan:',
+            `https://orderhere.vercel.app/order.html?id=${encodeURIComponent(o.orderId || 'invalid')}`,
+            '',
+            '=== Bazar Menu | 22 Mei 2025 ==='
+        ].join('\n');
 
-  window.addEventListener('resize', resize);
-  resize();
-})();
+        window.open(`https://wa.me/6285694458024?text=${encodeURIComponent(msg)}`, '_blank');
+    } catch (e) { console.error('[sendWhatsApp]', e); showToast('Gagal membuka WhatsApp'); }
+}
 
+/* =========================================================
+   SCROLL TO CART
+   ========================================================= */
+function scrollToCart() {
+    try {
+        const el = document.getElementById('cartPanel');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (e) {}
+}
 
-/* ============================================================
-   TWINKLING PIXEL STARS (DOM layer, animated)
-============================================================ */
-(function spawnStars() {
-  const layer = document.getElementById('star-layer');
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes twinkle {
-      0%,100% { opacity:.18; transform:scale(1); }
-      50%      { opacity:1;   transform:scale(1.6); }
-    }
-  `;
-  document.head.appendChild(style);
+/* =========================================================
+   CLOSE MODAL ON OVERLAY CLICK
+   ========================================================= */
+document.addEventListener('click', function(e) {
+    try {
+        if (e.target.classList.contains('modal-overlay')) {
+            e.target.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+    } catch (e2) {}
+});
 
-  for (let i = 0; i < 22; i++) {
-    const s = document.createElement('div');
-    const left = Math.random() * 100;
-    const top  = Math.random() * 28;
-    const dur  = 2 + Math.random() * 3.2;
-    const del  = Math.random() * 3.5;
-    s.style.cssText = `
-      position:absolute;
-      left:${left}%;top:${top}%;
-      width:2px;height:2px;
-      background:#ffe8c8;
-      animation:twinkle ${dur}s ${del}s infinite;
-    `;
-    layer.appendChild(s);
-  }
-})();
-
-
-/* ============================================================
+/* =========================================================
    INIT
-============================================================ */
-document.addEventListener('DOMContentLoaded', loadLS);
+   ========================================================= */
+document.addEventListener('DOMContentLoaded', function() {
+    try { renderCart(); }
+    catch (e) { console.error('[init]', e); }
+});
 </script>
-
 </body>
-   </html>
+  </html>
