@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KuzoSnacks — Konfirmasi Pesanan</title>
+<title>Konfirmasi Pesanan</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -413,7 +413,7 @@
     </div>
     <div class="popup-title">Yakin sudah kirim WA?</div>
     <div class="popup-body">
-      Pastikan kamu sudah benar-benar mengirim pesan ke WhatsApp KuzoSnacks sebelum konfirmasi. Pesananmu tidak akan diproses tanpa konfirmasi WA.
+      Pastikan kamu sudah benar-benar mengirim pesan ke WhatsApp sebelum konfirmasi. Pesananmu tidak akan diproses tanpa konfirmasi WA.
     </div>
     <div class="popup-actions">
       <button class="popup-cancel" onclick="closePopup()">Belum, kembali</button>
@@ -492,7 +492,7 @@ try {
           </svg>
         </div>
         <div class="main-title">Sudah Kirim Pesan<br>WhatsApp?</div>
-        <div class="main-sub">Langkah terakhir: konfirmasi bahwa kamu sudah mengirim pesan ke WhatsApp KuzoSnacks. Ini memastikan pesananmu langsung diproses.</div>
+        <div class="main-sub">Langkah terakhir: konfirmasi bahwa kamu sudah mengirim pesan ke WhatsApp Ini memastikan pesananmu langsung diproses.</div>
 
         <!-- ORDER PREVIEW -->
         <div class="order-preview">
@@ -526,7 +526,7 @@ try {
           </div>
           <div class="inst-step">
             <div class="inst-num">1</div>
-            <div>Buka WhatsApp — cek apakah pesan ke KuzoSnacks sudah terkirim (tanda centang).</div>
+            <div>Buka WhatsApp — cek apakah pesan ke sudah terkirim (tanda centang).</div>
           </div>
           <div class="inst-step">
             <div class="inst-num">2</div>
@@ -558,7 +558,7 @@ try {
   function buildWaLink(order) {
     const itemsText = (order.items || []).map(i => `- ${i.name} x${i.qty} = Rp ${(i.price * i.qty).toLocaleString('id-ID')}`).join('\n');
     const msg = encodeURIComponent(
-      `Halo KuzoSnacks, saya mau pesan:\n\n${itemsText}\n\nTotal: Rp ${Number(order.total).toLocaleString('id-ID')}\nNama: ${order.name} (${order.class} ${order.major})\nAmbil: ${order.pickup}\nOrder ID: ${order.orderId}`
+      `Halo Atmin, saya mau pesan:\n\n${itemsText}\n\nTotal: Rp ${Number(order.total).toLocaleString('id-ID')}\nNama: ${order.name} (${order.class} ${order.major})\nAmbil: ${order.pickup}\nOrder ID: ${order.orderId}`
     );
     const btn = document.getElementById('resendWaBtn');
     if (btn) btn.href = `https://wa.me/6281234567890?text=${msg}`;
