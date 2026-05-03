@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KuzoSnacks — Jajanan Sekolah</title>
+<title> List Menu - Jajanan</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -552,7 +552,7 @@
   <div class="product-grid" id="productGrid"></div>
 </div>
 
-<footer>KuzoSnacks &copy; 2025 &mdash; Jajanan Sekolah Terbaik</footer>
+<footer>KUZOks &copy; 2025 &mdash; Jajanan Sekolah Terbaik</footer>
 
 <!-- OVERLAY + DRAWER -->
 <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
@@ -905,7 +905,7 @@ try {
       // Build WA message
       const itemStr = order.items.map(i => `- ${i.name} x${i.qty} = ${fmt(i.price * i.qty)}`).join('%0A');
       const msg = encodeURIComponent(
-        `Halo KuzoSnacks, saya mau pesan:%0A%0A` +
+        `Halo Atmin, saya mau pesan:%0A%0A` +
         order.items.map(i => `- ${i.name} x${i.qty} = ${fmt(i.price * i.qty)}`).join('\n') +
         `\n\nTotal: ${fmt(order.total)}` +
         `\nNama: ${name} (${cls} ${major})` +
