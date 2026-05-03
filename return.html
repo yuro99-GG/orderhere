@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KuzoSnacks — Konfirmasi Pesanan</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --primary: #3b82f6;
+    --primary-dark: #2563eb;
+    --primary-light: #eff6ff;
+    --border: #e2e8f0;
+    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.06);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,.12);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --success: #10b981;
+    --success-light: #d1fae5;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --wa: #25d366;
+    --wa-dark: #128c7e;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    top: -20%;
+    right: -15%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, #dcfce7 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .topbar-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo { font-family: 'DM Serif Display', serif; font-size: 1.4rem; }
+  .logo span { color: var(--primary); }
+  .shop-link {
+    font-size: .82rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color .15s;
+  }
+  .shop-link:hover { color: var(--primary); }
+
+  /* MAIN */
+  .main {
+    flex: 1;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* STEP INDICATOR */
+  .steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 40px;
+  }
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .step-circle {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .8rem;
+    font-weight: 700;
+    transition: all .3s;
+  }
+  .step.done .step-circle { background: var(--success); color: #fff; }
+  .step.active .step-circle { background: var(--primary); color: #fff; box-shadow: 0 0 0 4px rgba(59,130,246,.2); }
+  .step.pending .step-circle { background: var(--border); color: var(--text-muted); }
+  .step-label { font-size: .7rem; font-weight: 600; color: var(--text-muted); text-align: center; max-width: 70px; line-height: 1.3; }
+  .step.done .step-label, .step.active .step-label { color: var(--text); }
+  .step-line {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    margin: 0 8px;
+    margin-bottom: 22px;
+    max-width: 60px;
+    transition: background .3s;
+  }
+  .step-line.done { background: var(--success); }
+
+  /* MAIN CARD */
+  .main-card {
+    background: var(--card);
+    border-radius: 24px;
+    box-shadow: var(--shadow-lg), 0 0 0 1px var(--border);
+    padding: 36px 32px;
+    text-align: center;
+    animation: fadeUp .4s ease;
+    margin-bottom: 20px;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .wa-icon-wrap {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(37,211,102,.3); }
+    50% { box-shadow: 0 0 0 12px rgba(37,211,102,0); }
+  }
+  .main-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.7rem;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .main-sub {
+    color: var(--text-muted);
+    font-size: .9rem;
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+
+  /* ORDER PREVIEW */
+  .order-preview {
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-bottom: 28px;
+    border: 1px solid var(--border);
+    text-align: left;
+  }
+  .preview-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .85rem;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .preview-row:last-child { border-bottom: none; }
+  .preview-label { color: var(--text-muted); font-size: .8rem; }
+  .preview-val { font-weight: 600; }
+  .preview-id { font-family: monospace; color: var(--primary); font-size: .78rem; }
+
+  /* INSTRUCTION STEPS */
+  .instructions {
+    background: var(--primary-light);
+    border-radius: var(--radius-sm);
+    padding: 18px;
+    margin-bottom: 28px;
+    border: 1px solid #bfdbfe;
+    text-align: left;
+  }
+  .inst-title {
+    font-weight: 700;
+    font-size: .85rem;
+    color: var(--primary-dark);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .inst-step {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: .83rem;
+    color: #1e40af;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .inst-step:last-child { margin-bottom: 0; }
+  .inst-num {
+    width: 20px; height: 20px;
+    background: var(--primary);
+    color: #fff;
+    border-radius: 50%;
+    font-size: .7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* BUTTONS */
+  .confirm-btn {
+    width: 100%;
+    background: var(--success);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all .2s;
+    margin-bottom: 12px;
+  }
+  .confirm-btn:hover { background: #059669; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(16,185,129,.3); }
+  .confirm-btn:active { transform: translateY(0); }
+  .confirm-btn:disabled { opacity: .7; cursor: not-allowed; transform: none; }
+
+  .resend-wa-btn {
+    width: 100%;
+    background: var(--card);
+    color: var(--wa);
+    border: 1.5px solid #bbf7d0;
+    border-radius: var(--radius-sm);
+    padding: 13px;
+    font-family: inherit;
+    font-size: .875rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all .2s;
+    text-decoration: none;
+  }
+  .resend-wa-btn:hover { background: var(--success-light); }
+
+  /* SUCCESS STATE */
+  .success-card {
+    background: var(--success-light);
+    border: 1.5px solid #a7f3d0;
+    border-radius: var(--radius);
+    padding: 28px;
+    text-align: center;
+    animation: fadeUp .4s ease;
+  }
+  .success-icon {
+    width: 64px; height: 64px;
+    background: var(--success);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 1.8rem;
+    color: #fff;
+  }
+  .success-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; color: #065f46; }
+  .success-sub { font-size: .875rem; color: #047857; margin-bottom: 20px; }
+  .view-order-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 24px;
+    background: var(--success);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: .9rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .2s;
+  }
+  .view-order-btn:hover { background: #059669; }
+
+  /* POPUP */
+  .popup-bg {
+    position: fixed; inset: 0;
+    background: rgba(15,23,42,.45);
+    z-index: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s;
+    backdrop-filter: blur(2px);
+  }
+  .popup-bg.active { opacity: 1; pointer-events: all; }
+  .popup {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 32px 28px;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    transform: scale(.9);
+    transition: transform .25s;
+  }
+  .popup-bg.active .popup { transform: scale(1); }
+  .popup-icon {
+    width: 56px; height: 56px;
+    background: #fef3c7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 1.6rem;
+  }
+  .popup-title { font-weight: 800; font-size: 1.05rem; margin-bottom: 8px; }
+  .popup-body { font-size: .875rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px; }
+  .popup-actions { display: flex; gap: 10px; }
+  .popup-cancel {
+    flex: 1;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    font-family: inherit;
+    font-size: .875rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .popup-cancel:hover { border-color: var(--text-muted); }
+  .popup-ok {
+    flex: 2;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: var(--success);
+    color: #fff;
+    font-family: inherit;
+    font-size: .875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .popup-ok:hover { background: #059669; }
+
+  /* NOT FOUND */
+  .not-found {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .not-found-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+
+  @media (max-width: 480px) {
+    .main-card { padding: 24px 20px; }
+    .main-title { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="logo">Kuzo<span>Snacks</span></div>
+    <a href="index.html" class="shop-link">Kembali ke Toko</a>
+  </div>
+</div>
+
+<div class="main" id="main">
+  <div style="text-align:center;padding:60px 20px;color:var(--text-muted)">Memuat...</div>
+</div>
+
+<!-- POPUP REMINDER -->
+<div class="popup-bg" id="popupBg">
+  <div class="popup">
+    <div class="popup-icon">
+      <svg width="28" height="28" fill="none" stroke="#92400e" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <div class="popup-title">Yakin sudah kirim WA?</div>
+    <div class="popup-body">
+      Pastikan kamu sudah benar-benar mengirim pesan ke WhatsApp KuzoSnacks sebelum konfirmasi. Pesananmu tidak akan diproses tanpa konfirmasi WA.
+    </div>
+    <div class="popup-actions">
+      <button class="popup-cancel" onclick="closePopup()">Belum, kembali</button>
+      <button class="popup-ok" onclick="doConfirm()">Ya, sudah kirim</button>
+    </div>
+  </div>
+</div>
+
+<script>
+try {
+  function fmt(n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); }
+
+  const params = new URLSearchParams(window.location.search);
+  const orderId = params.get('id') || localStorage.getItem("lastOrderId");
+  const main = document.getElementById('main');
+
+  if (!orderId) {
+    main.innerHTML = `<div class="not-found">
+      <div class="not-found-title">Order ID tidak ditemukan</div>
+      <div style="color:var(--text-muted);margin-bottom:16px;font-size:.9rem;">Silakan kembali dan buat pesanan baru.</div>
+      <a href="index.html" style="color:var(--primary);text-decoration:none;font-weight:600;">Kembali ke Toko</a>
+    </div>`;
+  } else {
+    const orders = JSON.parse(localStorage.getItem("orders")) || [];
+    const order = orders.find(o => o.orderId === orderId);
+
+    if (!order) {
+      main.innerHTML = `<div class="not-found">
+        <div class="not-found-title">Pesanan tidak ditemukan</div>
+        <div style="color:var(--text-muted);margin-bottom:16px;font-size:.9rem;">ID: ${orderId}</div>
+        <a href="index.html" style="color:var(--primary);text-decoration:none;font-weight:600;">Kembali ke Toko</a>
+      </div>`;
+    } else if (order.webConfirmed) {
+      // Already confirmed — show success
+      renderSuccess(orderId);
+    } else {
+      renderConfirmPage(order);
+    }
+  }
+
+  function renderConfirmPage(order) {
+    const itemsStr = (order.items || []).map(i => `${i.name} x${i.qty}`).join(', ');
+    main.innerHTML = `
+      <!-- STEPS -->
+      <div class="steps">
+        <div class="step done">
+          <div class="step-circle">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="step-label">Checkout</div>
+        </div>
+        <div class="step-line done"></div>
+        <div class="step done">
+          <div class="step-circle">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="step-label">Kirim WA</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step active">
+          <div class="step-circle">3</div>
+          <div class="step-label">Konfirmasi</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step pending">
+          <div class="step-circle">4</div>
+          <div class="step-label">Selesai</div>
+        </div>
+      </div>
+
+      <!-- MAIN CARD -->
+      <div class="main-card">
+        <div class="wa-icon-wrap">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="#25d366">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 16.849c-.282.792-1.392 1.52-2.228 1.707-.588.132-1.355.238-3.935-.846-2.999-1.295-4.934-4.296-5.084-4.496-.149-.199-1.213-1.612-1.213-3.075 0-1.462.767-2.18 1.04-2.478.272-.298.594-.372.792-.372.198 0 .396.002.57.01.183.01.428-.069.67.51.247.594.841 2.058.916 2.207.074.148.124.322.025.52-.099.199-.149.323-.298.497-.149.174-.312.388-.446.52-.148.148-.304.309-.13.606.173.298.77 1.271 1.653 2.059 1.135 1.012 2.093 1.325 2.39 1.475.297.148.471.124.644-.075.173-.198.743-.867.94-1.164.198-.298.396-.249.67-.15.272.1 1.732.818 2.029.967.298.149.497.223.57.347.074.124.074.719-.173 1.413z"/>
+          </svg>
+        </div>
+        <div class="main-title">Sudah Kirim Pesan<br>WhatsApp?</div>
+        <div class="main-sub">Langkah terakhir: konfirmasi bahwa kamu sudah mengirim pesan ke WhatsApp KuzoSnacks. Ini memastikan pesananmu langsung diproses.</div>
+
+        <!-- ORDER PREVIEW -->
+        <div class="order-preview">
+          <div class="preview-row">
+            <span class="preview-label">Order ID</span>
+            <span class="preview-val preview-id">${order.orderId}</span>
+          </div>
+          <div class="preview-row">
+            <span class="preview-label">Nama</span>
+            <span class="preview-val">${order.name || '-'} (${order.class || ''} ${order.major || ''})</span>
+          </div>
+          <div class="preview-row">
+            <span class="preview-label">Item</span>
+            <span class="preview-val" style="text-align:right;max-width:200px;font-size:.82rem;">${itemsStr}</span>
+          </div>
+          <div class="preview-row">
+            <span class="preview-label">Total</span>
+            <span class="preview-val" style="color:var(--primary)">${fmt(order.total || 0)}</span>
+          </div>
+          <div class="preview-row">
+            <span class="preview-label">Ambil Pukul</span>
+            <span class="preview-val">${order.pickup || '-'}</span>
+          </div>
+        </div>
+
+        <!-- INSTRUCTIONS -->
+        <div class="instructions">
+          <div class="inst-title">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Panduan Konfirmasi
+          </div>
+          <div class="inst-step">
+            <div class="inst-num">1</div>
+            <div>Buka WhatsApp — cek apakah pesan ke KuzoSnacks sudah terkirim (tanda centang).</div>
+          </div>
+          <div class="inst-step">
+            <div class="inst-num">2</div>
+            <div>Jika belum terkirim, klik tombol "Kirim Ulang WA" di bawah.</div>
+          </div>
+          <div class="inst-step">
+            <div class="inst-num">3</div>
+            <div>Setelah yakin sudah terkirim, klik "Saya Sudah Kirim" untuk mengonfirmasi.</div>
+          </div>
+        </div>
+
+        <!-- BUTTONS -->
+        <button class="confirm-btn" id="confirmBtn" onclick="showPopup()">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Saya Sudah Kirim ke WA
+        </button>
+        <a class="resend-wa-btn" id="resendWaBtn" href="#" onclick="resendWA(event)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#25d366">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 16.849c-.282.792-1.392 1.52-2.228 1.707-.588.132-1.355.238-3.935-.846-2.999-1.295-4.934-4.296-5.084-4.496-.149-.199-1.213-1.612-1.213-3.075 0-1.462.767-2.18 1.04-2.478.272-.298.594-.372.792-.372.198 0 .396.002.57.01.183.01.428-.069.67.51.247.594.841 2.058.916 2.207.074.148.124.322.025.52-.099.199-.149.323-.298.497-.149.174-.312.388-.446.52-.148.148-.304.309-.13.606.173.298.77 1.271 1.653 2.059 1.135 1.012 2.093 1.325 2.39 1.475.297.148.471.124.644-.075.173-.198.743-.867.94-1.164.198-.298.396-.249.67-.15.272.1 1.732.818 2.029.967.298.149.497.223.57.347.074.124.074.719-.173 1.413z"/>
+          </svg>
+          Kirim Ulang ke WhatsApp
+        </a>
+      </div>
+    `;
+    // Build WA resend link
+    buildWaLink(order);
+  }
+
+  function buildWaLink(order) {
+    const itemsText = (order.items || []).map(i => `- ${i.name} x${i.qty} = Rp ${(i.price * i.qty).toLocaleString('id-ID')}`).join('\n');
+    const msg = encodeURIComponent(
+      `Halo KuzoSnacks, saya mau pesan:\n\n${itemsText}\n\nTotal: Rp ${Number(order.total).toLocaleString('id-ID')}\nNama: ${order.name} (${order.class} ${order.major})\nAmbil: ${order.pickup}\nOrder ID: ${order.orderId}`
+    );
+    const btn = document.getElementById('resendWaBtn');
+    if (btn) btn.href = `https://wa.me/6281234567890?text=${msg}`;
+  }
+
+  function resendWA(e) {
+    // link will open naturally; update waConfirmed again just in case
+    try {
+      const orders = JSON.parse(localStorage.getItem("orders")) || [];
+      const idx = orders.findIndex(o => o.orderId === orderId);
+      if (idx !== -1) {
+        orders[idx].waConfirmed = true;
+        localStorage.setItem("orders", JSON.stringify(orders));
+      }
+    } catch(err) {}
+  }
+
+  function showPopup() { document.getElementById('popupBg').classList.add('active'); }
+  function closePopup() { document.getElementById('popupBg').classList.remove('active'); }
+
+  document.getElementById('popupBg').addEventListener('click', function(e) {
+    if (e.target === this) closePopup();
+  });
+
+  function doConfirm() {
+    try {
+      closePopup();
+      const btn = document.getElementById('confirmBtn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Memproses...'; }
+
+      const orders = JSON.parse(localStorage.getItem("orders")) || [];
+      const idx = orders.findIndex(o => o.orderId === orderId);
+      if (idx !== -1) {
+        orders[idx].webConfirmed = true;
+        orders[idx].waConfirmed = true;
+        orders[idx].status = 'DIPROSES';
+        localStorage.setItem("orders", JSON.stringify(orders));
+        localStorage.setItem("webConfirmed_" + orderId, "true");
+      }
+
+      setTimeout(() => {
+        renderSuccess(orderId);
+      }, 600);
+    } catch(e) { console.error(e); }
+  }
+
+  function renderSuccess(oid) {
+    main.innerHTML = `
+      <!-- STEPS -->
+      <div class="steps">
+        <div class="step done">
+          <div class="step-circle"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="step-label">Checkout</div>
+        </div>
+        <div class="step-line done"></div>
+        <div class="step done">
+          <div class="step-circle"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="step-label">Kirim WA</div>
+        </div>
+        <div class="step-line done"></div>
+        <div class="step done">
+          <div class="step-circle"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="step-label">Konfirmasi</div>
+        </div>
+        <div class="step-line done"></div>
+        <div class="step done">
+          <div class="step-circle"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="step-label">Selesai</div>
+        </div>
+      </div>
+
+      <div class="success-card">
+        <div class="success-icon">
+          <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="success-title">Konfirmasi Berhasil!</div>
+        <div class="success-sub">Pesananmu sedang diproses. Kamu bisa cek status dan lihat QR tiket di halaman pesanan.</div>
+        <a href="order.html?id=${oid}" class="view-order-btn">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Lihat Detail Pesanan & QR
+        </a>
+      </div>
+    `;
+    setTimeout(() => { window.location.href = 'order.html?id=' + oid; }, 3000);
+  }
+
+} catch(e) { console.error(e); }
+</script>
+</body>
+</html>
