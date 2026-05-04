@@ -1,669 +1,1036 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ALL Control — Admin Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MinBite Admin — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DM+Mono:wght@400;500&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --bg: #f8fafc;
-    --card: #ffffff;
-    --text: #0f172a;
-    --text-muted: #64748b;
-    --primary: #3b82f6;
-    --primary-dark: #2563eb;
-    --primary-light: #eff6ff;
-    --border: #e2e8f0;
-    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.06);
-    --shadow-lg: 0 8px 32px rgba(0,0,0,.10);
-    --radius: 16px;
-    --radius-sm: 10px;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-    --info: #6366f1;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
+:root{
+  --bg:       #080b14;
+  --surface:  #0e1220;
+  --card:     #131829;
+  --card2:    #1a2035;
+  --border:   #1e2840;
+  --accent:   #ff6b35;
+  --accent2:  #ffcc00;
+  --green:    #00d4a0;
+  --red:      #ff4d6d;
+  --blue:     #4d96ff;
+  --purple:   #b57bff;
+  --cyan:     #00cfff;
+  --text:     #d8e0f0;
+  --muted:    #5a6480;
+  --radius:   14px;
+}
 
-  /* TOPBAR */
-  .topbar {
-    background: var(--card);
-    border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; z-index: 100;
-  }
-  .topbar-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .logo {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.4rem;
-    color: var(--text);
-  }
-  .logo span { color: var(--primary); }
-  .admin-badge {
-    font-size: .72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .1em;
-    background: var(--primary-light);
-    color: var(--primary);
-    padding: 3px 10px;
-    border-radius: 50px;
-    margin-left: 10px;
-  }
-  .topbar-actions { display: flex; gap: 10px; align-items: center; }
-  .topbar-btn {
-    padding: 8px 16px;
-    border-radius: var(--radius-sm);
-    border: 1.5px solid var(--border);
-    background: var(--bg);
-    font-family: inherit;
-    font-size: .82rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all .15s;
-    color: var(--text);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .topbar-btn:hover { border-color: var(--primary); color: var(--primary); }
-  .logout-btn {
-    background: #fff5f5;
-    border-color: #fecaca;
-    color: var(--danger);
-  }
-  .logout-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+*{box-sizing:border-box;margin:0;padding:0}
 
-  /* MAIN */
-  .main { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
 
-  /* STATS */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 16px;
-    margin-bottom: 32px;
-  }
-  .stat-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 20px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-  }
-  .stat-label { font-size: .75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
-  .stat-value { font-size: 1.6rem; font-weight: 800; line-height: 1; }
-  .stat-value.blue { color: var(--primary); }
-  .stat-value.green { color: var(--success); }
-  .stat-value.orange { color: var(--warning); }
-  .stat-value.red { color: var(--danger); }
+/* pixel grid */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(77,150,255,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(77,150,255,.04) 1px,transparent 1px);
+  background-size:24px 24px;
+  pointer-events:none;z-index:0;
+}
 
-  /* CONTROLS */
-  .controls {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 20px 24px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    margin-bottom: 24px;
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .search-wrap {
-    position: relative;
-    flex: 1;
-    min-width: 200px;
-  }
-  .search-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-muted);
-  }
-  .search-input {
-    width: 100%;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 10px 14px 10px 38px;
-    font-family: inherit;
-    font-size: .875rem;
-    color: var(--text);
-    background: var(--bg);
-    transition: border-color .15s;
-  }
-  .search-input:focus { outline: none; border-color: var(--primary); }
-  .filter-select {
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 10px 14px;
-    font-family: inherit;
-    font-size: .875rem;
-    color: var(--text);
-    background: var(--bg);
-    cursor: pointer;
-    transition: border-color .15s;
-    appearance: none;
-    min-width: 160px;
-  }
-  .filter-select:focus { outline: none; border-color: var(--primary); }
-  .refresh-btn {
-    padding: 10px 18px;
-    border-radius: var(--radius-sm);
-    border: 1.5px solid var(--border);
-    background: var(--primary);
-    color: #fff;
-    font-family: inherit;
-    font-size: .875rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background .15s;
-  }
-  .refresh-btn:hover { background: var(--primary-dark); }
+/* ──────── LOGIN SCREEN ──────── */
+#loginScreen{
+  position:fixed;inset:0;z-index:900;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+}
+#loginScreen.hidden{display:none}
 
-  /* ORDERS TABLE */
-  .orders-section {
-    background: var(--card);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    overflow: hidden;
-  }
-  .orders-header {
-    padding: 20px 24px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .orders-title { font-weight: 700; font-size: 1rem; }
-  .orders-count {
-    font-size: .8rem;
-    color: var(--text-muted);
-    font-weight: 500;
-  }
-  .table-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; min-width: 700px; }
-  th {
-    background: var(--bg);
-    font-size: .75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .07em;
-    color: var(--text-muted);
-    padding: 12px 16px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-  }
-  td {
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border);
-    font-size: .875rem;
-    vertical-align: middle;
-  }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #f8fafc; }
-  .order-id {
-    font-family: 'Courier New', monospace;
-    font-size: .78rem;
-    color: var(--text-muted);
-    font-weight: 600;
-  }
-  .customer-name { font-weight: 600; }
-  .customer-meta { font-size: .78rem; color: var(--text-muted); margin-top: 2px; }
-  .items-list { font-size: .8rem; color: var(--text-muted); }
-  .total-val { font-weight: 700; color: var(--primary); }
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 10px;
-    border-radius: 50px;
-    font-size: .72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .05em;
-    white-space: nowrap;
-  }
-  .status-badge.MENUNGGU { background: #fef3c7; color: #92400e; }
-  .status-badge.DIPROSES { background: #dbeafe; color: #1e40af; }
-  .status-badge.SIAP_DIAMBIL { background: #d1fae5; color: #065f46; }
-  .status-badge.DIBATALKAN { background: #fee2e2; color: #991b1b; }
-  .status-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: currentColor;
-  }
-  .action-cell { display: flex; gap: 6px; flex-wrap: wrap; }
-  .act-btn {
-    padding: 5px 10px;
-    border-radius: 7px;
-    border: 1.5px solid var(--border);
-    background: var(--bg);
-    font-family: inherit;
-    font-size: .75rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all .15s;
-    color: var(--text);
-    white-space: nowrap;
-  }
-  .act-btn:hover { border-color: var(--primary); color: var(--primary); }
-  .act-btn.cancel { color: var(--danger); border-color: #fecaca; background: #fff5f5; }
-  .act-btn.cancel:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
-  .act-btn.view { color: var(--primary); border-color: #bfdbfe; background: var(--primary-light); }
-  .empty-orders {
-    padding: 60px 24px;
-    text-align: center;
-    color: var(--text-muted);
-  }
-  .empty-orders-icon {
-    width: 56px; height: 56px;
-    background: var(--bg);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 16px;
-  }
+.login-card{
+  background:var(--surface);
+  border:2px solid var(--border);
+  border-radius:22px;
+  padding:40px 36px;
+  width:100%;max-width:380px;
+  box-shadow:0 0 60px rgba(255,107,53,.1);
+  position:relative;overflow:hidden;
+}
+.login-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2),var(--purple),var(--cyan));
+}
 
-  /* STATUS MODAL */
-  .modal-bg {
-    position: fixed; inset: 0;
-    background: rgba(15,23,42,.45);
-    z-index: 300;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .25s;
-    backdrop-filter: blur(2px);
-  }
-  .modal-bg.active { opacity: 1; pointer-events: all; }
-  .modal {
-    background: var(--card);
-    border-radius: 20px;
-    padding: 32px;
-    width: 100%;
-    max-width: 440px;
-    box-shadow: var(--shadow-lg);
-    transform: scale(.95);
-    transition: transform .25s;
-  }
-  .modal-bg.active .modal { transform: scale(1); }
-  .modal-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
-  .modal-sub { font-size: .85rem; color: var(--text-muted); margin-bottom: 24px; }
-  .status-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-  .status-option {
-    padding: 12px 14px;
-    border-radius: var(--radius-sm);
-    border: 2px solid var(--border);
-    cursor: pointer;
-    transition: all .15s;
-    font-family: inherit;
-    font-size: .82rem;
-    font-weight: 600;
-    text-align: center;
-    background: var(--bg);
-    color: var(--text);
-  }
-  .status-option:hover { border-color: var(--primary); color: var(--primary); }
-  .status-option.selected { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
-  .status-option.disabled-opt { opacity: .4; cursor: not-allowed; }
-  .modal-actions { display: flex; gap: 10px; }
-  .modal-cancel-btn {
-    flex: 1;
-    padding: 12px;
-    border-radius: var(--radius-sm);
-    border: 1.5px solid var(--border);
-    background: var(--bg);
-    font-family: inherit;
-    font-size: .875rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all .15s;
-  }
-  .modal-cancel-btn:hover { border-color: var(--text-muted); }
-  .modal-save-btn {
-    flex: 2;
-    padding: 12px;
-    border-radius: var(--radius-sm);
-    border: none;
-    background: var(--primary);
-    color: #fff;
-    font-family: inherit;
-    font-size: .875rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background .15s;
-  }
-  .modal-save-btn:hover { background: var(--primary-dark); }
+.login-logo{text-align:center;margin-bottom:28px}
+.login-logo .l-icon{font-size:48px;display:block;margin-bottom:10px}
+.login-logo h1{
+  font-family:'Press Start 2P',monospace;
+  font-size:13px;color:var(--accent2);
+  text-shadow:2px 2px 0 var(--accent);
+  margin-bottom:6px;line-height:1.6;
+}
+.login-logo p{font-size:12px;color:var(--muted)}
 
-  /* TOAST */
-  .toast-container {
-    position: fixed; top: 80px; right: 20px; z-index: 500;
-    display: flex; flex-direction: column; gap: 10px;
-    pointer-events: none;
-  }
-  .toast {
-    background: var(--card);
-    border-radius: var(--radius-sm);
-    padding: 13px 18px;
-    box-shadow: var(--shadow-lg);
-    border-left: 3px solid var(--primary);
-    font-size: .875rem;
-    font-weight: 500;
-    max-width: 280px;
-    animation: slideIn .3s ease, fadeOut .3s ease 2.5s forwards;
-  }
-  .toast.success { border-color: var(--success); }
-  .toast.error { border-color: var(--danger); }
-  .toast-title { font-weight: 700; margin-bottom: 2px; font-size: .875rem; }
-  @keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-  @keyframes fadeOut { to { opacity: 0; transform: translateX(20px); } }
+.login-field{margin-bottom:16px}
+.login-field label{
+  display:block;
+  font-size:11px;font-weight:700;letter-spacing:1px;
+  color:var(--muted);margin-bottom:6px;text-transform:uppercase;
+}
+.login-field input{
+  width:100%;padding:12px 16px;
+  background:var(--bg);
+  border:2px solid var(--border);border-radius:10px;
+  color:var(--text);font-size:14px;font-family:'Nunito',sans-serif;
+  outline:none;transition:border-color .15s;
+}
+.login-field input:focus{border-color:var(--accent)}
 
-  @media (max-width: 640px) {
-    .main { padding: 20px 16px; }
-    .topbar-inner { padding: 0 16px; }
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    .controls { flex-direction: column; }
-    .search-wrap { min-width: 100%; }
-    .filter-select { width: 100%; }
-    .status-options { grid-template-columns: 1fr; }
-  }
+.login-btn{
+  width:100%;padding:14px;margin-top:6px;
+  background:var(--accent);color:#fff;
+  border:none;border-radius:10px;
+  font-family:'Press Start 2P',monospace;font-size:10px;
+  cursor:pointer;letter-spacing:.5px;
+  box-shadow:0 4px 20px rgba(255,107,53,.35);
+  transition:all .15s;
+}
+.login-btn:hover{background:#e5571e;transform:translateY(-1px)}
+.login-btn:active{transform:translateY(1px)}
+
+.login-err{
+  margin-top:12px;padding:10px 14px;
+  background:rgba(255,77,109,.1);
+  border:1.5px solid var(--red);
+  border-radius:8px;color:var(--red);
+  font-size:12px;text-align:center;
+  display:none;
+}
+.login-err.show{display:block}
+.login-hint{
+  margin-top:14px;text-align:center;
+  font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);
+}
+
+/* ──────── MAIN APP ──────── */
+#app{display:none;min-height:100vh;position:relative;z-index:1}
+#app.visible{display:block}
+
+/* ──────── NAVBAR ──────── */
+.admin-nav{
+  position:sticky;top:0;z-index:100;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+  display:flex;align-items:center;gap:14px;
+  height:58px;
+  box-shadow:0 2px 24px rgba(0,0,0,.4);
+}
+.nav-logo{
+  display:flex;align-items:center;gap:8px;
+  font-family:'Press Start 2P',monospace;
+  font-size:11px;color:var(--accent2);
+  text-shadow:1px 1px 0 var(--accent);
+  text-decoration:none;
+}
+.nav-badge{
+  font-size:9px;
+  background:rgba(255,107,53,.15);
+  color:var(--accent);
+  border:1px solid rgba(255,107,53,.3);
+  padding:3px 8px;border-radius:4px;
+  font-family:'Press Start 2P',monospace;
+  display:none;
+}
+@media(min-width:500px){.nav-badge{display:inline-block}}
+
+.nav-spacer{flex:1}
+
+.online-dot{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;color:var(--green);font-weight:700;
+}
+.online-dot::before{
+  content:'';
+  width:8px;height:8px;border-radius:50%;
+  background:var(--green);
+  animation:pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
+.admin-name-tag{
+  font-size:12px;color:var(--muted);
+  padding:5px 12px;
+  border:1px solid var(--border);border-radius:6px;
+  font-family:'DM Mono',monospace;
+}
+
+.logout-btn{
+  background:none;border:1px solid var(--border);
+  border-radius:6px;padding:6px 12px;
+  color:var(--muted);font-size:12px;cursor:pointer;
+  transition:all .15s;font-family:'Nunito',sans-serif;
+}
+.logout-btn:hover{border-color:var(--red);color:var(--red)}
+
+.store-link{
+  font-size:11px;color:var(--muted);
+  text-decoration:none;padding:5px 11px;
+  border:1px solid var(--border);border-radius:6px;
+  transition:all .15s;
+}
+.store-link:hover{color:var(--accent2);border-color:var(--accent2)}
+
+/* ──────── DASHBOARD LAYOUT ──────── */
+.dashboard{padding:24px}
+
+/* stats bar */
+.stats-bar{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:14px;margin-bottom:24px;
+}
+.stat-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px 18px;
+  position:relative;overflow:hidden;
+}
+.stat-card::before{
+  content:'';
+  position:absolute;top:0;left:0;bottom:0;width:3px;
+}
+.stat-card.s-total::before{background:var(--accent)}
+.stat-card.s-wait::before{background:var(--accent2)}
+.stat-card.s-process::before{background:var(--blue)}
+.stat-card.s-ready::before{background:var(--green)}
+.stat-card.s-done::before{background:var(--purple)}
+
+.stat-label{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.stat-value{font-family:'Press Start 2P',monospace;font-size:18px;color:var(--text)}
+.stat-card.s-total .stat-value{color:var(--accent)}
+.stat-card.s-wait  .stat-value{color:var(--accent2)}
+.stat-card.s-process .stat-value{color:var(--blue)}
+.stat-card.s-ready .stat-value{color:var(--green)}
+.stat-card.s-done  .stat-value{color:var(--purple)}
+
+/* filter bar */
+.filter-bar{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  margin-bottom:20px;
+}
+.filter-label{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace}
+.filter-btn{
+  font-family:'Press Start 2P',monospace;font-size:8px;
+  padding:7px 14px;
+  border:1.5px solid var(--border);border-radius:6px;
+  background:transparent;color:var(--muted);
+  cursor:pointer;transition:all .15s;
+}
+.filter-btn:hover{border-color:var(--accent);color:var(--accent)}
+.filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.refresh-btn{
+  margin-left:auto;
+  background:none;border:1.5px solid var(--border);
+  border-radius:6px;padding:7px 12px;
+  color:var(--muted);font-size:12px;cursor:pointer;
+  transition:all .15s;display:flex;align-items:center;gap:6px;
+  font-family:'Nunito',sans-serif;
+}
+.refresh-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+
+/* ──────── ORDER CARDS ──────── */
+.orders-list{
+  display:flex;flex-direction:column;gap:14px;
+}
+
+.order-card{
+  background:var(--card);
+  border:1.5px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  transition:border-color .2s,box-shadow .2s;
+}
+.order-card:hover{border-color:#2e3a58;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.order-card.locked-by-me{border-color:var(--cyan);box-shadow:0 0 16px rgba(0,207,255,.12)}
+.order-card.locked-by-other{border-color:var(--red);opacity:.8}
+
+.order-head{
+  padding:14px 18px;
+  display:flex;align-items:center;gap:12px;
+  flex-wrap:wrap;gap:10px;
+  border-bottom:1px solid var(--border);
+  background:var(--card2);
+}
+.order-id{
+  font-family:'DM Mono',monospace;font-size:12px;
+  color:var(--accent);font-weight:600;
+  letter-spacing:.5px;
+}
+.order-time{font-size:11px;color:var(--muted)}
+.order-buyer{font-weight:800;font-size:13px;color:var(--text)}
+.order-kelas{font-size:11px;color:var(--muted)}
+.head-spacer{flex:1}
+
+/* status badges */
+.badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 12px;border-radius:6px;
+  font-family:'Press Start 2P',monospace;font-size:7px;
+  border:1.5px solid;font-weight:700;
+}
+.badge-MENUNGGU{
+  color:var(--accent2);background:rgba(255,204,0,.1);
+  border-color:rgba(255,204,0,.3);
+}
+.badge-DIPROSES{
+  color:var(--blue);background:rgba(77,150,255,.1);
+  border-color:rgba(77,150,255,.3);
+}
+.badge-SIAP{
+  color:var(--green);background:rgba(0,212,160,.1);
+  border-color:rgba(0,212,160,.3);
+}
+.badge-SELESAI{
+  color:var(--purple);background:rgba(181,123,255,.1);
+  border-color:rgba(181,123,255,.3);
+}
+
+/* lock indicator */
+.lock-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:5px;
+  font-size:10px;font-weight:700;
+}
+.lock-tag.mine{color:var(--cyan);background:rgba(0,207,255,.1);border:1px solid rgba(0,207,255,.3)}
+.lock-tag.other{color:var(--red);background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.3)}
+
+/* order body */
+.order-body{padding:14px 18px}
+.order-items{margin-bottom:12px}
+.order-item-row{
+  display:flex;align-items:center;gap:10px;
+  padding:6px 0;
+  border-bottom:1px solid var(--border);
+  font-size:13px;
+}
+.order-item-row:last-child{border-bottom:none}
+.item-emoji{font-size:20px;flex-shrink:0}
+.item-name{flex:1;font-weight:700;color:var(--text)}
+.item-qty{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
+.item-sub{font-family:'DM Mono',monospace;font-size:12px;color:var(--accent);font-weight:700}
+
+.order-meta{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  padding-top:10px;border-top:1px solid var(--border);
+}
+.meta-chip{
+  font-size:11px;font-weight:700;
+  padding:4px 10px;border-radius:6px;
+  background:var(--card2);color:var(--muted);
+  border:1px solid var(--border);
+}
+.meta-total{
+  font-family:'Press Start 2P',monospace;
+  font-size:11px;color:var(--accent);
+  margin-left:auto;
+}
+
+/* status control */
+.order-foot{
+  padding:12px 18px;
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+  flex-wrap:wrap;
+}
+.status-select{
+  flex:1;min-width:160px;
+  padding:9px 14px;
+  background:var(--bg);
+  border:2px solid var(--border);border-radius:8px;
+  color:var(--text);font-size:13px;font-family:'Nunito',sans-serif;
+  outline:none;cursor:pointer;transition:border-color .15s;
+}
+.status-select:focus{border-color:var(--cyan)}
+.status-select:disabled{opacity:.4;cursor:not-allowed}
+
+.update-btn{
+  padding:9px 18px;
+  background:var(--accent);color:#fff;
+  border:2px solid rgba(255,107,53,.5);border-radius:8px;
+  font-family:'Press Start 2P',monospace;font-size:8px;
+  cursor:pointer;
+  box-shadow:0 2px 12px rgba(255,107,53,.25);
+  transition:all .15s;
+  white-space:nowrap;
+}
+.update-btn:hover{background:#e5571e;transform:translateY(-1px)}
+.update-btn:active{transform:translateY(1px)}
+.update-btn:disabled{background:var(--muted);cursor:not-allowed;transform:none;box-shadow:none}
+
+.lock-btn{
+  padding:9px 14px;
+  background:none;
+  border:2px solid var(--border);border-radius:8px;
+  color:var(--muted);font-size:12px;cursor:pointer;
+  transition:all .15s;font-family:'Nunito',sans-serif;
+  white-space:nowrap;
+}
+.lock-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.lock-btn.release{border-color:var(--red);color:var(--red)}
+.lock-btn.release:hover{background:rgba(255,77,109,.1)}
+
+/* ──────── EMPTY STATE ──────── */
+.empty-state{
+  text-align:center;padding:60px 20px;
+}
+.empty-state .e-icon{font-size:56px;margin-bottom:16px}
+.empty-state p{
+  font-family:'Press Start 2P',monospace;
+  font-size:9px;color:var(--muted);line-height:2;
+}
+
+/* ──────── TOAST ──────── */
+.toast-stack{
+  position:fixed;top:70px;right:20px;
+  z-index:800;
+  display:flex;flex-direction:column;gap:8px;
+  pointer-events:none;
+}
+.toast{
+  background:var(--card2);color:var(--text);
+  border-left:4px solid var(--accent);
+  border-radius:10px;padding:11px 16px;
+  font-size:13px;font-weight:700;
+  display:flex;align-items:center;gap:8px;
+  max-width:300px;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+  animation:t-in .3s cubic-bezier(.34,1.56,.64,1) both;
+}
+.toast.success{border-color:var(--green)}
+.toast.error{border-color:var(--red)}
+.toast.info{border-color:var(--blue)}
+.toast.warn{border-color:var(--accent2)}
+.toast.out{animation:t-out .3s ease forwards}
+@keyframes t-in{from{opacity:0;transform:translateX(30px) scale(.9)}to{opacity:1;transform:translateX(0) scale(1)}}
+@keyframes t-out{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(30px)}}
+.toast-icon{font-size:17px;flex-shrink:0}
+
+/* ──────── CONFIRM DIALOG ──────── */
+.confirm-wrap{
+  position:fixed;inset:0;z-index:700;
+  background:rgba(8,11,20,.7);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+  opacity:0;pointer-events:none;
+  transition:opacity .2s;
+  backdrop-filter:blur(4px);
+}
+.confirm-wrap.show{opacity:1;pointer-events:all}
+.confirm-box{
+  background:var(--surface);
+  border:2px solid var(--border);
+  border-radius:16px;padding:28px;
+  max-width:340px;width:100%;
+  box-shadow:0 0 40px rgba(0,0,0,.6);
+  transform:scale(.9);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+}
+.confirm-wrap.show .confirm-box{transform:scale(1)}
+.confirm-box h3{
+  font-family:'Press Start 2P',monospace;
+  font-size:11px;color:var(--text);
+  margin-bottom:10px;line-height:1.7;
+}
+.confirm-box p{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6}
+.confirm-actions{display:flex;gap:10px}
+.c-ok{
+  flex:1;padding:11px;
+  background:var(--accent);color:#fff;
+  border:none;border-radius:8px;
+  font-family:'Press Start 2P',monospace;font-size:8px;
+  cursor:pointer;transition:all .15s;
+}
+.c-ok:hover{background:#e5571e}
+.c-cancel{
+  flex:1;padding:11px;
+  background:none;color:var(--muted);
+  border:2px solid var(--border);border-radius:8px;
+  font-size:13px;cursor:pointer;transition:all .15s;
+  font-family:'Nunito',sans-serif;
+}
+.c-cancel:hover{border-color:var(--red);color:var(--red)}
+
+/* scrollbar */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* top bar pulse */
+.realtime-dot{
+  display:inline-block;
+  width:7px;height:7px;border-radius:50%;
+  background:var(--green);
+  animation:pulse-dot 2s ease-in-out infinite;
+  margin-right:6px;
+}
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="topbar-inner">
-    <div style="display:flex;align-items:center">
-      <div class="logo">Kuzo<span>Snacks</span></div>
-      <span class="admin-badge">Admin</span>
-    </div>
-    <div class="topbar-actions">
-      <a href="index.html" class="topbar-btn">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        Toko
-      </a>
-      <button class="topbar-btn logout-btn" onclick="logout()">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        Logout
-      </button>
+<!-- ── TOAST STACK ── -->
+<div class="toast-stack" id="toastStack"></div>
+
+<!-- ── CONFIRM DIALOG ── -->
+<div class="confirm-wrap" id="confirmWrap">
+  <div class="confirm-box">
+    <h3 id="confirmTitle">KONFIRMASI</h3>
+    <p id="confirmMsg">Yakin ingin melakukan aksi ini?</p>
+    <div class="confirm-actions">
+      <button class="c-cancel" onclick="closeConfirm()">Batal</button>
+      <button class="c-ok" id="confirmOk">✅ YA, LANJUT</button>
     </div>
   </div>
 </div>
 
-<div class="main">
-  <!-- STATS -->
-  <div class="stats-grid" id="statsGrid"></div>
-
-  <!-- CONTROLS -->
-  <div class="controls">
-    <div class="search-wrap">
-      <svg class="search-icon" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input class="search-input" id="searchInput" placeholder="Cari nama atau Order ID..." oninput="renderOrders()">
+<!-- ══════════════════════════════════════
+     LOGIN SCREEN
+════════════════════════════════════════ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <span class="l-icon">🛠</span>
+      <h1>MINBITE<br/>ADMIN</h1>
+      <p>Panel pengelolaan order kantin</p>
     </div>
-    <select class="filter-select" id="filterStatus" onchange="renderOrders()">
-      <option value="">Semua Status</option>
-      <option value="MENUNGGU">Menunggu</option>
-      <option value="DIPROSES">Diproses</option>
-      <option value="SIAP DIAMBIL">Siap Diambil</option>
-      <option value="DIBATALKAN">Dibatalkan</option>
-    </select>
-    <button class="refresh-btn" onclick="loadAndRender()">Refresh</button>
-  </div>
-
-  <!-- ORDERS -->
-  <div class="orders-section">
-    <div class="orders-header">
-      <div class="orders-title">Daftar Pesanan</div>
-      <div class="orders-count" id="ordersCount">0 pesanan</div>
+    <div class="login-field">
+      <label>Username</label>
+      <input type="text" id="loginUser" placeholder="admin" autocomplete="username"
+             onkeydown="if(event.key==='Enter')doLogin()"/>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>Pelanggan</th>
-            <th>Item</th>
-            <th>Total</th>
-            <th>Waktu Ambil</th>
-            <th>Status</th>
-            <th>Konfirmasi</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody id="ordersBody"></tbody>
-      </table>
+    <div class="login-field">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"
+             onkeydown="if(event.key==='Enter')doLogin()"/>
     </div>
+    <button class="login-btn" onclick="doLogin()">🔑 MASUK DASHBOARD</button>
+    <div class="login-err" id="loginErr">Username atau password salah!</div>
+    <div class="login-hint">default: admin / minbite123</div>
   </div>
 </div>
 
-<!-- STATUS MODAL -->
-<div class="modal-bg" id="modalBg">
-  <div class="modal">
-    <div class="modal-title">Ubah Status Pesanan</div>
-    <div class="modal-sub" id="modalSub"></div>
-    <div class="status-options" id="statusOptions"></div>
-    <div class="modal-actions">
-      <button class="modal-cancel-btn" onclick="closeModal()">Batal</button>
-      <button class="modal-save-btn" onclick="saveStatus()">Simpan Perubahan</button>
+<!-- ══════════════════════════════════════
+     MAIN APP
+════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- NAVBAR -->
+  <nav class="admin-nav">
+    <a href="index.html" class="nav-logo">🍱 <span>MinBite</span></a>
+    <span class="nav-badge">ADMIN PANEL</span>
+    <div class="nav-spacer"></div>
+    <div class="online-dot" title="Realtime sync aktif">LIVE</div>
+    <span class="admin-name-tag" id="adminNameTag"></span>
+    <a href="index.html" class="store-link">🛒 Toko</a>
+    <button class="logout-btn" onclick="doLogout()">🚪 Keluar</button>
+  </nav>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard">
+
+    <!-- STATS -->
+    <div class="stats-bar" id="statsBar">
+      <div class="stat-card s-total"><div class="stat-label">Total Order</div><div class="stat-value" id="st-total">0</div></div>
+      <div class="stat-card s-wait"><div class="stat-label">Menunggu</div><div class="stat-value" id="st-wait">0</div></div>
+      <div class="stat-card s-process"><div class="stat-label">Diproses</div><div class="stat-value" id="st-proc">0</div></div>
+      <div class="stat-card s-ready"><div class="stat-label">Siap</div><div class="stat-value" id="st-ready">0</div></div>
+      <div class="stat-card s-done"><div class="stat-label">Selesai</div><div class="stat-value" id="st-done">0</div></div>
     </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <span class="filter-label"><span class="realtime-dot"></span>Filter:</span>
+      <button class="filter-btn active" data-filter="SEMUA" onclick="setFilter('SEMUA',this)">SEMUA</button>
+      <button class="filter-btn" data-filter="MENUNGGU" onclick="setFilter('MENUNGGU',this)">⏳ MENUNGGU</button>
+      <button class="filter-btn" data-filter="DIPROSES" onclick="setFilter('DIPROSES',this)">🔥 DIPROSES</button>
+      <button class="filter-btn" data-filter="SIAP" onclick="setFilter('SIAP',this)">✅ SIAP</button>
+      <button class="filter-btn" data-filter="SELESAI" onclick="setFilter('SELESAI',this)">🎉 SELESAI</button>
+      <button class="refresh-btn" onclick="loadOrders()">🔄 Refresh</button>
+    </div>
+
+    <!-- ORDERS LIST -->
+    <div class="orders-list" id="ordersList"></div>
   </div>
 </div>
-
-<div class="toast-container" id="toastContainer"></div>
 
 <script>
-try {
-  if (localStorage.getItem("isAdmin") !== "true") {
-    window.location.href = 'login.html';
+// ═══════════════════════════════════════════════
+//  CONSTANTS
+// ═══════════════════════════════════════════════
+const ORDERS_KEY   = 'minbite_orders';
+const LOCK_KEY     = 'minbite_admin_locks';
+const LOCK_TIMEOUT = 2 * 60 * 1000; // 2 minutes
+
+const STATUS_FLOW = ['MENUNGGU', 'DIPROSES', 'SIAP', 'SELESAI'];
+
+const ADMIN_CREDS = [
+  { user: 'admin',  pass: 'minbite123' },
+  { user: 'kasir',  pass: 'kasir2025' },
+];
+
+// ═══════════════════════════════════════════════
+//  ADMIN SESSION
+// ═══════════════════════════════════════════════
+let adminId   = null;
+let adminName = null;
+
+function generateAdminId() {
+  return 'adm-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+}
+
+function doLogin() {
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const found = ADMIN_CREDS.find(c => c.user === user && c.pass === pass);
+  if (!found) {
+    document.getElementById('loginErr').classList.add('show');
+    return;
   }
+  document.getElementById('loginErr').classList.remove('show');
+  adminId   = generateAdminId();
+  adminName = user;
+  document.getElementById('adminNameTag').textContent = `🔑 ${user}  [${adminId}]`;
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('app').classList.add('visible');
+  loadOrders();
+  startHeartbeat();
+  toast(`👋 Halo, ${user}! Dashboard aktif.`, 'success');
+}
 
-  const STATUSES = ['MENUNGGU', 'DIPROSES', 'SIAP DIAMBIL', 'DIBATALKAN'];
-  let orders = [];
-  let editOrderId = null;
-  let selectedStatus = null;
-
-  function fmt(n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); }
-
-  function loadOrders() {
-    orders = JSON.parse(localStorage.getItem("orders")) || [];
-  }
-
-  function saveOrders() {
-    localStorage.setItem("orders", JSON.stringify(orders));
-  }
-
-  function renderStats() {
-    loadOrders();
-    const total = orders.length;
-    const menunggu = orders.filter(o => o.status === 'MENUNGGU').length;
-    const diproses = orders.filter(o => o.status === 'DIPROSES').length;
-    const siap = orders.filter(o => o.status === 'SIAP DIAMBIL').length;
-    const batal = orders.filter(o => o.status === 'DIBATALKAN').length;
-    const revenue = orders.filter(o => o.status !== 'DIBATALKAN').reduce((s, o) => s + (o.total || 0), 0);
-    document.getElementById('statsGrid').innerHTML = `
-      <div class="stat-card"><div class="stat-label">Total Pesanan</div><div class="stat-value blue">${total}</div></div>
-      <div class="stat-card"><div class="stat-label">Menunggu</div><div class="stat-value orange">${menunggu}</div></div>
-      <div class="stat-card"><div class="stat-label">Diproses</div><div class="stat-value blue">${diproses}</div></div>
-      <div class="stat-card"><div class="stat-label">Siap Diambil</div><div class="stat-value green">${siap}</div></div>
-      <div class="stat-card"><div class="stat-label">Dibatalkan</div><div class="stat-value red">${batal}</div></div>
-      <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value green" style="font-size:1.1rem">${fmt(revenue)}</div></div>
-    `;
-  }
-
-  function getStatusClass(s) {
-    if (s === 'MENUNGGU') return 'MENUNGGU';
-    if (s === 'DIPROSES') return 'DIPROSES';
-    if (s === 'SIAP DIAMBIL') return 'SIAP_DIAMBIL';
-    if (s === 'DIBATALKAN') return 'DIBATALKAN';
-    return '';
-  }
-
-  function renderOrders() {
-    const q = document.getElementById('searchInput').value.toLowerCase().trim();
-    const f = document.getElementById('filterStatus').value;
-    let filtered = orders.filter(o => {
-      const matchQ = !q || o.name?.toLowerCase().includes(q) || o.orderId?.toLowerCase().includes(q);
-      const matchF = !f || o.status === f;
-      return matchQ && matchF;
-    }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-    document.getElementById('ordersCount').textContent = filtered.length + ' pesanan';
-
-    const tbody = document.getElementById('ordersBody');
-    if (!filtered.length) {
-      tbody.innerHTML = `<tr><td colspan="8">
-        <div class="empty-orders">
-          <div class="empty-orders-icon">
-            <svg width="24" height="24" fill="none" stroke="#94a3b8" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          </div>
-          <div style="font-weight:600;margin-bottom:4px;">Belum Ada Pesanan</div>
-          <div style="font-size:.82rem;">Belum ada pesanan yang sesuai filter.</div>
-        </div>
-      </td></tr>`;
-      return;
-    }
-
-    tbody.innerHTML = filtered.map(o => {
-      const isCancelled = o.status === 'DIBATALKAN';
-      const itemsStr = (o.items || []).map(i => `${i.name} x${i.qty}`).join(', ');
-      const waOk = o.waConfirmed ? '<span style="color:#10b981;font-weight:700;">WA</span>' : '<span style="color:#94a3b8;">WA</span>';
-      const webOk = o.webConfirmed ? '<span style="color:#10b981;font-weight:700;">Web</span>' : '<span style="color:#94a3b8;">Web</span>';
-      const date = o.createdAt ? new Date(o.createdAt).toLocaleDateString('id-ID', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) : '-';
-      return `
-        <tr>
-          <td>
-            <div class="order-id">${o.orderId}</div>
-            <div style="font-size:.72rem;color:#94a3b8;margin-top:2px;">${date}</div>
-          </td>
-          <td>
-            <div class="customer-name">${o.name || '-'}</div>
-            <div class="customer-meta">${o.class || ''} ${o.major || ''} &bull; ${o.phone || '-'}</div>
-          </td>
-          <td><div class="items-list">${itemsStr || '-'}</div></td>
-          <td><div class="total-val">${fmt(o.total || 0)}</div></td>
-          <td style="font-size:.82rem;white-space:nowrap">${o.pickup || '-'}</td>
-          <td><span class="status-badge ${getStatusClass(o.status)}">${o.status}</span></td>
-          <td style="font-size:.8rem;">${waOk} ${webOk}</td>
-          <td>
-            <div class="action-cell">
-              <button class="act-btn view" onclick="window.open('order.html?id=${o.orderId}','_blank')">Lihat</button>
-              ${!isCancelled ? `<button class="act-btn" onclick="openStatusModal('${o.orderId}')">Status</button>` : ''}
-              ${!isCancelled ? `<button class="act-btn cancel" onclick="cancelOrder('${o.orderId}')">Batalkan</button>` : ''}
-            </div>
-          </td>
-        </tr>`;
-    }).join('');
-  }
-
-  function openStatusModal(orderId) {
-    try {
-      const order = orders.find(o => o.orderId === orderId);
-      if (!order) return;
-      editOrderId = orderId;
-      selectedStatus = order.status;
-      document.getElementById('modalSub').textContent = `Order ${orderId} — ${order.name}`;
-      const opts = document.getElementById('statusOptions');
-      opts.innerHTML = STATUSES.map(s => {
-        const isCurrent = s === order.status;
-        return `<button class="status-option ${isCurrent ? 'selected' : ''}" onclick="selectStatus(this, '${s}')">${s}</button>`;
-      }).join('');
-      document.getElementById('modalBg').classList.add('active');
-    } catch(e) { console.error(e); }
-  }
-
-  function selectStatus(btn, status) {
-    document.querySelectorAll('.status-option').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    selectedStatus = status;
-  }
-
-  function closeModal() {
-    document.getElementById('modalBg').classList.remove('active');
-    editOrderId = null;
-    selectedStatus = null;
-  }
-
-  document.getElementById('modalBg').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
+function doLogout() {
+  showConfirm('KELUAR?', 'Yakin ingin logout dari dashboard?', () => {
+    releaseAllMyLocks();
+    adminId = null; adminName = null;
+    document.getElementById('app').classList.remove('visible');
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
   });
+}
 
-  function saveStatus() {
-    try {
-      if (!editOrderId || !selectedStatus) return;
-      const idx = orders.findIndex(o => o.orderId === editOrderId);
-      if (idx === -1) return;
-      orders[idx].status = selectedStatus;
-      if (selectedStatus === 'DIPROSES' && orders[idx].waConfirmed && orders[idx].webConfirmed) {
-        // already set
-      }
-      saveOrders();
-      closeModal();
-      loadAndRender();
-      showToast('Status Diperbarui', `Pesanan ${editOrderId} sekarang ${selectedStatus}.`, 'success');
-    } catch(e) { showToast('Error', 'Gagal memperbarui status.', 'error'); }
+// ═══════════════════════════════════════════════
+//  LOCK SYSTEM
+// ═══════════════════════════════════════════════
+function getLocks() {
+  try { return JSON.parse(localStorage.getItem(LOCK_KEY) || '{}'); } catch { return {}; }
+}
+
+function saveLocks(locks) {
+  localStorage.setItem(LOCK_KEY, JSON.stringify(locks));
+}
+
+function acquireLock(orderId) {
+  const locks = getLocks();
+  const now   = Date.now();
+
+  // Check if already locked by someone else (and not expired)
+  const existing = locks[orderId];
+  if (existing && existing.adminId !== adminId) {
+    const elapsed = now - existing.timestamp;
+    if (elapsed < LOCK_TIMEOUT) {
+      toast(`🔒 Order dikunci oleh ${existing.adminId}. Tunggu 2 menit.`, 'error');
+      return false;
+    }
+    // expired → safe to take over
   }
 
-  function cancelOrder(orderId) {
-    try {
-      if (!confirm(`Batalkan pesanan ${orderId}? Tindakan ini tidak dapat dibatalkan.`)) return;
-      const idx = orders.findIndex(o => o.orderId === orderId);
-      if (idx === -1) return;
-      orders[idx].status = 'DIBATALKAN';
-      saveOrders();
-      loadAndRender();
-      showToast('Pesanan Dibatalkan', `Order ${orderId} telah dibatalkan.`, 'error');
-    } catch(e) { showToast('Error', 'Gagal membatalkan pesanan.', 'error'); }
-  }
+  // Lock it
+  locks[orderId] = { adminId, timestamp: now };
+  saveLocks(locks);
+  renderOrders(); // reflect lock immediately
+  return true;
+}
 
-  function logout() {
-    if (!confirm('Yakin ingin logout?')) return;
-    localStorage.removeItem("isAdmin");
-    window.location.href = 'login.html';
-  }
-
-  function showToast(title, msg, type = '') {
-    const container = document.getElementById('toastContainer');
-    const t = document.createElement('div');
-    t.className = 'toast ' + type;
-    t.innerHTML = `<div class="toast-title">${title}</div><div>${msg}</div>`;
-    container.appendChild(t);
-    setTimeout(() => t.remove(), 3000);
-  }
-
-  function loadAndRender() {
-    loadOrders();
-    renderStats();
+function releaseLock(orderId) {
+  const locks = getLocks();
+  if (locks[orderId] && locks[orderId].adminId === adminId) {
+    delete locks[orderId];
+    saveLocks(locks);
     renderOrders();
   }
+}
 
-  loadAndRender();
+function releaseAllMyLocks() {
+  const locks = getLocks();
+  let changed = false;
+  for (const k in locks) {
+    if (locks[k].adminId === adminId) { delete locks[k]; changed = true; }
+  }
+  if (changed) saveLocks(locks);
+}
 
-  // Auto-refresh every 30s
-  setInterval(loadAndRender, 30000);
-} catch(e) { console.error(e); }
+function isLockedByMe(orderId) {
+  const locks = getLocks();
+  const l = locks[orderId];
+  if (!l) return false;
+  if (l.adminId !== adminId) return false;
+  return (Date.now() - l.timestamp) < LOCK_TIMEOUT;
+}
+
+function isLockedByOther(orderId) {
+  const locks = getLocks();
+  const l = locks[orderId];
+  if (!l) return false;
+  if (l.adminId === adminId) return false;
+  return (Date.now() - l.timestamp) < LOCK_TIMEOUT;
+}
+
+function getLockOwner(orderId) {
+  const l = getLocks()[orderId];
+  return l ? l.adminId : null;
+}
+
+// Heartbeat: refresh own locks + cleanup expired ones every 30s
+function startHeartbeat() {
+  setInterval(() => {
+    const locks = getLocks();
+    const now   = Date.now();
+    let changed = false;
+    for (const k in locks) {
+      if (now - locks[k].timestamp >= LOCK_TIMEOUT) {
+        delete locks[k]; changed = true;
+      } else if (locks[k].adminId === adminId) {
+        // renew my lock if still within timeout
+        // (user interaction will have already updated it via acquireLock)
+      }
+    }
+    if (changed) { saveLocks(locks); renderOrders(); }
+  }, 30000);
+}
+
+// ═══════════════════════════════════════════════
+//  ORDERS CRUD
+// ═══════════════════════════════════════════════
+let orders   = [];
+let activeFilter = 'SEMUA';
+
+function loadOrders() {
+  try {
+    const raw = localStorage.getItem(ORDERS_KEY);
+    orders = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(orders)) orders = [];
+  } catch { orders = []; }
+  renderStats();
+  renderOrders();
+}
+
+function saveOrders() {
+  localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+}
+
+function updateStatus(orderId, newStatus) {
+  // Validate
+  if (!STATUS_FLOW.includes(newStatus)) {
+    toast('❌ Status tidak valid', 'error'); return;
+  }
+
+  // Must have lock
+  if (!isLockedByMe(orderId)) {
+    toast('🔒 Kunci order dulu sebelum update!', 'warn'); return;
+  }
+
+  const idx = orders.findIndex(o => o.id === orderId);
+  if (idx === -1) { toast('❌ Order tidak ditemukan!', 'error'); return; }
+
+  // Prevent backward jump (optional: comment out to allow any change)
+  const currIdx = STATUS_FLOW.indexOf(orders[idx].status);
+  const newIdx  = STATUS_FLOW.indexOf(newStatus);
+  if (newIdx <= currIdx) {
+    toast('⚠ Status hanya bisa maju!', 'warn'); return;
+  }
+
+  orders[idx].status = newStatus;
+  orders[idx].updatedAt = new Date().toISOString();
+  orders[idx].updatedBy = adminId;
+  saveOrders();
+
+  // Release lock after update
+  releaseLock(orderId);
+
+  renderStats();
+  renderOrders();
+  toast(`✅ Status → ${newStatus}`, 'success');
+}
+
+// ═══════════════════════════════════════════════
+//  FILTER
+// ═══════════════════════════════════════════════
+function setFilter(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderOrders();
+}
+
+function filteredOrders() {
+  if (activeFilter === 'SEMUA') return orders;
+  return orders.filter(o => o.status === activeFilter);
+}
+
+// ═══════════════════════════════════════════════
+//  RENDER STATS
+// ═══════════════════════════════════════════════
+function renderStats() {
+  document.getElementById('st-total').textContent = orders.length;
+  document.getElementById('st-wait').textContent  = orders.filter(o => o.status === 'MENUNGGU').length;
+  document.getElementById('st-proc').textContent  = orders.filter(o => o.status === 'DIPROSES').length;
+  document.getElementById('st-ready').textContent = orders.filter(o => o.status === 'SIAP').length;
+  document.getElementById('st-done').textContent  = orders.filter(o => o.status === 'SELESAI').length;
+}
+
+// ═══════════════════════════════════════════════
+//  RENDER ORDERS
+// ═══════════════════════════════════════════════
+function renderOrders() {
+  const list = document.getElementById('ordersList');
+  const shown = filteredOrders();
+
+  if (!shown.length) {
+    list.innerHTML = `
+      <div class="empty-state">
+        <div class="e-icon">📭</div>
+        <p>BELUM ADA ORDER<br/>${activeFilter !== 'SEMUA' ? 'DI FILTER INI' : 'MASUK'}</p>
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = '';
+  shown.forEach(order => {
+    const myLock    = isLockedByMe(order.id);
+    const otherLock = isLockedByOther(order.id);
+    const lockOwner = getLockOwner(order.id);
+    const canEdit   = myLock;
+    const isDone    = order.status === 'SELESAI';
+
+    // Next statuses available from current
+    const currIdx = STATUS_FLOW.indexOf(order.status);
+    const nextStatuses = STATUS_FLOW.slice(currIdx + 1);
+
+    // Time formatting
+    const dt = new Date(order.createdAt);
+    const timeStr = dt.toLocaleString('id-ID', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+
+    // Lock badge HTML
+    let lockHtml = '';
+    if (myLock)    lockHtml = `<span class="lock-tag mine">🔑 Dikunci oleh saya</span>`;
+    if (otherLock) lockHtml = `<span class="lock-tag other">🔒 Dikunci: ${lockOwner}</span>`;
+
+    // Card class
+    let cardClass = 'order-card';
+    if (myLock)    cardClass += ' locked-by-me';
+    if (otherLock) cardClass += ' locked-by-other';
+
+    // Items HTML
+    const itemsHtml = (order.items || []).map(item => `
+      <div class="order-item-row">
+        <span class="item-emoji">${item.emoji || '🍱'}</span>
+        <span class="item-name">${item.name}</span>
+        <span class="item-qty">×${item.qty}</span>
+        <span class="item-sub">Rp ${(item.price * item.qty).toLocaleString('id')}</span>
+      </div>`).join('');
+
+    // Status select options
+    const selectOpts = nextStatuses.map(s =>
+      `<option value="${s}">${s}</option>`
+    ).join('');
+
+    // Footer controls
+    let footerHtml = '';
+    if (isDone) {
+      footerHtml = `<span style="font-size:12px;color:var(--purple);font-family:'Press Start 2P',monospace;font-size:9px">🎉 ORDER SELESAI</span>`;
+    } else if (myLock) {
+      footerHtml = `
+        <select class="status-select" id="sel-${order.id}" ${!nextStatuses.length ? 'disabled' : ''}>
+          ${selectOpts || '<option disabled>Sudah maksimal</option>'}
+        </select>
+        <button class="update-btn" onclick="doUpdate('${order.id}')" ${!nextStatuses.length ? 'disabled' : ''}>
+          ⬆ UPDATE STATUS
+        </button>
+        <button class="lock-btn release" onclick="releaseLock('${order.id}')">🔓 Lepas Kunci</button>`;
+    } else if (otherLock) {
+      footerHtml = `
+        <span style="font-size:12px;color:var(--red);">🔒 Admin lain sedang mengedit...</span>`;
+    } else {
+      footerHtml = `
+        <button class="lock-btn" onclick="handleLock('${order.id}')">🔑 Kunci &amp; Edit</button>`;
+    }
+
+    const card = document.createElement('div');
+    card.className = cardClass;
+    card.id = `oc-${order.id}`;
+    card.innerHTML = `
+      <div class="order-head">
+        <div>
+          <div class="order-id">${order.id}</div>
+          <div class="order-time">${timeStr}</div>
+        </div>
+        <div>
+          <div class="order-buyer">${order.buyer || '—'}</div>
+          <div class="order-kelas">${order.kelas || ''}</div>
+        </div>
+        <div class="head-spacer"></div>
+        ${lockHtml}
+        <span class="badge badge-${order.status}">${statusEmoji(order.status)} ${order.status}</span>
+      </div>
+      <div class="order-body">
+        <div class="order-items">${itemsHtml}</div>
+        <div class="order-meta">
+          <span class="meta-chip">💳 ${order.payMethod || 'Tunai'}</span>
+          ${order.updatedAt ? `<span class="meta-chip">🕐 Update: ${new Date(order.updatedAt).toLocaleString('id-ID',{hour:'2-digit',minute:'2-digit'})}</span>` : ''}
+          <span class="meta-total">Total: Rp ${(order.total || 0).toLocaleString('id')}</span>
+        </div>
+      </div>
+      <div class="order-foot">${footerHtml}</div>`;
+    list.appendChild(card);
+  });
+}
+
+function statusEmoji(s) {
+  return { MENUNGGU:'⏳', DIPROSES:'🔥', SIAP:'✅', SELESAI:'🎉' }[s] || '';
+}
+
+function handleLock(orderId) {
+  if (isLockedByOther(orderId)) {
+    toast('🔒 Order ini sedang dikunci admin lain!', 'error'); return;
+  }
+  acquireLock(orderId);
+}
+
+function doUpdate(orderId) {
+  const sel = document.getElementById('sel-' + orderId);
+  if (!sel) return;
+  const newStatus = sel.value;
+  if (!newStatus) { toast('⚠ Pilih status dulu!', 'warn'); return; }
+
+  showConfirm(
+    'UPDATE STATUS?',
+    `Ubah status order ${orderId} menjadi "${newStatus}"?`,
+    () => updateStatus(orderId, newStatus)
+  );
+}
+
+// ═══════════════════════════════════════════════
+//  CONFIRM DIALOG
+// ═══════════════════════════════════════════════
+let _confirmCallback = null;
+
+function showConfirm(title, msg, cb) {
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMsg').textContent   = msg;
+  _confirmCallback = cb;
+  document.getElementById('confirmWrap').classList.add('show');
+}
+
+function closeConfirm() {
+  document.getElementById('confirmWrap').classList.remove('show');
+  _confirmCallback = null;
+}
+
+document.getElementById('confirmOk').onclick = () => {
+  if (_confirmCallback) _confirmCallback();
+  closeConfirm();
+};
+
+// ═══════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════
+function toast(msg, type = 'info') {
+  const icons = { success:'✅', error:'❌', info:'ℹ️', warn:'⚠️' };
+  const stack = document.getElementById('toastStack');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span class="toast-icon">${icons[type]||'💬'}</span><span>${msg}</span>`;
+  stack.appendChild(el);
+  setTimeout(() => {
+    el.classList.add('out');
+    setTimeout(() => el.remove(), 300);
+  }, 3000);
+}
+
+// ═══════════════════════════════════════════════
+//  REALTIME — STORAGE EVENT
+// ═══════════════════════════════════════════════
+window.addEventListener('storage', e => {
+  if (!adminId) return; // not logged in
+  if (e.key === ORDERS_KEY) {
+    loadOrders();
+    toast('🔄 Order list diperbarui secara realtime', 'info');
+  }
+  if (e.key === LOCK_KEY) {
+    renderOrders(); // reflect lock changes from other tabs/admins
+  }
+});
+
+// ═══════════════════════════════════════════════
+//  AUTO-LOAD DEMO ORDERS (only if empty)
+// ═══════════════════════════════════════════════
+(function seedDemo() {
+  const existing = localStorage.getItem(ORDERS_KEY);
+  if (existing && JSON.parse(existing).length > 0) return;
+  const demo = [
+    {
+      id: 'MB-DEMO001',
+      buyer: 'Aditya Putra',
+      kelas: '11 IPA 2',
+      payMethod: 'QRIS 📱',
+      items: [
+        { id:'p01', name:'Bola Bola Oreo Susu', emoji:'🍫', price:7000, qty:2 },
+        { id:'p02', name:'Thai Tea', emoji:'🧋', price:4000, qty:1 },
+      ],
+      total: 18000,
+      status: 'MENUNGGU',
+      createdAt: new Date(Date.now() - 5 * 60000).toISOString(),
+      lock: null,
+    },
+    {
+      id: 'MB-DEMO002',
+      buyer: 'Sari Dewi',
+      kelas: '10 IPS 3',
+      payMethod: 'Tunai 💵',
+      items: [
+        { id:'p02', name:'Thai Tea', emoji:'🧋', price:4000, qty:3 },
+      ],
+      total: 12000,
+      status: 'DIPROSES',
+      createdAt: new Date(Date.now() - 12 * 60000).toISOString(),
+      lock: null,
+    },
+    {
+      id: 'MB-DEMO003',
+      buyer: 'Rizky Maulana',
+      kelas: '12 IPA 1',
+      payMethod: 'Transfer 📲',
+      items: [
+        { id:'p01', name:'Bola Bola Oreo Susu', emoji:'🍫', price:7000, qty:1 },
+      ],
+      total: 7000,
+      status: 'SIAP',
+      createdAt: new Date(Date.now() - 25 * 60000).toISOString(),
+      lock: null,
+    },
+  ];
+  localStorage.setItem(ORDERS_KEY, JSON.stringify(demo));
+})();
 </script>
 </body>
 </html>
