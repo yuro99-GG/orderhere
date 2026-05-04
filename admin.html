@@ -1,460 +1,430 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - Kantin Corner</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --primary: #3b82f6; --accent: #fbbf24;
-      --bg: #0f172a; --bg2: #1e293b; --bg3: #334155;
-      --card: #1e293b; --card2: #0f172a;
-      --text: #f1f5f9; --muted: #94a3b8;
-      --success: #10b981; --warning: #f59e0b;
-      --danger: #ef4444; --info: #6366f1;
-      --border: #334155; --radius: 12px;
-    }
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-    /* HEADER */
-    .header { background: var(--card); border-bottom: 2px solid var(--border); padding: 0 20px; }
-    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
-    .logo { font-family: 'Press Start 2P', monospace; font-size: 10px; color: var(--primary); line-height: 1.6; }
-    .logo span { color: var(--accent); font-size: 7px; display: block; }
-    .admin-badge { background: var(--danger); color: white; border-radius: 6px; padding: 5px 12px; font-size: 11px; font-weight: 800; letter-spacing: 1px; }
-    .header-right { display: flex; align-items: center; gap: 12px; }
-    .live-dot { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--success); font-weight: 700; }
-    .dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; animation: blink 1.5s ease-in-out infinite; }
-    @keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
-    /* MAIN */
-    .main { max-width: 1200px; margin: 0 auto; padding: 24px 20px 60px; }
-    /* STATS */
-    .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 24px; }
-    @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 400px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
-    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; transition: transform 0.2s; }
-    .stat-card:hover { transform: translateY(-2px); }
-    .stat-icon { font-size: 24px; margin-bottom: 8px; }
-    .stat-num { font-family: 'Press Start 2P', monospace; font-size: 16px; margin-bottom: 4px; }
-    .stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
-    .stat-total   .stat-num { color: var(--primary); }
-    .stat-menunggu .stat-num { color: var(--warning); }
-    .stat-diproses .stat-num { color: var(--info); }
-    .stat-siap     .stat-num { color: var(--success); }
-    .stat-selesai  .stat-num { color: var(--muted); }
-    /* TOOLBAR */
-    .toolbar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-    .search-wrap { flex: 1; min-width: 200px; position: relative; }
-    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 15px; }
-    .search-input { width: 100%; padding: 11px 14px 11px 38px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text); outline: none; transition: border-color 0.2s; }
-    .search-input::placeholder { color: var(--muted); }
-    .search-input:focus { border-color: var(--primary); }
-    .filter-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
-    .filter-tab { padding: 9px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; background: var(--card); color: var(--muted); font-family: 'Plus Jakarta Sans', sans-serif; }
-    .filter-tab:hover { background: var(--bg3); }
-    .filter-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
-    .filter-tab[data-f="MENUNGGU"].active  { background: var(--warning); border-color: var(--warning); color: #1e293b; }
-    .filter-tab[data-f="DIPROSES"].active  { background: var(--info);    border-color: var(--info); }
-    .filter-tab[data-f="SIAP"].active      { background: var(--success);  border-color: var(--success); }
-    .filter-tab[data-f="SELESAI"].active   { background: var(--bg3);      border-color: var(--bg3);    color: var(--muted); }
-    /* ORDERS LIST */
-    .orders-count { font-size: 12px; color: var(--muted); margin-bottom: 12px; font-weight: 600; }
-    .order-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; transition: border-color 0.2s; }
-    .order-card:hover { border-color: var(--primary); }
-    .order-card-top { padding: 16px 20px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-    .order-left { flex: 1; min-width: 0; }
-    .order-id { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--primary); margin-bottom: 8px; word-break: break-all; line-height: 1.6; }
-    .order-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
-    .meta-chip { background: var(--bg3); border-radius: 6px; padding: 3px 8px; font-size: 11px; color: var(--muted); font-weight: 600; }
-    .order-items-preview { font-size: 12px; color: var(--text); font-weight: 600; }
-    .order-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
-    .status-badge { padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; white-space: nowrap; }
-    .b-MENUNGGU { background: #451a03; color: #fbbf24; }
-    .b-DIPROSES  { background: #1e3a5f; color: #93c5fd; }
-    .b-SIAP      { background: #064e3b; color: #6ee7b7; }
-    .b-SELESAI   { background: #1f2937; color: #9ca3af; }
-    .order-total { font-size: 16px; font-weight: 800; color: var(--accent); }
-    .order-time { font-size: 10px; color: var(--muted); }
-    /* CONTROL BAR */
-    .order-ctrl { padding: 12px 20px; background: var(--bg2); border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .status-select { flex: 1; min-width: 140px; padding: 8px 12px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 700; color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer; outline: none; }
-    .status-select:focus { border-color: var(--primary); }
-    .ctrl-btn { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; font-family: 'Plus Jakarta Sans', sans-serif; }
-    .btn-detail { background: var(--bg3); color: var(--text); }
-    .btn-detail:hover { background: var(--primary); border-color: var(--primary); }
-    .btn-track { background: var(--bg3); color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
-    .btn-track:hover { background: var(--success); border-color: var(--success); color: white; }
-    .btn-delete { background: var(--bg3); color: var(--danger); border-color: var(--danger); }
-    .btn-delete:hover { background: var(--danger); color: white; }
-    /* EMPTY STATE */
-    .empty-state { text-align: center; padding: 80px 20px; color: var(--muted); }
-    .empty-state .icon { font-size: 52px; display: block; margin-bottom: 16px; }
-    .empty-state h3 { font-family: 'Press Start 2P', monospace; font-size: 9px; line-height: 1.8; margin-bottom: 12px; }
-    .empty-state p { font-size: 13px; }
-    /* MODAL */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 500; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
-    .modal-overlay.open { display: flex; }
-    .modal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
-    .modal-head { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-    .modal-title { font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--primary); }
-    .modal-close { background: var(--danger); color: white; border: none; border-radius: 6px; width: 30px; height: 30px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; }
-    .modal-body { padding: 20px 24px; }
-    .detail-section { margin-bottom: 20px; }
-    .detail-section-title { font-family: 'Press Start 2P', monospace; font-size: 7px; color: var(--muted); margin-bottom: 12px; }
-    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .detail-item { background: var(--bg2); border-radius: 8px; padding: 12px; }
-    .detail-item-label { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
-    .detail-item-val { font-size: 13px; font-weight: 700; word-break: break-word; }
-    .modal-item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--bg2); border-radius: 8px; margin-bottom: 8px; }
-    .modal-item-name { font-size: 13px; font-weight: 700; }
-    .modal-item-qty { font-size: 11px; color: var(--muted); margin-top: 2px; }
-    .modal-item-price { font-size: 14px; font-weight: 800; color: var(--accent); }
-    .modal-total { display: flex; justify-content: space-between; align-items: center; padding: 14px; background: var(--primary); border-radius: 10px; margin-top: 12px; }
-    .modal-total-label { font-family: 'Press Start 2P', monospace; font-size: 8px; }
-    .modal-total-amt { font-size: 20px; font-weight: 800; }
-    /* CONFIRM DIALOG */
-    .confirm-dialog { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 600; align-items: center; justify-content: center; padding: 20px; }
-    .confirm-dialog.open { display: flex; }
-    .confirm-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; max-width: 340px; width: 100%; text-align: center; }
-    .confirm-box h3 { font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--danger); margin-bottom: 12px; line-height: 1.8; }
-    .confirm-box p { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
-    .confirm-btns { display: flex; gap: 10px; }
-    .btn-cancel { flex: 1; padding: 11px; background: var(--bg3); color: var(--text); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 13px; font-family: 'Plus Jakarta Sans', sans-serif; }
-    .btn-del-confirm { flex: 1; padding: 11px; background: var(--danger); color: white; border: 1px solid var(--danger); border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 13px; font-family: 'Plus Jakarta Sans', sans-serif; }
-    /* TOAST */
-    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 12px 20px; font-weight: 700; font-size: 13px; z-index: 999; opacity: 0; transform: translateY(20px); transition: all 0.3s; box-shadow: 0 8px 24px rgba(0,0,0,0.4); pointer-events: none; }
-    .toast.show { opacity: 1; transform: translateY(0); }
-    /* SCROLL */
-    ::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 3px; }
-    /* RESPONSIVE */
-    @media (max-width: 600px) {
-      .order-card-top { flex-direction: column; }
-      .order-right { flex-direction: row; align-items: center; width: 100%; justify-content: space-between; }
-      .detail-grid { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: 1fr 1fr; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MinBite · Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf8f5;--bg2:#f2ede6;--card:#fff;--text:#2c2420;--muted:#7a6b5d;--accent:#c8956c;--accent-d:#a67350;--border:#e8e0d5;--shadow:0 4px 24px rgba(44,36,32,.08);--r:16px;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
+/* LOGIN */
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem;background:linear-gradient(135deg,var(--bg) 0%,var(--bg2) 100%)}
+.login-box{background:var(--card);border-radius:24px;padding:2.5rem 2rem;width:100%;max-width:380px;box-shadow:0 8px 40px rgba(44,36,32,.12);border:1px solid var(--border)}
+.login-logo{font-family:var(--serif);font-size:1.8rem;font-weight:700;text-align:center;margin-bottom:.3rem}.login-logo span{color:var(--accent)}
+.login-sub{text-align:center;color:var(--muted);font-size:.82rem;margin-bottom:2rem}
+.form-group{margin-bottom:1rem}
+label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.06em}
+input,select,textarea{width:100%;padding:.75rem 1rem;border:1.5px solid var(--border);border-radius:12px;font-family:var(--sans);font-size:.9rem;background:var(--bg);color:var(--text);outline:none;transition:border-color .15s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+.btn-primary{width:100%;background:var(--accent);color:#fff;border:none;padding:.875rem;border-radius:12px;font-family:var(--sans);font-size:.95rem;font-weight:600;cursor:pointer;transition:background .2s}
+.btn-primary:hover{background:var(--accent-d)}
+.btn-sm{padding:.4rem .9rem;border-radius:8px;font-family:var(--sans);font-size:.78rem;font-weight:600;cursor:pointer;border:none;transition:background .15s}
+.btn-danger{background:#fde8e8;color:#b81c1c}.btn-danger:hover{background:#f5c0c0}
+.btn-info{background:#e3f2fd;color:#1255a4}.btn-info:hover{background:#bee5fb}
+.btn-success{background:#e8f5e9;color:#27742e}.btn-success:hover{background:#c8eacb}
+.btn-warn{background:#fff3e0;color:#c65000}.btn-warn:hover{background:#ffe0b0}
+.btn-default{background:var(--bg2);color:var(--text)}.btn-default:hover{background:var(--border)}
+.login-err{color:#b81c1c;font-size:.82rem;text-align:center;margin-top:.75rem;min-height:1.2em}
+/* DASHBOARD */
+#dashboard{display:none}
+.top-bar{background:rgba(250,248,245,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.bar-logo{font-family:var(--serif);font-size:1.3rem;font-weight:700}.bar-logo span{color:var(--accent)}
+.bar-actions{display:flex;align-items:center;gap:.75rem}
+.logout-btn{background:var(--bg2);border:1.5px solid var(--border);padding:.45rem 1rem;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;color:var(--text);transition:all .15s;font-family:var(--sans)}
+.logout-btn:hover{border-color:#b81c1c;color:#b81c1c}
+.refresh-badge{font-size:.75rem;color:var(--muted);background:var(--bg2);padding:.3rem .7rem;border-radius:50px;border:1px solid var(--border)}
+.main{max-width:1200px;margin:0 auto;padding:2rem 1.25rem 4rem}
+.section-head{font-family:var(--serif);font-size:1.4rem;margin-bottom:1.25rem;padding-bottom:.6rem;border-bottom:2px solid var(--border)}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem;margin-bottom:2.5rem}
+.stat-card{background:var(--card);border-radius:var(--r);padding:1.2rem;border:1px solid var(--border);box-shadow:var(--shadow)}
+.stat-val{font-family:var(--serif);font-size:2rem;font-weight:700;line-height:1;margin-bottom:.3rem}
+.stat-label{font-size:.75rem;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+.stat-revenue .stat-val{color:var(--accent)}
+/* FILTER BAR */
+.filter-bar{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center}
+.filter-bar input{flex:1;min-width:180px;margin:0}
+.filter-bar select{width:auto;min-width:140px;margin:0}
+/* TABLE */
+.table-wrap{overflow-x:auto;border-radius:var(--r);box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:2.5rem}
+table{width:100%;border-collapse:collapse;background:var(--card);min-width:720px}
+thead{background:var(--bg2)}
+th{padding:.75rem 1rem;text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);border-bottom:1px solid var(--border)}
+td{padding:.75rem 1rem;border-bottom:1px solid var(--border);vertical-align:middle;font-size:.85rem}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(250,248,245,.6)}
+.badge{display:inline-block;padding:.3rem .7rem;border-radius:50px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.b-MENUNGGU{background:#fff3e0;color:#c65000}
+.b-DIPROSES{background:#e3f2fd;color:#1255a4}
+.b-SIAP-DIAMBIL{background:#e8f5e9;color:#27742e}
+.b-DIBATALKAN{background:#fde8e8;color:#b81c1c}
+.action-row{display:flex;gap:.35rem;flex-wrap:wrap}
+/* PANEL GRID */
+.panel-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2.5rem}
+@media(max-width:680px){.panel-grid{grid-template-columns:1fr}}
+.panel{background:var(--card);border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--shadow);padding:1.5rem}
+.panel h3{font-family:var(--serif);font-size:1.1rem;margin-bottom:1.1rem}
+.mini-table{width:100%;border-collapse:collapse;font-size:.83rem}
+.mini-table th{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding:.4rem .5rem;text-align:left;border-bottom:1px solid var(--border)}
+.mini-table td{padding:.5rem .5rem;border-bottom:1px solid var(--border);vertical-align:middle}
+.mini-table tr:last-child td{border-bottom:none}
+.add-form{margin-top:1rem}
+.add-form .form-group{margin-bottom:.75rem}
+.add-form label{font-size:.72rem}
+.add-form textarea{height:70px;resize:vertical;font-size:.8rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.promo-type-row{display:flex;gap:.5rem}
+.promo-type-row select{width:auto;flex:0 0 120px}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:400;background:rgba(44,36,32,.45);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{background:var(--card);border-radius:20px;padding:2rem;max-width:420px;width:100%;box-shadow:0 16px 48px rgba(44,36,32,.18);transform:scale(.95);transition:transform .25s}
+.modal-overlay.open .modal-box{transform:scale(1)}
+.modal-box h3{font-family:var(--serif);font-size:1.2rem;margin-bottom:1.25rem}
+.modal-actions{display:flex;gap:.75rem;margin-top:1.25rem}
+.modal-actions .btn-primary{flex:1;padding:.75rem}
+/* TOAST */
+.toast-container{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:.5rem;align-items:center;pointer-events:none}
+.toast{background:var(--text);color:#fff;padding:.7rem 1.4rem;border-radius:50px;font-size:.875rem;font-weight:500;animation:tin .3s ease,tout .3s ease 2.5s forwards;box-shadow:0 4px 16px rgba(44,36,32,.2);white-space:nowrap}
+@keyframes tin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tout{to{opacity:0;transform:translateY(14px)}}
+</style>
 </head>
 <body>
 
-<header class="header">
-  <div class="header-inner">
-    <div class="logo">🍱 KANTIN<span>CORNER</span></div>
-    <div class="header-right">
-      <div class="live-dot"><span class="dot"></span>LIVE</div>
-      <div class="admin-badge">ADMIN</div>
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">Min<span>Bite</span></div>
+    <p class="login-sub">Panel Admin — Masuk untuk melanjutkan</p>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="loginUser" placeholder="Username" autocomplete="off">
     </div>
-  </div>
-</header>
-
-<main class="main">
-  <!-- STATS -->
-  <div class="stats-grid" id="statsGrid">
-    <div class="stat-card stat-total">
-      <div class="stat-icon">📋</div>
-      <div class="stat-num" id="stTotal">0</div>
-      <div class="stat-label">Total Order</div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="Password">
     </div>
-    <div class="stat-card stat-menunggu">
-      <div class="stat-icon">⏳</div>
-      <div class="stat-num" id="stMenunggu">0</div>
-      <div class="stat-label">Menunggu</div>
-    </div>
-    <div class="stat-card stat-diproses">
-      <div class="stat-icon">🔄</div>
-      <div class="stat-num" id="stDiproses">0</div>
-      <div class="stat-label">Diproses</div>
-    </div>
-    <div class="stat-card stat-siap">
-      <div class="stat-icon">✅</div>
-      <div class="stat-num" id="stSiap">0</div>
-      <div class="stat-label">Siap</div>
-    </div>
-    <div class="stat-card stat-selesai">
-      <div class="stat-icon">🎉</div>
-      <div class="stat-num" id="stSelesai">0</div>
-      <div class="stat-label">Selesai</div>
-    </div>
-  </div>
-
-  <!-- TOOLBAR -->
-  <div class="toolbar">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" class="search-input" id="searchInput" placeholder="Cari Order ID atau nama..." oninput="applyFilters()">
-    </div>
-    <div class="filter-tabs">
-      <button class="filter-tab active" data-f="ALL" onclick="setFilter('ALL')">Semua</button>
-      <button class="filter-tab" data-f="MENUNGGU" onclick="setFilter('MENUNGGU')">⏳ Menunggu</button>
-      <button class="filter-tab" data-f="DIPROSES" onclick="setFilter('DIPROSES')">🔄 Diproses</button>
-      <button class="filter-tab" data-f="SIAP" onclick="setFilter('SIAP')">✅ Siap</button>
-      <button class="filter-tab" data-f="SELESAI" onclick="setFilter('SELESAI')">🎉 Selesai</button>
-    </div>
-  </div>
-
-  <!-- ORDERS -->
-  <div class="orders-count" id="ordersCount">Memuat...</div>
-  <div id="ordersList"></div>
-</main>
-
-<!-- DETAIL MODAL -->
-<div class="modal-overlay" id="detailModal">
-  <div class="modal">
-    <div class="modal-head">
-      <div class="modal-title" id="detailModalTitle">📋 DETAIL ORDER</div>
-      <button class="modal-close" onclick="closeDetail()">✕</button>
-    </div>
-    <div class="modal-body" id="detailModalBody"></div>
+    <button class="btn-primary" onclick="doLogin()">Masuk</button>
+    <div class="login-err" id="loginErr"></div>
   </div>
 </div>
 
-<!-- CONFIRM DELETE -->
-<div class="confirm-dialog" id="confirmDialog">
-  <div class="confirm-box">
-    <h3>⚠️ HAPUS<br>ORDER?</h3>
-    <p>Order ini akan dihapus permanen dan tidak bisa dikembalikan.</p>
-    <div class="confirm-btns">
-      <button class="btn-cancel" onclick="closeConfirm()">Batal</button>
-      <button class="btn-del-confirm" onclick="confirmDelete()">Hapus</button>
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="top-bar">
+    <div class="bar-logo">Min<span>Bite</span> <span style="font-family:var(--sans);font-size:.8rem;font-weight:400;color:var(--muted)">· Admin</span></div>
+    <div class="bar-actions">
+      <span class="refresh-badge" id="refreshBadge">🔄 Auto-refresh 30s</span>
+      <button class="logout-btn" onclick="doLogout()">Keluar</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- STATS -->
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <!-- ORDERS -->
+    <div class="section-head">📋 Daftar Pesanan</div>
+    <div class="filter-bar">
+      <input type="text" id="searchInput" placeholder="Cari nama / ID…" oninput="renderTable()">
+      <select id="filterStatus" onchange="renderTable()">
+        <option value="">Semua Status</option>
+        <option value="MENUNGGU">Menunggu</option>
+        <option value="DIPROSES">Diproses</option>
+        <option value="SIAP DIAMBIL">Siap Diambil</option>
+        <option value="DIBATALKAN">Dibatalkan</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th><th>Pelanggan</th><th>Items</th><th>Total</th>
+            <th>Waktu Ambil</th><th>Status</th><th>Konfirmasi</th><th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="orderTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- MENU & PROMO MANAGEMENT -->
+    <div class="section-head">🍱 Manajemen Menu & Promo</div>
+    <div class="panel-grid">
+      <!-- MENU PANEL -->
+      <div class="panel">
+        <h3>Menu Produk</h3>
+        <table class="mini-table" id="menuTable">
+          <thead><tr><th>Nama</th><th>Harga</th><th>Aksi</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="add-form">
+          <div style="font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.6rem">+ Tambah Produk</div>
+          <div class="form-group"><label>Nama Produk</label><input type="text" id="np_name" placeholder="Nama produk"></div>
+          <div class="form-row">
+            <div class="form-group"><label>Harga (Rp)</label><input type="number" id="np_price" placeholder="7000"></div>
+            <div style=""></div>
+          </div>
+          <div class="form-group"><label>Deskripsi</label><textarea id="np_desc" placeholder="Deskripsi singkat…"></textarea></div>
+          <div class="form-group"><label>SVG (opsional — paste kode SVG)</label><textarea id="np_svg" placeholder="<svg …>…</svg>"></textarea></div>
+          <button class="btn-primary" onclick="addProduct()" style="margin-top:.25rem">Tambah Produk</button>
+        </div>
+      </div>
+
+      <!-- PROMO PANEL -->
+      <div class="panel">
+        <h3>Kode Promo</h3>
+        <table class="mini-table" id="promoTable">
+          <thead><tr><th>Kode</th><th>Tipe</th><th>Nilai</th><th>Aksi</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="add-form">
+          <div style="font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.6rem">+ Tambah Promo</div>
+          <div class="form-group"><label>Kode Promo</label><input type="text" id="pr_code" placeholder="Contoh: HEMAT10" style="text-transform:uppercase"></div>
+          <div class="promo-type-row">
+            <div class="form-group" style="flex:1"><label>Tipe</label>
+              <select id="pr_type"><option value="flat">Flat (Rp)</option><option value="percent">Persentase (%)</option></select>
+            </div>
+            <div class="form-group" style="flex:1"><label>Nilai</label><input type="number" id="pr_val" placeholder="10000"></div>
+          </div>
+          <button class="btn-primary" onclick="addPromo()">Tambah Promo</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
+<!-- STATUS CHANGE MODAL -->
+<div class="modal-overlay" id="statusModal">
+  <div class="modal-box">
+    <h3>Ubah Status Pesanan</h3>
+    <div class="form-group">
+      <label>ID Pesanan</label>
+      <input type="text" id="sm_id" readonly style="background:var(--bg2)">
+    </div>
+    <div class="form-group">
+      <label>Status Baru</label>
+      <select id="sm_status">
+        <option value="MENUNGGU">Menunggu</option>
+        <option value="DIPROSES">Diproses</option>
+        <option value="SIAP DIAMBIL">Siap Diambil</option>
+        <option value="DIBATALKAN">Dibatalkan</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-default btn-sm" style="padding:.75rem 1.25rem;border-radius:12px;font-size:.9rem" onclick="closeStatusModal()">Batal</button>
+      <button class="btn-primary" onclick="saveStatus()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
 
 <script>
-  // Safe storage
-  function safeGetOrders() { try { return JSON.parse(localStorage.getItem('orders') || '[]'); } catch { return []; } }
-  function saveOrders(o) {
-    localStorage.setItem('orders', JSON.stringify(o));
-    try { bc.postMessage({ type: 'orders_updated' }); } catch {}
+// Credentials stored as base64 — decoded at runtime only
+const _u = atob('a3V6bw==');       // "kuzo"
+const _p = atob('a3V6b3RhbXZhbg=='); // "kuzotamvan"
+
+function fmtRp(n){return 'Rp\u00a0'+Number(n).toLocaleString('id-ID')}
+function showToast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.getElementById('toastContainer').appendChild(t);setTimeout(()=>t.remove(),3100)}
+
+function doLogin(){
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value;
+  if(u===_u && p===_p){
+    localStorage.setItem('isAdmin','1');
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+    initDashboard();
+  } else {
+    document.getElementById('loginErr').textContent='Username atau password salah.';
   }
-  function fmt(n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); }
-  function fmtDate(iso) {
-    if (!iso) return '-';
-    try {
-      const d = new Date(iso);
-      return d.toLocaleDateString('id-ID', {day:'2-digit',month:'short'}) + ' ' + d.toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'});
-    } catch { return iso; }
+}
+document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+
+function doLogout(){
+  localStorage.removeItem('isAdmin');
+  location.reload();
+}
+
+function checkAuth(){
+  if(localStorage.getItem('isAdmin')==='1'){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+    initDashboard();
   }
+}
 
-  // BroadcastChannel
-  let bc;
-  try { bc = new BroadcastChannel('kantin_sync'); } catch { bc = { postMessage: ()=>{}, onmessage: null }; }
-  bc.onmessage = function(e) {
-    if (e && e.data && e.data.type === 'orders_updated') renderOrders();
-  };
-  window.addEventListener('storage', function(e) {
-    if (e.key === 'orders') renderOrders();
-  });
+function getOrders(){return JSON.parse(localStorage.getItem('orders')||'[]')}
+function saveOrders(o){localStorage.setItem('orders',JSON.stringify(o))}
+function getProducts(){
+  const s=localStorage.getItem('products');
+  if(s) return JSON.parse(s);
+  return [{id:1,name:'Bola Oreo Susu',price:7000,desc:'Bola coklat Oreo lembut, taburan susu bubuk.',svg:null},{id:2,name:'Thai Tea',price:4000,desc:'Teh Thailand creamy manis, es batu segar.',svg:null}];
+}
+function saveProducts(p){localStorage.setItem('products',JSON.stringify(p))}
+function getPromos(){return JSON.parse(localStorage.getItem('promos')||'[]')}
+function savePromos(p){localStorage.setItem('promos',JSON.stringify(p))}
 
-  // State
-  let currentFilter = 'ALL';
-  let deleteTargetId = null;
+function badgeClass(s){
+  const map={'MENUNGGU':'b-MENUNGGU','DIPROSES':'b-DIPROSES','SIAP DIAMBIL':'b-SIAP-DIAMBIL','DIBATALKAN':'b-DIBATALKAN'};
+  return map[s]||'b-MENUNGGU';
+}
 
-  const STATUS_BADGES = {
-    MENUNGGU: 'b-MENUNGGU', DIPROSES: 'b-DIPROSES', SIAP: 'b-SIAP', SELESAI: 'b-SELESAI'
-  };
-  const STATUS_ICONS = { MENUNGGU:'⏳', DIPROSES:'🔄', SIAP:'✅', SELESAI:'🎉' };
+function renderStats(){
+  const orders=getOrders();
+  const stats=[
+    {label:'Total Pesanan',val:orders.length,cls:''},
+    {label:'Menunggu',val:orders.filter(o=>o.status==='MENUNGGU').length,cls:''},
+    {label:'Diproses',val:orders.filter(o=>o.status==='DIPROSES').length,cls:''},
+    {label:'Siap Diambil',val:orders.filter(o=>o.status==='SIAP DIAMBIL').length,cls:''},
+    {label:'Dibatalkan',val:orders.filter(o=>o.status==='DIBATALKAN').length,cls:''},
+    {label:'Total Pendapatan',val:fmtRp(orders.filter(o=>o.status!=='DIBATALKAN').reduce((s,o)=>s+o.total,0)),cls:'stat-revenue'},
+  ];
+  document.getElementById('statsGrid').innerHTML=stats.map(s=>`
+    <div class="stat-card ${s.cls}">
+      <div class="stat-val">${s.val}</div>
+      <div class="stat-label">${s.label}</div>
+    </div>`).join('');
+}
 
-  function setFilter(f) {
-    currentFilter = f;
-    document.querySelectorAll('.filter-tab').forEach(t => {
-      t.classList.toggle('active', t.dataset.f === f);
-    });
-    renderOrders();
-  }
+function renderTable(){
+  const orders=getOrders();
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const fs=document.getElementById('filterStatus').value;
+  const filtered=orders.filter(o=>{
+    const match=!q || o.id.toLowerCase().includes(q) || o.customer.name.toLowerCase().includes(q);
+    const stMatch=!fs || o.status===fs;
+    return match && stMatch;
+  }).sort((a,b)=>b.timestamp-a.timestamp);
 
-  function applyFilters() { renderOrders(); }
-
-  function renderStats(orders) {
-    document.getElementById('stTotal').textContent    = orders.length;
-    document.getElementById('stMenunggu').textContent = orders.filter(o => o.status === 'MENUNGGU').length;
-    document.getElementById('stDiproses').textContent = orders.filter(o => o.status === 'DIPROSES').length;
-    document.getElementById('stSiap').textContent     = orders.filter(o => o.status === 'SIAP').length;
-    document.getElementById('stSelesai').textContent  = orders.filter(o => o.status === 'SELESAI').length;
-  }
-
-  function renderOrders() {
-    let orders = safeGetOrders();
-    // Sort newest first
-    orders.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-
-    renderStats(orders);
-
-    // Filter by status
-    const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
-    let filtered = orders;
-    if (currentFilter !== 'ALL') filtered = filtered.filter(o => o.status === currentFilter);
-    if (q) filtered = filtered.filter(o =>
-      (o.orderId||'').toLowerCase().includes(q) ||
-      (o.name||'').toLowerCase().includes(q) ||
-      (o.phone||'').toLowerCase().includes(q)
-    );
-
-    const countEl = document.getElementById('ordersCount');
-    const listEl  = document.getElementById('ordersList');
-
-    countEl.textContent = `Menampilkan ${filtered.length} dari ${orders.length} order`;
-
-    if (filtered.length === 0) {
-      listEl.innerHTML = `<div class="empty-state">
-        <span class="icon">${orders.length === 0 ? '📭' : '🔍'}</span>
-        <h3>${orders.length === 0 ? 'BELUM ADA\nORDER' : 'TIDAK ADA\nHASIL'}</h3>
-        <p>${orders.length === 0 ? 'Order dari pelanggan akan muncul di sini secara realtime.' : 'Coba ubah filter atau kata kunci pencarian.'}</p>
-      </div>`;
-      return;
-    }
-
-    listEl.innerHTML = filtered.map(order => {
-      const items  = Array.isArray(order.items) ? order.items : [];
-      const status = order.status || 'MENUNGGU';
-      const preview = items.map(i => `${i.name||''} ×${i.qty||1}`).join(' · ') || '-';
-      const badgeCls = STATUS_BADGES[status] || 'b-MENUNGGU';
-      return `<div class="order-card" id="card-${CSS.escape(order.orderId||'')}">
-        <div class="order-card-top">
-          <div class="order-left">
-            <div class="order-id">${escHtml(order.orderId||'')}</div>
-            <div class="order-meta">
-              <span class="meta-chip">👤 ${escHtml(order.name||'-')}</span>
-              <span class="meta-chip">🏫 ${escHtml((order.class||'')+' '+(order.major||''))}</span>
-              <span class="meta-chip">⏰ ${escHtml(order.pickupTime||'-')}</span>
-              <span class="meta-chip">📱 ${escHtml(order.phone||'-')}</span>
-            </div>
-            <div class="order-items-preview">🛒 ${escHtml(preview)}</div>
-          </div>
-          <div class="order-right">
-            <span class="status-badge ${badgeCls}">${STATUS_ICONS[status]||''} ${status}</span>
-            <div class="order-total">${fmt(order.total||0)}</div>
-            <div class="order-time">${fmtDate(order.createdAt)}</div>
-          </div>
+  const tbody=document.getElementById('orderTableBody');
+  if(!filtered.length){tbody.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--muted)">Tidak ada pesanan ditemukan</td></tr>`;return;}
+  tbody.innerHTML=filtered.map(o=>{
+    const items=o.items.map(i=>`${i.name}×${i.qty}`).join(', ');
+    return `<tr>
+      <td><code style="font-size:.75rem;background:var(--bg2);padding:.2rem .4rem;border-radius:4px">${o.id}</code></td>
+      <td><div style="font-weight:500">${o.customer.name}</div><div style="font-size:.72rem;color:var(--muted)">${o.customer.kelas} ${o.customer.jurusan}</div></td>
+      <td style="max-width:160px"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${items}</div></td>
+      <td style="font-weight:600;color:var(--accent)">${fmtRp(o.total)}</td>
+      <td>${o.customer.pickup}</td>
+      <td><span class="badge ${badgeClass(o.status)}">${o.status}</span></td>
+      <td>
+        <a href="https://wa.me/${o.customer.wa.replace(/^0/,'62')}" target="_blank" class="btn-sm btn-success" style="text-decoration:none;display:inline-block">WA</a>
+        <a href="order.html?id=${o.id}" target="_blank" class="btn-sm btn-info" style="text-decoration:none;display:inline-block;margin-left:.25rem">Web</a>
+      </td>
+      <td>
+        <div class="action-row">
+          <button class="btn-sm btn-warn" onclick="openStatusModal('${o.id}','${o.status}')">Ubah</button>
+          <button class="btn-sm btn-danger" onclick="cancelOrder('${o.id}')">Batal</button>
         </div>
-        <div class="order-ctrl">
-          <select class="status-select" onchange="updateStatus('${escAttr(order.orderId||'')}', this.value)">
-            <option value="MENUNGGU" ${status==='MENUNGGU'?'selected':''}>⏳ MENUNGGU</option>
-            <option value="DIPROSES" ${status==='DIPROSES'?'selected':''}>🔄 DIPROSES</option>
-            <option value="SIAP"     ${status==='SIAP'    ?'selected':''}>✅ SIAP</option>
-            <option value="SELESAI"  ${status==='SELESAI' ?'selected':''}>🎉 SELESAI</option>
-          </select>
-          <button class="ctrl-btn btn-detail" onclick="showDetail('${escAttr(order.orderId||'')}')">📋 Detail</button>
-          <a class="ctrl-btn btn-track" href="return.html?id=${encodeURIComponent(order.orderId||'')}" target="_blank">🔗 Track</a>
-          <button class="ctrl-btn btn-delete" onclick="askDelete('${escAttr(order.orderId||'')}')">🗑️ Hapus</button>
-        </div>
-      </div>`;
-    }).join('');
-  }
+      </td>
+    </tr>`;
+  }).join('');
+}
 
-  function escHtml(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-  }
-  function escAttr(s) {
-    return String(s).replace(/'/g,"\\'");
-  }
+function renderMenu(){
+  const prods=getProducts();
+  const tbody=document.querySelector('#menuTable tbody');
+  tbody.innerHTML=prods.length ? prods.map(p=>`
+    <tr>
+      <td style="font-weight:500">${p.name}</td>
+      <td>${fmtRp(p.price)}</td>
+      <td><button class="btn-sm btn-danger" onclick="deleteProduct(${p.id})">Hapus</button></td>
+    </tr>`).join('') : `<tr><td colspan="3" style="color:var(--muted)">Belum ada produk</td></tr>`;
+}
 
-  function updateStatus(orderId, newStatus) {
-    if (!orderId || !newStatus) return;
-    const orders = safeGetOrders();
-    const idx    = orders.findIndex(o => o.orderId === orderId);
-    if (idx < 0) return;
-    orders[idx].status = newStatus;
-    saveOrders(orders);
-    renderOrders();
-    showToast(`✅ Status → ${newStatus}`);
-  }
+function renderPromos(){
+  const promos=getPromos();
+  const tbody=document.querySelector('#promoTable tbody');
+  tbody.innerHTML=promos.length ? promos.map((p,i)=>`
+    <tr>
+      <td><strong>${p.code}</strong></td>
+      <td>${p.type==='flat'?'Flat':'%'}</td>
+      <td>${p.type==='flat'?fmtRp(p.value):p.value+'%'}</td>
+      <td><button class="btn-sm btn-danger" onclick="deletePromo(${i})">Hapus</button></td>
+    </tr>`).join('') : `<tr><td colspan="4" style="color:var(--muted)">Belum ada promo</td></tr>`;
+}
 
-  // DETAIL MODAL
-  function showDetail(orderId) {
-    const orders = safeGetOrders();
-    const order  = orders.find(o => o.orderId === orderId);
-    if (!order) return;
+function addProduct(){
+  const name=document.getElementById('np_name').value.trim();
+  const price=parseInt(document.getElementById('np_price').value)||0;
+  const desc=document.getElementById('np_desc').value.trim();
+  const svg=document.getElementById('np_svg').value.trim();
+  if(!name||!price){showToast('Nama & harga wajib diisi!');return;}
+  const prods=getProducts();
+  const newId=Math.max(0,...prods.map(p=>p.id))+1;
+  prods.push({id:newId,name,price,desc,svg:svg||null});
+  saveProducts(prods);
+  ['np_name','np_price','np_desc','np_svg'].forEach(id=>document.getElementById(id).value='');
+  renderMenu(); showToast('Produk ditambahkan!');
+}
 
-    const items  = Array.isArray(order.items) ? order.items : [];
-    const status = order.status || 'MENUNGGU';
-    const badgeCls = STATUS_BADGES[status] || 'b-MENUNGGU';
+function deleteProduct(id){
+  if(!confirm('Hapus produk ini?'))return;
+  const prods=getProducts().filter(p=>p.id!==id);
+  saveProducts(prods); renderMenu(); showToast('Produk dihapus.');
+}
 
-    document.getElementById('detailModalTitle').textContent = '📋 ' + (order.orderId||'');
-    document.getElementById('detailModalBody').innerHTML = `
-      <div class="detail-section">
-        <div class="detail-section-title">STATUS</div>
-        <span class="status-badge ${badgeCls}" style="font-size:13px;padding:8px 16px;">${STATUS_ICONS[status]||''} ${status}</span>
-      </div>
-      <div class="detail-section">
-        <div class="detail-section-title">DATA PEMESAN</div>
-        <div class="detail-grid">
-          <div class="detail-item"><div class="detail-item-label">Nama</div><div class="detail-item-val">${escHtml(order.name||'-')}</div></div>
-          <div class="detail-item"><div class="detail-item-label">Kelas</div><div class="detail-item-val">${escHtml((order.class||'')+' '+(order.major||''))}</div></div>
-          <div class="detail-item"><div class="detail-item-label">No. WA</div><div class="detail-item-val">${escHtml(order.phone||'-')}</div></div>
-          <div class="detail-item"><div class="detail-item-label">Waktu Ambil</div><div class="detail-item-val">${escHtml(order.pickupTime||'-')}</div></div>
-        </div>
-      </div>
-      <div class="detail-section">
-        <div class="detail-section-title">PESANAN</div>
-        ${items.map(i => `<div class="modal-item-row">
-          <div><div class="modal-item-name">${escHtml(i.name||'-')}</div><div class="modal-item-qty">× ${i.qty||1}</div></div>
-          <div class="modal-item-price">${fmt((i.price||0)*(i.qty||1))}</div>
-        </div>`).join('')}
-        <div class="modal-total">
-          <span class="modal-total-label">TOTAL</span>
-          <span class="modal-total-amt">${fmt(order.total||0)}</span>
-        </div>
-      </div>
-      <div class="detail-section">
-        <div class="detail-section-title">WAKTU ORDER</div>
-        <div class="detail-item"><div class="detail-item-val">${fmtDate(order.createdAt)}</div></div>
-      </div>
-      <div style="margin-top:16px">
-        <label style="display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;">UBAH STATUS</label>
-        <select class="status-select" style="width:100%;padding:10px 14px;font-size:13px;" onchange="updateStatus('${escAttr(order.orderId||'')}',this.value);closeDetail()">
-          <option value="MENUNGGU" ${status==='MENUNGGU'?'selected':''}>⏳ MENUNGGU</option>
-          <option value="DIPROSES" ${status==='DIPROSES'?'selected':''}>🔄 DIPROSES</option>
-          <option value="SIAP"     ${status==='SIAP'    ?'selected':''}>✅ SIAP</option>
-          <option value="SELESAI"  ${status==='SELESAI' ?'selected':''}>🎉 SELESAI</option>
-        </select>
-      </div>`;
-    document.getElementById('detailModal').classList.add('open');
-  }
+function addPromo(){
+  const code=document.getElementById('pr_code').value.trim().toUpperCase();
+  const type=document.getElementById('pr_type').value;
+  const value=parseFloat(document.getElementById('pr_val').value)||0;
+  if(!code||!value){showToast('Kode & nilai promo wajib!');return;}
+  const promos=getPromos();
+  if(promos.find(p=>p.code===code)){showToast('Kode promo sudah ada!');return;}
+  promos.push({code,type,value});
+  savePromos(promos);
+  ['pr_code','pr_val'].forEach(id=>document.getElementById(id).value='');
+  renderPromos(); showToast('Promo ditambahkan!');
+}
 
-  function closeDetail() {
-    document.getElementById('detailModal').classList.remove('open');
-  }
-  document.getElementById('detailModal').addEventListener('click', function(e) {
-    if (e.target === this) closeDetail();
-  });
+function deletePromo(idx){
+  const promos=getPromos();
+  promos.splice(idx,1);
+  savePromos(promos); renderPromos(); showToast('Promo dihapus.');
+}
 
-  // DELETE
-  function askDelete(orderId) {
-    deleteTargetId = orderId;
-    document.getElementById('confirmDialog').classList.add('open');
-  }
-  function closeConfirm() {
-    deleteTargetId = null;
-    document.getElementById('confirmDialog').classList.remove('open');
-  }
-  function confirmDelete() {
-    if (!deleteTargetId) return;
-    const orders = safeGetOrders().filter(o => o.orderId !== deleteTargetId);
-    saveOrders(orders);
-    closeConfirm();
-    renderOrders();
-    showToast('🗑️ Order dihapus');
-    deleteTargetId = null;
-  }
+function cancelOrder(id){
+  if(!confirm(`Batalkan pesanan ${id}?`))return;
+  const orders=getOrders();
+  const o=orders.find(x=>x.id===id);
+  if(o) o.status='DIBATALKAN';
+  saveOrders(orders); refreshAll(); showToast('Pesanan dibatalkan.');
+}
 
-  // TOAST
-  let toastTmr;
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    clearTimeout(toastTmr);
-    toastTmr = setTimeout(() => t.classList.remove('show'), 2800);
-  }
+function openStatusModal(id,cur){
+  document.getElementById('sm_id').value=id;
+  document.getElementById('sm_status').value=cur;
+  document.getElementById('statusModal').classList.add('open');
+}
+function closeStatusModal(){document.getElementById('statusModal').classList.remove('open')}
+function saveStatus(){
+  const id=document.getElementById('sm_id').value;
+  const ns=document.getElementById('sm_status').value;
+  const orders=getOrders();
+  const o=orders.find(x=>x.id===id);
+  if(o) o.status=ns;
+  saveOrders(orders); closeStatusModal(); refreshAll(); showToast('Status diperbarui!');
+}
 
-  // INIT
-  renderOrders();
+function refreshAll(){renderStats();renderTable();renderMenu();renderPromos()}
+
+let countdown=30;
+function tick(){
+  countdown--;
+  if(countdown<=0){countdown=30;refreshAll();}
+  document.getElementById('refreshBadge').textContent=`🔄 Refresh ${countdown}s`;
+}
+
+function initDashboard(){
+  refreshAll();
+  setInterval(tick,1000);
+}
+
+checkAuth();
 </script>
 </body>
 </html>
