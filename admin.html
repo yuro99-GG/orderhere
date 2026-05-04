@@ -1,1036 +1,460 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>MinBite Admin — Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DM+Mono:wght@400;500&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
-<style>
-:root{
-  --bg:       #080b14;
-  --surface:  #0e1220;
-  --card:     #131829;
-  --card2:    #1a2035;
-  --border:   #1e2840;
-  --accent:   #ff6b35;
-  --accent2:  #ffcc00;
-  --green:    #00d4a0;
-  --red:      #ff4d6d;
-  --blue:     #4d96ff;
-  --purple:   #b57bff;
-  --cyan:     #00cfff;
-  --text:     #d8e0f0;
-  --muted:    #5a6480;
-  --radius:   14px;
-}
-
-*{box-sizing:border-box;margin:0;padding:0}
-
-body{
-  font-family:'Nunito',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-}
-
-/* pixel grid */
-body::before{
-  content:'';
-  position:fixed;inset:0;
-  background-image:
-    linear-gradient(rgba(77,150,255,.04) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(77,150,255,.04) 1px,transparent 1px);
-  background-size:24px 24px;
-  pointer-events:none;z-index:0;
-}
-
-/* ──────── LOGIN SCREEN ──────── */
-#loginScreen{
-  position:fixed;inset:0;z-index:900;
-  background:var(--bg);
-  display:flex;align-items:center;justify-content:center;
-  padding:20px;
-}
-#loginScreen.hidden{display:none}
-
-.login-card{
-  background:var(--surface);
-  border:2px solid var(--border);
-  border-radius:22px;
-  padding:40px 36px;
-  width:100%;max-width:380px;
-  box-shadow:0 0 60px rgba(255,107,53,.1);
-  position:relative;overflow:hidden;
-}
-.login-card::before{
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--accent),var(--accent2),var(--purple),var(--cyan));
-}
-
-.login-logo{text-align:center;margin-bottom:28px}
-.login-logo .l-icon{font-size:48px;display:block;margin-bottom:10px}
-.login-logo h1{
-  font-family:'Press Start 2P',monospace;
-  font-size:13px;color:var(--accent2);
-  text-shadow:2px 2px 0 var(--accent);
-  margin-bottom:6px;line-height:1.6;
-}
-.login-logo p{font-size:12px;color:var(--muted)}
-
-.login-field{margin-bottom:16px}
-.login-field label{
-  display:block;
-  font-size:11px;font-weight:700;letter-spacing:1px;
-  color:var(--muted);margin-bottom:6px;text-transform:uppercase;
-}
-.login-field input{
-  width:100%;padding:12px 16px;
-  background:var(--bg);
-  border:2px solid var(--border);border-radius:10px;
-  color:var(--text);font-size:14px;font-family:'Nunito',sans-serif;
-  outline:none;transition:border-color .15s;
-}
-.login-field input:focus{border-color:var(--accent)}
-
-.login-btn{
-  width:100%;padding:14px;margin-top:6px;
-  background:var(--accent);color:#fff;
-  border:none;border-radius:10px;
-  font-family:'Press Start 2P',monospace;font-size:10px;
-  cursor:pointer;letter-spacing:.5px;
-  box-shadow:0 4px 20px rgba(255,107,53,.35);
-  transition:all .15s;
-}
-.login-btn:hover{background:#e5571e;transform:translateY(-1px)}
-.login-btn:active{transform:translateY(1px)}
-
-.login-err{
-  margin-top:12px;padding:10px 14px;
-  background:rgba(255,77,109,.1);
-  border:1.5px solid var(--red);
-  border-radius:8px;color:var(--red);
-  font-size:12px;text-align:center;
-  display:none;
-}
-.login-err.show{display:block}
-.login-hint{
-  margin-top:14px;text-align:center;
-  font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);
-}
-
-/* ──────── MAIN APP ──────── */
-#app{display:none;min-height:100vh;position:relative;z-index:1}
-#app.visible{display:block}
-
-/* ──────── NAVBAR ──────── */
-.admin-nav{
-  position:sticky;top:0;z-index:100;
-  background:var(--surface);
-  border-bottom:1px solid var(--border);
-  padding:0 24px;
-  display:flex;align-items:center;gap:14px;
-  height:58px;
-  box-shadow:0 2px 24px rgba(0,0,0,.4);
-}
-.nav-logo{
-  display:flex;align-items:center;gap:8px;
-  font-family:'Press Start 2P',monospace;
-  font-size:11px;color:var(--accent2);
-  text-shadow:1px 1px 0 var(--accent);
-  text-decoration:none;
-}
-.nav-badge{
-  font-size:9px;
-  background:rgba(255,107,53,.15);
-  color:var(--accent);
-  border:1px solid rgba(255,107,53,.3);
-  padding:3px 8px;border-radius:4px;
-  font-family:'Press Start 2P',monospace;
-  display:none;
-}
-@media(min-width:500px){.nav-badge{display:inline-block}}
-
-.nav-spacer{flex:1}
-
-.online-dot{
-  display:flex;align-items:center;gap:6px;
-  font-size:12px;color:var(--green);font-weight:700;
-}
-.online-dot::before{
-  content:'';
-  width:8px;height:8px;border-radius:50%;
-  background:var(--green);
-  animation:pulse-dot 2s ease-in-out infinite;
-}
-@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-
-.admin-name-tag{
-  font-size:12px;color:var(--muted);
-  padding:5px 12px;
-  border:1px solid var(--border);border-radius:6px;
-  font-family:'DM Mono',monospace;
-}
-
-.logout-btn{
-  background:none;border:1px solid var(--border);
-  border-radius:6px;padding:6px 12px;
-  color:var(--muted);font-size:12px;cursor:pointer;
-  transition:all .15s;font-family:'Nunito',sans-serif;
-}
-.logout-btn:hover{border-color:var(--red);color:var(--red)}
-
-.store-link{
-  font-size:11px;color:var(--muted);
-  text-decoration:none;padding:5px 11px;
-  border:1px solid var(--border);border-radius:6px;
-  transition:all .15s;
-}
-.store-link:hover{color:var(--accent2);border-color:var(--accent2)}
-
-/* ──────── DASHBOARD LAYOUT ──────── */
-.dashboard{padding:24px}
-
-/* stats bar */
-.stats-bar{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  gap:14px;margin-bottom:24px;
-}
-.stat-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:16px 18px;
-  position:relative;overflow:hidden;
-}
-.stat-card::before{
-  content:'';
-  position:absolute;top:0;left:0;bottom:0;width:3px;
-}
-.stat-card.s-total::before{background:var(--accent)}
-.stat-card.s-wait::before{background:var(--accent2)}
-.stat-card.s-process::before{background:var(--blue)}
-.stat-card.s-ready::before{background:var(--green)}
-.stat-card.s-done::before{background:var(--purple)}
-
-.stat-label{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.stat-value{font-family:'Press Start 2P',monospace;font-size:18px;color:var(--text)}
-.stat-card.s-total .stat-value{color:var(--accent)}
-.stat-card.s-wait  .stat-value{color:var(--accent2)}
-.stat-card.s-process .stat-value{color:var(--blue)}
-.stat-card.s-ready .stat-value{color:var(--green)}
-.stat-card.s-done  .stat-value{color:var(--purple)}
-
-/* filter bar */
-.filter-bar{
-  display:flex;flex-wrap:wrap;gap:10px;align-items:center;
-  margin-bottom:20px;
-}
-.filter-label{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace}
-.filter-btn{
-  font-family:'Press Start 2P',monospace;font-size:8px;
-  padding:7px 14px;
-  border:1.5px solid var(--border);border-radius:6px;
-  background:transparent;color:var(--muted);
-  cursor:pointer;transition:all .15s;
-}
-.filter-btn:hover{border-color:var(--accent);color:var(--accent)}
-.filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-
-.refresh-btn{
-  margin-left:auto;
-  background:none;border:1.5px solid var(--border);
-  border-radius:6px;padding:7px 12px;
-  color:var(--muted);font-size:12px;cursor:pointer;
-  transition:all .15s;display:flex;align-items:center;gap:6px;
-  font-family:'Nunito',sans-serif;
-}
-.refresh-btn:hover{border-color:var(--cyan);color:var(--cyan)}
-
-/* ──────── ORDER CARDS ──────── */
-.orders-list{
-  display:flex;flex-direction:column;gap:14px;
-}
-
-.order-card{
-  background:var(--card);
-  border:1.5px solid var(--border);
-  border-radius:var(--radius);
-  overflow:hidden;
-  transition:border-color .2s,box-shadow .2s;
-}
-.order-card:hover{border-color:#2e3a58;box-shadow:0 4px 20px rgba(0,0,0,.3)}
-.order-card.locked-by-me{border-color:var(--cyan);box-shadow:0 0 16px rgba(0,207,255,.12)}
-.order-card.locked-by-other{border-color:var(--red);opacity:.8}
-
-.order-head{
-  padding:14px 18px;
-  display:flex;align-items:center;gap:12px;
-  flex-wrap:wrap;gap:10px;
-  border-bottom:1px solid var(--border);
-  background:var(--card2);
-}
-.order-id{
-  font-family:'DM Mono',monospace;font-size:12px;
-  color:var(--accent);font-weight:600;
-  letter-spacing:.5px;
-}
-.order-time{font-size:11px;color:var(--muted)}
-.order-buyer{font-weight:800;font-size:13px;color:var(--text)}
-.order-kelas{font-size:11px;color:var(--muted)}
-.head-spacer{flex:1}
-
-/* status badges */
-.badge{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:4px 12px;border-radius:6px;
-  font-family:'Press Start 2P',monospace;font-size:7px;
-  border:1.5px solid;font-weight:700;
-}
-.badge-MENUNGGU{
-  color:var(--accent2);background:rgba(255,204,0,.1);
-  border-color:rgba(255,204,0,.3);
-}
-.badge-DIPROSES{
-  color:var(--blue);background:rgba(77,150,255,.1);
-  border-color:rgba(77,150,255,.3);
-}
-.badge-SIAP{
-  color:var(--green);background:rgba(0,212,160,.1);
-  border-color:rgba(0,212,160,.3);
-}
-.badge-SELESAI{
-  color:var(--purple);background:rgba(181,123,255,.1);
-  border-color:rgba(181,123,255,.3);
-}
-
-/* lock indicator */
-.lock-tag{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:3px 10px;border-radius:5px;
-  font-size:10px;font-weight:700;
-}
-.lock-tag.mine{color:var(--cyan);background:rgba(0,207,255,.1);border:1px solid rgba(0,207,255,.3)}
-.lock-tag.other{color:var(--red);background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.3)}
-
-/* order body */
-.order-body{padding:14px 18px}
-.order-items{margin-bottom:12px}
-.order-item-row{
-  display:flex;align-items:center;gap:10px;
-  padding:6px 0;
-  border-bottom:1px solid var(--border);
-  font-size:13px;
-}
-.order-item-row:last-child{border-bottom:none}
-.item-emoji{font-size:20px;flex-shrink:0}
-.item-name{flex:1;font-weight:700;color:var(--text)}
-.item-qty{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
-.item-sub{font-family:'DM Mono',monospace;font-size:12px;color:var(--accent);font-weight:700}
-
-.order-meta{
-  display:flex;flex-wrap:wrap;gap:10px;align-items:center;
-  padding-top:10px;border-top:1px solid var(--border);
-}
-.meta-chip{
-  font-size:11px;font-weight:700;
-  padding:4px 10px;border-radius:6px;
-  background:var(--card2);color:var(--muted);
-  border:1px solid var(--border);
-}
-.meta-total{
-  font-family:'Press Start 2P',monospace;
-  font-size:11px;color:var(--accent);
-  margin-left:auto;
-}
-
-/* status control */
-.order-foot{
-  padding:12px 18px;
-  border-top:1px solid var(--border);
-  display:flex;align-items:center;gap:10px;
-  flex-wrap:wrap;
-}
-.status-select{
-  flex:1;min-width:160px;
-  padding:9px 14px;
-  background:var(--bg);
-  border:2px solid var(--border);border-radius:8px;
-  color:var(--text);font-size:13px;font-family:'Nunito',sans-serif;
-  outline:none;cursor:pointer;transition:border-color .15s;
-}
-.status-select:focus{border-color:var(--cyan)}
-.status-select:disabled{opacity:.4;cursor:not-allowed}
-
-.update-btn{
-  padding:9px 18px;
-  background:var(--accent);color:#fff;
-  border:2px solid rgba(255,107,53,.5);border-radius:8px;
-  font-family:'Press Start 2P',monospace;font-size:8px;
-  cursor:pointer;
-  box-shadow:0 2px 12px rgba(255,107,53,.25);
-  transition:all .15s;
-  white-space:nowrap;
-}
-.update-btn:hover{background:#e5571e;transform:translateY(-1px)}
-.update-btn:active{transform:translateY(1px)}
-.update-btn:disabled{background:var(--muted);cursor:not-allowed;transform:none;box-shadow:none}
-
-.lock-btn{
-  padding:9px 14px;
-  background:none;
-  border:2px solid var(--border);border-radius:8px;
-  color:var(--muted);font-size:12px;cursor:pointer;
-  transition:all .15s;font-family:'Nunito',sans-serif;
-  white-space:nowrap;
-}
-.lock-btn:hover{border-color:var(--cyan);color:var(--cyan)}
-.lock-btn.release{border-color:var(--red);color:var(--red)}
-.lock-btn.release:hover{background:rgba(255,77,109,.1)}
-
-/* ──────── EMPTY STATE ──────── */
-.empty-state{
-  text-align:center;padding:60px 20px;
-}
-.empty-state .e-icon{font-size:56px;margin-bottom:16px}
-.empty-state p{
-  font-family:'Press Start 2P',monospace;
-  font-size:9px;color:var(--muted);line-height:2;
-}
-
-/* ──────── TOAST ──────── */
-.toast-stack{
-  position:fixed;top:70px;right:20px;
-  z-index:800;
-  display:flex;flex-direction:column;gap:8px;
-  pointer-events:none;
-}
-.toast{
-  background:var(--card2);color:var(--text);
-  border-left:4px solid var(--accent);
-  border-radius:10px;padding:11px 16px;
-  font-size:13px;font-weight:700;
-  display:flex;align-items:center;gap:8px;
-  max-width:300px;
-  box-shadow:0 4px 20px rgba(0,0,0,.5);
-  animation:t-in .3s cubic-bezier(.34,1.56,.64,1) both;
-}
-.toast.success{border-color:var(--green)}
-.toast.error{border-color:var(--red)}
-.toast.info{border-color:var(--blue)}
-.toast.warn{border-color:var(--accent2)}
-.toast.out{animation:t-out .3s ease forwards}
-@keyframes t-in{from{opacity:0;transform:translateX(30px) scale(.9)}to{opacity:1;transform:translateX(0) scale(1)}}
-@keyframes t-out{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(30px)}}
-.toast-icon{font-size:17px;flex-shrink:0}
-
-/* ──────── CONFIRM DIALOG ──────── */
-.confirm-wrap{
-  position:fixed;inset:0;z-index:700;
-  background:rgba(8,11,20,.7);
-  display:flex;align-items:center;justify-content:center;
-  padding:20px;
-  opacity:0;pointer-events:none;
-  transition:opacity .2s;
-  backdrop-filter:blur(4px);
-}
-.confirm-wrap.show{opacity:1;pointer-events:all}
-.confirm-box{
-  background:var(--surface);
-  border:2px solid var(--border);
-  border-radius:16px;padding:28px;
-  max-width:340px;width:100%;
-  box-shadow:0 0 40px rgba(0,0,0,.6);
-  transform:scale(.9);
-  transition:transform .25s cubic-bezier(.34,1.56,.64,1);
-}
-.confirm-wrap.show .confirm-box{transform:scale(1)}
-.confirm-box h3{
-  font-family:'Press Start 2P',monospace;
-  font-size:11px;color:var(--text);
-  margin-bottom:10px;line-height:1.7;
-}
-.confirm-box p{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6}
-.confirm-actions{display:flex;gap:10px}
-.c-ok{
-  flex:1;padding:11px;
-  background:var(--accent);color:#fff;
-  border:none;border-radius:8px;
-  font-family:'Press Start 2P',monospace;font-size:8px;
-  cursor:pointer;transition:all .15s;
-}
-.c-ok:hover{background:#e5571e}
-.c-cancel{
-  flex:1;padding:11px;
-  background:none;color:var(--muted);
-  border:2px solid var(--border);border-radius:8px;
-  font-size:13px;cursor:pointer;transition:all .15s;
-  font-family:'Nunito',sans-serif;
-}
-.c-cancel:hover{border-color:var(--red);color:var(--red)}
-
-/* scrollbar */
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-
-/* top bar pulse */
-.realtime-dot{
-  display:inline-block;
-  width:7px;height:7px;border-radius:50%;
-  background:var(--green);
-  animation:pulse-dot 2s ease-in-out infinite;
-  margin-right:6px;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Kantin Corner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #3b82f6; --accent: #fbbf24;
+      --bg: #0f172a; --bg2: #1e293b; --bg3: #334155;
+      --card: #1e293b; --card2: #0f172a;
+      --text: #f1f5f9; --muted: #94a3b8;
+      --success: #10b981; --warning: #f59e0b;
+      --danger: #ef4444; --info: #6366f1;
+      --border: #334155; --radius: 12px;
+    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    /* HEADER */
+    .header { background: var(--card); border-bottom: 2px solid var(--border); padding: 0 20px; }
+    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { font-family: 'Press Start 2P', monospace; font-size: 10px; color: var(--primary); line-height: 1.6; }
+    .logo span { color: var(--accent); font-size: 7px; display: block; }
+    .admin-badge { background: var(--danger); color: white; border-radius: 6px; padding: 5px 12px; font-size: 11px; font-weight: 800; letter-spacing: 1px; }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .live-dot { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--success); font-weight: 700; }
+    .dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; animation: blink 1.5s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+    /* MAIN */
+    .main { max-width: 1200px; margin: 0 auto; padding: 24px 20px 60px; }
+    /* STATS */
+    .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 24px; }
+    @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 400px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; transition: transform 0.2s; }
+    .stat-card:hover { transform: translateY(-2px); }
+    .stat-icon { font-size: 24px; margin-bottom: 8px; }
+    .stat-num { font-family: 'Press Start 2P', monospace; font-size: 16px; margin-bottom: 4px; }
+    .stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
+    .stat-total   .stat-num { color: var(--primary); }
+    .stat-menunggu .stat-num { color: var(--warning); }
+    .stat-diproses .stat-num { color: var(--info); }
+    .stat-siap     .stat-num { color: var(--success); }
+    .stat-selesai  .stat-num { color: var(--muted); }
+    /* TOOLBAR */
+    .toolbar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .search-wrap { flex: 1; min-width: 200px; position: relative; }
+    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 15px; }
+    .search-input { width: 100%; padding: 11px 14px 11px 38px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text); outline: none; transition: border-color 0.2s; }
+    .search-input::placeholder { color: var(--muted); }
+    .search-input:focus { border-color: var(--primary); }
+    .filter-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+    .filter-tab { padding: 9px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; background: var(--card); color: var(--muted); font-family: 'Plus Jakarta Sans', sans-serif; }
+    .filter-tab:hover { background: var(--bg3); }
+    .filter-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+    .filter-tab[data-f="MENUNGGU"].active  { background: var(--warning); border-color: var(--warning); color: #1e293b; }
+    .filter-tab[data-f="DIPROSES"].active  { background: var(--info);    border-color: var(--info); }
+    .filter-tab[data-f="SIAP"].active      { background: var(--success);  border-color: var(--success); }
+    .filter-tab[data-f="SELESAI"].active   { background: var(--bg3);      border-color: var(--bg3);    color: var(--muted); }
+    /* ORDERS LIST */
+    .orders-count { font-size: 12px; color: var(--muted); margin-bottom: 12px; font-weight: 600; }
+    .order-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; transition: border-color 0.2s; }
+    .order-card:hover { border-color: var(--primary); }
+    .order-card-top { padding: 16px 20px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .order-left { flex: 1; min-width: 0; }
+    .order-id { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--primary); margin-bottom: 8px; word-break: break-all; line-height: 1.6; }
+    .order-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+    .meta-chip { background: var(--bg3); border-radius: 6px; padding: 3px 8px; font-size: 11px; color: var(--muted); font-weight: 600; }
+    .order-items-preview { font-size: 12px; color: var(--text); font-weight: 600; }
+    .order-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+    .status-badge { padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; white-space: nowrap; }
+    .b-MENUNGGU { background: #451a03; color: #fbbf24; }
+    .b-DIPROSES  { background: #1e3a5f; color: #93c5fd; }
+    .b-SIAP      { background: #064e3b; color: #6ee7b7; }
+    .b-SELESAI   { background: #1f2937; color: #9ca3af; }
+    .order-total { font-size: 16px; font-weight: 800; color: var(--accent); }
+    .order-time { font-size: 10px; color: var(--muted); }
+    /* CONTROL BAR */
+    .order-ctrl { padding: 12px 20px; background: var(--bg2); border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .status-select { flex: 1; min-width: 140px; padding: 8px 12px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 700; color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer; outline: none; }
+    .status-select:focus { border-color: var(--primary); }
+    .ctrl-btn { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .btn-detail { background: var(--bg3); color: var(--text); }
+    .btn-detail:hover { background: var(--primary); border-color: var(--primary); }
+    .btn-track { background: var(--bg3); color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+    .btn-track:hover { background: var(--success); border-color: var(--success); color: white; }
+    .btn-delete { background: var(--bg3); color: var(--danger); border-color: var(--danger); }
+    .btn-delete:hover { background: var(--danger); color: white; }
+    /* EMPTY STATE */
+    .empty-state { text-align: center; padding: 80px 20px; color: var(--muted); }
+    .empty-state .icon { font-size: 52px; display: block; margin-bottom: 16px; }
+    .empty-state h3 { font-family: 'Press Start 2P', monospace; font-size: 9px; line-height: 1.8; margin-bottom: 12px; }
+    .empty-state p { font-size: 13px; }
+    /* MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 500; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+    .modal-head { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .modal-title { font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--primary); }
+    .modal-close { background: var(--danger); color: white; border: none; border-radius: 6px; width: 30px; height: 30px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .modal-body { padding: 20px 24px; }
+    .detail-section { margin-bottom: 20px; }
+    .detail-section-title { font-family: 'Press Start 2P', monospace; font-size: 7px; color: var(--muted); margin-bottom: 12px; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .detail-item { background: var(--bg2); border-radius: 8px; padding: 12px; }
+    .detail-item-label { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+    .detail-item-val { font-size: 13px; font-weight: 700; word-break: break-word; }
+    .modal-item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--bg2); border-radius: 8px; margin-bottom: 8px; }
+    .modal-item-name { font-size: 13px; font-weight: 700; }
+    .modal-item-qty { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .modal-item-price { font-size: 14px; font-weight: 800; color: var(--accent); }
+    .modal-total { display: flex; justify-content: space-between; align-items: center; padding: 14px; background: var(--primary); border-radius: 10px; margin-top: 12px; }
+    .modal-total-label { font-family: 'Press Start 2P', monospace; font-size: 8px; }
+    .modal-total-amt { font-size: 20px; font-weight: 800; }
+    /* CONFIRM DIALOG */
+    .confirm-dialog { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 600; align-items: center; justify-content: center; padding: 20px; }
+    .confirm-dialog.open { display: flex; }
+    .confirm-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; max-width: 340px; width: 100%; text-align: center; }
+    .confirm-box h3 { font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--danger); margin-bottom: 12px; line-height: 1.8; }
+    .confirm-box p { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+    .confirm-btns { display: flex; gap: 10px; }
+    .btn-cancel { flex: 1; padding: 11px; background: var(--bg3); color: var(--text); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 13px; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .btn-del-confirm { flex: 1; padding: 11px; background: var(--danger); color: white; border: 1px solid var(--danger); border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 13px; font-family: 'Plus Jakarta Sans', sans-serif; }
+    /* TOAST */
+    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 12px 20px; font-weight: 700; font-size: 13px; z-index: 999; opacity: 0; transform: translateY(20px); transition: all 0.3s; box-shadow: 0 8px 24px rgba(0,0,0,0.4); pointer-events: none; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    /* SCROLL */
+    ::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 3px; }
+    /* RESPONSIVE */
+    @media (max-width: 600px) {
+      .order-card-top { flex-direction: column; }
+      .order-right { flex-direction: row; align-items: center; width: 100%; justify-content: space-between; }
+      .detail-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- ── TOAST STACK ── -->
-<div class="toast-stack" id="toastStack"></div>
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">🍱 KANTIN<span>CORNER</span></div>
+    <div class="header-right">
+      <div class="live-dot"><span class="dot"></span>LIVE</div>
+      <div class="admin-badge">ADMIN</div>
+    </div>
+  </div>
+</header>
 
-<!-- ── CONFIRM DIALOG ── -->
-<div class="confirm-wrap" id="confirmWrap">
+<main class="main">
+  <!-- STATS -->
+  <div class="stats-grid" id="statsGrid">
+    <div class="stat-card stat-total">
+      <div class="stat-icon">📋</div>
+      <div class="stat-num" id="stTotal">0</div>
+      <div class="stat-label">Total Order</div>
+    </div>
+    <div class="stat-card stat-menunggu">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-num" id="stMenunggu">0</div>
+      <div class="stat-label">Menunggu</div>
+    </div>
+    <div class="stat-card stat-diproses">
+      <div class="stat-icon">🔄</div>
+      <div class="stat-num" id="stDiproses">0</div>
+      <div class="stat-label">Diproses</div>
+    </div>
+    <div class="stat-card stat-siap">
+      <div class="stat-icon">✅</div>
+      <div class="stat-num" id="stSiap">0</div>
+      <div class="stat-label">Siap</div>
+    </div>
+    <div class="stat-card stat-selesai">
+      <div class="stat-icon">🎉</div>
+      <div class="stat-num" id="stSelesai">0</div>
+      <div class="stat-label">Selesai</div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="searchInput" placeholder="Cari Order ID atau nama..." oninput="applyFilters()">
+    </div>
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-f="ALL" onclick="setFilter('ALL')">Semua</button>
+      <button class="filter-tab" data-f="MENUNGGU" onclick="setFilter('MENUNGGU')">⏳ Menunggu</button>
+      <button class="filter-tab" data-f="DIPROSES" onclick="setFilter('DIPROSES')">🔄 Diproses</button>
+      <button class="filter-tab" data-f="SIAP" onclick="setFilter('SIAP')">✅ Siap</button>
+      <button class="filter-tab" data-f="SELESAI" onclick="setFilter('SELESAI')">🎉 Selesai</button>
+    </div>
+  </div>
+
+  <!-- ORDERS -->
+  <div class="orders-count" id="ordersCount">Memuat...</div>
+  <div id="ordersList"></div>
+</main>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="detailModalTitle">📋 DETAIL ORDER</div>
+      <button class="modal-close" onclick="closeDetail()">✕</button>
+    </div>
+    <div class="modal-body" id="detailModalBody"></div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE -->
+<div class="confirm-dialog" id="confirmDialog">
   <div class="confirm-box">
-    <h3 id="confirmTitle">KONFIRMASI</h3>
-    <p id="confirmMsg">Yakin ingin melakukan aksi ini?</p>
-    <div class="confirm-actions">
-      <button class="c-cancel" onclick="closeConfirm()">Batal</button>
-      <button class="c-ok" id="confirmOk">✅ YA, LANJUT</button>
+    <h3>⚠️ HAPUS<br>ORDER?</h3>
+    <p>Order ini akan dihapus permanen dan tidak bisa dikembalikan.</p>
+    <div class="confirm-btns">
+      <button class="btn-cancel" onclick="closeConfirm()">Batal</button>
+      <button class="btn-del-confirm" onclick="confirmDelete()">Hapus</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     LOGIN SCREEN
-════════════════════════════════════════ -->
-<div id="loginScreen">
-  <div class="login-card">
-    <div class="login-logo">
-      <span class="l-icon">🛠</span>
-      <h1>MINBITE<br/>ADMIN</h1>
-      <p>Panel pengelolaan order kantin</p>
-    </div>
-    <div class="login-field">
-      <label>Username</label>
-      <input type="text" id="loginUser" placeholder="admin" autocomplete="username"
-             onkeydown="if(event.key==='Enter')doLogin()"/>
-    </div>
-    <div class="login-field">
-      <label>Password</label>
-      <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"
-             onkeydown="if(event.key==='Enter')doLogin()"/>
-    </div>
-    <button class="login-btn" onclick="doLogin()">🔑 MASUK DASHBOARD</button>
-    <div class="login-err" id="loginErr">Username atau password salah!</div>
-    <div class="login-hint">default: admin / minbite123</div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════
-     MAIN APP
-════════════════════════════════════════ -->
-<div id="app">
-
-  <!-- NAVBAR -->
-  <nav class="admin-nav">
-    <a href="index.html" class="nav-logo">🍱 <span>MinBite</span></a>
-    <span class="nav-badge">ADMIN PANEL</span>
-    <div class="nav-spacer"></div>
-    <div class="online-dot" title="Realtime sync aktif">LIVE</div>
-    <span class="admin-name-tag" id="adminNameTag"></span>
-    <a href="index.html" class="store-link">🛒 Toko</a>
-    <button class="logout-btn" onclick="doLogout()">🚪 Keluar</button>
-  </nav>
-
-  <!-- DASHBOARD -->
-  <div class="dashboard">
-
-    <!-- STATS -->
-    <div class="stats-bar" id="statsBar">
-      <div class="stat-card s-total"><div class="stat-label">Total Order</div><div class="stat-value" id="st-total">0</div></div>
-      <div class="stat-card s-wait"><div class="stat-label">Menunggu</div><div class="stat-value" id="st-wait">0</div></div>
-      <div class="stat-card s-process"><div class="stat-label">Diproses</div><div class="stat-value" id="st-proc">0</div></div>
-      <div class="stat-card s-ready"><div class="stat-label">Siap</div><div class="stat-value" id="st-ready">0</div></div>
-      <div class="stat-card s-done"><div class="stat-label">Selesai</div><div class="stat-value" id="st-done">0</div></div>
-    </div>
-
-    <!-- FILTER BAR -->
-    <div class="filter-bar">
-      <span class="filter-label"><span class="realtime-dot"></span>Filter:</span>
-      <button class="filter-btn active" data-filter="SEMUA" onclick="setFilter('SEMUA',this)">SEMUA</button>
-      <button class="filter-btn" data-filter="MENUNGGU" onclick="setFilter('MENUNGGU',this)">⏳ MENUNGGU</button>
-      <button class="filter-btn" data-filter="DIPROSES" onclick="setFilter('DIPROSES',this)">🔥 DIPROSES</button>
-      <button class="filter-btn" data-filter="SIAP" onclick="setFilter('SIAP',this)">✅ SIAP</button>
-      <button class="filter-btn" data-filter="SELESAI" onclick="setFilter('SELESAI',this)">🎉 SELESAI</button>
-      <button class="refresh-btn" onclick="loadOrders()">🔄 Refresh</button>
-    </div>
-
-    <!-- ORDERS LIST -->
-    <div class="orders-list" id="ordersList"></div>
-  </div>
-</div>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════════════
-//  CONSTANTS
-// ═══════════════════════════════════════════════
-const ORDERS_KEY   = 'minbite_orders';
-const LOCK_KEY     = 'minbite_admin_locks';
-const LOCK_TIMEOUT = 2 * 60 * 1000; // 2 minutes
-
-const STATUS_FLOW = ['MENUNGGU', 'DIPROSES', 'SIAP', 'SELESAI'];
-
-const ADMIN_CREDS = [
-  { user: 'admin',  pass: 'minbite123' },
-  { user: 'kasir',  pass: 'kasir2025' },
-];
-
-// ═══════════════════════════════════════════════
-//  ADMIN SESSION
-// ═══════════════════════════════════════════════
-let adminId   = null;
-let adminName = null;
-
-function generateAdminId() {
-  return 'adm-' + Math.random().toString(36).slice(2, 8).toUpperCase();
-}
-
-function doLogin() {
-  const user = document.getElementById('loginUser').value.trim();
-  const pass = document.getElementById('loginPass').value;
-  const found = ADMIN_CREDS.find(c => c.user === user && c.pass === pass);
-  if (!found) {
-    document.getElementById('loginErr').classList.add('show');
-    return;
+  // Safe storage
+  function safeGetOrders() { try { return JSON.parse(localStorage.getItem('orders') || '[]'); } catch { return []; } }
+  function saveOrders(o) {
+    localStorage.setItem('orders', JSON.stringify(o));
+    try { bc.postMessage({ type: 'orders_updated' }); } catch {}
   }
-  document.getElementById('loginErr').classList.remove('show');
-  adminId   = generateAdminId();
-  adminName = user;
-  document.getElementById('adminNameTag').textContent = `🔑 ${user}  [${adminId}]`;
-  document.getElementById('loginScreen').classList.add('hidden');
-  document.getElementById('app').classList.add('visible');
-  loadOrders();
-  startHeartbeat();
-  toast(`👋 Halo, ${user}! Dashboard aktif.`, 'success');
-}
+  function fmt(n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); }
+  function fmtDate(iso) {
+    if (!iso) return '-';
+    try {
+      const d = new Date(iso);
+      return d.toLocaleDateString('id-ID', {day:'2-digit',month:'short'}) + ' ' + d.toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'});
+    } catch { return iso; }
+  }
 
-function doLogout() {
-  showConfirm('KELUAR?', 'Yakin ingin logout dari dashboard?', () => {
-    releaseAllMyLocks();
-    adminId = null; adminName = null;
-    document.getElementById('app').classList.remove('visible');
-    document.getElementById('loginScreen').classList.remove('hidden');
-    document.getElementById('loginUser').value = '';
-    document.getElementById('loginPass').value = '';
+  // BroadcastChannel
+  let bc;
+  try { bc = new BroadcastChannel('kantin_sync'); } catch { bc = { postMessage: ()=>{}, onmessage: null }; }
+  bc.onmessage = function(e) {
+    if (e && e.data && e.data.type === 'orders_updated') renderOrders();
+  };
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'orders') renderOrders();
   });
-}
 
-// ═══════════════════════════════════════════════
-//  LOCK SYSTEM
-// ═══════════════════════════════════════════════
-function getLocks() {
-  try { return JSON.parse(localStorage.getItem(LOCK_KEY) || '{}'); } catch { return {}; }
-}
+  // State
+  let currentFilter = 'ALL';
+  let deleteTargetId = null;
 
-function saveLocks(locks) {
-  localStorage.setItem(LOCK_KEY, JSON.stringify(locks));
-}
+  const STATUS_BADGES = {
+    MENUNGGU: 'b-MENUNGGU', DIPROSES: 'b-DIPROSES', SIAP: 'b-SIAP', SELESAI: 'b-SELESAI'
+  };
+  const STATUS_ICONS = { MENUNGGU:'⏳', DIPROSES:'🔄', SIAP:'✅', SELESAI:'🎉' };
 
-function acquireLock(orderId) {
-  const locks = getLocks();
-  const now   = Date.now();
-
-  // Check if already locked by someone else (and not expired)
-  const existing = locks[orderId];
-  if (existing && existing.adminId !== adminId) {
-    const elapsed = now - existing.timestamp;
-    if (elapsed < LOCK_TIMEOUT) {
-      toast(`🔒 Order dikunci oleh ${existing.adminId}. Tunggu 2 menit.`, 'error');
-      return false;
-    }
-    // expired → safe to take over
-  }
-
-  // Lock it
-  locks[orderId] = { adminId, timestamp: now };
-  saveLocks(locks);
-  renderOrders(); // reflect lock immediately
-  return true;
-}
-
-function releaseLock(orderId) {
-  const locks = getLocks();
-  if (locks[orderId] && locks[orderId].adminId === adminId) {
-    delete locks[orderId];
-    saveLocks(locks);
+  function setFilter(f) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.f === f);
+    });
     renderOrders();
   }
-}
 
-function releaseAllMyLocks() {
-  const locks = getLocks();
-  let changed = false;
-  for (const k in locks) {
-    if (locks[k].adminId === adminId) { delete locks[k]; changed = true; }
-  }
-  if (changed) saveLocks(locks);
-}
+  function applyFilters() { renderOrders(); }
 
-function isLockedByMe(orderId) {
-  const locks = getLocks();
-  const l = locks[orderId];
-  if (!l) return false;
-  if (l.adminId !== adminId) return false;
-  return (Date.now() - l.timestamp) < LOCK_TIMEOUT;
-}
-
-function isLockedByOther(orderId) {
-  const locks = getLocks();
-  const l = locks[orderId];
-  if (!l) return false;
-  if (l.adminId === adminId) return false;
-  return (Date.now() - l.timestamp) < LOCK_TIMEOUT;
-}
-
-function getLockOwner(orderId) {
-  const l = getLocks()[orderId];
-  return l ? l.adminId : null;
-}
-
-// Heartbeat: refresh own locks + cleanup expired ones every 30s
-function startHeartbeat() {
-  setInterval(() => {
-    const locks = getLocks();
-    const now   = Date.now();
-    let changed = false;
-    for (const k in locks) {
-      if (now - locks[k].timestamp >= LOCK_TIMEOUT) {
-        delete locks[k]; changed = true;
-      } else if (locks[k].adminId === adminId) {
-        // renew my lock if still within timeout
-        // (user interaction will have already updated it via acquireLock)
-      }
-    }
-    if (changed) { saveLocks(locks); renderOrders(); }
-  }, 30000);
-}
-
-// ═══════════════════════════════════════════════
-//  ORDERS CRUD
-// ═══════════════════════════════════════════════
-let orders   = [];
-let activeFilter = 'SEMUA';
-
-function loadOrders() {
-  try {
-    const raw = localStorage.getItem(ORDERS_KEY);
-    orders = raw ? JSON.parse(raw) : [];
-    if (!Array.isArray(orders)) orders = [];
-  } catch { orders = []; }
-  renderStats();
-  renderOrders();
-}
-
-function saveOrders() {
-  localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-}
-
-function updateStatus(orderId, newStatus) {
-  // Validate
-  if (!STATUS_FLOW.includes(newStatus)) {
-    toast('❌ Status tidak valid', 'error'); return;
+  function renderStats(orders) {
+    document.getElementById('stTotal').textContent    = orders.length;
+    document.getElementById('stMenunggu').textContent = orders.filter(o => o.status === 'MENUNGGU').length;
+    document.getElementById('stDiproses').textContent = orders.filter(o => o.status === 'DIPROSES').length;
+    document.getElementById('stSiap').textContent     = orders.filter(o => o.status === 'SIAP').length;
+    document.getElementById('stSelesai').textContent  = orders.filter(o => o.status === 'SELESAI').length;
   }
 
-  // Must have lock
-  if (!isLockedByMe(orderId)) {
-    toast('🔒 Kunci order dulu sebelum update!', 'warn'); return;
-  }
+  function renderOrders() {
+    let orders = safeGetOrders();
+    // Sort newest first
+    orders.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
 
-  const idx = orders.findIndex(o => o.id === orderId);
-  if (idx === -1) { toast('❌ Order tidak ditemukan!', 'error'); return; }
+    renderStats(orders);
 
-  // Prevent backward jump (optional: comment out to allow any change)
-  const currIdx = STATUS_FLOW.indexOf(orders[idx].status);
-  const newIdx  = STATUS_FLOW.indexOf(newStatus);
-  if (newIdx <= currIdx) {
-    toast('⚠ Status hanya bisa maju!', 'warn'); return;
-  }
+    // Filter by status
+    const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+    let filtered = orders;
+    if (currentFilter !== 'ALL') filtered = filtered.filter(o => o.status === currentFilter);
+    if (q) filtered = filtered.filter(o =>
+      (o.orderId||'').toLowerCase().includes(q) ||
+      (o.name||'').toLowerCase().includes(q) ||
+      (o.phone||'').toLowerCase().includes(q)
+    );
 
-  orders[idx].status = newStatus;
-  orders[idx].updatedAt = new Date().toISOString();
-  orders[idx].updatedBy = adminId;
-  saveOrders();
+    const countEl = document.getElementById('ordersCount');
+    const listEl  = document.getElementById('ordersList');
 
-  // Release lock after update
-  releaseLock(orderId);
+    countEl.textContent = `Menampilkan ${filtered.length} dari ${orders.length} order`;
 
-  renderStats();
-  renderOrders();
-  toast(`✅ Status → ${newStatus}`, 'success');
-}
-
-// ═══════════════════════════════════════════════
-//  FILTER
-// ═══════════════════════════════════════════════
-function setFilter(f, btn) {
-  activeFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderOrders();
-}
-
-function filteredOrders() {
-  if (activeFilter === 'SEMUA') return orders;
-  return orders.filter(o => o.status === activeFilter);
-}
-
-// ═══════════════════════════════════════════════
-//  RENDER STATS
-// ═══════════════════════════════════════════════
-function renderStats() {
-  document.getElementById('st-total').textContent = orders.length;
-  document.getElementById('st-wait').textContent  = orders.filter(o => o.status === 'MENUNGGU').length;
-  document.getElementById('st-proc').textContent  = orders.filter(o => o.status === 'DIPROSES').length;
-  document.getElementById('st-ready').textContent = orders.filter(o => o.status === 'SIAP').length;
-  document.getElementById('st-done').textContent  = orders.filter(o => o.status === 'SELESAI').length;
-}
-
-// ═══════════════════════════════════════════════
-//  RENDER ORDERS
-// ═══════════════════════════════════════════════
-function renderOrders() {
-  const list = document.getElementById('ordersList');
-  const shown = filteredOrders();
-
-  if (!shown.length) {
-    list.innerHTML = `
-      <div class="empty-state">
-        <div class="e-icon">📭</div>
-        <p>BELUM ADA ORDER<br/>${activeFilter !== 'SEMUA' ? 'DI FILTER INI' : 'MASUK'}</p>
+    if (filtered.length === 0) {
+      listEl.innerHTML = `<div class="empty-state">
+        <span class="icon">${orders.length === 0 ? '📭' : '🔍'}</span>
+        <h3>${orders.length === 0 ? 'BELUM ADA\nORDER' : 'TIDAK ADA\nHASIL'}</h3>
+        <p>${orders.length === 0 ? 'Order dari pelanggan akan muncul di sini secara realtime.' : 'Coba ubah filter atau kata kunci pencarian.'}</p>
       </div>`;
-    return;
-  }
-
-  list.innerHTML = '';
-  shown.forEach(order => {
-    const myLock    = isLockedByMe(order.id);
-    const otherLock = isLockedByOther(order.id);
-    const lockOwner = getLockOwner(order.id);
-    const canEdit   = myLock;
-    const isDone    = order.status === 'SELESAI';
-
-    // Next statuses available from current
-    const currIdx = STATUS_FLOW.indexOf(order.status);
-    const nextStatuses = STATUS_FLOW.slice(currIdx + 1);
-
-    // Time formatting
-    const dt = new Date(order.createdAt);
-    const timeStr = dt.toLocaleString('id-ID', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
-
-    // Lock badge HTML
-    let lockHtml = '';
-    if (myLock)    lockHtml = `<span class="lock-tag mine">🔑 Dikunci oleh saya</span>`;
-    if (otherLock) lockHtml = `<span class="lock-tag other">🔒 Dikunci: ${lockOwner}</span>`;
-
-    // Card class
-    let cardClass = 'order-card';
-    if (myLock)    cardClass += ' locked-by-me';
-    if (otherLock) cardClass += ' locked-by-other';
-
-    // Items HTML
-    const itemsHtml = (order.items || []).map(item => `
-      <div class="order-item-row">
-        <span class="item-emoji">${item.emoji || '🍱'}</span>
-        <span class="item-name">${item.name}</span>
-        <span class="item-qty">×${item.qty}</span>
-        <span class="item-sub">Rp ${(item.price * item.qty).toLocaleString('id')}</span>
-      </div>`).join('');
-
-    // Status select options
-    const selectOpts = nextStatuses.map(s =>
-      `<option value="${s}">${s}</option>`
-    ).join('');
-
-    // Footer controls
-    let footerHtml = '';
-    if (isDone) {
-      footerHtml = `<span style="font-size:12px;color:var(--purple);font-family:'Press Start 2P',monospace;font-size:9px">🎉 ORDER SELESAI</span>`;
-    } else if (myLock) {
-      footerHtml = `
-        <select class="status-select" id="sel-${order.id}" ${!nextStatuses.length ? 'disabled' : ''}>
-          ${selectOpts || '<option disabled>Sudah maksimal</option>'}
-        </select>
-        <button class="update-btn" onclick="doUpdate('${order.id}')" ${!nextStatuses.length ? 'disabled' : ''}>
-          ⬆ UPDATE STATUS
-        </button>
-        <button class="lock-btn release" onclick="releaseLock('${order.id}')">🔓 Lepas Kunci</button>`;
-    } else if (otherLock) {
-      footerHtml = `
-        <span style="font-size:12px;color:var(--red);">🔒 Admin lain sedang mengedit...</span>`;
-    } else {
-      footerHtml = `
-        <button class="lock-btn" onclick="handleLock('${order.id}')">🔑 Kunci &amp; Edit</button>`;
+      return;
     }
 
-    const card = document.createElement('div');
-    card.className = cardClass;
-    card.id = `oc-${order.id}`;
-    card.innerHTML = `
-      <div class="order-head">
-        <div>
-          <div class="order-id">${order.id}</div>
-          <div class="order-time">${timeStr}</div>
+    listEl.innerHTML = filtered.map(order => {
+      const items  = Array.isArray(order.items) ? order.items : [];
+      const status = order.status || 'MENUNGGU';
+      const preview = items.map(i => `${i.name||''} ×${i.qty||1}`).join(' · ') || '-';
+      const badgeCls = STATUS_BADGES[status] || 'b-MENUNGGU';
+      return `<div class="order-card" id="card-${CSS.escape(order.orderId||'')}">
+        <div class="order-card-top">
+          <div class="order-left">
+            <div class="order-id">${escHtml(order.orderId||'')}</div>
+            <div class="order-meta">
+              <span class="meta-chip">👤 ${escHtml(order.name||'-')}</span>
+              <span class="meta-chip">🏫 ${escHtml((order.class||'')+' '+(order.major||''))}</span>
+              <span class="meta-chip">⏰ ${escHtml(order.pickupTime||'-')}</span>
+              <span class="meta-chip">📱 ${escHtml(order.phone||'-')}</span>
+            </div>
+            <div class="order-items-preview">🛒 ${escHtml(preview)}</div>
+          </div>
+          <div class="order-right">
+            <span class="status-badge ${badgeCls}">${STATUS_ICONS[status]||''} ${status}</span>
+            <div class="order-total">${fmt(order.total||0)}</div>
+            <div class="order-time">${fmtDate(order.createdAt)}</div>
+          </div>
         </div>
-        <div>
-          <div class="order-buyer">${order.buyer || '—'}</div>
-          <div class="order-kelas">${order.kelas || ''}</div>
+        <div class="order-ctrl">
+          <select class="status-select" onchange="updateStatus('${escAttr(order.orderId||'')}', this.value)">
+            <option value="MENUNGGU" ${status==='MENUNGGU'?'selected':''}>⏳ MENUNGGU</option>
+            <option value="DIPROSES" ${status==='DIPROSES'?'selected':''}>🔄 DIPROSES</option>
+            <option value="SIAP"     ${status==='SIAP'    ?'selected':''}>✅ SIAP</option>
+            <option value="SELESAI"  ${status==='SELESAI' ?'selected':''}>🎉 SELESAI</option>
+          </select>
+          <button class="ctrl-btn btn-detail" onclick="showDetail('${escAttr(order.orderId||'')}')">📋 Detail</button>
+          <a class="ctrl-btn btn-track" href="return.html?id=${encodeURIComponent(order.orderId||'')}" target="_blank">🔗 Track</a>
+          <button class="ctrl-btn btn-delete" onclick="askDelete('${escAttr(order.orderId||'')}')">🗑️ Hapus</button>
         </div>
-        <div class="head-spacer"></div>
-        ${lockHtml}
-        <span class="badge badge-${order.status}">${statusEmoji(order.status)} ${order.status}</span>
+      </div>`;
+    }).join('');
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+  function escAttr(s) {
+    return String(s).replace(/'/g,"\\'");
+  }
+
+  function updateStatus(orderId, newStatus) {
+    if (!orderId || !newStatus) return;
+    const orders = safeGetOrders();
+    const idx    = orders.findIndex(o => o.orderId === orderId);
+    if (idx < 0) return;
+    orders[idx].status = newStatus;
+    saveOrders(orders);
+    renderOrders();
+    showToast(`✅ Status → ${newStatus}`);
+  }
+
+  // DETAIL MODAL
+  function showDetail(orderId) {
+    const orders = safeGetOrders();
+    const order  = orders.find(o => o.orderId === orderId);
+    if (!order) return;
+
+    const items  = Array.isArray(order.items) ? order.items : [];
+    const status = order.status || 'MENUNGGU';
+    const badgeCls = STATUS_BADGES[status] || 'b-MENUNGGU';
+
+    document.getElementById('detailModalTitle').textContent = '📋 ' + (order.orderId||'');
+    document.getElementById('detailModalBody').innerHTML = `
+      <div class="detail-section">
+        <div class="detail-section-title">STATUS</div>
+        <span class="status-badge ${badgeCls}" style="font-size:13px;padding:8px 16px;">${STATUS_ICONS[status]||''} ${status}</span>
       </div>
-      <div class="order-body">
-        <div class="order-items">${itemsHtml}</div>
-        <div class="order-meta">
-          <span class="meta-chip">💳 ${order.payMethod || 'Tunai'}</span>
-          ${order.updatedAt ? `<span class="meta-chip">🕐 Update: ${new Date(order.updatedAt).toLocaleString('id-ID',{hour:'2-digit',minute:'2-digit'})}</span>` : ''}
-          <span class="meta-total">Total: Rp ${(order.total || 0).toLocaleString('id')}</span>
+      <div class="detail-section">
+        <div class="detail-section-title">DATA PEMESAN</div>
+        <div class="detail-grid">
+          <div class="detail-item"><div class="detail-item-label">Nama</div><div class="detail-item-val">${escHtml(order.name||'-')}</div></div>
+          <div class="detail-item"><div class="detail-item-label">Kelas</div><div class="detail-item-val">${escHtml((order.class||'')+' '+(order.major||''))}</div></div>
+          <div class="detail-item"><div class="detail-item-label">No. WA</div><div class="detail-item-val">${escHtml(order.phone||'-')}</div></div>
+          <div class="detail-item"><div class="detail-item-label">Waktu Ambil</div><div class="detail-item-val">${escHtml(order.pickupTime||'-')}</div></div>
         </div>
       </div>
-      <div class="order-foot">${footerHtml}</div>`;
-    list.appendChild(card);
+      <div class="detail-section">
+        <div class="detail-section-title">PESANAN</div>
+        ${items.map(i => `<div class="modal-item-row">
+          <div><div class="modal-item-name">${escHtml(i.name||'-')}</div><div class="modal-item-qty">× ${i.qty||1}</div></div>
+          <div class="modal-item-price">${fmt((i.price||0)*(i.qty||1))}</div>
+        </div>`).join('')}
+        <div class="modal-total">
+          <span class="modal-total-label">TOTAL</span>
+          <span class="modal-total-amt">${fmt(order.total||0)}</span>
+        </div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">WAKTU ORDER</div>
+        <div class="detail-item"><div class="detail-item-val">${fmtDate(order.createdAt)}</div></div>
+      </div>
+      <div style="margin-top:16px">
+        <label style="display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;">UBAH STATUS</label>
+        <select class="status-select" style="width:100%;padding:10px 14px;font-size:13px;" onchange="updateStatus('${escAttr(order.orderId||'')}',this.value);closeDetail()">
+          <option value="MENUNGGU" ${status==='MENUNGGU'?'selected':''}>⏳ MENUNGGU</option>
+          <option value="DIPROSES" ${status==='DIPROSES'?'selected':''}>🔄 DIPROSES</option>
+          <option value="SIAP"     ${status==='SIAP'    ?'selected':''}>✅ SIAP</option>
+          <option value="SELESAI"  ${status==='SELESAI' ?'selected':''}>🎉 SELESAI</option>
+        </select>
+      </div>`;
+    document.getElementById('detailModal').classList.add('open');
+  }
+
+  function closeDetail() {
+    document.getElementById('detailModal').classList.remove('open');
+  }
+  document.getElementById('detailModal').addEventListener('click', function(e) {
+    if (e.target === this) closeDetail();
   });
-}
 
-function statusEmoji(s) {
-  return { MENUNGGU:'⏳', DIPROSES:'🔥', SIAP:'✅', SELESAI:'🎉' }[s] || '';
-}
-
-function handleLock(orderId) {
-  if (isLockedByOther(orderId)) {
-    toast('🔒 Order ini sedang dikunci admin lain!', 'error'); return;
+  // DELETE
+  function askDelete(orderId) {
+    deleteTargetId = orderId;
+    document.getElementById('confirmDialog').classList.add('open');
   }
-  acquireLock(orderId);
-}
-
-function doUpdate(orderId) {
-  const sel = document.getElementById('sel-' + orderId);
-  if (!sel) return;
-  const newStatus = sel.value;
-  if (!newStatus) { toast('⚠ Pilih status dulu!', 'warn'); return; }
-
-  showConfirm(
-    'UPDATE STATUS?',
-    `Ubah status order ${orderId} menjadi "${newStatus}"?`,
-    () => updateStatus(orderId, newStatus)
-  );
-}
-
-// ═══════════════════════════════════════════════
-//  CONFIRM DIALOG
-// ═══════════════════════════════════════════════
-let _confirmCallback = null;
-
-function showConfirm(title, msg, cb) {
-  document.getElementById('confirmTitle').textContent = title;
-  document.getElementById('confirmMsg').textContent   = msg;
-  _confirmCallback = cb;
-  document.getElementById('confirmWrap').classList.add('show');
-}
-
-function closeConfirm() {
-  document.getElementById('confirmWrap').classList.remove('show');
-  _confirmCallback = null;
-}
-
-document.getElementById('confirmOk').onclick = () => {
-  if (_confirmCallback) _confirmCallback();
-  closeConfirm();
-};
-
-// ═══════════════════════════════════════════════
-//  TOAST
-// ═══════════════════════════════════════════════
-function toast(msg, type = 'info') {
-  const icons = { success:'✅', error:'❌', info:'ℹ️', warn:'⚠️' };
-  const stack = document.getElementById('toastStack');
-  const el = document.createElement('div');
-  el.className = `toast ${type}`;
-  el.innerHTML = `<span class="toast-icon">${icons[type]||'💬'}</span><span>${msg}</span>`;
-  stack.appendChild(el);
-  setTimeout(() => {
-    el.classList.add('out');
-    setTimeout(() => el.remove(), 300);
-  }, 3000);
-}
-
-// ═══════════════════════════════════════════════
-//  REALTIME — STORAGE EVENT
-// ═══════════════════════════════════════════════
-window.addEventListener('storage', e => {
-  if (!adminId) return; // not logged in
-  if (e.key === ORDERS_KEY) {
-    loadOrders();
-    toast('🔄 Order list diperbarui secara realtime', 'info');
+  function closeConfirm() {
+    deleteTargetId = null;
+    document.getElementById('confirmDialog').classList.remove('open');
   }
-  if (e.key === LOCK_KEY) {
-    renderOrders(); // reflect lock changes from other tabs/admins
+  function confirmDelete() {
+    if (!deleteTargetId) return;
+    const orders = safeGetOrders().filter(o => o.orderId !== deleteTargetId);
+    saveOrders(orders);
+    closeConfirm();
+    renderOrders();
+    showToast('🗑️ Order dihapus');
+    deleteTargetId = null;
   }
-});
 
-// ═══════════════════════════════════════════════
-//  AUTO-LOAD DEMO ORDERS (only if empty)
-// ═══════════════════════════════════════════════
-(function seedDemo() {
-  const existing = localStorage.getItem(ORDERS_KEY);
-  if (existing && JSON.parse(existing).length > 0) return;
-  const demo = [
-    {
-      id: 'MB-DEMO001',
-      buyer: 'Aditya Putra',
-      kelas: '11 IPA 2',
-      payMethod: 'QRIS 📱',
-      items: [
-        { id:'p01', name:'Bola Bola Oreo Susu', emoji:'🍫', price:7000, qty:2 },
-        { id:'p02', name:'Thai Tea', emoji:'🧋', price:4000, qty:1 },
-      ],
-      total: 18000,
-      status: 'MENUNGGU',
-      createdAt: new Date(Date.now() - 5 * 60000).toISOString(),
-      lock: null,
-    },
-    {
-      id: 'MB-DEMO002',
-      buyer: 'Sari Dewi',
-      kelas: '10 IPS 3',
-      payMethod: 'Tunai 💵',
-      items: [
-        { id:'p02', name:'Thai Tea', emoji:'🧋', price:4000, qty:3 },
-      ],
-      total: 12000,
-      status: 'DIPROSES',
-      createdAt: new Date(Date.now() - 12 * 60000).toISOString(),
-      lock: null,
-    },
-    {
-      id: 'MB-DEMO003',
-      buyer: 'Rizky Maulana',
-      kelas: '12 IPA 1',
-      payMethod: 'Transfer 📲',
-      items: [
-        { id:'p01', name:'Bola Bola Oreo Susu', emoji:'🍫', price:7000, qty:1 },
-      ],
-      total: 7000,
-      status: 'SIAP',
-      createdAt: new Date(Date.now() - 25 * 60000).toISOString(),
-      lock: null,
-    },
-  ];
-  localStorage.setItem(ORDERS_KEY, JSON.stringify(demo));
-})();
+  // TOAST
+  let toastTmr;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTmr);
+    toastTmr = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // INIT
+  renderOrders();
 </script>
 </body>
 </html>
