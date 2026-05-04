@@ -3,185 +3,260 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Web Admin Login</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<title>MinBite — Admin Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DM+Mono:wght@400;500&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f8fafc;
-    --card: #ffffff;
-    --text: #0f172a;
-    --text-muted: #64748b;
-    --primary: #3b82f6;
-    --primary-dark: #2563eb;
-    --primary-light: #eff6ff;
-    --border: #e2e8f0;
-    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.06);
-    --shadow-lg: 0 8px 32px rgba(0,0,0,.10);
-    --radius: 16px;
-    --radius-sm: 10px;
-    --danger: #ef4444;
+    --bg: #080b14;
+    --bg2: #0d1120;
+    --bg3: #111827;
+    --border: #1e2d45;
+    --border2: #243350;
+    --orange: #ff6b35;
+    --yellow: #ffcc00;
+    --cyan: #00e5ff;
+    --green: #00ff88;
+    --red: #ff4466;
+    --text: #e2e8f0;
+    --muted: #4a5568;
+    --card: #0f1729;
   }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
   body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
     background: var(--bg);
     color: var(--text);
+    font-family: 'Nunito', sans-serif;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    position: relative;
     overflow: hidden;
+    position: relative;
   }
+
+  /* SCANLINES */
   body::before {
     content: '';
     position: fixed;
-    top: -40%;
-    right: -20%;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, #dbeafe 0%, transparent 70%);
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.07) 2px,
+      rgba(0,0,0,0.07) 4px
+    );
     pointer-events: none;
+    z-index: 9999;
   }
-  body::after {
-    content: '';
+
+  /* GRID */
+  .grid-bg {
     position: fixed;
-    bottom: -30%;
-    left: -15%;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, #f0fdf4 0%, transparent 70%);
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.025) 1px, transparent 1px);
+    background-size: 40px 40px;
     pointer-events: none;
+    z-index: 0;
   }
-  .login-card {
-    background: var(--card);
-    border-radius: 24px;
-    box-shadow: var(--shadow-lg), 0 0 0 1px var(--border);
-    padding: 44px 40px;
-    width: 100%;
-    max-width: 400px;
+
+  /* GLOW ORBS */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.18;
+  }
+
+  .orb1 {
+    width: 400px; height: 400px;
+    background: var(--orange);
+    top: -120px; right: -80px;
+    animation: float1 8s ease-in-out infinite;
+  }
+
+  .orb2 {
+    width: 300px; height: 300px;
+    background: var(--cyan);
+    bottom: -80px; left: -60px;
+    animation: float2 10s ease-in-out infinite;
+  }
+
+  @keyframes float1 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-30px, 30px); }
+  }
+
+  @keyframes float2 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(20px, -20px); }
+  }
+
+  /* WRAPPER */
+  .wrapper {
     position: relative;
     z-index: 1;
-    animation: fadeUp .4s ease;
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
   }
-  @keyframes fadeUp {
+
+  /* LOGO AREA */
+  .logo-area {
+    text-align: center;
+    margin-bottom: 36px;
+    animation: slideDown 0.5s ease;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .logo-icon {
+    font-size: 36px;
+    display: block;
+    margin-bottom: 12px;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .logo-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 20px;
+    color: var(--orange);
+    text-shadow:
+      0 0 20px rgba(255,107,53,0.5),
+      0 0 40px rgba(255,107,53,0.2);
+    line-height: 1.4;
+  }
+
+  .logo-title span {
+    color: var(--yellow);
+    text-shadow:
+      0 0 20px rgba(255,204,0,0.5),
+      0 0 40px rgba(255,204,0,0.2);
+  }
+
+  .logo-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    padding: 28px 28px 24px;
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.5s ease 0.1s both;
+  }
+
+  @keyframes slideUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  .brand {
-    text-align: center;
-    margin-bottom: 32px;
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--orange), var(--yellow), var(--cyan), transparent);
   }
-  .brand-icon {
-    width: 56px; height: 56px;
-    background: var(--primary-light);
-    border-radius: 16px;
+
+  .card-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  /* FORM FIELDS */
+  .field {
+    margin-bottom: 18px;
+  }
+
+  .field-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin: 0 auto 14px;
+    gap: 6px;
   }
-  .brand-name {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.6rem;
-    color: var(--text);
-    letter-spacing: -0.5px;
+
+  .field-label span {
+    color: var(--cyan);
   }
-  .brand-name span { color: var(--primary); }
-  .brand-sub {
-    font-size: .82rem;
-    color: var(--text-muted);
-    margin-top: 4px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: .08em;
+
+  .input-wrap {
+    position: relative;
   }
-  .form-group { margin-bottom: 18px; }
-  .form-label {
-    display: block;
-    font-size: .8rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    margin-bottom: 7px;
-  }
-  .input-wrap { position: relative; }
-  .form-input {
-    width: 100%;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 12px 16px;
-    font-family: inherit;
-    font-size: .9rem;
-    color: var(--text);
-    background: var(--bg);
-    transition: all .15s;
-  }
-  .form-input:focus {
-    outline: none;
-    border-color: var(--primary);
-    background: var(--card);
-    box-shadow: 0 0 0 3px rgba(59,130,246,.1);
-  }
-  .form-input.error { border-color: var(--danger); }
-  .eye-btn {
+
+  .input-icon {
     position: absolute;
-    right: 12px;
+    left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--text-muted);
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    transition: color .15s;
+    font-size: 14px;
+    pointer-events: none;
   }
-  .eye-btn:hover { color: var(--primary); }
-  .error-msg {
-    color: var(--danger);
-    font-size: .8rem;
-    font-weight: 500;
-    margin-top: 8px;
-    display: none;
-    align-items: center;
-    gap: 4px;
-  }
-  .error-msg.show { display: flex; }
-  .login-btn {
+
+  input[type="text"],
+  input[type="password"] {
     width: 100%;
-    background: var(--primary);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius-sm);
-    padding: 13px;
-    font-family: inherit;
-    font-size: .95rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all .2s;
-    margin-top: 8px;
-    letter-spacing: .01em;
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    padding: 12px 14px 12px 38px;
+    outline: none;
+    transition: all 0.2s;
+    -webkit-appearance: none;
   }
-  .login-btn:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,130,246,.3); }
-  .login-btn:active { transform: translateY(0); }
-  .login-btn:disabled { opacity: .7; cursor: not-allowed; transform: none; }
-  .back-link {
-    text-align: center;
-    margin-top: 20px;
-    font-size: .82rem;
-    color: var(--text-muted);
+
+  input[type="text"]::placeholder,
+  input[type="password"]::placeholder {
+    color: var(--muted);
+    font-size: 12px;
   }
-  .back-link a {
-    color: var(--primary);
-    text-decoration: none;
-    font-weight: 600;
+
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 2px rgba(255,107,53,0.15), 0 0 12px rgba(255,107,53,0.1);
+    background: rgba(13,17,32,0.9);
   }
-  .back-link a:hover { text-decoration: underline; }
-  .shake { animation: shake .4s ease; }
+
+  input.error-field {
+    border-color: var(--red) !important;
+    box-shadow: 0 0 0 2px rgba(255,68,102,0.15) !important;
+    animation: shake 0.35s ease;
+  }
+
   @keyframes shake {
     0%, 100% { transform: translateX(0); }
     20% { transform: translateX(-6px); }
@@ -189,103 +264,553 @@
     60% { transform: translateX(-4px); }
     80% { transform: translateX(4px); }
   }
+
+  /* TOGGLE PASSWORD */
+  .toggle-pw {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 2px;
+    transition: color 0.15s;
+  }
+
+  .toggle-pw:hover { color: var(--text); }
+
+  /* ERROR BOX */
+  .error-box {
+    background: rgba(255,68,102,0.08);
+    border: 1px solid rgba(255,68,102,0.3);
+    border-radius: 3px;
+    padding: 10px 14px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .error-box.hidden { display: none; }
+
+  .error-icon-box {
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .error-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--red);
+    line-height: 1.6;
+  }
+
+  /* WARNING BOX */
+  .warn-box {
+    background: rgba(255,204,0,0.08);
+    border: 1px solid rgba(255,204,0,0.3);
+    border-radius: 3px;
+    padding: 10px 14px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .warn-box.hidden { display: none; }
+
+  .warn-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--yellow);
+    line-height: 1.6;
+  }
+
+  /* SUBMIT BUTTON */
+  .submit-btn {
+    width: 100%;
+    background: var(--orange);
+    border: none;
+    border-radius: 3px;
+    color: #080b14;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  .submit-btn:hover:not(:disabled) {
+    background: #ff8352;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(255,107,53,0.35);
+  }
+
+  .submit-btn:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  .submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .submit-btn .btn-loading {
+    display: none;
+  }
+
+  .submit-btn.loading .btn-text {
+    display: none;
+  }
+
+  .submit-btn.loading .btn-loading {
+    display: inline;
+  }
+
+  /* LOADING DOTS */
+  .dot-anim {
+    display: inline-block;
+  }
+
+  /* DIVIDER */
+  .divider {
+    text-align: center;
+    margin: 20px 0 0;
+    position: relative;
+  }
+
+  .divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .divider-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    background: var(--card);
+    padding: 0 10px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* IDLE WARNING */
+  .idle-bar-wrap {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .idle-bar-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* TERMINAL BLINKING CURSOR */
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: var(--orange);
+    margin-left: 3px;
+    vertical-align: middle;
+    animation: blink-cur 0.8s step-end infinite;
+  }
+
+  @keyframes blink-cur {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* FOOTER */
+  .login-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    animation: slideUp 0.5s ease 0.2s both;
+  }
+
+  .login-footer span { color: var(--orange); }
+
+  /* BLOCKED OVERLAY */
+  .blocked-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(8,11,20,0.95);
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .blocked-overlay.hidden { display: none; }
+
+  .blocked-box {
+    background: var(--card);
+    border: 1px solid rgba(255,68,102,0.4);
+    border-radius: 4px;
+    padding: 32px;
+    max-width: 380px;
+    text-align: center;
+    position: relative;
+  }
+
+  .blocked-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--red), var(--orange), transparent);
+  }
+
+  .blocked-icon {
+    font-size: 40px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .blocked-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: var(--red);
+    margin-bottom: 14px;
+    text-shadow: 0 0 14px rgba(255,68,102,0.4);
+  }
+
+  .blocked-msg {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+
+  .blocked-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    padding: 9px 20px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+
+  .blocked-btn:hover {
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 460px) {
+    .card { padding: 22px 18px 20px; }
+    .logo-title { font-size: 16px; }
+    .wrapper { padding: 16px; }
+  }
 </style>
 </head>
 <body>
-<div class="login-card">
-  <div class="brand">
-    <div class="brand-icon">
-      <svg width="28" height="28" fill="none" stroke="#3b82f6" stroke-width="2" viewBox="0 0 24 24">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-        <path d="M7 11V7a5 5 0 0110 0v4"/>
-      </svg>
-    </div>
-    <div class="brand-name">Kuzo<span>Snacks</span></div>
-    <div class="brand-sub">Admin Dashboard</div>
-  </div>
 
-  <form id="loginForm" onsubmit="doLogin(event)">
-    <div class="form-group">
-      <label class="form-label">Username</label>
-      <input class="form-input" id="username" type="text" placeholder="Masukkan username" autocomplete="username">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Password</label>
-      <div class="input-wrap">
-        <input class="form-input" id="password" type="password" placeholder="Masukkan password" autocomplete="current-password" style="padding-right:44px">
-        <button type="button" class="eye-btn" onclick="togglePass()" id="eyeBtn">
-          <svg id="eyeIcon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-        </button>
-      </div>
-      <div class="error-msg" id="errorMsg">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Username atau password salah.
-      </div>
-    </div>
-    <button type="submit" class="login-btn" id="loginBtn">Masuk ke Dashboard</button>
-  </form>
+<div class="grid-bg"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
 
-  <div class="back-link">
-    Kembali ke <a href="index.html">Toko</a>
+<!-- DUPLICATE SESSION BLOCK -->
+<div id="blockedOverlay" class="blocked-overlay hidden">
+  <div class="blocked-box">
+    <span class="blocked-icon">⛔</span>
+    <div class="blocked-title">SESI DUPLIKAT</div>
+    <div class="blocked-msg">
+      Admin panel sudah dibuka di tab atau browser lain.<br>
+      Hanya satu sesi aktif yang diizinkan.
+    </div>
+    <button class="blocked-btn" onclick="forceLogin()">PAKSA LOGIN ULANG</button>
   </div>
 </div>
 
+<!-- MAIN WRAPPER -->
+<div class="wrapper">
+
+  <!-- LOGO -->
+  <div class="logo-area">
+    <span class="logo-icon">🍔</span>
+    <div class="logo-title">MIN<span>BITE</span></div>
+    <div class="logo-sub">ADMIN PANEL</div>
+  </div>
+
+  <!-- CARD -->
+  <div class="card">
+    <div class="card-title">[ MASUK KE SISTEM ]<span class="cursor"></span></div>
+
+    <!-- WARNINGS -->
+    <div id="warnBox" class="warn-box hidden">
+      <span style="font-size:14px;">⚠️</span>
+      <div class="warn-text" id="warnText"></div>
+    </div>
+
+    <div id="errorBox" class="error-box hidden">
+      <span class="error-icon-box">✗</span>
+      <div class="error-text" id="errorText"></div>
+    </div>
+
+    <!-- FIELDS -->
+    <div class="field">
+      <div class="field-label"><span>$</span> USERNAME</div>
+      <div class="input-wrap">
+        <span class="input-icon">👤</span>
+        <input
+          type="text"
+          id="usernameInput"
+          placeholder="masukkan username"
+          autocomplete="username"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        >
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label"><span>$</span> PASSWORD</div>
+      <div class="input-wrap">
+        <span class="input-icon">🔒</span>
+        <input
+          type="password"
+          id="passwordInput"
+          placeholder="masukkan password"
+          autocomplete="current-password"
+        >
+        <button class="toggle-pw" id="togglePw" type="button" onclick="togglePassword()">👁</button>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <button class="submit-btn" id="loginBtn" onclick="handleLogin()">
+      <span class="btn-text">LOGIN →</span>
+      <span class="btn-loading">MEMPROSES...</span>
+    </button>
+
+    <div class="divider">
+      <span class="divider-text">SECURE ACCESS ONLY</span>
+    </div>
+  </div>
+
+  <div class="login-footer">MINBITE SYSTEM v1.0 <span>©</span> 2025</div>
+</div>
+
 <script>
-try {
-  if (localStorage.getItem("isAdmin") === "true") {
-    window.location.href = 'admin.html';
+  // ── CREDENTIALS ──────────────────────────────────────────
+  const CREDENTIALS = {
+    'admin': 'minbite123',
+    'kasir': 'kasir2025'
+  };
+
+  const SESSION_KEY = 'minbite_admin_session';
+  const SESSION_ID_KEY = 'minbite_session_id';
+  const IDLE_TIMEOUT = 10 * 60 * 1000; // 10 minutes
+  let idleTimer = null;
+
+  // ── UTILS ─────────────────────────────────────────────────
+  function genSessionId() {
+    return 'sess_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
   }
 
-  function togglePass() {
-    const p = document.getElementById('password');
-    const icon = document.getElementById('eyeIcon');
-    if (p.type === 'password') {
-      p.type = 'text';
-      icon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>`;
-    } else {
-      p.type = 'password';
-      icon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+  function safeGet(key) {
+    try { return localStorage.getItem(key); } catch(e) { return null; }
+  }
+
+  function safeSet(key, val) {
+    try { localStorage.setItem(key, val); return true; } catch(e) { return false; }
+  }
+
+  function safeRemove(key) {
+    try { localStorage.removeItem(key); } catch(e) {}
+  }
+
+  // ── CHECK EXISTING SESSION ────────────────────────────────
+  function checkExistingSession() {
+    const existing = safeGet(SESSION_KEY);
+    if (!existing) return; // no session, show login form normally
+
+    const existingId = safeGet(SESSION_ID_KEY);
+    const tabSession = sessionStorage.getItem('minbite_tab_id');
+
+    if (existing && existingId) {
+      if (tabSession && tabSession === existingId) {
+        // This tab owns the session → redirect
+        window.location.href = 'admin.html';
+        return;
+      } else {
+        // Another tab/browser has a session → warn
+        showBlockedOverlay();
+        return;
+      }
     }
   }
 
-  function doLogin(e) {
-    e.preventDefault();
-    try {
-      const u = document.getElementById('username').value.trim();
-      const p = document.getElementById('password').value;
-      const btn = document.getElementById('loginBtn');
-      const err = document.getElementById('errorMsg');
-      const card = document.querySelector('.login-card');
-
-      btn.disabled = true;
-      btn.textContent = 'Memeriksa...';
-
-      setTimeout(() => {
-        if (u === 'kuzo' && p === 'kuzotamvan') {
-          localStorage.setItem("isAdmin", "true");
-          btn.textContent = 'Berhasil! Mengalihkan...';
-          setTimeout(() => { window.location.href = 'admin.html'; }, 600);
-        } else {
-          err.classList.add('show');
-          document.getElementById('username').classList.add('error');
-          document.getElementById('password').classList.add('error');
-          card.classList.add('shake');
-          setTimeout(() => card.classList.remove('shake'), 400);
-          btn.disabled = false;
-          btn.textContent = 'Masuk ke Dashboard';
-          setTimeout(() => {
-            err.classList.remove('show');
-            document.getElementById('username').classList.remove('error');
-            document.getElementById('password').classList.remove('error');
-          }, 3000);
-        }
-      }, 600);
-    } catch(err) { console.error(err); }
+  function showBlockedOverlay() {
+    document.getElementById('blockedOverlay').classList.remove('hidden');
   }
-} catch(e) { console.error(e); }
+
+  function forceLogin() {
+    safeRemove(SESSION_KEY);
+    safeRemove(SESSION_ID_KEY);
+    document.getElementById('blockedOverlay').classList.add('hidden');
+  }
+
+  // ── FORM HELPERS ──────────────────────────────────────────
+  function showError(msg) {
+    const box = document.getElementById('errorBox');
+    const txt = document.getElementById('errorText');
+    box.classList.remove('hidden');
+    txt.textContent = msg;
+    document.getElementById('warnBox').classList.add('hidden');
+    document.getElementById('usernameInput').classList.add('error-field');
+    document.getElementById('passwordInput').classList.add('error-field');
+    setTimeout(() => {
+      document.getElementById('usernameInput').classList.remove('error-field');
+      document.getElementById('passwordInput').classList.remove('error-field');
+    }, 600);
+  }
+
+  function hideError() {
+    document.getElementById('errorBox').classList.add('hidden');
+  }
+
+  function showWarn(msg) {
+    document.getElementById('warnBox').classList.remove('hidden');
+    document.getElementById('warnText').textContent = msg;
+  }
+
+  function setLoading(on) {
+    const btn = document.getElementById('loginBtn');
+    if (on) {
+      btn.classList.add('loading');
+      btn.disabled = true;
+    } else {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+  }
+
+  function togglePassword() {
+    const inp = document.getElementById('passwordInput');
+    const btn = document.getElementById('togglePw');
+    if (inp.type === 'password') {
+      inp.type = 'text';
+      btn.textContent = '🙈';
+    } else {
+      inp.type = 'password';
+      btn.textContent = '👁';
+    }
+  }
+
+  // ── LOGIN HANDLER ─────────────────────────────────────────
+  function handleLogin() {
+    hideError();
+    const username = document.getElementById('usernameInput').value.trim().toLowerCase();
+    const password = document.getElementById('passwordInput').value;
+
+    if (!username) { showError('Username tidak boleh kosong.'); return; }
+    if (!password) { showError('Password tidak boleh kosong.'); return; }
+
+    setLoading(true);
+
+    // Simulate slight delay for UX
+    setTimeout(() => {
+      if (CREDENTIALS[username] && CREDENTIALS[username] === password) {
+        doLogin(username);
+      } else {
+        setLoading(false);
+        showError('Username atau password salah. Coba lagi.');
+        document.getElementById('passwordInput').value = '';
+        document.getElementById('passwordInput').focus();
+      }
+    }, 600);
+  }
+
+  function doLogin(username) {
+    const sessionId = genSessionId();
+    safeSet(SESSION_KEY, username);
+    safeSet(SESSION_ID_KEY, sessionId);
+    sessionStorage.setItem('minbite_tab_id', sessionId);
+    sessionStorage.setItem('minbite_user', username);
+    window.location.href = 'admin.html';
+  }
+
+  // ── IDLE LOGOUT ───────────────────────────────────────────
+  function resetIdleTimer() {
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(idleLogout, IDLE_TIMEOUT);
+  }
+
+  function idleLogout() {
+    safeRemove(SESSION_KEY);
+    safeRemove(SESSION_ID_KEY);
+    sessionStorage.clear();
+    showWarn('Sesi berakhir karena tidak aktif selama 10 menit.');
+  }
+
+  ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll', 'click'].forEach(evt => {
+    document.addEventListener(evt, resetIdleTimer, { passive: true });
+  });
+
+  // ── KEYBOARD ENTER ────────────────────────────────────────
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      const active = document.activeElement;
+      if (active && (active.id === 'usernameInput' || active.id === 'passwordInput')) {
+        handleLogin();
+      }
+    }
+  });
+
+  // ── CLEAR ERROR ON INPUT ──────────────────────────────────
+  document.getElementById('usernameInput').addEventListener('input', hideError);
+  document.getElementById('passwordInput').addEventListener('input', hideError);
+
+  // ── STORAGE CHANGE LISTENER ───────────────────────────────
+  // If another tab logs out, update this page too
+  window.addEventListener('storage', function(e) {
+    if (e.key === SESSION_KEY && !e.newValue) {
+      // Session was cleared from another tab
+      document.getElementById('blockedOverlay').classList.add('hidden');
+    }
+  });
+
+  // ── INIT ──────────────────────────────────────────────────
+  checkExistingSession();
+  resetIdleTimer();
 </script>
 </body>
 </html>
