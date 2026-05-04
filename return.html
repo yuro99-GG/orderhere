@@ -1,356 +1,193 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Track Order - Kantin Corner</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --primary: #3b82f6; --accent: #fbbf24;
-      --bg: #eaf4fc; --card: #ffffff;
-      --text: #1e293b; --muted: #64748b;
-      --success: #10b981; --warning: #f59e0b;
-      --danger: #ef4444; --border: #e2e8f0;
-      --shadow: 4px 4px 0 #1e293b; --radius: 12px;
-    }
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-    /* HEADER */
-    .header { background: var(--card); border-bottom: 2px solid #1e293b; }
-    .header-inner { max-width: 480px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 60px; padding: 0 16px; }
-    .logo { font-family: 'Press Start 2P', monospace; font-size: 10px; color: var(--primary); line-height: 1.6; }
-    .logo span { color: var(--accent); font-size: 7px; display: block; }
-    .back-btn { background: var(--card); color: var(--text); border: 2px solid #1e293b; border-radius: 8px; box-shadow: 2px 2px 0 #1e293b; padding: 8px 14px; cursor: pointer; font-weight: 700; font-size: 12px; font-family: 'Plus Jakarta Sans', sans-serif; text-decoration: none; display: flex; align-items: center; gap: 6px; }
-    .back-btn:active { transform: translate(2px,2px); box-shadow: none; }
-    /* MAIN */
-    .main { max-width: 480px; margin: 0 auto; padding: 20px 16px 60px; }
-    /* STATES */
-    .state-not-found { text-align: center; padding: 80px 20px; }
-    .state-not-found .icon { font-size: 64px; display: block; margin-bottom: 16px; }
-    .state-not-found h2 { font-family: 'Press Start 2P', monospace; font-size: 10px; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
-    .state-not-found p { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
-    .order-content { display: none; }
-    .order-content.show { display: block; }
-    /* ORDER ID CARD */
-    .order-id-card { background: var(--primary); border: 2px solid #1e293b; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin-bottom: 16px; color: white; text-align: center; }
-    .order-id-label { font-size: 11px; opacity: 0.8; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-    .order-id-value { font-family: 'Press Start 2P', monospace; font-size: 10px; letter-spacing: 2px; word-break: break-all; line-height: 1.8; }
-    .created-at { font-size: 11px; opacity: 0.7; margin-top: 8px; }
-    /* STATUS CARD */
-    .status-card { background: var(--card); border: 2px solid #1e293b; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin-bottom: 16px; }
-    .status-card-title { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--muted); margin-bottom: 16px; }
-    .status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border: 2px solid #1e293b; border-radius: 8px; font-weight: 800; font-size: 14px; box-shadow: 2px 2px 0 #1e293b; margin-bottom: 20px; }
-    /* STATUS COLORS */
-    .s-MENUNGGU { background: #fef3c7; color: #92400e; }
-    .s-DIPROSES  { background: #dbeafe; color: #1e40af; }
-    .s-SIAP      { background: #d1fae5; color: #065f46; }
-    .s-SELESAI   { background: #f3f4f6; color: #374151; }
-    /* PROGRESS BAR */
-    .progress-track { display: flex; align-items: center; gap: 0; }
-    .prog-step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
-    .prog-circle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid #1e293b; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; transition: all 0.4s; background: var(--border); color: var(--muted); font-family: 'Plus Jakarta Sans', sans-serif; position: relative; z-index: 2; }
-    .prog-circle.done  { background: var(--success); color: white; border-color: var(--success); }
-    .prog-circle.active { background: var(--primary); color: white; border-color: var(--primary); }
-    .prog-label { font-size: 8px; font-weight: 700; text-align: center; color: var(--muted); white-space: nowrap; }
-    .prog-label.done   { color: var(--success); }
-    .prog-label.active { color: var(--primary); }
-    .prog-line { flex: 1; height: 3px; background: var(--border); margin-top: -16px; transition: background 0.4s; max-width: 40px; position: relative; z-index: 1; }
-    .prog-line.done { background: var(--success); }
-    /* QR SECTION */
-    .qr-card { background: var(--card); border: 2px solid #1e293b; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin-bottom: 16px; text-align: center; }
-    .qr-card-title { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--muted); margin-bottom: 16px; }
-    #qrcode { display: flex; justify-content: center; margin-bottom: 12px; }
-    #qrcode canvas, #qrcode img { border: 2px solid #1e293b; border-radius: 8px; }
-    .qr-hint { font-size: 11px; color: var(--muted); line-height: 1.5; }
-    /* DETAIL CARD */
-    .detail-card { background: var(--card); border: 2px solid #1e293b; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin-bottom: 16px; }
-    .detail-card-title { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--muted); margin-bottom: 16px; }
-    .detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--border); gap: 12px; }
-    .detail-row:last-child { border-bottom: none; }
-    .detail-key { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; }
-    .detail-val { font-size: 13px; font-weight: 700; text-align: right; }
-    /* ITEMS CARD */
-    .items-card { background: var(--card); border: 2px solid #1e293b; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin-bottom: 16px; }
-    .items-card-title { font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--muted); margin-bottom: 16px; }
-    .item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--bg); border: 2px solid var(--border); border-radius: 8px; margin-bottom: 8px; }
-    .item-row:last-child { margin-bottom: 0; }
-    .item-name-wrap { font-size: 13px; font-weight: 700; }
-    .item-qty { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 600; }
-    .item-price { font-weight: 800; color: var(--primary); font-size: 14px; }
-    .total-row { display: flex; justify-content: space-between; align-items: center; padding: 14px; background: var(--primary); color: white; border: 2px solid #1e293b; border-radius: 10px; margin-top: 12px; }
-    .total-label { font-family: 'Press Start 2P', monospace; font-size: 8px; }
-    .total-amt { font-size: 22px; font-weight: 800; }
-    /* CASH BANNER */
-    .cash-banner { background: var(--accent); border: 2px solid #1e293b; border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; margin-bottom: 16px; text-align: center; }
-    .cash-banner h3 { font-family: 'Press Start 2P', monospace; font-size: 10px; margin-bottom: 8px; line-height: 1.8; }
-    .cash-banner p { font-size: 12px; font-weight: 600; line-height: 1.5; }
-    /* WA BUTTON */
-    .wa-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: #25d366; color: white; border: 2px solid #1e293b; border-radius: 10px; box-shadow: var(--shadow); padding: 15px; font-size: 14px; font-weight: 800; cursor: pointer; text-decoration: none; transition: all 0.1s; font-family: 'Plus Jakarta Sans', sans-serif; margin-bottom: 16px; }
-    .wa-btn:active { transform: translate(4px,4px); box-shadow: none; }
-    /* LOADING */
-    .loading { text-align: center; padding: 80px 20px; color: var(--muted); }
-    .loading-spinner { width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    /* PULSE ANIMATION FOR ACTIVE STATUS */
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
-    .prog-circle.active { animation: pulse 2s ease-in-out infinite; }
-    /* LINK */
-    .link-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: white; border: 2px solid #1e293b; border-radius: 8px; box-shadow: 2px 2px 0 #1e293b; padding: 10px 18px; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.1s; }
-    .link-btn:active { transform: translate(2px,2px); box-shadow: none; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MinBite · Status Pesanan</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf8f5;--bg2:#f2ede6;--card:#fff;--text:#2c2420;--muted:#7a6b5d;--accent:#c8956c;--accent-d:#a67350;--border:#e8e0d5;--shadow:0 4px 24px rgba(44,36,32,.08);--r:20px;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
+header{background:rgba(250,248,245,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.logo{font-family:var(--serif);font-size:1.4rem;font-weight:700;text-decoration:none;color:var(--text)}.logo span{color:var(--accent)}
+.back-link{font-size:.82rem;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:.35rem;transition:color .15s}
+.back-link:hover{color:var(--accent)}
+.page-wrap{max-width:540px;margin:0 auto;padding:2rem 1.25rem 4rem}
+.page-title{font-family:var(--serif);font-size:1.75rem;margin-bottom:.4rem}
+.order-id{font-size:.82rem;color:var(--muted);margin-bottom:1.75rem;font-weight:500}
+.not-found{text-align:center;padding:5rem 2rem}
+.not-found h2{font-family:var(--serif);font-size:1.5rem;margin-bottom:.75rem}
+.not-found p{color:var(--muted);margin-bottom:1.5rem}
+.not-found a{color:var(--accent);text-decoration:none;font-weight:600}
+/* STATUS BADGE */
+.status-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.45rem 1.1rem;border-radius:50px;font-size:.82rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;margin-bottom:1.75rem}
+.s-MENUNGGU{background:#fff3e0;color:#c65000}
+.s-DIPROSES{background:#e3f2fd;color:#1255a4}
+.s-SIAP{background:#e8f5e9;color:#27742e}
+.s-DIBATALKAN{background:#fde8e8;color:#b81c1c}
+.pulse{width:8px;height:8px;border-radius:50%;animation:pulse 1.5s ease infinite}
+.s-MENUNGGU .pulse{background:#c65000}
+.s-DIPROSES .pulse{background:#1255a4}
+.s-SIAP .pulse{background:#27742e}
+.s-DIBATALKAN .pulse{background:#b81c1c;animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+/* CARD */
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);border:1px solid var(--border);padding:1.5rem;margin-bottom:1.25rem}
+.card-label{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem}
+.item-row{display:flex;justify-content:space-between;align-items:center;padding:.55rem 0;border-bottom:1px solid var(--border);font-size:.9rem}
+.item-row:last-child{border-bottom:none}
+.item-row.total-row{border-top:2px solid var(--border);border-bottom:none;font-weight:700;font-size:1rem;padding-top:.75rem;margin-top:.25rem}
+.total-row span:last-child{color:var(--accent)}
+/* CUSTOMER INFO */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.info-item label{display:block;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:.3rem}
+.info-item .val{font-size:.9rem;font-weight:500}
+/* QR VISUAL */
+.qr-section{text-align:center;padding:1.5rem;background:linear-gradient(135deg,#f9f3ec,var(--bg2));border-radius:var(--r);border:1px solid var(--border);margin-bottom:1.25rem}
+.qr-label{font-family:var(--serif);font-size:1.1rem;margin-bottom.5rem;color:var(--text);margin-bottom:.75rem}
+.qr-wrapper{display:inline-block;background:#fff;border-radius:12px;padding:14px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.qr-hint{margin-top:1rem;font-size:.82rem;color:var(--muted);line-height:1.5}
+.qr-hint strong{color:var(--accent)}
+/* REFRESH */
+.refresh-info{text-align:center;font-size:.75rem;color:var(--muted);margin-top:1.25rem}
+/* TOAST */
+.toast-container{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:.5rem;align-items:center;pointer-events:none}
+.toast{background:var(--text);color:#fff;padding:.7rem 1.4rem;border-radius:50px;font-size:.875rem;font-weight:500;animation:tin .3s ease,tout .3s ease 2.5s forwards;box-shadow:0 4px 16px rgba(44,36,32,.2);white-space:nowrap}
+@keyframes tin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tout{to{opacity:0;transform:translateY(14px)}}
+</style>
 </head>
 <body>
-
-<header class="header">
-  <div class="header-inner">
-    <div class="logo">🍱 KANTIN<span>CORNER</span></div>
-    <a href="index.html" class="back-btn">← Order Lagi</a>
-  </div>
+<header>
+  <a href="index.html" class="logo">Min<span>Bite</span></a>
+  <a href="index.html" class="back-link">← Pesan Lagi</a>
 </header>
 
-<main class="main">
-  <div class="loading" id="loadingState">
-    <div class="loading-spinner"></div>
-    <p>Memuat data order...</p>
-  </div>
+<div class="page-wrap" id="pageContent">
+  <div style="text-align:center;padding:3rem 1rem;color:var(--muted)">Memuat pesanan…</div>
+</div>
 
-  <div class="state-not-found" id="notFoundState" style="display:none">
-    <span class="icon">😕</span>
-    <h2>ORDER TIDAK<br>DITEMUKAN</h2>
-    <p>ID order tidak valid atau tidak ditemukan dalam sistem.</p>
-    <a href="index.html" class="link-btn">🍱 Kembali ke Beranda</a>
-  </div>
-
-  <div class="order-content" id="orderContent">
-    <!-- ORDER ID -->
-    <div class="order-id-card">
-      <div class="order-id-label">📋 ID Order Anda</div>
-      <div class="order-id-value" id="dispOrderId">-</div>
-      <div class="created-at" id="dispCreatedAt"></div>
-    </div>
-
-    <!-- CASH BANNER -->
-    <div class="cash-banner">
-      <h3>💵 CASH ONLY</h3>
-      <p>BAYAR DI LOKET saat mengambil pesanan.<br>Tunjukkan QR Code ini kepada petugas!</p>
-    </div>
-
-    <!-- STATUS CARD -->
-    <div class="status-card">
-      <div class="status-card-title">📊 STATUS PESANAN</div>
-      <div id="statusBadge" class="status-badge s-MENUNGGU">⏳ MENUNGGU</div>
-      <div class="progress-track" id="progressTrack">
-        <div class="prog-step" id="ps-MENUNGGU">
-          <div class="prog-circle" id="pc-MENUNGGU">⏳</div>
-          <div class="prog-label" id="pl-MENUNGGU">MENUNGGU</div>
-        </div>
-        <div class="prog-line" id="pl1"></div>
-        <div class="prog-step" id="ps-DIPROSES">
-          <div class="prog-circle" id="pc-DIPROSES">🔄</div>
-          <div class="prog-label" id="pl-DIPROSES">DIPROSES</div>
-        </div>
-        <div class="prog-line" id="pl2"></div>
-        <div class="prog-step" id="ps-SIAP">
-          <div class="prog-circle" id="pc-SIAP">✅</div>
-          <div class="prog-label" id="pl-SIAP">SIAP</div>
-        </div>
-        <div class="prog-line" id="pl3"></div>
-        <div class="prog-step" id="ps-SELESAI">
-          <div class="prog-circle" id="pc-SELESAI">🎉</div>
-          <div class="prog-label" id="pl-SELESAI">SELESAI</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- QR CODE -->
-    <div class="qr-card">
-      <div class="qr-card-title">📱 QR CODE PESANAN</div>
-      <div id="qrcode"></div>
-      <div class="qr-hint">Tunjukkan QR ini ke petugas kantin saat mengambil pesanan</div>
-    </div>
-
-    <!-- WA CONFIRM BUTTON -->
-    <a class="wa-btn" id="waBtn" href="#" target="_blank">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Konfirmasi via WhatsApp
-    </a>
-
-    <!-- ORDER DETAIL -->
-    <div class="detail-card">
-      <div class="detail-card-title">👤 DETAIL PEMESAN</div>
-      <div class="detail-row">
-        <span class="detail-key">Nama</span>
-        <span class="detail-val" id="dispNama">-</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-key">Kelas</span>
-        <span class="detail-val" id="dispKelas">-</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-key">No. WA</span>
-        <span class="detail-val" id="dispPhone">-</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-key">Waktu Ambil</span>
-        <span class="detail-val" id="dispPickup">-</span>
-      </div>
-    </div>
-
-    <!-- ORDER ITEMS -->
-    <div class="items-card">
-      <div class="items-card-title">🛒 DETAIL PESANAN</div>
-      <div id="dispItems"></div>
-      <div class="total-row">
-        <span class="total-label">TOTAL</span>
-        <span class="total-amt" id="dispTotal">Rp 0</span>
-      </div>
-    </div>
-  </div>
-</main>
+<div class="toast-container" id="toastContainer"></div>
 
 <script>
-  const KANTIN_WA = '6281234567890';
-  const STATUSES  = ['MENUNGGU', 'DIPROSES', 'SIAP', 'SELESAI'];
-  const STATUS_ICONS = { MENUNGGU:'⏳', DIPROSES:'🔄', SIAP:'✅', SELESAI:'🎉' };
+function fmtRp(n){return 'Rp\u00a0'+Number(n).toLocaleString('id-ID')}
+function showToast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.getElementById('toastContainer').appendChild(t);setTimeout(()=>t.remove(),3100)}
 
-  function safeGetOrders() { try { return JSON.parse(localStorage.getItem('orders') || '[]'); } catch { return []; } }
-  function fmt(n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); }
-  function fmtDate(iso) {
-    if (!iso) return '';
-    try {
-      const d = new Date(iso);
-      return d.toLocaleDateString('id-ID', {day:'2-digit',month:'long',year:'numeric'}) + ' · ' +
-             d.toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'});
-    } catch { return iso; }
+function statusClass(s){
+  if(s==='MENUNGGU') return 's-MENUNGGU';
+  if(s==='DIPROSES') return 's-DIPROSES';
+  if(s==='SIAP DIAMBIL') return 's-SIAP';
+  if(s==='DIBATALKAN') return 's-DIBATALKAN';
+  return 's-MENUNGGU';
+}
+function statusLabel(s){
+  const map={'MENUNGGU':'⏳ Menunggu','DIPROSES':'⚙️ Diproses','SIAP DIAMBIL':'✅ Siap Diambil','DIBATALKAN':'❌ Dibatalkan'};
+  return map[s] || s;
+}
+
+const QR_SVG = `<svg viewBox="0 0 120 120" width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+  <!-- corner TL -->
+  <rect x="5" y="5" width="38" height="38" rx="5" fill="none" stroke="#2c2420" stroke-width="4"/>
+  <rect x="13" y="13" width="22" height="22" rx="3" fill="#2c2420"/>
+  <!-- corner TR -->
+  <rect x="77" y="5" width="38" height="38" rx="5" fill="none" stroke="#2c2420" stroke-width="4"/>
+  <rect x="85" y="13" width="22" height="22" rx="3" fill="#2c2420"/>
+  <!-- corner BL -->
+  <rect x="5" y="77" width="38" height="38" rx="5" fill="none" stroke="#2c2420" stroke-width="4"/>
+  <rect x="13" y="85" width="22" height="22" rx="3" fill="#2c2420"/>
+  <!-- data modules -->
+  <rect x="50" y="5" width="8" height="14" rx="2" fill="#2c2420"/>
+  <rect x="62" y="5" width="10" height="8" rx="2" fill="#2c2420"/>
+  <rect x="50" y="24" width="14" height="8" rx="2" fill="#2c2420"/>
+  <rect x="66" y="18" width="8" height="18" rx="2" fill="#2c2420"/>
+  <rect x="5" y="50" width="8" height="16" rx="2" fill="#2c2420"/>
+  <rect x="18" y="50" width="18" height="8" rx="2" fill="#2c2420"/>
+  <rect x="40" y="50" width="6" height="22" rx="2" fill="#2c2420"/>
+  <rect x="50" y="50" width="18" height="8" rx="2" fill="#2c2420"/>
+  <rect x="72" y="50" width="8" height="14" rx="2" fill="#2c2420"/>
+  <rect x="84" y="50" width="24" height="8" rx="2" fill="#2c2420"/>
+  <rect x="100" y="62" width="15" height="8" rx="2" fill="#2c2420"/>
+  <rect x="50" y="65" width="14" height="8" rx="2" fill="#2c2420"/>
+  <rect x="68" y="65" width="8" height="8" rx="2" fill="#2c2420"/>
+  <rect x="50" y="78" width="22" height="8" rx="2" fill="#2c2420"/>
+  <rect x="58" y="90" width="8" height="16" rx="2" fill="#2c2420"/>
+  <rect x="70" y="85" width="16" height="8" rx="2" fill="#2c2420"/>
+  <rect x="90" y="78" width="8" height="22" rx="2" fill="#2c2420"/>
+  <rect x="102" y="90" width="13" height="8" rx="2" fill="#2c2420"/>
+  <rect x="90" y="104" width="18" height="10" rx="2" fill="#2c2420"/>
+</svg>`;
+
+function renderOrder(order) {
+  const sc = statusClass(order.status);
+  const isReady = order.status === 'SIAP DIAMBIL';
+  const isCancelled = order.status === 'DIBATALKAN';
+  const d = new Date(order.timestamp);
+  const dateStr = d.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}) + ', ' + d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+
+  let html = `
+    <h1 class="page-title">Status Pesanan</h1>
+    <div class="order-id">ID: ${order.id} &nbsp;·&nbsp; ${dateStr}</div>
+    <div class="status-badge ${sc}"><span class="pulse"></span>${statusLabel(order.status)}</div>`;
+
+  if (isReady) {
+    html += `<div class="qr-section">
+      <div class="qr-label">🎉 Pesananmu Siap!</div>
+      <div class="qr-wrapper">${QR_SVG}</div>
+      <p class="qr-hint">Tunjukkan halaman ini ke penjual saat pengambilan.<br><strong>ID: ${order.id}</strong></p>
+    </div>`;
   }
 
-  // Get orderId from URL
-  const urlParams  = new URLSearchParams(window.location.search);
-  const targetId   = urlParams.get('id') || '';
-
-  let qrGenerated = false;
-
-  function renderStatus(status) {
-    const badge = document.getElementById('statusBadge');
-    // Update badge
-    badge.className = 'status-badge s-' + status;
-    badge.textContent = STATUS_ICONS[status] + ' ' + status;
-
-    // Update progress
-    const idx = STATUSES.indexOf(status);
-    STATUSES.forEach((s, i) => {
-      const circle = document.getElementById('pc-' + s);
-      const label  = document.getElementById('pl-' + s);
-      if (!circle || !label) return;
-      if (i < idx)       { circle.classList.add('done');   circle.classList.remove('active'); label.className='prog-label done'; }
-      else if (i === idx){ circle.classList.add('active'); circle.classList.remove('done');   label.className='prog-label active'; }
-      else               { circle.classList.remove('done','active');                           label.className='prog-label'; }
-    });
-    // Lines
-    for (let l = 1; l <= 3; l++) {
-      const line = document.getElementById('pl' + l);
-      if (line) line.classList.toggle('done', l <= idx);
-    }
-  }
-
-  function renderOrder(order) {
-    // Show content
-    document.getElementById('loadingState').style.display = 'none';
-    document.getElementById('notFoundState').style.display = 'none';
-    document.getElementById('orderContent').classList.add('show');
-
-    // Order ID
-    document.getElementById('dispOrderId').textContent  = order.orderId;
-    document.getElementById('dispCreatedAt').textContent = fmtDate(order.createdAt);
-
-    // Status
-    renderStatus(order.status || 'MENUNGGU');
-
-    // Detail
-    document.getElementById('dispNama').textContent   = order.name   || '-';
-    document.getElementById('dispKelas').textContent  = (order.class||'') + ' ' + (order.major||'');
-    document.getElementById('dispPhone').textContent  = order.phone  || '-';
-    document.getElementById('dispPickup').textContent = order.pickupTime || '-';
-
-    // Items
-    const items = Array.isArray(order.items) ? order.items : [];
-    document.getElementById('dispItems').innerHTML = items.map(item => {
-      const sub = (item.price||0) * (item.qty||1);
-      return `<div class="item-row">
-        <div class="item-name-wrap">
-          <div>${item.name||'-'}</div>
-          <div class="item-qty">× ${item.qty||1}</div>
-        </div>
-        <div class="item-price">${fmt(sub)}</div>
-      </div>`;
-    }).join('') || '<div style="text-align:center;color:var(--muted);padding:12px">Tidak ada item</div>';
-    document.getElementById('dispTotal').textContent = fmt(order.total||0);
-
-    // WA Button
-    const itemLines = items.map(i => `  • ${i.name} x${i.qty||1} = ${fmt((i.price||0)*(i.qty||1))}`).join('\n');
-    const waMsg = `Halo Kantin Corner! 🍱\n\n📋 Order ID: ${order.orderId}\n👤 Nama: ${order.name}\n🏫 Kelas: ${order.class} ${order.major}\n📱 WA: ${order.phone}\n⏰ Ambil: ${order.pickupTime}\n\n🛒 Pesanan:\n${itemLines}\n\n💰 TOTAL: ${fmt(order.total)}\n💵 BAYAR DI LOKET (CASH ONLY)\n\nTerima kasih! 🙏`;
-    document.getElementById('waBtn').href = `https://wa.me/${KANTIN_WA}?text=${encodeURIComponent(waMsg)}`;
-
-    // QR Code (generate once)
-    if (!qrGenerated) {
-      const qrDiv = document.getElementById('qrcode');
-      qrDiv.innerHTML = '';
-      try {
-        new QRCode(qrDiv, {
-          text: `ID:${order.orderId}|NAMA:${order.name}|TOTAL:${order.total}`,
-          width:  180,
-          height: 180,
-          colorDark:  '#1e293b',
-          colorLight: '#ffffff',
-          correctLevel: QRCode.CorrectLevel.M
-        });
-        qrGenerated = true;
-      } catch(e) {
-        qrDiv.innerHTML = `<div style="width:180px;height:180px;border:2px solid #1e293b;border-radius:8px;display:flex;align-items:center;justify-content:center;text-align:center;padding:12px;font-size:11px;color:var(--muted);margin:0 auto">QR: ${order.orderId}</div>`;
-      }
-    }
-  }
-
-  function loadOrder() {
-    if (!targetId) {
-      document.getElementById('loadingState').style.display = 'none';
-      document.getElementById('notFoundState').style.display = 'block';
-      return;
-    }
-    const orders = safeGetOrders();
-    const order  = orders.find(o => o.orderId === targetId);
-    if (!order) {
-      document.getElementById('loadingState').style.display = 'none';
-      document.getElementById('notFoundState').style.display = 'block';
-      return;
-    }
-    renderOrder(order);
-  }
-
-  function refreshStatus() {
-    if (!targetId) return;
-    const orders = safeGetOrders();
-    const order  = orders.find(o => o.orderId === targetId);
-    if (order) renderStatus(order.status || 'MENUNGGU');
-  }
-
-  // BroadcastChannel
-  let bc;
-  try { bc = new BroadcastChannel('kantin_sync'); } catch { bc = {postMessage:()=>{},onmessage:null}; }
-  bc.onmessage = function(e) {
-    if (e && e.data && e.data.type === 'orders_updated') refreshStatus();
-  };
-
-  // Storage event (cross-tab/cross-window)
-  window.addEventListener('storage', function(e) {
-    if (e.key === 'orders') refreshStatus();
+  html += `<div class="card">
+    <div class="card-label">Detail Pesanan</div>`;
+  order.items.forEach(i => {
+    html += `<div class="item-row"><span>${i.name} <span style="color:var(--muted)">× ${i.qty}</span></span><span>${fmtRp(i.price * i.qty)}</span></div>`;
   });
+  if (order.discount > 0) {
+    html += `<div class="item-row" style="color:#2a7a4b"><span>Diskon (${order.promoCode})</span><span>−${fmtRp(order.discount)}</span></div>`;
+  }
+  html += `<div class="item-row total-row"><span>Total</span><span>${fmtRp(order.total)}</span></div></div>`;
 
-  // Initial load
-  setTimeout(loadOrder, 150);
+  html += `<div class="card">
+    <div class="card-label">Info Pelanggan</div>
+    <div class="info-grid">
+      <div class="info-item"><label>Nama</label><div class="val">${order.customer.name}</div></div>
+      <div class="info-item"><label>Kelas</label><div class="val">${order.customer.kelas} ${order.customer.jurusan}</div></div>
+      <div class="info-item"><label>Waktu Ambil</label><div class="val">${order.customer.pickup}</div></div>
+      <div class="info-item"><label>Status</label><div class="val">${statusLabel(order.status)}</div></div>
+    </div>
+  </div>`;
+
+  if (!isCancelled) {
+    html += `<div class="refresh-info" id="refreshInfo">🔄 Status diperbarui otomatis setiap 15 detik</div>`;
+  }
+
+  document.getElementById('pageContent').innerHTML = html;
+}
+
+function renderNotFound() {
+  document.getElementById('pageContent').innerHTML = `
+    <div class="not-found">
+      <div style="font-size:3rem;margin-bottom:1rem">🔍</div>
+      <h2>Pesanan Tidak Ditemukan</h2>
+      <p>Pastikan ID pesanan kamu benar.</p>
+      <a href="index.html">← Kembali ke Beranda</a>
+    </div>`;
+}
+
+const params = new URLSearchParams(location.search);
+const orderId = params.get('id');
+
+function loadAndRender() {
+  if (!orderId) { renderNotFound(); return; }
+  const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+  const order = orders.find(o => o.id === orderId);
+  if (!order) { renderNotFound(); return; }
+  renderOrder(order);
+}
+
+loadAndRender();
+setInterval(loadAndRender, 15000);
 </script>
 </body>
 </html>
