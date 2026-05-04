@@ -193,27 +193,7 @@ footer strong{color:var(--accent);font-family:var(--serif)}
 
 <script>
 const WA = '6285694458024';
-
-// Safe cart load – sanitize any corrupted data
-let cart = (function() {
-  const raw = localStorage.getItem('cart');
-  if (!raw) return [];
-  try {
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
-    return parsed
-      .filter(item => item && typeof item.id === 'number' && typeof item.price === 'number')
-      .map(item => ({
-        id: item.id,
-        name: item.name || 'Produk',
-        price: Number(item.price),
-        qty: Number(item.qty) || 1
-      }));
-  } catch (e) {
-    return [];
-  }
-})();
-
+let cart = JSON.parse(localStorage.getItem('cart') || '[]');
 let appliedPromo = null;
 
 const DEFAULT_PRODUCTS = [
@@ -349,14 +329,9 @@ function addToCart(id) {
   const prods = loadProducts();
   const p = prods.find(x => x.id === id);
   if (!p) return;
-  const qty = Number(qtyState[id]) || 1;
+  const qty = qtyState[id] || 1;
   const ex = cart.find(c => c.id === id);
-  if (ex) {
-    ex.qty = Number(ex.qty) || 0;
-    ex.qty += qty;
-  } else {
-    cart.push({ id: p.id, name: p.name, price: Number(p.price), qty: qty });
-  }
+  if (ex) ex.qty += qty; else cart.push({ id: p.id, name: p.name, price: p.price, qty });
   saveCart(); updateCartUI();
   showToast(`${p.name} ditambahkan! ✨`);
 }
@@ -365,8 +340,8 @@ function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); }
 function fmtRp(n) { return 'Rp\u00a0' + Number(n).toLocaleString('id-ID'); }
 
 function updateCartUI() {
-  const total = cart.reduce((s, i) => s + (Number(i.price) || 0) * (Number(i.qty) || 0), 0);
-  const count = cart.reduce((s, i) => s + (Number(i.qty) || 0), 0);
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const count = cart.reduce((s, i) => s + i.qty, 0);
   document.getElementById('cartCount').textContent = count;
   const itemsEl = document.getElementById('cartItems');
   const footerEl = document.getElementById('cartFooter');
@@ -376,29 +351,24 @@ function updateCartUI() {
   }
   footerEl.style.display = 'block';
   document.getElementById('cartTotalEl').textContent = fmtRp(total);
-  itemsEl.innerHTML = cart.map(item => {
-    const price = Number(item.price) || 0;
-    const qty = Number(item.qty) || 0;
-    return `
+  itemsEl.innerHTML = cart.map(item => `
     <div class="cart-item">
       <div class="cart-item-info">
         <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-price">${fmtRp(price)} × ${qty}</div>
+        <div class="cart-item-price">${fmtRp(item.price)} × ${item.qty}</div>
       </div>
       <div class="qty-control" style="gap:.45rem">
         <button class="qty-btn" onclick="cQty(${item.id},-1)">−</button>
-        <span style="font-weight:600;font-size:.9rem">${qty}</span>
+        <span style="font-weight:600;font-size:.9rem">${item.qty}</span>
         <button class="qty-btn" onclick="cQty(${item.id},1)">+</button>
       </div>
-      <strong style="min-width:72px;text-align:right;font-size:.88rem">${fmtRp(price * qty)}</strong>
-    </div>`;
-  }).join('');
+      <strong style="min-width:72px;text-align:right;font-size:.88rem">${fmtRp(item.price * item.qty)}</strong>
+    </div>`).join('');
 }
 
 function cQty(id, d) {
   const item = cart.find(c => c.id === id);
   if (!item) return;
-  item.qty = Number(item.qty) || 0;
   item.qty += d;
   if (item.qty <= 0) cart = cart.filter(c => c.id !== id);
   saveCart(); updateCartUI();
@@ -447,10 +417,10 @@ function calcDiscount(sub) {
 }
 
 function renderSummary() {
-  const sub = cart.reduce((s, i) => s + (Number(i.price)||0) * (Number(i.qty)||0), 0);
+  const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const disc = calcDiscount(sub);
   const total = sub - disc;
-  let html = cart.map(i => `<div class="os-item"><span>${i.name} × ${i.qty}</span><span>${fmtRp((Number(i.price)||0) * (Number(i.qty)||0))}</span></div>`).join('');
+  let html = cart.map(i => `<div class="os-item"><span>${i.name} × ${i.qty}</span><span>${fmtRp(i.price * i.qty)}</span></div>`).join('');
   html += `<hr class="os-divider"><div class="os-item"><span>Subtotal</span><span>${fmtRp(sub)}</span></div>`;
   if (disc > 0) html += `<div class="os-item os-discount"><span>Diskon (${appliedPromo.code})</span><span>−${fmtRp(disc)}</span></div>`;
   html += `<div class="os-item os-total"><span>Total</span><span>${fmtRp(total)}</span></div>`;
@@ -467,7 +437,7 @@ function submitOrder() {
   if (!/^08\d{7,12}$/.test(wa)) { showToast('Format WA: 08xxxxxxxxxx'); return; }
   if (!cart.length) { showToast('Keranjang kosong!'); return; }
 
-  const sub = cart.reduce((s, i) => s + (Number(i.price)||0) * (Number(i.qty)||0), 0);
+  const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const disc = calcDiscount(sub);
   const total = sub - disc;
   const id = 'MB-' + Date.now().toString(36).toUpperCase();
@@ -475,8 +445,7 @@ function submitOrder() {
   const order = {
     id, timestamp: Date.now(), status: 'MENUNGGU',
     customer: { name, kelas, jurusan, wa, pickup },
-    items: cart.map(i => ({...i, price: Number(i.price), qty: Number(i.qty)})),
-    subtotal: sub, discount: disc,
+    items: [...cart], subtotal: sub, discount: disc,
     promoCode: appliedPromo ? appliedPromo.code : null, total
   };
 
