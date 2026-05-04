@@ -3,475 +3,200 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> Detail Pesanan</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<title>MinBite · Detail Pesanan</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #f8fafc;
-    --card: #ffffff;
-    --text: #0f172a;
-    --text-muted: #64748b;
-    --primary: #3b82f6;
-    --primary-dark: #2563eb;
-    --primary-light: #eff6ff;
-    --border: #e2e8f0;
-    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.06);
-    --shadow-lg: 0 8px 32px rgba(0,0,0,.10);
-    --radius: 16px;
-    --radius-sm: 10px;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
-
-  /* TOPBAR */
-  .topbar {
-    background: var(--card);
-    border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; z-index: 100;
-  }
-  .topbar-inner {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 0 20px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .logo { font-family: 'DM Serif Display', serif; font-size: 1.4rem; }
-  .logo span { color: var(--primary); }
-  .back-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    text-decoration: none;
-    color: var(--text-muted);
-    font-size: .875rem;
-    font-weight: 600;
-    transition: color .15s;
-  }
-  .back-btn:hover { color: var(--primary); }
-
-  /* MAIN */
-  .main {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 32px 20px 60px;
-  }
-
-  /* STATUS BANNER */
-  .status-banner {
-    border-radius: var(--radius);
-    padding: 20px 24px;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  .status-banner.MENUNGGU { background: #fef3c7; border: 1px solid #fde68a; }
-  .status-banner.DIPROSES { background: var(--primary-light); border: 1px solid #bfdbfe; }
-  .status-banner.SIAP_DIAMBIL { background: #d1fae5; border: 1px solid #a7f3d0; }
-  .status-banner.DIBATALKAN { background: #fee2e2; border: 1px solid #fecaca; }
-  .status-icon {
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    background: rgba(255,255,255,.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .status-info-title { font-weight: 700; font-size: 1rem; margin-bottom: 3px; }
-  .status-info-sub { font-size: .82rem; color: var(--text-muted); }
-
-  /* CARD */
-  .card {
-    background: var(--card);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    margin-bottom: 16px;
-    overflow: hidden;
-  }
-  .card-header {
-    padding: 18px 20px;
-    border-bottom: 1px solid var(--border);
-    font-weight: 700;
-    font-size: .9rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .card-body { padding: 20px; }
-  .info-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-    gap: 12px;
-  }
-  .info-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .info-row:first-child { padding-top: 0; }
-  .info-label { font-size: .8rem; color: var(--text-muted); font-weight: 500; flex-shrink: 0; }
-  .info-val { font-size: .9rem; font-weight: 600; text-align: right; }
-  .order-id-val {
-    font-family: 'Courier New', monospace;
-    font-size: .85rem;
-    color: var(--primary);
-    font-weight: 700;
-    text-align: right;
-  }
-
-  /* ITEMS */
-  .item-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .item-row:last-child { border-bottom: none; }
-  .item-name { font-weight: 600; font-size: .9rem; }
-  .item-qty { font-size: .8rem; color: var(--text-muted); margin-top: 2px; }
-  .item-price { font-weight: 700; color: var(--primary); }
-  .total-row {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 14px;
-    margin-top: 4px;
-    border-top: 2px solid var(--border);
-    font-weight: 800;
-    font-size: 1rem;
-  }
-  .total-row span:last-child { color: var(--primary); }
-
-  /* QR SECTION */
-  .qr-section { text-align: center; }
-  .qr-locked {
-    padding: 32px 20px;
-    background: var(--bg);
-    border-radius: var(--radius-sm);
-    border: 2px dashed var(--border);
-    text-align: center;
-  }
-  .qr-locked-icon {
-    width: 56px; height: 56px;
-    background: var(--card);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 12px;
-    box-shadow: var(--shadow);
-  }
-  .qr-locked-title { font-weight: 700; margin-bottom: 6px; }
-  .qr-locked-sub { font-size: .82rem; color: var(--text-muted); line-height: 1.5; }
-  .qr-steps {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 16px;
-    text-align: left;
-  }
-  .qr-step {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    font-size: .82rem;
-    color: var(--text-muted);
-  }
-  .qr-step-num {
-    width: 20px; height: 20px;
-    background: var(--primary-light);
-    color: var(--primary);
-    border-radius: 50%;
-    font-size: .7rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-  #qrCanvas {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-  }
-  #qrCanvas canvas, #qrCanvas img {
-    border-radius: 12px !important;
-  }
-  .qr-url {
-    font-size: .75rem;
-    color: var(--text-muted);
-    word-break: break-all;
-    margin: 10px 0 16px;
-    font-family: monospace;
-    background: var(--bg);
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-  }
-  .dl-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 11px 20px;
-    background: var(--primary);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius-sm);
-    font-family: inherit;
-    font-size: .875rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background .2s;
-    text-decoration: none;
-  }
-  .dl-btn:hover { background: var(--primary-dark); }
-
-  /* CONFIRM BADGES */
-  .confirm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .confirm-badge {
-    padding: 14px;
-    border-radius: var(--radius-sm);
-    text-align: center;
-    border: 1.5px solid;
-  }
-  .confirm-badge.ok { background: #d1fae5; border-color: #a7f3d0; }
-  .confirm-badge.no { background: var(--bg); border-color: var(--border); }
-  .confirm-badge-label { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--text-muted); margin-bottom: 4px; }
-  .confirm-badge-val { font-weight: 700; font-size: .9rem; }
-  .confirm-badge.ok .confirm-badge-val { color: #065f46; }
-
-  @media (max-width: 480px) {
-    .main { padding: 20px 16px 48px; }
-    .confirm-grid { grid-template-columns: 1fr; }
-  }
+:root{--bg:#faf8f5;--bg2:#f2ede6;--card:#fff;--text:#2c2420;--muted:#7a6b5d;--accent:#c8956c;--accent-d:#a67350;--border:#e8e0d5;--shadow:0 4px 24px rgba(44,36,32,.08);--r:20px;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
+header{background:rgba(250,248,245,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.logo{font-family:var(--serif);font-size:1.3rem;font-weight:700;color:var(--text);text-decoration:none}.logo span{color:var(--accent)}
+.admin-link{font-size:.8rem;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:.3rem;background:var(--bg2);padding:.4rem .9rem;border-radius:8px;border:1px solid var(--border);transition:all .15s}
+.admin-link:hover{border-color:var(--accent);color:var(--accent)}
+.page-wrap{max-width:480px;margin:0 auto;padding:2rem 1.25rem 4rem}
+/* STATUS BADGE */
+.status-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.5rem 1.2rem;border-radius:50px;font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:1.5rem}
+.s-MENUNGGU{background:#fff3e0;color:#c65000}
+.s-DIPROSES{background:#e3f2fd;color:#1255a4}
+.s-SIAP{background:#e8f5e9;color:#27742e}
+.s-DIBATALKAN{background:#fde8e8;color:#b81c1c}
+.pulse{width:8px;height:8px;border-radius:50%;animation:pulse 1.5s ease infinite}
+.s-MENUNGGU .pulse{background:#c65000}.s-DIPROSES .pulse{background:#1255a4}.s-SIAP .pulse{background:#27742e}.s-DIBATALKAN .pulse{background:#b81c1c;animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+/* CARD */
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);border:1px solid var(--border);padding:1.5rem;margin-bottom:1.25rem}
+.card-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.85rem}
+.item-row{display:flex;justify-content:space-between;align-items:center;padding:.55rem 0;border-bottom:1px solid var(--border);font-size:.9rem}
+.item-row:last-child{border-bottom:none}
+.total-row{font-weight:700;font-size:1rem;border-top:2px solid var(--border);border-bottom:none;padding-top:.75rem;margin-top:.25rem}
+.total-row span:last-child{color:var(--accent)}
+/* INFO GRID */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+.info-item label{display:block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.3rem}
+.info-item .val{font-size:.9rem;font-weight:500}
+.masked{font-family:monospace;letter-spacing:.05em}
+/* ORDER HEADER */
+.order-heading{font-family:var(--serif);font-size:1.65rem;margin-bottom:.35rem}
+.order-id-text{font-size:.8rem;color:var(--muted);font-weight:500;margin-bottom:1.5rem}
+/* CONFIRM BUTTON */
+.confirm-section{background:linear-gradient(135deg,#e8f5e9,#d4edda);border-radius:var(--r);border:1px solid #c3e6cb;padding:1.75rem;margin-bottom:1.25rem;text-align:center}
+.confirm-section h3{font-family:var(--serif);font-size:1.2rem;color:#27742e;margin-bottom:.5rem}
+.confirm-section p{color:#476c4a;font-size:.85rem;margin-bottom:1.25rem;line-height:1.5}
+.confirm-btn{background:#27742e;color:#fff;border:none;padding:.9rem 2rem;border-radius:50px;font-family:var(--sans);font-size:.95rem;font-weight:700;cursor:pointer;transition:background .2s;box-shadow:0 4px 14px rgba(39,116,46,.25)}
+.confirm-btn:hover{background:#1d5e23}
+.confirmed-tag{display:inline-flex;align-items:center;gap:.5rem;background:#27742e;color:#fff;padding:.6rem 1.5rem;border-radius:50px;font-size:.9rem;font-weight:600}
+/* PRIVACY NOTE */
+.privacy-note{display:flex;align-items:center;gap:.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.6rem 1rem;font-size:.75rem;color:var(--muted);margin-bottom:1.25rem}
+/* CANCELLED BANNER */
+.cancelled-banner{background:#fde8e8;border:1px solid #f5c0c0;border-radius:var(--r);padding:1.5rem;text-align:center;margin-bottom:1.25rem;color:#b81c1c}
+.cancelled-banner h3{font-family:var(--serif);font-size:1.1rem;margin-bottom:.35rem}
+/* NOT FOUND */
+.not-found{text-align:center;padding:5rem 2rem}
+.not-found h2{font-family:var(--serif);font-size:1.4rem;margin-bottom:.75rem}
+.not-found p{color:var(--muted);margin-bottom:1.5rem}
+.not-found a{color:var(--accent);text-decoration:none;font-weight:600}
+/* TOAST */
+.toast-container{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:.5rem;align-items:center;pointer-events:none}
+.toast{background:var(--text);color:#fff;padding:.7rem 1.4rem;border-radius:50px;font-size:.875rem;font-weight:500;animation:tin .3s ease,tout .3s ease 2.5s forwards;box-shadow:0 4px 16px rgba(44,36,32,.2);white-space:nowrap}
+@keyframes tin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tout{to{opacity:0;transform:translateY(14px)}}
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="topbar-inner">
-    <div class="logo">Kuzo<span>Snacks</span></div>
-    <a href="index.html" class="back-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-      Kembali
-    </a>
-  </div>
+<header>
+  <a href="index.html" class="logo">Min<span>Bite</span></a>
+  <a href="admin.html" class="admin-link">← Admin</a>
+</header>
+
+<div class="page-wrap" id="pageContent">
+  <div style="text-align:center;padding:3rem 1rem;color:var(--muted)">Memuat…</div>
 </div>
 
-<div class="main" id="main">
-  <div style="text-align:center;padding:60px 20px;color:var(--text-muted)">
-    <div style="font-size:1.5rem;margin-bottom:12px">Memuat pesanan...</div>
-  </div>
-</div>
+<div class="toast-container" id="toastContainer"></div>
 
 <script>
-try {
-  function fmt(n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); }
+function fmtRp(n){return 'Rp\u00a0'+Number(n).toLocaleString('id-ID')}
+function showToast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.getElementById('toastContainer').appendChild(t);setTimeout(()=>t.remove(),3100)}
 
-  function getStatusInfo(status) {
-    const map = {
-      'MENUNGGU': { cls: 'MENUNGGU', icon: '&#x23F3;', color: '#92400e', label: 'Menunggu Konfirmasi', sub: 'Pesananmu sedang menunggu konfirmasi WA dan web.' },
-      'DIPROSES': { cls: 'DIPROSES', icon: '&#x1F4E6;', color: '#1e40af', label: 'Sedang Diproses', sub: 'Pesananmu sedang diproses oleh admin.' },
-      'SIAP DIAMBIL': { cls: 'SIAP_DIAMBIL', icon: '&#x2714;', color: '#065f46', label: 'Siap Diambil!', sub: 'Pesananmu siap diambil sesuai jadwal.' },
-      'DIBATALKAN': { cls: 'DIBATALKAN', icon: '&#x2715;', color: '#991b1b', label: 'Pesanan Dibatalkan', sub: 'Pesanan ini telah dibatalkan.' },
-    };
-    return map[status] || map['MENUNGGU'];
+function maskName(name){
+  if(!name) return '—';
+  return name.trim().split(/\s+/).map(part=>part.charAt(0)+'***').join(' ');
+}
+
+function statusClass(s){
+  if(s==='MENUNGGU') return 's-MENUNGGU';
+  if(s==='DIPROSES') return 's-DIPROSES';
+  if(s==='SIAP DIAMBIL') return 's-SIAP';
+  if(s==='DIBATALKAN') return 's-DIBATALKAN';
+  return 's-MENUNGGU';
+}
+function statusEmoji(s){
+  const m={'MENUNGGU':'⏳','DIPROSES':'⚙️','SIAP DIAMBIL':'✅','DIBATALKAN':'❌'};
+  return (m[s]||'•')+' '+s;
+}
+
+const params=new URLSearchParams(location.search);
+const orderId=params.get('id');
+
+function getOrders(){return JSON.parse(localStorage.getItem('orders')||'[]')}
+
+function confirmPickup(){
+  const orders=getOrders();
+  const o=orders.find(x=>x.id===orderId);
+  if(!o) return;
+  if(!confirm('Konfirmasi pengambilan pesanan ini?')) return;
+  o.status='DIBATALKAN'; // mark as completed — using a final state
+  // Actually spec says "mark as completed" — we'll add a SELESAI status or just use DIBATALKAN
+  // Re-reading spec: "mark as completed" — let's set a custom completed state
+  // We'll update status to "SELESAI" for semantic clarity even if it's not in the badge list
+  o.status = 'SELESAI';
+  localStorage.setItem('orders',JSON.stringify(orders));
+  showToast('Pengambilan dikonfirmasi! ✅');
+  setTimeout(renderPage, 800);
+}
+
+function renderPage(){
+  if(!orderId){renderNotFound();return;}
+  const orders=getOrders();
+  const order=orders.find(o=>o.id===orderId);
+  if(!order){renderNotFound();return;}
+
+  const sc=statusClass(order.status);
+  const isReady=order.status==='SIAP DIAMBIL';
+  const isCancelled=order.status==='DIBATALKAN';
+  const isSelesai=order.status==='SELESAI';
+  const d=new Date(order.timestamp);
+  const dateStr=d.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+
+  let html=`
+    <h1 class="order-heading">Detail Pesanan</h1>
+    <div class="order-id-text"><code>${order.id}</code> &nbsp;·&nbsp; ${dateStr}</div>`;
+
+  // Status badge
+  const dispStatus = isSelesai ? 'SELESAI' : order.status;
+  const badgeClass = isSelesai ? 's-SIAP' : sc;
+  html+=`<div class="status-badge ${badgeClass}"><span class="pulse"></span>${statusEmoji(dispStatus)}</div>`;
+
+  // Cancelled banner
+  if(isCancelled){
+    html+=`<div class="cancelled-banner"><h3>❌ Pesanan Dibatalkan</h3><p>Pesanan ini telah dibatalkan oleh penjual.</p></div>`;
   }
 
-  const params = new URLSearchParams(window.location.search);
-  const orderId = params.get('id');
-  const main = document.getElementById('main');
-
-  if (!orderId) {
-    main.innerHTML = `<div style="text-align:center;padding:60px 20px">
-      <div style="font-size:1.1rem;font-weight:700;margin-bottom:8px;">Order ID tidak ditemukan</div>
-      <a href="index.html" style="color:var(--primary);text-decoration:none;font-weight:600;">Kembali ke Toko</a>
+  // Ready / confirm section
+  if(isReady){
+    html+=`<div class="confirm-section">
+      <h3>✅ Siap Diambil!</h3>
+      <p>Pelanggan sudah bisa mengambil pesanannya. Klik tombol di bawah setelah pesanan diserahkan.</p>
+      <button class="confirm-btn" onclick="confirmPickup()">Konfirmasi Pengambilan</button>
     </div>`;
-  } else {
-    const orders = JSON.parse(localStorage.getItem("orders")) || [];
-    const order = orders.find(o => o.orderId === orderId);
-
-    if (!order) {
-      main.innerHTML = `<div style="text-align:center;padding:60px 20px">
-        <div style="font-size:1.1rem;font-weight:700;margin-bottom:8px;">Pesanan tidak ditemukan</div>
-        <div style="color:var(--text-muted);margin-bottom:16px;font-size:.9rem;">Order ID: ${orderId}</div>
-        <a href="index.html" style="color:var(--primary);text-decoration:none;font-weight:600;">Kembali ke Toko</a>
-      </div>`;
-    } else {
-      const si = getStatusInfo(order.status);
-      const qrUrl = `https://orderhere.vercel.app/order.html?id=${orderId}`;
-      const canShowQR = order.waConfirmed && order.webConfirmed;
-      const createdAt = order.createdAt ? new Date(order.createdAt).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : '-';
-
-      main.innerHTML = `
-        <!-- STATUS BANNER -->
-        <div class="status-banner ${si.cls}" style="margin-bottom:24px">
-          <div class="status-icon" style="color:${si.color}">${si.icon}</div>
-          <div>
-            <div class="status-info-title" style="color:${si.color}">${si.label}</div>
-            <div class="status-info-sub">${si.sub}</div>
-          </div>
-        </div>
-
-        <!-- ORDER INFO -->
-        <div class="card">
-          <div class="card-header">
-            <span>Informasi Pesanan</span>
-            <span style="font-family:monospace;font-size:.78rem;color:var(--text-muted)">${orderId}</span>
-          </div>
-          <div class="card-body">
-            <div class="info-row">
-              <span class="info-label">Nama</span>
-              <span class="info-val">${order.name || '-'}</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Kelas / Jurusan</span>
-              <span class="info-val">${order.class || '-'} ${order.major || ''}</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Nomor WA</span>
-              <span class="info-val">${order.phone || '-'}</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Waktu Ambil</span>
-              <span class="info-val">${order.pickup || '-'}</span>
-            </div>
-            <div class="info-row">
-              <span class="info-label">Dipesan Pada</span>
-              <span class="info-val">${createdAt}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- ITEMS -->
-        <div class="card">
-          <div class="card-header">Rincian Item</div>
-          <div class="card-body">
-            ${(order.items || []).map(item => `
-              <div class="item-row">
-                <div>
-                  <div class="item-name">${item.name}</div>
-                  <div class="item-qty">${item.qty} pcs &times; ${fmt(item.price)}</div>
-                </div>
-                <div class="item-price">${fmt(item.price * item.qty)}</div>
-              </div>
-            `).join('')}
-            <div class="total-row">
-              <span>Total Pembayaran</span>
-              <span>${fmt(order.total || 0)}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- KONFIRMASI -->
-        <div class="card">
-          <div class="card-header">Status Konfirmasi</div>
-          <div class="card-body">
-            <div class="confirm-grid">
-              <div class="confirm-badge ${order.waConfirmed ? 'ok' : 'no'}">
-                <div class="confirm-badge-label">WhatsApp</div>
-                <div class="confirm-badge-val">${order.waConfirmed ? 'Terkirim' : 'Belum'}</div>
-              </div>
-              <div class="confirm-badge ${order.webConfirmed ? 'ok' : 'no'}">
-                <div class="confirm-badge-label">Web Konfirmasi</div>
-                <div class="confirm-badge-val">${order.webConfirmed ? 'Dikonfirmasi' : 'Belum'}</div>
-              </div>
-            </div>
-            ${!canShowQR ? `<div style="margin-top:14px;padding:10px 14px;background:var(--bg);border-radius:var(--radius-sm);font-size:.82rem;color:var(--text-muted);border:1px solid var(--border);">QR tiket akan muncul setelah kedua konfirmasi selesai.</div>` : ''}
-          </div>
-        </div>
-
-        <!-- QR CODE -->
-        <div class="card">
-          <div class="card-header">Tiket QR Code</div>
-          <div class="card-body qr-section">
-            ${canShowQR ? `
-              <div id="qrCanvas" style="margin:0 auto 12px"></div>
-              <div class="qr-url">${qrUrl}</div>
-              <button class="dl-btn" id="dlBtn">
-                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Unduh QR Code
-              </button>
-            ` : `
-              <div class="qr-locked">
-                <div class="qr-locked-icon">
-                  <svg width="24" height="24" fill="none" stroke="#94a3b8" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                </div>
-                <div class="qr-locked-title">QR Terkunci</div>
-                <div class="qr-locked-sub">Selesaikan kedua langkah konfirmasi untuk membuka QR tiket pengambilan.</div>
-                <div class="qr-steps">
-                  <div class="qr-step">
-                    <div class="qr-step-num">1</div>
-                    <div>Kirim pesan ke WhatsApp (sudah otomatis dilakukan saat checkout).</div>
-                  </div>
-                  <div class="qr-step">
-                    <div class="qr-step-num">2</div>
-                    <div>Konfirmasi di halaman return bahwa kamu sudah kirim pesan WA.</div>
-                  </div>
-                </div>
-              </div>
-            `}
-          </div>
-        </div>
-      `;
-
-      if (canShowQR) {
-        try {
-          setTimeout(() => {
-            const canvas = document.getElementById('qrCanvas');
-            if (canvas && typeof QRCode !== 'undefined') {
-              const qr = new QRCode(canvas, {
-                text: qrUrl,
-                width: 200,
-                height: 200,
-                colorDark: '#0f172a',
-                colorLight: '#ffffff',
-                correctLevel: QRCode.CorrectLevel.H
-              });
-              // Download button
-              setTimeout(() => {
-                const dlBtn = document.getElementById('dlBtn');
-                if (dlBtn) {
-                  dlBtn.addEventListener('click', () => {
-                    try {
-                      const img = canvas.querySelector('img') || canvas.querySelector('canvas');
-                      const link = document.createElement('a');
-                      if (img && img.tagName === 'CANVAS') {
-                        link.href = img.toDataURL('image/png');
-                      } else if (img) {
-                        link.href = img.src;
-                      } else {
-                        const c = canvas.querySelector('canvas');
-                        if (c) link.href = c.toDataURL('image/png');
-                      }
-                      link.download = `qr-${orderId}.png`;
-                      link.click();
-                    } catch(e) { alert('Gagal download QR. Coba screenshot saja.'); }
-                  });
-                }
-              }, 500);
-            }
-          }, 300);
-        } catch(e) { console.error('QR error', e); }
-      }
-    }
   }
-} catch(e) { console.error(e); }
+
+  if(isSelesai){
+    html+=`<div class="confirm-section">
+      <h3>🎉 Sudah Diambil</h3>
+      <p>Pesanan ini telah berhasil diserahkan ke pelanggan.</p>
+      <span class="confirmed-tag">✓ Selesai</span>
+    </div>`;
+  }
+
+  // Privacy note
+  html+=`<div class="privacy-note">🔒 Informasi pelanggan ditampilkan dalam format anonim untuk privasi.</div>`;
+
+  // Items
+  html+=`<div class="card"><div class="card-label">Item Pesanan</div>`;
+  order.items.forEach(i=>{
+    html+=`<div class="item-row"><span>${i.name} <span style="color:var(--muted)">× ${i.qty}</span></span><span style="font-weight:600">${fmtRp(i.price*i.qty)}</span></div>`;
+  });
+  if(order.discount>0){
+    html+=`<div class="item-row" style="color:#2a7a4b"><span>Diskon (${order.promoCode})</span><span>−${fmtRp(order.discount)}</span></div>`;
+  }
+  html+=`<div class="item-row total-row"><span>Total</span><span>${fmtRp(order.total)}</span></div></div>`;
+
+  // Info (privacy-masked)
+  html+=`<div class="card"><div class="card-label">Info Pelanggan (Anonim)</div>
+    <div class="info-grid">
+      <div class="info-item"><label>Nama</label><div class="val masked">${maskName(order.customer.name)}</div></div>
+      <div class="info-item"><label>Kelas</label><div class="val">${order.customer.kelas} ${order.customer.jurusan}</div></div>
+      <div class="info-item"><label>Waktu Ambil</label><div class="val">${order.customer.pickup}</div></div>
+      <div class="info-item"><label>No. WA</label><div class="val masked">08•••••••••</div></div>
+    </div>
+  </div>`;
+
+  document.getElementById('pageContent').innerHTML=html;
+}
+
+function renderNotFound(){
+  document.getElementById('pageContent').innerHTML=`
+    <div class="not-found">
+      <div style="font-size:3rem;margin-bottom:1rem">🔍</div>
+      <h2>Pesanan Tidak Ditemukan</h2>
+      <p>ID pesanan tidak valid atau tidak ditemukan.</p>
+      <a href="admin.html">← Kembali ke Admin</a>
+    </div>`;
+}
+
+renderPage();
 </script>
 </body>
 </html>
