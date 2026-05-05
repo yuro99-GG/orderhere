@@ -788,46 +788,6 @@
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 
-    /* ── QR NOTICE ── */
-    .qr-notice {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 20px 28px;
-      background: linear-gradient(135deg, #fff8e6, #fdf3e0);
-      border-top: 1px solid var(--status-wait-border);
-    }
-
-    .qr-notice-icon {
-      width: 42px;
-      height: 42px;
-      background: var(--status-wait-bg);
-      border: 1.5px solid var(--status-wait-border);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .qr-notice-icon svg {
-      width: 20px;
-      height: 20px;
-      color: var(--status-wait-text);
-      opacity: 0.7;
-    }
-
-    .qr-notice-text {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--status-wait-text);
-      line-height: 1.5;
-    }
-
-    [data-theme="dark"] .qr-notice {
-      background: linear-gradient(135deg, var(--status-wait-bg), var(--bg2));
-    }
-
     /* ── QR POPUP MODAL ── */
     .qr-popup-overlay {
       position: fixed;
@@ -1150,18 +1110,6 @@
           <div class="qr-sub">Tunjukkan QR code ini kepada penjual saat mengambil pesananmu.</div>
         </div>
 
-        <!-- QR NOTICE (shown when status bukan DIPROSES) -->
-        <div class="qr-notice" id="qrNotice" style="display:none">
-          <div class="qr-notice-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-              <rect x="3" y="14" width="7" height="7"/>
-              <path d="M14 14h3v3h-3z"/><path d="M17 17h3v3h-3z"/><path d="M14 17h.01"/>
-            </svg>
-          </div>
-          <div class="qr-notice-text">QR Pemesanan Akan Muncul Setelah Di Konfirmasi Oleh Admin</div>
-        </div>
-
       </div>
 
       <!-- REFRESH BAR -->
@@ -1389,7 +1337,6 @@
 
       // QR Code — hanya tampil saat status DIPROSES
       const qrSection = document.getElementById('qrSection');
-      const qrNotice  = document.getElementById('qrNotice');
       const normalizedStatus = rawStatus.replace(/\s+/g, ' ').trim();
       if (normalizedStatus === 'DIPROSES') {
         const orderId = data.id || getOrderId();
@@ -1397,15 +1344,12 @@
         const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + qrData;
         document.getElementById('qrImage').src = qrUrl;
         qrSection.style.display = 'flex';
-        if (qrNotice) qrNotice.style.display = 'none';
         // Tampilkan popup hanya sekali per sesi
         if (!sessionStorage.getItem('qrPopupShown_' + orderId)) {
           setTimeout(function() { showQrPopup(); }, 600);
         }
       } else {
         qrSection.style.display = 'none';
-        // Tampilkan notice hanya saat status MENUNGGU (belum dikonfirmasi)
-        if (qrNotice) qrNotice.style.display = normalizedStatus === 'MENUNGGU' ? 'flex' : 'none';
       }
     }
 
