@@ -1024,7 +1024,7 @@
   <!-- ══ HEADER ══ -->
   <header>
     <div class="header-inner">
-      <a class="logo" href="#">MinBite <span>by sekolah</span></a>
+      <a class="logo" href="#">MinBite</a>
       <div class="header-actions">
         <button class="btn-pesanan" id="btnPesanan" onclick="openPesanan()">Pesanan Saya</button>
         <button class="btn-icon" id="btnTheme" onclick="toggleTheme()" title="Toggle dark mode">
@@ -1872,7 +1872,7 @@
 
         // Show popup
         document.getElementById('btnReturnPage').onclick = function() {
-          window.location.href = 'return.html?id=' + currentOrderId;
+          window.location.href = 'order.html?id=' + currentOrderId;
         };
         document.getElementById('successPopup').classList.add('open');
 
@@ -1932,7 +1932,7 @@
                 <span class="order-list-total">${fmt(d.total || 0)}</span>
               </div>
               <div style="margin-top:8px;">
-                <a href="return.html?id=${d.id}" style="font-size:0.75rem;color:var(--accent);text-decoration:none;font-weight:600;">Lihat Detail &rarr;</a>
+                <a href="order.html?id=${d.id}" style="font-size:0.75rem;color:var(--accent);text-decoration:none;font-weight:600;">Lihat Detail &rarr;</a>
               </div>
             </div>`;
         });
