@@ -675,25 +675,24 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 18px;
       background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
-      border-top: 1px solid var(--border);
     }
 
     .qr-label {
       font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--text);
       text-align: center;
     }
 
     .qr-sub {
-      font-size: 0.78rem;
+      font-size: 0.82rem;
       color: var(--text3);
       text-align: center;
-      line-height: 1.65;
-      max-width: 280px;
+      line-height: 1.6;
+      max-width: 260px;
     }
 
     .qr-wrap {
@@ -706,10 +705,26 @@
 
     .qr-wrap img {
       display: block;
-      width: 190px;
-      height: 190px;
-      border-radius: 4px;
+      width: 180px;
+      height: 180px;
+      border-radius: 6px;
     }
+
+    .qr-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      background: var(--accent-light);
+      color: var(--accent);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .qr-badge svg { width: 13px; height: 13px; }
 
     /* ── REFRESH INFO ── */
     .refresh-bar {
@@ -792,7 +807,7 @@
   <!-- ══ HEADER ══ -->
   <header>
     <div class="header-inner">
-      <a class="logo" href="index.html">MinBite</a>
+      <a class="logo" href="index.html">MinBite <span>by sekolah</span></a>
       <div class="header-right">
         <a class="btn-back" href="index.html">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -921,13 +936,19 @@
           </div>
         </div>
 
-        <!-- QR CODE (selalu tampil) -->
-        <div class="qr-section" id="qrSection">
-          <div class="qr-label">QR Code Pesanan</div>
+        <!-- QR CODE (shown only when DIPROSES) -->
+        <div class="qr-section" id="qrSection" style="display:none">
+          <div class="qr-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
+            </svg>
+            Sedang Diproses
+          </div>
+          <div class="qr-label">Tunjukkan QR ini ke penjual</div>
           <div class="qr-wrap">
             <img id="qrImage" src="" alt="QR Code" />
           </div>
-          <div class="qr-sub">Scan QR ini untuk membuka detail pesanan. Tunjukkan ke penjual saat mengambil, atau simpan untuk referensi pembeli.</div>
+          <div class="qr-sub">Tunjukkan QR code ini kepada penjual saat mengambil pesananmu.</div>
         </div>
 
       </div>
@@ -1112,12 +1133,18 @@
       // Pickup
       document.getElementById('oPickup').textContent = data.pickup || '-';
 
-      // QR Code — selalu tampil, bisa discan penjual & pembeli
-      const orderId = data.id || getOrderId();
-      const qrData = encodeURIComponent(location.origin + location.pathname.replace(/[^/]*$/, '') + 'order.html?id=' + orderId);
-      const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + qrData;
-      document.getElementById('qrImage').src = qrUrl;
-      document.getElementById('qrSection').style.display = 'flex';
+      // QR Code — hanya tampil saat status DIPROSES
+      const qrSection = document.getElementById('qrSection');
+      const normalizedStatus = rawStatus.replace(/\s+/g, ' ').trim();
+      if (normalizedStatus === 'DIPROSES') {
+        const orderId = data.id || getOrderId();
+        const qrData = encodeURIComponent('return.html?id=' + orderId);
+        const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + qrData;
+        document.getElementById('qrImage').src = qrUrl;
+        qrSection.style.display = 'flex';
+      } else {
+        qrSection.style.display = 'none';
+      }
     }
 
     // ── FETCH ORDER ──
