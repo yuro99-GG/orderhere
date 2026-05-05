@@ -488,6 +488,32 @@ var DEFAULT_MENU=[
 var menuItems=loadMenuPrices();
 var BUILTIN_PROMOS={'HEMAT1K':{type:'fixed',amount:1000}};
 
+/* AUTO DELETE — Pesanan MENUNGGU > 24 jam */
+async function autoDeleteExpiredOrders(orders){
+  var now=Date.now();
+  var LIMIT_MS=24*60*60*1000;
+  var expired=orders.filter(function(o){
+    if((o.status||'MENUNGGU').toUpperCase()!=='MENUNGGU') return false;
+    var ts=0;
+    if(o.timestamp&&typeof o.timestamp.toMillis==='function') ts=o.timestamp.toMillis();
+    else if(o.timestamp&&o.timestamp.seconds) ts=o.timestamp.seconds*1000;
+    else return false;
+    return (now-ts)>LIMIT_MS;
+  });
+  if(!expired.length) return;
+  for(var i=0;i<expired.length;i++){
+    var o=expired[i];
+    try{
+      await db.collection('orders').doc(o._docId).delete();
+      allOrders=allOrders.filter(function(x){return x._docId!==o._docId;});
+      knownOrderIds.delete(o._docId);
+      addLog('delete','Auto-hapus: Pesanan <strong>'+escHtml(o.id||o._docId)+'</strong> ('+escHtml(o.name||'Anonim')+') dihapus otomatis karena tidak diproses dalam 24 jam.');
+    }catch(err){console.error('[AutoDelete] Gagal:',o._docId,err);}
+  }
+  updateStats(); renderOrders();
+  showToast(expired.length+' pesanan kedaluwarsa dihapus otomatis');
+}
+
 /* INIT */
 document.addEventListener('DOMContentLoaded',function(){
   renderMenuEditor(); renderLog(); renderPromoList();
@@ -515,6 +541,7 @@ async function fetchOrders(silent){
     });
     allOrders=fetched; updateStats(); renderOrders();
     if(!silent) resetCountdown();
+    autoDeleteExpiredOrders(fetched);
   }catch(err){console.error(err); if(!silent) showToast('Gagal mengambil data');}
 }
 
@@ -829,4 +856,4 @@ function getItemIconSVG(name){
 }
 </script>
 </body>
-</html>
+        </html>
