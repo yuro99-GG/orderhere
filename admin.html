@@ -14,12 +14,13 @@
     var db;
     try {
       var firebaseConfig = {
-        apiKey: "AIzaSyDX70_NVuPtnUvxwALxn5fSnjj2H8pgSu0",
-        authDomain: "planning-with-ai-d8ea1.firebaseapp.com",
-        projectId: "planning-with-ai-d8ea1",
-        storageBucket: "planning-with-ai-d8ea1.firebasestorage.app",
-        messagingSenderId: "975523910853",
-        appId: "1:975523910853:web:af7350de88ce5d9e668cac"
+        apiKey: "AIzaSyA_G_Qdk2Zbo_oR4f6BB5tOtDoNrV7yy00",
+        authDomain: "minbite-web.firebaseapp.com",
+        projectId: "minbite-web",
+        storageBucket: "minbite-web.firebasestorage.app",
+        messagingSenderId: "680757323494",
+        appId: "1:680757323494:web:15123e98c19198057a3d27",
+        measurementId: "G-D0L88Y6S8N"
       };
       if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
       db = firebase.firestore();
@@ -311,7 +312,7 @@
     <div class="header-right">
       <div class="live-pill">
         <span class="live-dot"></span>
-        Live &bull; <strong id="refreshCountHeader" style="color:var(--accent);margin-left:3px;">baru saja</strong>
+        Refresh: <strong id="refreshCountHeader" style="color:var(--accent);margin-left:3px;">10</strong>s
       </div>
       <button class="btn-logout" onclick="_logout()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
@@ -325,13 +326,6 @@
 </header>
 
 <div class="page">
-
-  <!-- DIAGNOSTIC BANNER -->
-  <div id="diagBanner" style="display:none;margin-bottom:20px;padding:14px 18px;background:#fdecea;border:1.5px solid #f5b7b1;border-radius:12px;font-size:0.83rem;color:#6b1414;line-height:1.7;">
-    <strong style="display:block;margin-bottom:4px;">&#9888; Terjadi Error — Info untuk Admin</strong>
-    <span id="diagMsg"></span>
-  </div>
-
 
   <!-- STATS -->
   <div class="stats-grid">
@@ -485,9 +479,9 @@ function _logout(){
 
 /* STATE */
 var allOrders=[],currentFilter='ALL',pendingAction=null;
+var refreshInterval=null,countdownSec=10,countdownTimer=null;
 var knownOrderIds=new Set(),activityLog=loadLog();
-var _unsubscribe=null,_lastUpdate=Date.now();
-var BAZAR_DATE='2025-05-22';
+var BAZAR_DATE=''; // Dinonaktifkan — tombol Siap Diambil selalu aktif
 var DEFAULT_MENU=[
   {id:'bola-oreo',name:'Bola Oreo Susu',desc:'Cokelat lembut',price:7000,icon:'oreo'},
   {id:'thai-tea', name:'Thai Tea',       desc:'Segar & creamy',price:4000,icon:'thai'}
@@ -512,93 +506,55 @@ async function autoDeleteExpiredOrders(orders){
     var o=expired[i];
     try{
       await db.collection('orders').doc(o._docId).delete();
+      allOrders=allOrders.filter(function(x){return x._docId!==o._docId;});
       knownOrderIds.delete(o._docId);
       addLog('delete','Auto-hapus: Pesanan <strong>'+escHtml(o.id||o._docId)+'</strong> ('+escHtml(o.name||'Anonim')+') dihapus otomatis karena tidak diproses dalam 24 jam.');
     }catch(err){console.error('[AutoDelete] Gagal:',o._docId,err);}
   }
+  updateStats(); renderOrders();
   showToast(expired.length+' pesanan kedaluwarsa dihapus otomatis');
 }
 
 /* INIT */
 document.addEventListener('DOMContentLoaded',function(){
   renderMenuEditor(); renderLog(); renderPromoList();
-  startRealtimeListener();
-  setInterval(updateLastUpdateUI,1000);
+  fetchOrders(); startAutoRefresh();
 });
 
 /* BAZAR */
 function isBazarDay(){
-  var t=new Date();
-  var d=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
-  return d===BAZAR_DATE;
+  return true; // Tombol Siap Diambil selalu aktif
 }
 
-
-/* DIAGNOSTIC */
-function showDiag(msg){
-  var b=document.getElementById('diagBanner'),m=document.getElementById('diagMsg');
-  if(b&&m){b.style.display='block';m.innerHTML=msg;}
-  console.error('[MinBite Admin]',msg);
-}
-function hideDiag(){
-  var b=document.getElementById('diagBanner'); if(b) b.style.display='none';
-}
-
-/* REALTIME LISTENER — pakai onSnapshot, langsung update tanpa polling */
-function startRealtimeListener(){
-  if(!db){
-    showDiag('Firebase tidak berhasil diinisialisasi. Pastikan halaman dibuka lewat hosting (bukan file://) dan cek koneksi internet.');
-    var list=document.getElementById('ordersList');
-    if(list) list.innerHTML='<div class="empty-state"><div class="empty-icon">&#9888;&#65039;</div><p>Firebase gagal konek. Cek koneksi internet.</p></div>';
-    return;
-  }
-  if(_unsubscribe){_unsubscribe();_unsubscribe=null;}
-  var list=document.getElementById('ordersList');
-  if(list) list.innerHTML='<div class="loading-wrap"><div class="loading-ring"></div><span style="font-size:0.85rem;color:var(--text3);font-style:italic">Memuat pesanan...</span></div>';
-
-  _unsubscribe=db.collection('orders').onSnapshot(function(snap){
-    hideDiag();
+/* FETCH */
+async function fetchOrders(silent){
+  try{
+    var snap=await db.collection('orders').orderBy('timestamp','desc').limit(100).get();
     var fetched=[];
     snap.forEach(function(doc){fetched.push(Object.assign({_docId:doc.id},doc.data()));});
-    fetched.sort(function(a,b){
-      var ta=a.timestamp?(a.timestamp.toMillis?a.timestamp.toMillis():(a.timestamp.seconds||0)*1000):0;
-      var tb=b.timestamp?(b.timestamp.toMillis?b.timestamp.toMillis():(b.timestamp.seconds||0)*1000):0;
-      return tb-ta;
-    });
     fetched.forEach(function(o){
       if(!knownOrderIds.has(o._docId)){
-        if(knownOrderIds.size>0) showToast('\uD83D\uDD14 Pesanan baru: '+(o.id||o._docId));
+        if(knownOrderIds.size>0) showToast('Pesanan baru: '+(o.id||o._docId));
         knownOrderIds.add(o._docId);
       }
     });
     allOrders=fetched; updateStats(); renderOrders();
-    _lastUpdate=Date.now(); updateLastUpdateUI();
+    if(!silent) resetCountdown();
     autoDeleteExpiredOrders(fetched);
-  },function(err){
-    var errCode=err.code||'unknown';
-    var errMsg='';
-    if(errCode==='permission-denied'){
-      errMsg='<strong>Permission Denied</strong> — Firestore Security Rules memblokir akses baca. Buka Firebase Console &rarr; Firestore &rarr; Rules, dan pastikan <code>allow read: if true;</code> sudah diset.';
-    } else if(errCode==='unavailable'){
-      errMsg='<strong>Firestore Unavailable</strong> — Tidak bisa konek ke server. Cek koneksi internet.';
-    } else {
-      errMsg='<strong>Error Firestore ['+errCode+']:</strong> '+err.message;
-    }
-    showDiag(errMsg+' &nbsp;<button onclick="startRealtimeListener()" style="margin-left:8px;padding:3px 10px;background:#c0392b;color:white;border:none;border-radius:6px;cursor:pointer;font-size:0.78rem;">Coba Lagi</button>');
-    var list=document.getElementById('ordersList');
-    if(list) list.innerHTML='<div class="empty-state"><div class="empty-icon">&#9888;&#65039;</div><p>Gagal memuat pesanan &mdash; lihat banner merah di atas.</p></div>';
-    showToast('Gagal memuat pesanan: '+errCode);
-  });
+  }catch(err){console.error(err); if(!silent) showToast('Gagal mengambil data');}
 }
 
-/* LAST UPDATE DISPLAY */
-function updateLastUpdateUI(){
-  var el=document.getElementById('refreshCountHeader'); if(!el) return;
-  var sec=Math.floor((Date.now()-_lastUpdate)/1000);
-  if(sec<5) el.textContent='baru saja';
-  else if(sec<60) el.textContent=sec+'d lalu';
-  else el.textContent=Math.floor(sec/60)+'m lalu';
+/* REFRESH */
+function startAutoRefresh(){
+  resetCountdown();
+  refreshInterval=setInterval(function(){fetchOrders(true);resetCountdown();},10000);
 }
+function resetCountdown(){
+  countdownSec=10; updateCdUI();
+  if(countdownTimer) clearInterval(countdownTimer);
+  countdownTimer=setInterval(function(){countdownSec=Math.max(0,countdownSec-1);updateCdUI();},1000);
+}
+function updateCdUI(){var el=document.getElementById('refreshCountHeader');if(el)el.textContent=countdownSec;}
 
 /* STATS */
 function updateStats(){
@@ -899,4 +855,4 @@ function getItemIconSVG(name){
 }
 </script>
 </body>
-        </html>
+</html>
