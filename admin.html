@@ -326,6 +326,13 @@
 
 <div class="page">
 
+  <!-- DIAGNOSTIC BANNER -->
+  <div id="diagBanner" style="display:none;margin-bottom:20px;padding:14px 18px;background:#fdecea;border:1.5px solid #f5b7b1;border-radius:12px;font-size:0.83rem;color:#6b1414;line-height:1.7;">
+    <strong style="display:block;margin-bottom:4px;">&#9888; Terjadi Error — Info untuk Admin</strong>
+    <span id="diagMsg"></span>
+  </div>
+
+
   <!-- STATS -->
   <div class="stats-grid">
     <div class="stat-card">
@@ -526,13 +533,31 @@ function isBazarDay(){
   return d===BAZAR_DATE;
 }
 
+
+/* DIAGNOSTIC */
+function showDiag(msg){
+  var b=document.getElementById('diagBanner'),m=document.getElementById('diagMsg');
+  if(b&&m){b.style.display='block';m.innerHTML=msg;}
+  console.error('[MinBite Admin]',msg);
+}
+function hideDiag(){
+  var b=document.getElementById('diagBanner'); if(b) b.style.display='none';
+}
+
 /* REALTIME LISTENER — pakai onSnapshot, langsung update tanpa polling */
 function startRealtimeListener(){
+  if(!db){
+    showDiag('Firebase tidak berhasil diinisialisasi. Pastikan halaman dibuka lewat hosting (bukan file://) dan cek koneksi internet.');
+    var list=document.getElementById('ordersList');
+    if(list) list.innerHTML='<div class="empty-state"><div class="empty-icon">&#9888;&#65039;</div><p>Firebase gagal konek. Cek koneksi internet.</p></div>';
+    return;
+  }
   if(_unsubscribe){_unsubscribe();_unsubscribe=null;}
   var list=document.getElementById('ordersList');
   if(list) list.innerHTML='<div class="loading-wrap"><div class="loading-ring"></div><span style="font-size:0.85rem;color:var(--text3);font-style:italic">Memuat pesanan...</span></div>';
 
   _unsubscribe=db.collection('orders').onSnapshot(function(snap){
+    hideDiag();
     var fetched=[];
     snap.forEach(function(doc){fetched.push(Object.assign({_docId:doc.id},doc.data()));});
     fetched.sort(function(a,b){
@@ -550,10 +575,19 @@ function startRealtimeListener(){
     _lastUpdate=Date.now(); updateLastUpdateUI();
     autoDeleteExpiredOrders(fetched);
   },function(err){
-    console.error('Firestore onSnapshot error:',err);
+    var errCode=err.code||'unknown';
+    var errMsg='';
+    if(errCode==='permission-denied'){
+      errMsg='<strong>Permission Denied</strong> — Firestore Security Rules memblokir akses baca. Buka Firebase Console &rarr; Firestore &rarr; Rules, dan pastikan <code>allow read: if true;</code> sudah diset.';
+    } else if(errCode==='unavailable'){
+      errMsg='<strong>Firestore Unavailable</strong> — Tidak bisa konek ke server. Cek koneksi internet.';
+    } else {
+      errMsg='<strong>Error Firestore ['+errCode+']:</strong> '+err.message;
+    }
+    showDiag(errMsg+' &nbsp;<button onclick="startRealtimeListener()" style="margin-left:8px;padding:3px 10px;background:#c0392b;color:white;border:none;border-radius:6px;cursor:pointer;font-size:0.78rem;">Coba Lagi</button>');
     var list=document.getElementById('ordersList');
-    if(list) list.innerHTML='<div class="empty-state"><div class="empty-icon">\u26A0\uFE0F</div><p>Gagal memuat pesanan. Cek koneksi internet, lalu <button onclick="startRealtimeListener()" style="background:none;border:none;color:var(--accent);font-weight:700;cursor:pointer;font-size:inherit;padding:0;">coba lagi</button>.</p></div>';
-    showToast('Gagal memuat pesanan');
+    if(list) list.innerHTML='<div class="empty-state"><div class="empty-icon">&#9888;&#65039;</div><p>Gagal memuat pesanan &mdash; lihat banner merah di atas.</p></div>';
+    showToast('Gagal memuat pesanan: '+errCode);
   });
 }
 
@@ -865,4 +899,4 @@ function getItemIconSVG(name){
 }
 </script>
 </body>
-        </html>
+</html>
