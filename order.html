@@ -788,6 +788,165 @@
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 
+    /* ── QR POPUP MODAL ── */
+    .qr-popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 32, 24, 0.55);
+      backdrop-filter: blur(6px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeInOverlay 0.3s ease;
+    }
+
+    @keyframes fadeInOverlay {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .qr-popup-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 64px var(--shadow-lg);
+      width: 100%;
+      max-width: 360px;
+      overflow: hidden;
+      animation: popupSlideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popupSlideUp {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .qr-popup-header {
+      background: linear-gradient(135deg, var(--status-proc-bg), var(--bg2));
+      border-bottom: 1px solid var(--status-proc-border);
+      padding: 28px 24px 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .qr-popup-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--status-proc-bg);
+      border: 2px solid var(--status-proc-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+    }
+
+    .qr-popup-icon svg { width: 28px; height: 28px; color: var(--status-proc-text); }
+
+    .qr-popup-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .qr-popup-subtitle {
+      font-size: 0.82rem;
+      color: var(--text3);
+      line-height: 1.5;
+    }
+
+    .qr-popup-body {
+      padding: 22px 24px;
+    }
+
+    .qr-popup-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .qr-popup-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .qr-popup-step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .qr-popup-step-text {
+      font-size: 0.85rem;
+      color: var(--text2);
+      line-height: 1.5;
+    }
+
+    .qr-popup-step-text strong { color: var(--text); }
+
+    .qr-popup-btn {
+      width: 100%;
+      padding: 13px 20px;
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius-sm);
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .qr-popup-btn:hover { background: var(--accent-dark); transform: translateY(-1px); }
+    .qr-popup-btn:active { transform: scale(0.98); }
+    .qr-popup-btn svg { width: 16px; height: 16px; }
+
+    .qr-popup-dismiss {
+      display: block;
+      text-align: center;
+      margin-top: 12px;
+      font-size: 0.78rem;
+      color: var(--text3);
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      padding: 4px;
+      transition: color var(--transition);
+    }
+
+    .qr-popup-dismiss:hover { color: var(--text2); }
+
+    .qr-popup-pulse {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--status-proc-text);
+      animation: pulse 1.2s ease infinite;
+      margin-right: 6px;
+    }
+
     /* ── MOBILE ── */
     @media (max-width: 520px) {
       .main { padding: 24px 14px 60px; }
@@ -964,6 +1123,49 @@
     </div>
   </main>
 
+  <!-- ══ QR POPUP MODAL ══ -->
+  <div id="qrPopupOverlay" class="qr-popup-overlay" style="display:none">
+    <div class="qr-popup-card">
+      <div class="qr-popup-header">
+        <div class="qr-popup-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+            <path d="M14 14h3v3h-3z"/><path d="M17 17h3v3h-3z"/><path d="M14 17h.01"/>
+          </svg>
+        </div>
+        <div class="qr-popup-title">🎉 Pesananmu Sedang Diproses!</div>
+        <div class="qr-popup-subtitle">
+          <span class="qr-popup-pulse"></span>
+          QR Code kamu sudah siap di bawah
+        </div>
+      </div>
+      <div class="qr-popup-body">
+        <div class="qr-popup-steps">
+          <div class="qr-popup-step">
+            <div class="qr-popup-step-num">1</div>
+            <div class="qr-popup-step-text">Pesananmu sedang <strong>diproses</strong> oleh penjual — tunggu sebentar ya!</div>
+          </div>
+          <div class="qr-popup-step">
+            <div class="qr-popup-step-num">2</div>
+            <div class="qr-popup-step-text"><strong>Scroll ke bawah</strong> untuk melihat QR Code yang muncul di halaman ini.</div>
+          </div>
+          <div class="qr-popup-step">
+            <div class="qr-popup-step-num">3</div>
+            <div class="qr-popup-step-text">Saat mengambil pesanan, <strong>tunjukkan QR Code</strong> tersebut kepada penjual.</div>
+          </div>
+        </div>
+        <button class="qr-popup-btn" onclick="closeQrPopup(true)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Oke, Saya Mengerti!
+        </button>
+        <button class="qr-popup-dismiss" onclick="closeQrPopup(false)">Tutup</button>
+      </div>
+    </div>
+  </div>
+
   <div id="toast-container"></div>
 
   <script>
@@ -1138,10 +1340,14 @@
       const normalizedStatus = rawStatus.replace(/\s+/g, ' ').trim();
       if (normalizedStatus === 'DIPROSES') {
         const orderId = data.id || getOrderId();
-        const qrData = encodeURIComponent('return.html?id=' + orderId);
+        const qrData = encodeURIComponent('order.html?id=' + orderId);
         const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + qrData;
         document.getElementById('qrImage').src = qrUrl;
         qrSection.style.display = 'flex';
+        // Tampilkan popup hanya sekali per sesi
+        if (!sessionStorage.getItem('qrPopupShown_' + orderId)) {
+          setTimeout(function() { showQrPopup(); }, 600);
+        }
       } else {
         qrSection.style.display = 'none';
       }
@@ -1214,6 +1420,35 @@
         startCountdown();
       }, 15000);
     }
+
+    // ── QR POPUP ──
+    function showQrPopup() {
+      document.getElementById('qrPopupOverlay').style.display = 'flex';
+    }
+
+    function closeQrPopup(scrollToQr) {
+      const overlay = document.getElementById('qrPopupOverlay');
+      overlay.style.animation = 'none';
+      overlay.style.opacity = '0';
+      overlay.style.transition = 'opacity 0.25s ease';
+      setTimeout(function() {
+        overlay.style.display = 'none';
+        overlay.style.opacity = '';
+        overlay.style.transition = '';
+      }, 250);
+      sessionStorage.setItem('qrPopupShown_' + orderId, '1');
+      if (scrollToQr) {
+        setTimeout(function() {
+          const qr = document.getElementById('qrSection');
+          if (qr) qr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+      }
+    }
+
+    // Tutup popup kalau klik di luar card
+    document.getElementById('qrPopupOverlay').addEventListener('click', function(e) {
+      if (e.target === this) closeQrPopup(false);
+    });
 
     // ── INIT ──
     fetchOrder(false);
