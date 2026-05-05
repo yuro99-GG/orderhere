@@ -1273,108 +1273,186 @@
     /* ═══════════════════════════════════════
        PROMO SECTION
     ═══════════════════════════════════════ */
+    /* ═══════════════════════════════════════
+       PROMO CODE SECTION
+    ═══════════════════════════════════════ */
     .promo-section {
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 22px;
+      padding: 24px;
       margin-top: 20px;
+    }
+
+    .promo-desc {
+      font-size: 0.78rem;
+      color: var(--text3);
+      margin-top: 6px;
+      line-height: 1.6;
+    }
+
+    .promo-desc strong { color: var(--green); }
+
+    /* ── Promo List ── */
+    .promo-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .promo-list-empty {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text3);
+      font-style: italic;
+      padding: 20px 0;
+    }
+
+    .promo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: border-color var(--transition);
+    }
+
+    .promo-row:hover { border-color: var(--border2); }
+
+    .promo-row-left {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .promo-code-badge {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.45rem;
+      background: var(--blue-dim);
+      color: var(--blue-light);
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(79,142,247,0.25);
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    .promo-type-pill {
+      font-size: 0.68rem;
+      color: var(--text3);
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 2px 9px;
+      white-space: nowrap;
+    }
+
+    .promo-value-text {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--amber);
+    }
+
+    .promo-builtin-badge {
+      font-size: 0.62rem;
+      background: var(--green-dim);
+      color: var(--green);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      border: 1px solid rgba(76,217,123,0.2);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Add Form ── */
+    .promo-add-wrap {
+      margin-top: 20px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    .promo-add-title {
+      font-size: 0.68rem;
+      color: var(--text3);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .promo-add-title::before {
+      content: '';
+      display: block;
+      width: 3px;
+      height: 12px;
+      background: var(--purple);
+      border-radius: 2px;
     }
 
     .promo-add-row {
       display: grid;
-      grid-template-columns: 1fr 120px 120px auto;
+      grid-template-columns: 1fr 140px 140px auto;
       gap: 10px;
       align-items: end;
-      margin-top: 16px;
-      flex-wrap: wrap;
+    }
+
+    .promo-field { display: flex; flex-direction: column; gap: 5px; }
+
+    .promo-label-sm {
+      font-size: 0.66rem;
+      color: var(--text3);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
     }
 
     .promo-input {
       width: 100%;
       padding: 8px 11px;
-      background: var(--bg3);
+      background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       color: var(--text);
       font-family: 'DM Sans', sans-serif;
-      font-size: 0.82rem;
+      font-size: 0.83rem;
       outline: none;
       transition: border-color var(--transition);
     }
 
-    .promo-input:focus { border-color: var(--blue); }
+    .promo-input:focus { border-color: var(--blue); background: var(--panel); }
 
     .promo-select {
       width: 100%;
       padding: 8px 11px;
-      background: var(--bg3);
+      background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       color: var(--text);
       font-family: 'DM Sans', sans-serif;
-      font-size: 0.82rem;
+      font-size: 0.83rem;
       outline: none;
       cursor: pointer;
+      transition: border-color var(--transition);
     }
 
-    .promo-label-sm {
-      font-size: 0.68rem;
-      color: var(--text3);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .promo-list-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 14px;
-    }
-
-    .promo-list-table th {
-      font-size: 0.68rem;
-      color: var(--text3);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-weight: 700;
-      text-align: left;
-      padding: 6px 10px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .promo-list-table td {
-      font-size: 0.82rem;
-      color: var(--text2);
-      padding: 9px 10px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .promo-list-table tr:last-child td { border-bottom: none; }
-
-    .promo-code-badge {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.44rem;
-      background: var(--blue-dim);
-      color: var(--blue-light);
-      padding: 3px 8px;
-      border-radius: 4px;
-      letter-spacing: 0.04em;
-    }
-
-    .promo-builtin-badge {
-      font-size: 0.65rem;
-      background: var(--green-dim);
-      color: var(--green);
-      padding: 2px 7px;
-      border-radius: 4px;
-      font-weight: 600;
-    }
+    .promo-select:focus { border-color: var(--blue); }
 
     @media (max-width: 900px) {
       .promo-add-row { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .promo-add-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -1599,34 +1677,33 @@
         <h2 style="color:var(--purple)">KODE PROMO</h2>
       </div>
     </div>
-    <p style="font-size:0.75rem;color:var(--text3);margin-top:8px;margin-bottom:4px;">
-      Kelola kode promo. Kode <strong style="color:var(--green)">bawaan</strong> tidak bisa dihapus.
-    </p>
-    <table class="promo-list-table">
-      <thead><tr><th>Kode</th><th>Tipe</th><th>Nilai</th><th>Aksi</th></tr></thead>
-      <tbody id="promoTableBody"></tbody>
-    </table>
-    <div style="margin-top:18px;">
-      <div style="font-size:0.7rem;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;">Tambah Promo Baru</div>
+    <p class="promo-desc">Kelola kode diskon untuk pelanggan. Kode <strong>bawaan</strong> tidak bisa dihapus.</p>
+
+    <!-- Promo list -->
+    <div class="promo-list" id="promoList"></div>
+
+    <!-- Add form -->
+    <div class="promo-add-wrap">
+      <div class="promo-add-title">Tambah Promo Baru</div>
       <div class="promo-add-row">
-        <div>
+        <div class="promo-field">
           <label class="promo-label-sm">Kode Promo</label>
           <input class="promo-input" type="text" id="newPromoCode" placeholder="cth. DISKON20" oninput="this.value=this.value.toUpperCase()"/>
         </div>
-        <div>
-          <label class="promo-label-sm">Tipe</label>
+        <div class="promo-field">
+          <label class="promo-label-sm">Tipe Diskon</label>
           <select class="promo-select" id="newPromoType" onchange="togglePromoTypeUI()">
             <option value="fixed">Fixed (Rp)</option>
             <option value="percent">Persentase (%)</option>
           </select>
         </div>
-        <div>
+        <div class="promo-field">
           <label class="promo-label-sm" id="newPromoValLabel">Nilai (Rp)</label>
           <input class="promo-input" type="number" id="newPromoValue" placeholder="1000" min="0"/>
         </div>
-        <div>
-          <label class="promo-label-sm" style="visibility:hidden">.</label>
-          <button class="btn btn-save" onclick="addPromoCode()" style="width:100%">
+        <div class="promo-field" style="justify-content:flex-end">
+          <label class="promo-label-sm" style="opacity:0">x</label>
+          <button class="btn btn-save" onclick="addPromoCode()" style="width:100%;justify-content:center;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Tambah
           </button>
@@ -2245,50 +2322,62 @@ function savePromos(obj) {
   localStorage.setItem('promos', JSON.stringify(obj));
 }
 
-function renderPromoTable() {
-  var tbody = document.getElementById('promoTableBody');
-  if (!tbody) return;
-  var rows = '';
+function renderPromoTable() { renderPromoList(); }
+
+function renderPromoList() {
+  var list = document.getElementById('promoList');
+  if (!list) return;
+  var html = '';
 
   // Built-in promos
   Object.keys(BUILTIN_PROMOS).forEach(function(code) {
     var p = BUILTIN_PROMOS[code];
     var valStr = p.type === 'fixed' ? fmtRp(p.amount) : (p.value * 100) + '%';
-    rows += '<tr>' +
-      '<td><span class="promo-code-badge">' + escHtml(code) + '</span></td>' +
-      '<td>' + (p.type === 'fixed' ? 'Fixed (Rp)' : 'Persentase') + '</td>' +
-      '<td>' + valStr + '</td>' +
-      '<td><span class="promo-builtin-badge">built-in</span></td>' +
-    '</tr>';
+    var tipeLabel = p.type === 'fixed' ? 'Fixed' : 'Persen';
+    html +=
+      '<div class="promo-row">' +
+        '<div class="promo-row-left">' +
+          '<span class="promo-code-badge">' + escHtml(code) + '</span>' +
+          '<span class="promo-type-pill">' + tipeLabel + '</span>' +
+          '<span class="promo-value-text">' + valStr + '</span>' +
+        '</div>' +
+        '<span class="promo-builtin-badge">built-in</span>' +
+      '</div>';
   });
 
   // localStorage promos
   var promos = loadPromos();
   var keys = Object.keys(promos);
-  if (keys.length === 0 && rows === '') {
-    rows = '<tr><td colspan="4" style="text-align:center;color:var(--text3);font-style:italic;padding:16px;">Belum ada promo tambahan.</td></tr>';
+
+  if (keys.length === 0 && html === '') {
+    html = '<div class="promo-list-empty">Belum ada kode promo.</div>';
   } else {
     keys.forEach(function(code) {
       var p = promos[code];
-      var tipe, valStr;
+      var tipeLabel, valStr;
       if (typeof p === 'number') {
-        tipe = 'Persentase'; valStr = Math.round(p * 100) + '%';
+        tipeLabel = 'Persen'; valStr = Math.round(p * 100) + '%';
       } else if (p.type === 'fixed') {
-        tipe = 'Fixed (Rp)'; valStr = fmtRp(p.amount);
+        tipeLabel = 'Fixed'; valStr = fmtRp(p.amount);
       } else {
-        tipe = 'Persentase'; valStr = Math.round((p.value || 0) * 100) + '%';
+        tipeLabel = 'Persen'; valStr = Math.round((p.value || 0) * 100) + '%';
       }
-      rows += '<tr>' +
-        '<td><span class="promo-code-badge">' + escHtml(code) + '</span></td>' +
-        '<td>' + tipe + '</td>' +
-        '<td>' + valStr + '</td>' +
-        '<td><button class="btn btn-delete" style="font-size:0.7rem;padding:4px 10px" onclick="deletePromo(\'' + escHtml(code) + '\')">' +
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="12" height="12"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Hapus</button></td>' +
-      '</tr>';
+      html +=
+        '<div class="promo-row">' +
+          '<div class="promo-row-left">' +
+            '<span class="promo-code-badge">' + escHtml(code) + '</span>' +
+            '<span class="promo-type-pill">' + tipeLabel + '</span>' +
+            '<span class="promo-value-text">' + valStr + '</span>' +
+          '</div>' +
+          '<button class="btn btn-delete" style="font-size:0.72rem;padding:5px 11px;flex-shrink:0;" onclick="deletePromo(\'' + escHtml(code) + '\')">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="12" height="12"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>' +
+            'Hapus' +
+          '</button>' +
+        '</div>';
     });
   }
 
-  tbody.innerHTML = rows;
+  list.innerHTML = html;
 }
 
 function togglePromoTypeUI() {
@@ -2341,4 +2430,4 @@ function deletePromo(code) {
 }
 </script>
 </body>
-</html>
+  </html>
