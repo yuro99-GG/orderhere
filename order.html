@@ -1,202 +1,1196 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="light">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MinBite · Detail Pesanan</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#faf8f5;--bg2:#f2ede6;--card:#fff;--text:#2c2420;--muted:#7a6b5d;--accent:#c8956c;--accent-d:#a67350;--border:#e8e0d5;--shadow:0 4px 24px rgba(44,36,32,.08);--r:20px;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
-header{background:rgba(250,248,245,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
-.logo{font-family:var(--serif);font-size:1.3rem;font-weight:700;color:var(--text);text-decoration:none}.logo span{color:var(--accent)}
-.admin-link{font-size:.8rem;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:.3rem;background:var(--bg2);padding:.4rem .9rem;border-radius:8px;border:1px solid var(--border);transition:all .15s}
-.admin-link:hover{border-color:var(--accent);color:var(--accent)}
-.page-wrap{max-width:480px;margin:0 auto;padding:2rem 1.25rem 4rem}
-/* STATUS BADGE */
-.status-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.5rem 1.2rem;border-radius:50px;font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:1.5rem}
-.s-MENUNGGU{background:#fff3e0;color:#c65000}
-.s-DIPROSES{background:#e3f2fd;color:#1255a4}
-.s-SIAP{background:#e8f5e9;color:#27742e}
-.s-DIBATALKAN{background:#fde8e8;color:#b81c1c}
-.pulse{width:8px;height:8px;border-radius:50%;animation:pulse 1.5s ease infinite}
-.s-MENUNGGU .pulse{background:#c65000}.s-DIPROSES .pulse{background:#1255a4}.s-SIAP .pulse{background:#27742e}.s-DIBATALKAN .pulse{background:#b81c1c;animation:none}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-/* CARD */
-.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);border:1px solid var(--border);padding:1.5rem;margin-bottom:1.25rem}
-.card-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.85rem}
-.item-row{display:flex;justify-content:space-between;align-items:center;padding:.55rem 0;border-bottom:1px solid var(--border);font-size:.9rem}
-.item-row:last-child{border-bottom:none}
-.total-row{font-weight:700;font-size:1rem;border-top:2px solid var(--border);border-bottom:none;padding-top:.75rem;margin-top:.25rem}
-.total-row span:last-child{color:var(--accent)}
-/* INFO GRID */
-.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
-.info-item label{display:block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.3rem}
-.info-item .val{font-size:.9rem;font-weight:500}
-.masked{font-family:monospace;letter-spacing:.05em}
-/* ORDER HEADER */
-.order-heading{font-family:var(--serif);font-size:1.65rem;margin-bottom:.35rem}
-.order-id-text{font-size:.8rem;color:var(--muted);font-weight:500;margin-bottom:1.5rem}
-/* CONFIRM BUTTON */
-.confirm-section{background:linear-gradient(135deg,#e8f5e9,#d4edda);border-radius:var(--r);border:1px solid #c3e6cb;padding:1.75rem;margin-bottom:1.25rem;text-align:center}
-.confirm-section h3{font-family:var(--serif);font-size:1.2rem;color:#27742e;margin-bottom:.5rem}
-.confirm-section p{color:#476c4a;font-size:.85rem;margin-bottom:1.25rem;line-height:1.5}
-.confirm-btn{background:#27742e;color:#fff;border:none;padding:.9rem 2rem;border-radius:50px;font-family:var(--sans);font-size:.95rem;font-weight:700;cursor:pointer;transition:background .2s;box-shadow:0 4px 14px rgba(39,116,46,.25)}
-.confirm-btn:hover{background:#1d5e23}
-.confirmed-tag{display:inline-flex;align-items:center;gap:.5rem;background:#27742e;color:#fff;padding:.6rem 1.5rem;border-radius:50px;font-size:.9rem;font-weight:600}
-/* PRIVACY NOTE */
-.privacy-note{display:flex;align-items:center;gap:.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.6rem 1rem;font-size:.75rem;color:var(--muted);margin-bottom:1.25rem}
-/* CANCELLED BANNER */
-.cancelled-banner{background:#fde8e8;border:1px solid #f5c0c0;border-radius:var(--r);padding:1.5rem;text-align:center;margin-bottom:1.25rem;color:#b81c1c}
-.cancelled-banner h3{font-family:var(--serif);font-size:1.1rem;margin-bottom:.35rem}
-/* NOT FOUND */
-.not-found{text-align:center;padding:5rem 2rem}
-.not-found h2{font-family:var(--serif);font-size:1.4rem;margin-bottom:.75rem}
-.not-found p{color:var(--muted);margin-bottom:1.5rem}
-.not-found a{color:var(--accent);text-decoration:none;font-weight:600}
-/* TOAST */
-.toast-container{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:.5rem;align-items:center;pointer-events:none}
-.toast{background:var(--text);color:#fff;padding:.7rem 1.4rem;border-radius:50px;font-size:.875rem;font-weight:500;animation:tin .3s ease,tout .3s ease 2.5s forwards;box-shadow:0 4px 16px rgba(44,36,32,.2);white-space:nowrap}
-@keyframes tin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-@keyframes tout{to{opacity:0;transform:translateY(14px)}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Status Pesanan — MinBite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script>
+    var db;
+    try {
+      var firebaseConfig = {
+        apiKey: "AIzaSyDX70_NVuPtnUvxwALxn5fSnjj2H8pgSu0",
+        authDomain: "planning-with-ai-d8ea1.firebaseapp.com",
+        projectId: "planning-with-ai-d8ea1",
+        storageBucket: "planning-with-ai-d8ea1.firebasestorage.app",
+        messagingSenderId: "975523910853",
+        appId: "1:975523910853:web:af7350de88ce5d9e668cac"
+      };
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      db = firebase.firestore();
+    } catch (e) {
+      console.error("Firebase gagal diinisialisasi:", e);
+      alert("Koneksi ke server gagal. Pastikan kamu membuka halaman ini melalui hosting (bukan file://) dan cek koneksi internet.");
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #faf8f5;
+      --bg2: #f3efe9;
+      --bg3: #ede8e0;
+      --surface: #ffffff;
+      --accent: #c8956c;
+      --accent-dark: #a8734d;
+      --accent-light: #f0ddd0;
+      --text: #2c2018;
+      --text2: #6b5744;
+      --text3: #9c8575;
+      --border: #e8e0d8;
+      --shadow: rgba(44, 32, 24, 0.08);
+      --shadow-md: rgba(44, 32, 24, 0.14);
+      --shadow-lg: rgba(44, 32, 24, 0.22);
+      --radius: 18px;
+      --radius-sm: 10px;
+      --radius-lg: 28px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --status-wait-bg: #fff8e6;
+      --status-wait-text: #92620a;
+      --status-wait-border: #fde9a2;
+      --status-proc-bg: #e8f0fe;
+      --status-proc-text: #1a47a0;
+      --status-proc-border: #b6d0fb;
+      --status-ready-bg: #e6f9ef;
+      --status-ready-text: #0d6b35;
+      --status-ready-border: #a0e4bf;
+      --status-done-bg: #f0ece8;
+      --status-done-text: #7a6555;
+      --status-done-border: #d8cfc7;
+    }
+
+    [data-theme="dark"] {
+      --bg: #1a1410;
+      --bg2: #221c16;
+      --bg3: #2a221a;
+      --surface: #2e251c;
+      --accent: #d4a07a;
+      --accent-dark: #c8956c;
+      --accent-light: #3d2e20;
+      --text: #f0e8df;
+      --text2: #c4a98a;
+      --text3: #8a7060;
+      --border: #3a2e24;
+      --shadow: rgba(0,0,0,0.25);
+      --shadow-md: rgba(0,0,0,0.38);
+      --shadow-lg: rgba(0,0,0,0.55);
+      --status-wait-bg: #342810;
+      --status-wait-text: #f0c060;
+      --status-wait-border: #5a4010;
+      --status-proc-bg: #101e38;
+      --status-proc-text: #7aabf8;
+      --status-proc-border: #1c3870;
+      --status-ready-bg: #0a2418;
+      --status-ready-text: #5acd8a;
+      --status-ready-border: #145830;
+      --status-done-bg: #221c18;
+      --status-done-text: #8a7060;
+      --status-done-border: #3a3028;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .header-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .logo span {
+      color: var(--text);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 0.85em;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      background: var(--surface);
+      color: var(--text2);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--transition);
+    }
+
+    .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 4px 12px var(--shadow-md);
+    }
+
+    .btn-back svg { width: 14px; height: 14px; }
+
+    .btn-theme {
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      background: var(--surface);
+      color: var(--text2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+    }
+
+    .btn-theme:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-theme svg { width: 16px; height: 16px; }
+
+    /* ── MAIN ── */
+    .main {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 36px 20px 80px;
+    }
+
+    /* ── LOADING ── */
+    .loading-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 20px;
+      gap: 20px;
+    }
+
+    .loading-ring {
+      width: 52px;
+      height: 52px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-text {
+      font-size: 0.88rem;
+      color: var(--text3);
+      font-style: italic;
+    }
+
+    /* ── ERROR ── */
+    .error-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 20px;
+      gap: 16px;
+      text-align: center;
+    }
+
+    .error-icon {
+      width: 72px;
+      height: 72px;
+      background: var(--bg2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .error-icon svg { width: 32px; height: 32px; color: var(--text3); }
+
+    .error-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .error-sub {
+      font-size: 0.88rem;
+      color: var(--text3);
+      line-height: 1.7;
+      max-width: 280px;
+    }
+
+    /* ── ORDER CARD ── */
+    .order-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 24px var(--shadow);
+      overflow: hidden;
+      animation: fadeUp 0.4s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── ORDER HEADER ── */
+    .order-head {
+      padding: 28px 28px 24px;
+      background: linear-gradient(135deg, var(--bg2) 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .order-head::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.05;
+    }
+
+    .order-head::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 40px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.04;
+    }
+
+    .order-id-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+
+    .order-id-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      letter-spacing: 0.02em;
+    }
+
+    .order-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .order-customer {
+      font-size: 0.88rem;
+      color: var(--text2);
+      font-weight: 500;
+    }
+
+    .order-customer strong {
+      color: var(--text);
+    }
+
+    /* ── STATUS BADGE ── */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: 1.5px solid transparent;
+      transition: all var(--transition);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    .status-MENUNGGU {
+      background: var(--status-wait-bg);
+      color: var(--status-wait-text);
+      border-color: var(--status-wait-border);
+    }
+
+    .status-MENUNGGU .status-dot {
+      background: var(--status-wait-text);
+      animation: pulse 1.6s ease infinite;
+    }
+
+    .status-DIPROSES {
+      background: var(--status-proc-bg);
+      color: var(--status-proc-text);
+      border-color: var(--status-proc-border);
+    }
+
+    .status-DIPROSES .status-dot {
+      background: var(--status-proc-text);
+      animation: pulse 1.2s ease infinite;
+    }
+
+    .status-SIAP {
+      background: var(--status-ready-bg);
+      color: var(--status-ready-text);
+      border-color: var(--status-ready-border);
+    }
+
+    .status-SIAP .status-dot {
+      background: var(--status-ready-text);
+    }
+
+    .status-SELESAI {
+      background: var(--status-done-bg);
+      color: var(--status-done-text);
+      border-color: var(--status-done-border);
+    }
+
+    .status-SELESAI .status-dot {
+      background: var(--status-done-text);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* ── PROGRESS TRACKER ── */
+    .progress-section {
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .progress-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 18px;
+    }
+
+    .progress-steps {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      position: relative;
+    }
+
+    .step-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      transition: all var(--transition);
+      flex-shrink: 0;
+    }
+
+    .step-circle svg { width: 14px; height: 14px; color: var(--text3); }
+
+    .step-circle.active {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .step-circle.active svg { color: var(--accent); }
+
+    .step-circle.done {
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    .step-circle.done svg { color: white; }
+
+    .step-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--text3);
+      text-align: center;
+      line-height: 1.3;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .step.active-step .step-label { color: var(--accent); }
+    .step.done-step .step-label { color: var(--text2); }
+
+    .step-connector {
+      flex: 1;
+      height: 2px;
+      background: var(--border);
+      margin-bottom: 26px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .step-connector.filled {
+      background: var(--accent);
+    }
+
+    .step-connector.filling::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent);
+      animation: fillLine 0.6s ease forwards;
+    }
+
+    @keyframes fillLine {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+
+    /* ── ITEMS SECTION ── */
+    .items-section {
+      padding: 22px 28px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 14px;
+    }
+
+    .order-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .order-item:last-child { border-bottom: none; }
+
+    .item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .item-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--bg2);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .item-icon svg { width: 36px; height: 36px; }
+
+    .item-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .item-qty {
+      font-size: 0.78rem;
+      color: var(--text3);
+      margin-top: 2px;
+    }
+
+    .item-subtotal {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-align: right;
+    }
+
+    /* ── TOTAL SECTION ── */
+    .total-section {
+      padding: 18px 28px 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .total-row-label {
+      font-size: 0.85rem;
+      color: var(--text3);
+    }
+
+    .total-row-value {
+      font-size: 0.85rem;
+      color: var(--text2);
+    }
+
+    .total-row.discount .total-row-value { color: #2e8b57; font-weight: 600; }
+
+    .total-final {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding-top: 14px;
+      border-top: 1.5px dashed var(--border);
+    }
+
+    .total-final-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .total-final-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* ── PICKUP ── */
+    .pickup-section {
+      padding: 18px 28px 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pickup-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg2);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+    }
+
+    .pickup-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--accent-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .pickup-icon svg { width: 18px; height: 18px; color: var(--accent); }
+
+    .pickup-info {}
+
+    .pickup-info-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 3px;
+    }
+
+    .pickup-info-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ── QR SECTION ── */
+    .qr-section {
+      padding: 28px 28px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+      border-top: 1px solid var(--border);
+    }
+
+    .qr-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      text-align: center;
+    }
+
+    .qr-sub {
+      font-size: 0.78rem;
+      color: var(--text3);
+      text-align: center;
+      line-height: 1.65;
+      max-width: 280px;
+    }
+
+    .qr-wrap {
+      background: white;
+      padding: 14px;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 32px var(--shadow-md);
+      border: 1px solid var(--border);
+    }
+
+    .qr-wrap img {
+      display: block;
+      width: 190px;
+      height: 190px;
+      border-radius: 4px;
+    }
+
+    /* ── REFRESH INFO ── */
+    .refresh-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 20px;
+      background: var(--bg2);
+      border-radius: var(--radius-sm);
+      margin-top: 20px;
+      font-size: 0.78rem;
+      color: var(--text3);
+    }
+
+    .refresh-bar svg { width: 14px; height: 14px; }
+
+    .refresh-countdown {
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* ── TOAST ── */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--text);
+      color: var(--bg);
+      padding: 11px 22px;
+      border-radius: 100px;
+      font-size: 0.83rem;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.4s forwards;
+      white-space: nowrap;
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes toastOut {
+      from { opacity: 1; }
+      to { opacity: 0; transform: translateY(-8px); }
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 520px) {
+      .main { padding: 24px 14px 60px; }
+      .order-head { padding: 22px 20px 18px; }
+      .progress-section { padding: 20px; }
+      .items-section { padding: 18px 20px; }
+      .total-section { padding: 14px 20px 18px; }
+      .pickup-section { padding: 14px 20px 18px; }
+      .qr-section { padding: 24px 20px 28px; }
+      .step-label { font-size: 0.58rem; }
+      .order-id-value { font-size: 1.1rem; }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <a href="index.html" class="logo">Min<span>Bite</span></a>
-  <a href="admin.html" class="admin-link">← Admin</a>
-</header>
-
-<div class="page-wrap" id="pageContent">
-  <div style="text-align:center;padding:3rem 1rem;color:var(--muted)">Memuat…</div>
-</div>
-
-<div class="toast-container" id="toastContainer"></div>
-
-<script>
-function fmtRp(n){return 'Rp\u00a0'+Number(n).toLocaleString('id-ID')}
-function showToast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.getElementById('toastContainer').appendChild(t);setTimeout(()=>t.remove(),3100)}
-
-function maskName(name){
-  if(!name) return '—';
-  return name.trim().split(/\s+/).map(part=>part.charAt(0)+'***').join(' ');
-}
-
-function statusClass(s){
-  if(s==='MENUNGGU') return 's-MENUNGGU';
-  if(s==='DIPROSES') return 's-DIPROSES';
-  if(s==='SIAP DIAMBIL') return 's-SIAP';
-  if(s==='DIBATALKAN') return 's-DIBATALKAN';
-  return 's-MENUNGGU';
-}
-function statusEmoji(s){
-  const m={'MENUNGGU':'⏳','DIPROSES':'⚙️','SIAP DIAMBIL':'✅','DIBATALKAN':'❌'};
-  return (m[s]||'•')+' '+s;
-}
-
-const params=new URLSearchParams(location.search);
-const orderId=params.get('id');
-
-function getOrders(){return JSON.parse(localStorage.getItem('orders')||'[]')}
-
-function confirmPickup(){
-  const orders=getOrders();
-  const o=orders.find(x=>x.id===orderId);
-  if(!o) return;
-  if(!confirm('Konfirmasi pengambilan pesanan ini?')) return;
-  o.status='DIBATALKAN'; // mark as completed — using a final state
-  // Actually spec says "mark as completed" — we'll add a SELESAI status or just use DIBATALKAN
-  // Re-reading spec: "mark as completed" — let's set a custom completed state
-  // We'll update status to "SELESAI" for semantic clarity even if it's not in the badge list
-  o.status = 'SELESAI';
-  localStorage.setItem('orders',JSON.stringify(orders));
-  showToast('Pengambilan dikonfirmasi! ✅');
-  setTimeout(renderPage, 800);
-}
-
-function renderPage(){
-  if(!orderId){renderNotFound();return;}
-  const orders=getOrders();
-  const order=orders.find(o=>o.id===orderId);
-  if(!order){renderNotFound();return;}
-
-  const sc=statusClass(order.status);
-  const isReady=order.status==='SIAP DIAMBIL';
-  const isCancelled=order.status==='DIBATALKAN';
-  const isSelesai=order.status==='SELESAI';
-  const d=new Date(order.timestamp);
-  const dateStr=d.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
-
-  let html=`
-    <h1 class="order-heading">Detail Pesanan</h1>
-    <div class="order-id-text"><code>${order.id}</code> &nbsp;·&nbsp; ${dateStr}</div>`;
-
-  // Status badge
-  const dispStatus = isSelesai ? 'SELESAI' : order.status;
-  const badgeClass = isSelesai ? 's-SIAP' : sc;
-  html+=`<div class="status-badge ${badgeClass}"><span class="pulse"></span>${statusEmoji(dispStatus)}</div>`;
-
-  // Cancelled banner
-  if(isCancelled){
-    html+=`<div class="cancelled-banner"><h3>❌ Pesanan Dibatalkan</h3><p>Pesanan ini telah dibatalkan oleh penjual.</p></div>`;
-  }
-
-  // Ready / confirm section
-  if(isReady){
-    html+=`<div class="confirm-section">
-      <h3>✅ Siap Diambil!</h3>
-      <p>Pelanggan sudah bisa mengambil pesanannya. Klik tombol di bawah setelah pesanan diserahkan.</p>
-      <button class="confirm-btn" onclick="confirmPickup()">Konfirmasi Pengambilan</button>
-    </div>`;
-  }
-
-  if(isSelesai){
-    html+=`<div class="confirm-section">
-      <h3>🎉 Sudah Diambil</h3>
-      <p>Pesanan ini telah berhasil diserahkan ke pelanggan.</p>
-      <span class="confirmed-tag">✓ Selesai</span>
-    </div>`;
-  }
-
-  // Privacy note
-  html+=`<div class="privacy-note">🔒 Informasi pelanggan ditampilkan dalam format anonim untuk privasi.</div>`;
-
-  // Items
-  html+=`<div class="card"><div class="card-label">Item Pesanan</div>`;
-  order.items.forEach(i=>{
-    html+=`<div class="item-row"><span>${i.name} <span style="color:var(--muted)">× ${i.qty}</span></span><span style="font-weight:600">${fmtRp(i.price*i.qty)}</span></div>`;
-  });
-  if(order.discount>0){
-    html+=`<div class="item-row" style="color:#2a7a4b"><span>Diskon (${order.promoCode})</span><span>−${fmtRp(order.discount)}</span></div>`;
-  }
-  html+=`<div class="item-row total-row"><span>Total</span><span>${fmtRp(order.total)}</span></div></div>`;
-
-  // Info (privacy-masked)
-  html+=`<div class="card"><div class="card-label">Info Pelanggan (Anonim)</div>
-    <div class="info-grid">
-      <div class="info-item"><label>Nama</label><div class="val masked">${maskName(order.customer.name)}</div></div>
-      <div class="info-item"><label>Kelas</label><div class="val">${order.customer.kelas} ${order.customer.jurusan}</div></div>
-      <div class="info-item"><label>Waktu Ambil</label><div class="val">${order.customer.pickup}</div></div>
-      <div class="info-item"><label>No. WA</label><div class="val masked">08•••••••••</div></div>
+  <!-- ══ HEADER ══ -->
+  <header>
+    <div class="header-inner">
+      <a class="logo" href="index.html">MinBite</a>
+      <div class="header-right">
+        <a class="btn-back" href="index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Kembali
+        </a>
+        <button class="btn-theme" onclick="toggleTheme()" title="Toggle tema">
+          <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+            <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+          <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
     </div>
-  </div>`;
+  </header>
 
-  document.getElementById('pageContent').innerHTML=html;
-}
+  <!-- ══ MAIN CONTENT ══ -->
+  <main class="main">
+    <div id="stateLoading" class="loading-wrap">
+      <div class="loading-ring"></div>
+      <span class="loading-text">Mengambil data pesanan...</span>
+    </div>
 
-function renderNotFound(){
-  document.getElementById('pageContent').innerHTML=`
-    <div class="not-found">
-      <div style="font-size:3rem;margin-bottom:1rem">🔍</div>
-      <h2>Pesanan Tidak Ditemukan</h2>
-      <p>ID pesanan tidak valid atau tidak ditemukan.</p>
-      <a href="admin.html">← Kembali ke Admin</a>
-    </div>`;
-}
+    <div id="stateError" style="display:none">
+      <div class="error-wrap">
+        <div class="error-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <div class="error-title">Pesanan Tidak Ditemukan</div>
+        <div class="error-sub" id="errorMsg">ID pesanan tidak valid atau pesanan tidak ada di sistem kami.</div>
+        <a class="btn-back" href="index.html" style="margin-top:8px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Ke Halaman Utama
+        </a>
+      </div>
+    </div>
 
-renderPage();
-</script>
+    <div id="stateOrder" style="display:none">
+      <div class="order-card">
+
+        <!-- ORDER HEAD -->
+        <div class="order-head">
+          <div class="order-id-label">ID Pesanan</div>
+          <div class="order-id-value" id="oId"></div>
+          <div class="order-meta">
+            <div class="order-customer">Untuk: <strong id="oName"></strong></div>
+            <div class="status-badge" id="oStatusBadge">
+              <span class="status-dot"></span>
+              <span id="oStatusText"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROGRESS TRACKER -->
+        <div class="progress-section">
+          <div class="progress-label">Status Pesanan</div>
+          <div class="progress-steps">
+            <div class="step" id="step-0">
+              <div class="step-circle" id="sc-0">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                </svg>
+              </div>
+              <div class="step-label">Menunggu</div>
+            </div>
+            <div class="step-connector" id="conn-0"></div>
+            <div class="step" id="step-1">
+              <div class="step-circle" id="sc-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
+                </svg>
+              </div>
+              <div class="step-label">Diproses</div>
+            </div>
+            <div class="step-connector" id="conn-1"></div>
+            <div class="step" id="step-2">
+              <div class="step-circle" id="sc-2">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+                </svg>
+              </div>
+              <div class="step-label">Siap Diambil</div>
+            </div>
+            <div class="step-connector" id="conn-2"></div>
+            <div class="step" id="step-3">
+              <div class="step-circle" id="sc-3">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+              <div class="step-label">Selesai</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ITEMS -->
+        <div class="items-section">
+          <div class="section-label">Item Pesanan</div>
+          <div id="oItems"></div>
+        </div>
+
+        <!-- TOTAL -->
+        <div class="total-section" id="oTotalSection"></div>
+
+        <!-- PICKUP -->
+        <div class="pickup-section">
+          <div class="pickup-row">
+            <div class="pickup-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <div class="pickup-info">
+              <div class="pickup-info-label">Waktu Pengambilan</div>
+              <div class="pickup-info-value" id="oPickup"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- QR CODE (selalu tampil) -->
+        <div class="qr-section" id="qrSection">
+          <div class="qr-label">QR Code Pesanan</div>
+          <div class="qr-wrap">
+            <img id="qrImage" src="" alt="QR Code" />
+          </div>
+          <div class="qr-sub">Scan QR ini untuk membuka detail pesanan. Tunjukkan ke penjual saat mengambil, atau simpan untuk referensi pembeli.</div>
+        </div>
+
+      </div>
+
+      <!-- REFRESH BAR -->
+      <div class="refresh-bar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+        Otomatis refresh dalam <span class="refresh-countdown" id="refreshCount">15</span> detik
+      </div>
+    </div>
+  </main>
+
+  <div id="toast-container"></div>
+
+  <script>
+    // ── THEME ──
+    (function () {
+      const t = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+      document.getElementById('iconSun').style.display = t === 'dark' ? 'block' : 'none';
+      document.getElementById('iconMoon').style.display = t === 'light' ? 'block' : 'none';
+    })();
+
+    function toggleTheme() {
+      const cur = document.documentElement.getAttribute('data-theme');
+      const next = cur === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      document.getElementById('iconSun').style.display = next === 'dark' ? 'block' : 'none';
+      document.getElementById('iconMoon').style.display = next === 'light' ? 'block' : 'none';
+    }
+
+    // ── UTILS ──
+    function fmt(n) {
+      return 'Rp' + Number(n).toLocaleString('id-ID');
+    }
+
+    function showToast(msg) {
+      const c = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      el.className = 'toast';
+      el.textContent = msg;
+      c.appendChild(el);
+      setTimeout(() => el.remove(), 2800);
+    }
+
+    function getOrderId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id') || '';
+    }
+
+    // ── STATUS MAP ──
+    const STATUS_MAP = {
+      'MENUNGGU':     { step: 0, label: 'Menunggu', cls: 'status-MENUNGGU' },
+      'DIPROSES':     { step: 1, label: 'Diproses', cls: 'status-DIPROSES' },
+      'SIAP DIAMBIL': { step: 2, label: 'Siap Diambil', cls: 'status-SIAP' },
+      'SELESAI':      { step: 3, label: 'Selesai', cls: 'status-SELESAI' }
+    };
+
+    // ── ITEM ICONS ──
+    function getItemIcon(name) {
+      const n = (name || '').toLowerCase();
+      if (n.includes('oreo') || n.includes('bola')) {
+        return `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="rb" cx="35%" cy="28%" r="65%">
+              <stop offset="0%" stop-color="#6b4c34"/>
+              <stop offset="45%" stop-color="#3b2a1f"/>
+              <stop offset="100%" stop-color="#22140a"/>
+            </radialGradient>
+          </defs>
+          <circle cx="40" cy="40" r="22" fill="url(#rb)"/>
+          <ellipse cx="33" cy="32" rx="6" ry="5" fill="#8c6045" opacity="0.45"/>
+          <ellipse cx="31" cy="30" rx="3" ry="2" fill="#c09070" opacity="0.28"/>
+          <circle cx="37" cy="28" r="1.4" fill="#f5f0eb"/>
+          <circle cx="45" cy="26" r="1" fill="#f5f0eb"/>
+          <circle cx="50" cy="32" r="1.2" fill="#f5f0eb"/>
+        </svg>`;
+      }
+      if (n.includes('thai') || n.includes('tea')) {
+        return `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="rtea" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#d2691e"/>
+              <stop offset="100%" stop-color="#a0430a"/>
+            </linearGradient>
+            <clipPath id="rc"><rect x="24" y="14" width="32" height="52" rx="8"/></clipPath>
+          </defs>
+          <rect x="24" y="14" width="32" height="52" rx="8" fill="rgba(200,180,160,0.18)" stroke="rgba(200,160,120,0.4)" stroke-width="1.5"/>
+          <rect x="24" y="36" width="32" height="30" fill="url(#rtea)" clip-path="url(#rc)"/>
+          <rect x="24" y="28" width="32" height="12" fill="#f5e6c8" clip-path="url(#rc)"/>
+          <rect x="50" y="12" width="5" height="34" rx="2.5" fill="#e06030"/>
+          <rect x="51" y="12" width="1.8" height="34" rx="0.9" fill="white" opacity="0.28"/>
+        </svg>`;
+      }
+      return `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="20" width="40" height="40" rx="10" fill="var(--accent-light)" stroke="var(--accent)" stroke-width="1.5"/>
+        <circle cx="40" cy="40" r="8" fill="var(--accent)" opacity="0.5"/>
+      </svg>`;
+    }
+
+    // ── RENDER ORDER ──
+    function renderOrder(data) {
+      // Show state
+      document.getElementById('stateLoading').style.display = 'none';
+      document.getElementById('stateError').style.display = 'none';
+      document.getElementById('stateOrder').style.display = 'block';
+
+      // ID & Name
+      document.getElementById('oId').textContent = data.id || 'N/A';
+      document.getElementById('oName').textContent = data.name || '-';
+
+      // Status badge
+      const rawStatus = (data.status || 'MENUNGGU').toUpperCase().trim();
+      const statusInfo = STATUS_MAP[rawStatus] || { step: 0, label: rawStatus, cls: 'status-MENUNGGU' };
+      const badge = document.getElementById('oStatusBadge');
+      badge.className = 'status-badge ' + statusInfo.cls;
+      document.getElementById('oStatusText').textContent = statusInfo.label;
+
+      // Progress steps
+      const steps = ['MENUNGGU', 'DIPROSES', 'SIAP DIAMBIL', 'SELESAI'];
+      const activeIdx = steps.indexOf(rawStatus);
+
+      for (let i = 0; i < 4; i++) {
+        const circle = document.getElementById('sc-' + i);
+        const stepEl = document.getElementById('step-' + i);
+        circle.classList.remove('done', 'active');
+        stepEl.classList.remove('done-step', 'active-step');
+
+        if (i < activeIdx) {
+          circle.classList.add('done');
+          stepEl.classList.add('done-step');
+        } else if (i === activeIdx) {
+          circle.classList.add('active');
+          stepEl.classList.add('active-step');
+        }
+      }
+
+      for (let i = 0; i < 3; i++) {
+        const conn = document.getElementById('conn-' + i);
+        conn.classList.remove('filled', 'filling');
+        if (i < activeIdx) conn.classList.add('filled');
+        else if (i === activeIdx - 1) conn.classList.add('filling');
+      }
+
+      // Items
+      const items = data.items || [];
+      let itemsHTML = '';
+      items.forEach(function (item) {
+        const sub = (item.price || 0) * (item.qty || 1);
+        itemsHTML += `
+          <div class="order-item">
+            <div class="item-left">
+              <div class="item-icon">${getItemIcon(item.name)}</div>
+              <div>
+                <div class="item-name">${item.name || '-'}</div>
+                <div class="item-qty">${item.qty || 1} pcs &times; ${fmt(item.price || 0)}</div>
+              </div>
+            </div>
+            <div class="item-subtotal">${fmt(sub)}</div>
+          </div>`;
+      });
+      document.getElementById('oItems').innerHTML = itemsHTML || '<div style="color:var(--text3);font-size:0.85rem;padding:8px 0">Tidak ada item</div>';
+
+      // Total
+      const subtotal = data.subtotal || data.items && data.items.reduce(function (s, it) { return s + (it.price || 0) * (it.qty || 1); }, 0) || 0;
+      const discount = data.discount || 0;
+      const total = data.total || (subtotal - discount);
+      let totalHTML = '';
+      if (subtotal && subtotal !== total) {
+        totalHTML += `<div class="total-row"><span class="total-row-label">Subtotal</span><span class="total-row-value">${fmt(subtotal)}</span></div>`;
+      }
+      if (discount > 0) {
+        totalHTML += `<div class="total-row discount"><span class="total-row-label">Diskon Promo</span><span class="total-row-value">- ${fmt(discount)}</span></div>`;
+      }
+      totalHTML += `<div class="total-final"><span class="total-final-label">Total</span><span class="total-final-amount">${fmt(total)}</span></div>`;
+      document.getElementById('oTotalSection').innerHTML = totalHTML;
+
+      // Pickup
+      document.getElementById('oPickup').textContent = data.pickup || '-';
+
+      // QR Code — selalu tampil, bisa discan penjual & pembeli
+      const orderId = data.id || getOrderId();
+      const qrData = encodeURIComponent(location.origin + location.pathname.replace(/[^/]*$/, '') + 'order.html?id=' + orderId);
+      const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + qrData;
+      document.getElementById('qrImage').src = qrUrl;
+      document.getElementById('qrSection').style.display = 'flex';
+    }
+
+    // ── FETCH ORDER ──
+    function showError(msg) {
+      document.getElementById('stateLoading').style.display = 'none';
+      document.getElementById('stateOrder').style.display = 'none';
+      document.getElementById('stateError').style.display = 'block';
+      document.getElementById('errorMsg').textContent = msg || 'ID pesanan tidak valid atau pesanan tidak ada.';
+    }
+
+    var orderId = getOrderId();
+    var refreshInterval = null;
+    var countdownInterval = null;
+    var refreshSec = 15;
+
+    function startCountdown() {
+      refreshSec = 15;
+      document.getElementById('refreshCount').textContent = refreshSec;
+      if (countdownInterval) clearInterval(countdownInterval);
+      countdownInterval = setInterval(function () {
+        refreshSec -= 1;
+        var el = document.getElementById('refreshCount');
+        if (el) el.textContent = refreshSec;
+        if (refreshSec <= 0) {
+          refreshSec = 15;
+          if (el) el.textContent = refreshSec;
+        }
+      }, 1000);
+    }
+
+    async function fetchOrder(silent) {
+      if (!orderId) {
+        showError('Tidak ada ID pesanan di URL. Pastikan link yang kamu buka sudah benar.');
+        return;
+      }
+
+      if (!silent) {
+        document.getElementById('stateLoading').style.display = 'flex';
+        document.getElementById('stateError').style.display = 'none';
+        document.getElementById('stateOrder').style.display = 'none';
+      }
+
+      try {
+        var docRef = db.collection('orders').doc(orderId);
+        var snap = await docRef.get();
+
+        if (!snap.exists) {
+          showError('Pesanan dengan ID "' + orderId + '" tidak ditemukan. Pastikan ID pesanan sudah benar.');
+          return;
+        }
+
+        var data = snap.data();
+        renderOrder(data);
+        if (silent) showToast('Data pesanan diperbarui');
+      } catch (err) {
+        console.error(err);
+        if (!silent) showError('Gagal mengambil data. Periksa koneksi internet kamu.');
+        else showToast('Gagal memperbarui data. Mencoba lagi nanti...');
+      }
+    }
+
+    function startAutoRefresh() {
+      if (refreshInterval) clearInterval(refreshInterval);
+      startCountdown();
+      refreshInterval = setInterval(function () {
+        fetchOrder(true);
+        startCountdown();
+      }, 15000);
+    }
+
+    // ── INIT ──
+    fetchOrder(false);
+    startAutoRefresh();
+  </script>
 </body>
 </html>
