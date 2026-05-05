@@ -311,7 +311,7 @@
     <div class="header-right">
       <div class="live-pill">
         <span class="live-dot"></span>
-        Refresh: <strong id="refreshCountHeader" style="color:var(--accent);margin-left:3px;">10</strong>s
+        Live &bull; <strong id="refreshCountHeader" style="color:var(--accent);margin-left:3px;">baru saja</strong>
       </div>
       <button class="btn-logout" onclick="_logout()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
@@ -478,8 +478,8 @@ function _logout(){
 
 /* STATE */
 var allOrders=[],currentFilter='ALL',pendingAction=null;
-var refreshInterval=null,countdownSec=10,countdownTimer=null;
 var knownOrderIds=new Set(),activityLog=loadLog();
+var _unsubscribe=null,_lastUpdate=Date.now();
 var BAZAR_DATE='2025-05-22';
 var DEFAULT_MENU=[
   {id:'bola-oreo',name:'Bola Oreo Susu',desc:'Cokelat lembut',price:7000,icon:'oreo'},
@@ -505,19 +505,18 @@ async function autoDeleteExpiredOrders(orders){
     var o=expired[i];
     try{
       await db.collection('orders').doc(o._docId).delete();
-      allOrders=allOrders.filter(function(x){return x._docId!==o._docId;});
       knownOrderIds.delete(o._docId);
       addLog('delete','Auto-hapus: Pesanan <strong>'+escHtml(o.id||o._docId)+'</strong> ('+escHtml(o.name||'Anonim')+') dihapus otomatis karena tidak diproses dalam 24 jam.');
     }catch(err){console.error('[AutoDelete] Gagal:',o._docId,err);}
   }
-  updateStats(); renderOrders();
   showToast(expired.length+' pesanan kedaluwarsa dihapus otomatis');
 }
 
 /* INIT */
 document.addEventListener('DOMContentLoaded',function(){
   renderMenuEditor(); renderLog(); renderPromoList();
-  fetchOrders(); startAutoRefresh();
+  startRealtimeListener();
+  setInterval(updateLastUpdateUI,1000);
 });
 
 /* BAZAR */
@@ -527,13 +526,15 @@ function isBazarDay(){
   return d===BAZAR_DATE;
 }
 
-/* FETCH */
-async function fetchOrders(silent){
-  try{
-    var snap=await db.collection('orders').limit(100).get();
+/* REALTIME LISTENER — pakai onSnapshot, langsung update tanpa polling */
+function startRealtimeListener(){
+  if(_unsubscribe){_unsubscribe();_unsubscribe=null;}
+  var list=document.getElementById('ordersList');
+  if(list) list.innerHTML='<div class="loading-wrap"><div class="loading-ring"></div><span style="font-size:0.85rem;color:var(--text3);font-style:italic">Memuat pesanan...</span></div>';
+
+  _unsubscribe=db.collection('orders').onSnapshot(function(snap){
     var fetched=[];
     snap.forEach(function(doc){fetched.push(Object.assign({_docId:doc.id},doc.data()));});
-    // Sort client-side: pesanan terbaru di atas (tidak perlu Composite Index)
     fetched.sort(function(a,b){
       var ta=a.timestamp?(a.timestamp.toMillis?a.timestamp.toMillis():(a.timestamp.seconds||0)*1000):0;
       var tb=b.timestamp?(b.timestamp.toMillis?b.timestamp.toMillis():(b.timestamp.seconds||0)*1000):0;
@@ -541,32 +542,29 @@ async function fetchOrders(silent){
     });
     fetched.forEach(function(o){
       if(!knownOrderIds.has(o._docId)){
-        if(knownOrderIds.size>0) showToast('Pesanan baru: '+(o.id||o._docId));
+        if(knownOrderIds.size>0) showToast('\uD83D\uDD14 Pesanan baru: '+(o.id||o._docId));
         knownOrderIds.add(o._docId);
       }
     });
     allOrders=fetched; updateStats(); renderOrders();
-    if(!silent) resetCountdown();
+    _lastUpdate=Date.now(); updateLastUpdateUI();
     autoDeleteExpiredOrders(fetched);
-  }catch(err){
-    console.error(err);
+  },function(err){
+    console.error('Firestore onSnapshot error:',err);
     var list=document.getElementById('ordersList');
-    if(list&&!silent) list.innerHTML='<div class="empty-state"><div class="empty-icon">⚠️</div><p>Gagal mengambil data pesanan. Periksa koneksi internet.</p></div>';
-    if(!silent) showToast('Gagal mengambil data');
-  }
+    if(list) list.innerHTML='<div class="empty-state"><div class="empty-icon">\u26A0\uFE0F</div><p>Gagal memuat pesanan. Cek koneksi internet, lalu <button onclick="startRealtimeListener()" style="background:none;border:none;color:var(--accent);font-weight:700;cursor:pointer;font-size:inherit;padding:0;">coba lagi</button>.</p></div>';
+    showToast('Gagal memuat pesanan');
+  });
 }
 
-/* REFRESH */
-function startAutoRefresh(){
-  resetCountdown();
-  refreshInterval=setInterval(function(){fetchOrders(true);resetCountdown();},10000);
+/* LAST UPDATE DISPLAY */
+function updateLastUpdateUI(){
+  var el=document.getElementById('refreshCountHeader'); if(!el) return;
+  var sec=Math.floor((Date.now()-_lastUpdate)/1000);
+  if(sec<5) el.textContent='baru saja';
+  else if(sec<60) el.textContent=sec+'d lalu';
+  else el.textContent=Math.floor(sec/60)+'m lalu';
 }
-function resetCountdown(){
-  countdownSec=10; updateCdUI();
-  if(countdownTimer) clearInterval(countdownTimer);
-  countdownTimer=setInterval(function(){countdownSec=Math.max(0,countdownSec-1);updateCdUI();},1000);
-}
-function updateCdUI(){var el=document.getElementById('refreshCountHeader');if(el)el.textContent=countdownSec;}
 
 /* STATS */
 function updateStats(){
@@ -867,4 +865,4 @@ function getItemIconSVG(name){
 }
 </script>
 </body>
-  </html>
+        </html>
