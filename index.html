@@ -1,484 +1,1980 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="light">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MinBite · Jajanan Sekolah</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#faf8f5;--bg2:#f2ede6;--card:#ffffff;--text:#2c2420;--muted:#7a6b5d;--accent:#c8956c;--accent-d:#a67350;--border:#e8e0d5;--shadow:0 4px 24px rgba(44,36,32,.08);--r:20px;--serif:'Playfair Display',Georgia,serif;--sans:'Inter',sans-serif}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
-/* HEADER */
-header{position:sticky;top:0;z-index:100;background:rgba(250,248,245,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
-.logo{font-family:var(--serif);font-size:1.5rem;font-weight:700;letter-spacing:-.5px}.logo span{color:var(--accent)}
-.cart-btn{position:relative;background:var(--text);color:#fff;border:none;cursor:pointer;padding:.6rem 1.2rem;border-radius:50px;font-family:var(--sans);font-size:.875rem;font-weight:500;display:flex;align-items:center;gap:.5rem;transition:background .2s}
-.cart-btn:hover{background:var(--accent)}
-.cart-count{background:var(--accent);color:#fff;border-radius:50%;width:20px;height:20px;font-size:.7rem;display:flex;align-items:center;justify-content:center;font-weight:700}
-/* HERO */
-.hero{padding:4.5rem 1.5rem 3.5rem;text-align:center;background:linear-gradient(170deg,var(--bg2) 0%,var(--bg) 100%)}
-.hero-tag{display:inline-block;background:var(--accent);color:#fff;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.3rem 1.1rem;border-radius:50px;margin-bottom:1.1rem}
-.hero h1{font-family:var(--serif);font-size:clamp(2.2rem,6vw,3.8rem);line-height:1.12;color:var(--text);margin-bottom:.8rem}
-.hero p{color:var(--muted);font-size:1rem;max-width:380px;margin:0 auto;line-height:1.65}
-/* PRODUCTS */
-.section{padding:2.5rem 1.5rem 4rem;max-width:940px;margin:0 auto}
-.section-title{font-family:var(--serif);font-size:1.6rem;margin-bottom:1.75rem}
-.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
-.product-card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--border);transition:transform .25s,box-shadow .25s}
-.product-card:hover{transform:translateY(-5px);box-shadow:0 10px 36px rgba(44,36,32,.13)}
-.product-img{width:100%;height:210px;background:var(--bg2);display:flex;align-items:center;justify-content:center;padding:1.25rem}
-.product-img svg{width:100%;height:100%;max-width:185px}
-.product-info{padding:1.3rem}
-.product-name{font-family:var(--serif);font-size:1.2rem;font-weight:600;margin-bottom:.4rem}
-.product-desc{color:var(--muted);font-size:.83rem;line-height:1.55;margin-bottom:.8rem}
-.product-price{font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:1rem}
-.qty-control{display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem}
-.qty-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg);cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;color:var(--text);transition:border-color .15s,color .15s}
-.qty-btn:hover{border-color:var(--accent);color:var(--accent)}
-.qty-display{font-weight:600;min-width:24px;text-align:center}
-.add-btn{width:100%;background:var(--text);color:#fff;border:none;padding:.75rem;border-radius:12px;font-family:var(--sans);font-size:.9rem;font-weight:500;cursor:pointer;transition:background .2s}
-.add-btn:hover{background:var(--accent)}
-/* CART DRAWER */
-.cart-overlay{position:fixed;inset:0;z-index:200;background:rgba(44,36,32,.4);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:opacity .3s}
-.cart-overlay.open{opacity:1;pointer-events:all}
-.cart-drawer{position:fixed;top:0;right:0;bottom:0;z-index:201;width:min(390px,94vw);background:var(--card);box-shadow:-8px 0 40px rgba(44,36,32,.16);transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;border-radius:var(--r) 0 0 var(--r)}
-.cart-drawer.open{transform:translateX(0)}
-.cart-header{padding:1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.cart-title{font-family:var(--serif);font-size:1.3rem}
-.close-btn{background:var(--bg2);border:none;cursor:pointer;width:36px;height:36px;border-radius:50%;font-size:1rem;display:flex;align-items:center;justify-content:center;color:var(--text);transition:background .15s}
-.close-btn:hover{background:var(--border)}
-.cart-items{flex:1;overflow-y:auto;padding:1rem 1.5rem}
-.cart-empty{text-align:center;padding:3rem 1rem;color:var(--muted);line-height:2}
-.cart-item{display:flex;gap:.75rem;align-items:center;padding:.875rem 0;border-bottom:1px solid var(--border)}
-.cart-item:last-child{border-bottom:none}
-.cart-item-info{flex:1}
-.cart-item-name{font-weight:500;font-size:.88rem;margin-bottom:.2rem}
-.cart-item-price{color:var(--muted);font-size:.78rem}
-.cart-footer{padding:1.5rem;border-top:1px solid var(--border)}
-.cart-total{display:flex;justify-content:space-between;font-weight:600;font-size:1.05rem;margin-bottom:1rem}
-.checkout-btn{width:100%;background:var(--accent);color:#fff;border:none;padding:.9rem;border-radius:12px;font-family:var(--sans);font-size:1rem;font-weight:600;cursor:pointer;transition:background .2s}
-.checkout-btn:hover{background:var(--accent-d)}
-/* CHECKOUT MODAL */
-.modal-overlay{position:fixed;inset:0;z-index:300;background:rgba(44,36,32,.42);backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
-.modal-overlay.open{opacity:1;pointer-events:all}
-.modal-sheet{background:var(--card);border-radius:var(--r) var(--r) 0 0;width:100%;max-width:580px;max-height:92vh;overflow-y:auto;padding:2rem 1.5rem 2.5rem;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1)}
-.modal-overlay.open .modal-sheet{transform:translateY(0)}
-.modal-title{font-family:var(--serif);font-size:1.4rem;margin-bottom:1.5rem}
-.form-group{margin-bottom:1rem}
-label{display:block;font-size:.82rem;font-weight:500;color:var(--muted);margin-bottom:.4rem}
-input,select{width:100%;padding:.75rem 1rem;border:1.5px solid var(--border);border-radius:12px;font-family:var(--sans);font-size:.9rem;background:var(--bg);color:var(--text);outline:none;transition:border-color .15s;-webkit-appearance:none}
-input:focus,select:focus{border-color:var(--accent)}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
-@media(max-width:380px){.form-row{grid-template-columns:1fr}}
-.order-summary{background:var(--bg2);border-radius:12px;padding:1rem 1.1rem;margin-bottom:1rem}
-.os-item{display:flex;justify-content:space-between;font-size:.85rem;padding:.28rem 0}
-.os-divider{border:none;border-top:1px solid var(--border);margin:.5rem 0}
-.os-total{font-weight:700;font-size:1rem}
-.os-discount{color:#2a7a4b;font-weight:500}
-.os-total span:last-child{color:var(--accent)}
-.promo-row{display:flex;gap:.5rem;margin-bottom:.5rem}
-.promo-row input{flex:1;margin:0}
-.promo-apply{padding:0 1.1rem;background:var(--text);color:#fff;border:none;border-radius:12px;cursor:pointer;font-size:.85rem;font-weight:500;white-space:nowrap;transition:background .15s}
-.promo-apply:hover{background:var(--accent)}
-.promo-fb{font-size:.8rem;margin-bottom:.75rem;min-height:1.2em}
-.submit-btn{width:100%;background:var(--accent);color:#fff;border:none;padding:1rem;border-radius:12px;font-family:var(--sans);font-size:1rem;font-weight:600;cursor:pointer;margin-top:.75rem;transition:background .2s}
-.submit-btn:hover{background:var(--accent-d)}
-.cancel-link{width:100%;background:none;border:none;color:var(--muted);cursor:pointer;margin-top:.75rem;font-size:.85rem;font-family:var(--sans);display:block;text-align:center;padding:.5rem}
-/* POPUP */
-.popup-overlay{position:fixed;inset:0;z-index:500;background:rgba(44,36,32,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;pointer-events:none;transition:opacity .3s}
-.popup-overlay.open{opacity:1;pointer-events:all}
-.popup-box{background:var(--card);border-radius:var(--r);padding:2.5rem 2rem;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(44,36,32,.22);transform:scale(.9) translateY(10px);transition:transform .3s}
-.popup-overlay.open .popup-box{transform:scale(1) translateY(0)}
-.popup-icon{font-size:3rem;margin-bottom:1rem}
-.popup-title{font-family:var(--serif);font-size:1.35rem;margin-bottom:.75rem}
-.popup-text{color:var(--muted);font-size:.9rem;margin-bottom:1.75rem;line-height:1.65}
-.popup-btn{display:inline-block;background:var(--accent);color:#fff;padding:.8rem 2rem;border-radius:50px;text-decoration:none;font-weight:600;font-size:.9rem;transition:background .2s}
-.popup-btn:hover{background:var(--accent-d)}
-/* TOAST */
-.toast-container{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:.5rem;align-items:center;pointer-events:none}
-.toast{background:var(--text);color:#fff;padding:.7rem 1.4rem;border-radius:50px;font-size:.875rem;font-weight:500;animation:tin .3s ease,tout .3s ease 2.5s forwards;box-shadow:0 4px 16px rgba(44,36,32,.2);white-space:nowrap}
-@keyframes tin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-@keyframes tout{to{opacity:0;transform:translateY(14px)}}
-/* FOOTER */
-footer{text-align:center;padding:2.5rem 1rem;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border);margin-top:2rem}
-footer strong{color:var(--accent);font-family:var(--serif)}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MinBite — Jajanan Sekolah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script>
+    var db;
+    try {
+      var firebaseConfig = {
+        apiKey: "AIzaSyDX70_NVuPtnUvxwALxn5fSnjj2H8pgSu0",
+        authDomain: "planning-with-ai-d8ea1.firebaseapp.com",
+        projectId: "planning-with-ai-d8ea1",
+        storageBucket: "planning-with-ai-d8ea1.firebasestorage.app",
+        messagingSenderId: "975523910853",
+        appId: "1:975523910853:web:af7350de88ce5d9e668cac"
+      };
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      db = firebase.firestore();
+    } catch (e) {
+      console.error("Firebase gagal diinisialisasi:", e);
+      alert("Koneksi ke server gagal. Pastikan kamu membuka halaman ini melalui hosting (bukan file://) dan cek koneksi internet.");
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #faf8f5;
+      --bg2: #f3efe9;
+      --bg3: #ede8e0;
+      --surface: #ffffff;
+      --accent: #c8956c;
+      --accent-dark: #a8734d;
+      --accent-light: #f0ddd0;
+      --text: #2c2018;
+      --text2: #6b5744;
+      --text3: #9c8575;
+      --border: #e8e0d8;
+      --shadow: rgba(44, 32, 24, 0.08);
+      --shadow-md: rgba(44, 32, 24, 0.14);
+      --shadow-lg: rgba(44, 32, 24, 0.20);
+      --toast-bg: #2c2018;
+      --toast-text: #faf8f5;
+      --radius: 18px;
+      --radius-sm: 10px;
+      --radius-lg: 28px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] {
+      --bg: #1a1410;
+      --bg2: #221c16;
+      --bg3: #2a221a;
+      --surface: #2e251c;
+      --accent: #d4a07a;
+      --accent-dark: #c8956c;
+      --accent-light: #3d2e20;
+      --text: #f0e8df;
+      --text2: #c4a98a;
+      --text3: #8a7060;
+      --border: #3a2e24;
+      --shadow: rgba(0, 0, 0, 0.25);
+      --shadow-md: rgba(0, 0, 0, 0.35);
+      --shadow-lg: rgba(0, 0, 0, 0.50);
+      --toast-bg: #f0e8df;
+      --toast-text: #1a1410;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background var(--transition), color var(--transition);
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .logo span {
+      color: var(--text);
+      font-weight: 400;
+      font-style: italic;
+      font-size: 0.85em;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      background: var(--surface);
+      color: var(--text2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      position: relative;
+    }
+
+    .btn-icon:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px var(--shadow-md);
+    }
+
+    .btn-icon svg { width: 18px; height: 18px; }
+
+    .cart-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 18px;
+      height: 18px;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0);
+      transition: all var(--transition);
+    }
+
+    .cart-badge.show { opacity: 1; transform: scale(1); }
+
+    .btn-pesanan {
+      padding: 8px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      background: var(--surface);
+      color: var(--text2);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+
+    .btn-pesanan:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 4px 12px var(--shadow-md);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 56px 20px 24px;
+      text-align: center;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      padding: 5px 14px;
+      background: var(--accent-light);
+      color: var(--accent);
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero p {
+      font-size: 0.95rem;
+      color: var(--text3);
+      max-width: 400px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ── PRODUCTS ── */
+    .products-section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+
+    .section-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .product-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 2px 16px var(--shadow);
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+
+    .product-card:hover {
+      box-shadow: 0 8px 32px var(--shadow-md);
+      transform: translateY(-3px);
+    }
+
+    .product-image-wrap {
+      background: var(--bg2);
+      padding: 32px 24px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-image-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: linear-gradient(to top, var(--surface), transparent);
+    }
+
+    .product-info {
+      padding: 20px 22px 22px;
+    }
+
+    .product-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .product-desc {
+      font-size: 0.8rem;
+      color: var(--text3);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .product-price {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: 'Playfair Display', serif;
+    }
+
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .qty-btn {
+      width: 32px;
+      height: 32px;
+      background: none;
+      border: none;
+      color: var(--text2);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      font-weight: 600;
+    }
+
+    .qty-btn:hover { background: var(--bg2); color: var(--accent); }
+
+    .qty-display {
+      min-width: 32px;
+      text-align: center;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      padding: 0 4px;
+    }
+
+    .btn-addcart {
+      padding: 9px 18px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+
+    .btn-addcart:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(200, 149, 108, 0.4);
+    }
+
+    .btn-addcart:active { transform: scale(0.97); }
+
+    /* ── CART DRAWER ── */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(3px);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition);
+    }
+
+    .drawer-overlay.open { opacity: 1; pointer-events: all; }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(400px, 100vw);
+      background: var(--surface);
+      z-index: 201;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -8px 0 40px var(--shadow-lg);
+    }
+
+    .cart-drawer.open { transform: translateX(0); }
+
+    .drawer-header {
+      padding: 22px 24px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .drawer-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .btn-close {
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: var(--bg2);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text2);
+      transition: all var(--transition);
+    }
+
+    .btn-close:hover { background: var(--accent-light); color: var(--accent); }
+    .btn-close svg { width: 16px; height: 16px; }
+
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 24px;
+    }
+
+    .cart-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text3);
+      gap: 12px;
+    }
+
+    .cart-empty svg { width: 64px; height: 64px; opacity: 0.3; }
+
+    .cart-empty p {
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      animation: slideIn 0.25s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(16px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .cart-item-thumb {
+      width: 56px;
+      height: 56px;
+      background: var(--bg2);
+      border-radius: var(--radius-sm);
+      flex-shrink: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cart-item-thumb svg {
+      width: 52px;
+      height: 52px;
+    }
+
+    .cart-item-info { flex: 1; }
+
+    .cart-item-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .cart-item-price {
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .cart-item-controls {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+    }
+
+    .cart-qty-btn {
+      width: 28px;
+      height: 28px;
+      background: none;
+      border: none;
+      color: var(--text2);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      transition: all var(--transition);
+    }
+
+    .cart-qty-btn:hover { color: var(--accent); }
+
+    .cart-qty-num {
+      min-width: 24px;
+      text-align: center;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .drawer-footer {
+      padding: 20px 24px;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .cart-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .cart-summary-label {
+      font-size: 0.9rem;
+      color: var(--text3);
+    }
+
+    .cart-total-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .btn-checkout {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      letter-spacing: 0.02em;
+    }
+
+    .btn-checkout:hover {
+      background: var(--accent-dark);
+      box-shadow: 0 6px 20px rgba(200, 149, 108, 0.4);
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition);
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px var(--shadow-lg);
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-header {
+      padding: 26px 28px 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .modal-sub {
+      font-size: 0.8rem;
+      color: var(--text3);
+      margin-top: 2px;
+    }
+
+    .modal-body { padding: 22px 28px 28px; }
+
+    .form-group { margin-bottom: 16px; }
+
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text2);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      transition: all var(--transition);
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+
+    .form-input::placeholder { color: var(--text3); }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .promo-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .promo-row .form-input { flex: 1; }
+
+    .btn-promo {
+      padding: 11px 18px;
+      background: var(--bg2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text2);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--transition);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-promo:hover { border-color: var(--accent); color: var(--accent); }
+
+    .promo-status {
+      font-size: 0.78rem;
+      margin-top: 6px;
+      min-height: 18px;
+    }
+
+    .promo-ok { color: #3d9970; }
+    .promo-err { color: #e74c3c; }
+
+    .order-review {
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      margin-bottom: 20px;
+    }
+
+    .order-review-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
+
+    .order-review-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--text2);
+      margin-bottom: 4px;
+    }
+
+    .order-review-divider {
+      border: none;
+      border-top: 1px dashed var(--border);
+      margin: 10px 0;
+    }
+
+    .order-review-total {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .order-review-discount {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: #3d9970;
+      margin-bottom: 4px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-submit::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.1);
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .btn-submit:hover::after { opacity: 1; }
+
+    .btn-submit:hover {
+      background: var(--accent-dark);
+      box-shadow: 0 6px 24px rgba(200, 149, 108, 0.45);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    /* ── POPUP ── */
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(6px);
+      z-index: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition);
+    }
+
+    .popup-overlay.open { opacity: 1; pointer-events: all; }
+
+    .popup-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 24px 60px var(--shadow-lg);
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .popup-overlay.open .popup-card { transform: scale(1); }
+
+    .popup-icon {
+      width: 72px;
+      height: 72px;
+      background: var(--accent-light);
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .popup-icon svg { width: 36px; height: 36px; color: var(--accent); }
+
+    .popup-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .popup-text {
+      font-size: 0.88rem;
+      color: var(--text3);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .popup-text strong { color: var(--accent); font-style: italic; }
+
+    .btn-popup-main {
+      width: 100%;
+      padding: 13px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--transition);
+      margin-bottom: 10px;
+    }
+
+    .btn-popup-main:hover { background: var(--accent-dark); }
+
+    /* ── PESANAN MODAL ── */
+    .order-list-item {
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .order-list-id {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 4px;
+    }
+
+    .order-list-status {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-menunggu { background: #fff3cd; color: #856404; }
+    .status-diproses { background: #cfe2ff; color: #084298; }
+    .status-siap { background: #d1e7dd; color: #0a3622; }
+    .status-selesai { background: var(--bg3); color: var(--text3); }
+
+    .order-list-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .order-list-total {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--accent);
+    }
+
+    /* ── TOAST ── */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--toast-bg);
+      color: var(--toast-text);
+      padding: 12px 22px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.4s forwards;
+      white-space: nowrap;
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(-8px); }
+    }
+
+    /* ── LOADING SPINNER ── */
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+    /* ── DECORATION ── */
+    .texture-line {
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.2;
+      margin: 0 auto;
+      max-width: 200px;
+      border-radius: 2px;
+      margin-top: 8px;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 560px) {
+      .header-inner { padding: 0 14px; }
+      .hero { padding: 36px 14px 16px; }
+      .products-section { padding: 24px 14px 70px; }
+      .products-grid { grid-template-columns: 1fr; gap: 16px; }
+      .form-row { grid-template-columns: 1fr; }
+      .modal-header { padding: 20px 20px 0; }
+      .modal-body { padding: 18px 20px 20px; }
+      .popup-card { padding: 28px 22px; }
+      .btn-pesanan { display: none; }
+    }
+
+    @media (max-width: 400px) {
+      .logo { font-size: 1.3rem; }
+      .hero h1 { font-size: 1.7rem; }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">Min<span>Bite</span></div>
-  <button class="cart-btn" onclick="openCart()">
-    🛒 Keranjang <span class="cart-count" id="cartCount">0</span>
-  </button>
-</header>
-
-<section class="hero">
-  <span class="hero-tag">Jajanan Sekolah</span>
-  <h1>Snack Enak,<br>Harga Bersahabat</h1>
-  <p>Pesan snack favoritmu dengan mudah. Tersedia setiap hari sekolah — fresh &amp; lezat!</p>
-</section>
-
-<section class="section">
-  <h2 class="section-title">Menu Kami</h2>
-  <div class="product-grid" id="productGrid"></div>
-</section>
-
-<footer><strong>MinBite</strong> · Jajanan Sekolah Favoritmu ❤️</footer>
-
-<!-- CART OVERLAY + DRAWER -->
-<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
-<div class="cart-drawer" id="cartDrawer">
-  <div class="cart-header">
-    <span class="cart-title">Keranjang</span>
-    <button class="close-btn" onclick="closeCart()">✕</button>
-  </div>
-  <div class="cart-items" id="cartItems">
-    <div class="cart-empty">🛒<br>Keranjang masih kosong</div>
-  </div>
-  <div class="cart-footer" id="cartFooter" style="display:none">
-    <div class="cart-total"><span>Total</span><span id="cartTotalEl">Rp 0</span></div>
-    <button class="checkout-btn" onclick="openCheckout()">Checkout →</button>
-  </div>
-</div>
-
-<!-- CHECKOUT MODAL -->
-<div class="modal-overlay" id="checkoutOverlay">
-  <div class="modal-sheet">
-    <h2 class="modal-title">Konfirmasi Pesanan</h2>
-    <div class="order-summary" id="orderSummary"></div>
-    <div class="promo-row">
-      <input type="text" id="promoInput" placeholder="Kode promo (opsional)">
-      <button class="promo-apply" onclick="applyPromo()">Terapkan</button>
-    </div>
-    <div class="promo-fb" id="promoFb"></div>
-    <div class="form-group">
-      <label>Nama Lengkap</label>
-      <input type="text" id="f_name" placeholder="Nama lengkap kamu">
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Kelas</label>
-        <select id="f_kelas"><option value="X">X</option><option value="XI">XI</option><option value="XII">XII</option></select>
-      </div>
-      <div class="form-group">
-        <label>Jurusan</label>
-        <select id="f_jurusan"><option value="AK">AK</option><option value="MM">MM</option><option value="MP">MP</option><option value="TKJ">TKJ</option></select>
+  <!-- ══ HEADER ══ -->
+  <header>
+    <div class="header-inner">
+      <a class="logo" href="#">MinBite <span>by sekolah</span></a>
+      <div class="header-actions">
+        <button class="btn-pesanan" id="btnPesanan" onclick="openPesanan()">Pesanan Saya</button>
+        <button class="btn-icon" id="btnTheme" onclick="toggleTheme()" title="Toggle dark mode">
+          <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <button class="btn-icon" onclick="openCart()" title="Keranjang">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="cart-badge" id="cartBadge">0</span>
+        </button>
       </div>
     </div>
-    <div class="form-group">
-      <label>Nomor WhatsApp</label>
-      <input type="tel" id="f_wa" placeholder="08xxxxxxxxxx">
-    </div>
-    <div class="form-group">
-      <label>Waktu Pengambilan</label>
-      <select id="f_pickup"><option value="12.00-13.00">12.00 – 13.00</option><option value="13.00-14.00">13.00 – 14.00</option></select>
-    </div>
-    <button class="submit-btn" onclick="submitOrder()">Pesan via WhatsApp 💬</button>
-    <button class="cancel-link" onclick="closeCheckout()">Batal</button>
-  </div>
-</div>
+  </header>
 
-<!-- POST-WA POPUP -->
-<div class="popup-overlay" id="popupOverlay">
-  <div class="popup-box">
-    <div class="popup-icon">🎉</div>
-    <h3 class="popup-title">Pesanan Dibuat!</h3>
-    <p class="popup-text">Jangan lupa kembali ke website untuk melihat status pesananmu!</p>
-    <a href="#" class="popup-btn" id="popupBtn">Lihat Status Pesanan</a>
-  </div>
-</div>
+  <!-- ══ HERO ══ -->
+  <section class="hero">
+    <span class="hero-tag">Jajanan Sekolah</span>
+    <h1>Cemilan <em>enak</em>,<br>harga ramah</h1>
+    <p>Pesan sekarang, ambil saat istirahat. Segarkan harimu dengan pilihan terbaik MinBite.</p>
+    <div class="texture-line"></div>
+  </section>
 
-<div class="toast-container" id="toastContainer"></div>
+  <!-- ══ PRODUCTS ══ -->
+  <section class="products-section">
+    <div class="section-label">Menu Hari Ini</div>
+    <div class="products-grid" id="productsGrid">
 
-<script>
-const WA = '6285694458024';
-let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-let appliedPromo = null;
+      <!-- PRODUCT 1: Bola Oreo Susu -->
+      <div class="product-card">
+        <div class="product-image-wrap">
+          <!-- SVG: Bola Oreo Susu -->
+          <svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg" width="220" height="170">
+            <defs>
+              <radialGradient id="plateGrad" cx="50%" cy="30%" r="60%">
+                <stop offset="0%" stop-color="#f5f2ee"/>
+                <stop offset="100%" stop-color="#e0d8d0"/>
+              </radialGradient>
+              <radialGradient id="ball1Grad" cx="35%" cy="28%" r="65%">
+                <stop offset="0%" stop-color="#6b4c34"/>
+                <stop offset="40%" stop-color="#4a3020"/>
+                <stop offset="100%" stop-color="#2a1c0e"/>
+              </radialGradient>
+              <radialGradient id="ball2Grad" cx="35%" cy="28%" r="65%">
+                <stop offset="0%" stop-color="#5e4030"/>
+                <stop offset="45%" stop-color="#3b2a1f"/>
+                <stop offset="100%" stop-color="#22140a"/>
+              </radialGradient>
+              <radialGradient id="ball3Grad" cx="35%" cy="28%" r="65%">
+                <stop offset="0%" stop-color="#6a4530"/>
+                <stop offset="40%" stop-color="#422c1a"/>
+                <stop offset="100%" stop-color="#251508"/>
+              </radialGradient>
+              <filter id="plateShadow" x="-20%" y="-20%" width="140%" height="180%">
+                <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#3b2a1f" flood-opacity="0.22"/>
+              </filter>
+              <filter id="ballShadow">
+                <feDropShadow dx="1" dy="3" stdDeviation="3" flood-color="#1a0d05" flood-opacity="0.35"/>
+              </filter>
+              <clipPath id="plateClip">
+                <ellipse cx="130" cy="155" rx="95" ry="22"/>
+              </clipPath>
+            </defs>
 
-const DEFAULT_PRODUCTS = [
-  {
-    id: 1, name: 'Bola Oreo Susu', price: 7000,
-    desc: 'Bola coklat Oreo lembut, taburan susu bubuk, kriuk di luar lembut di dalam.',
-    svg: `<svg viewBox="0 0 200 170" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <radialGradient id="b1" cx="38%" cy="32%"><stop offset="0%" stop-color="#6b3d22"/><stop offset="100%" stop-color="#2e1a0e"/></radialGradient>
-    <radialGradient id="b2" cx="38%" cy="32%"><stop offset="0%" stop-color="#6b3d22"/><stop offset="100%" stop-color="#2e1a0e"/></radialGradient>
-    <radialGradient id="b3" cx="38%" cy="32%"><stop offset="0%" stop-color="#6b3d22"/><stop offset="100%" stop-color="#2e1a0e"/></radialGradient>
-    <radialGradient id="plateg" cx="50%" cy="40%"><stop offset="0%" stop-color="#fff9f4"/><stop offset="100%" stop-color="#e8ddd0"/></radialGradient>
-  </defs>
-  <!-- plate shadow -->
-  <ellipse cx="100" cy="152" rx="76" ry="12" fill="rgba(44,36,32,.12)"/>
-  <!-- plate -->
-  <ellipse cx="100" cy="145" rx="74" ry="16" fill="#ddd0c0"/>
-  <ellipse cx="100" cy="141" rx="70" ry="13" fill="url(#plateg)"/>
-  <!-- ball 3 (back) -->
-  <circle cx="100" cy="88" r="30" fill="#251208" opacity=".3"/>
-  <circle cx="97" cy="85" r="30" fill="url(#b3)"/>
-  <ellipse cx="86" cy="75" rx="8" ry="5" fill="rgba(255,255,255,.08)" transform="rotate(-20,86,75)"/>
-  <!-- ball 1 (left) -->
-  <circle cx="62" cy="110" r="30" fill="#251208" opacity=".35"/>
-  <circle cx="59" cy="107" r="30" fill="url(#b1)"/>
-  <ellipse cx="48" cy="97" rx="8" ry="5" fill="rgba(255,255,255,.08)" transform="rotate(-20,48,97)"/>
-  <!-- ball 2 (right) -->
-  <circle cx="135" cy="110" r="30" fill="#251208" opacity=".35"/>
-  <circle cx="132" cy="107" r="30" fill="url(#b2)"/>
-  <ellipse cx="121" cy="97" rx="8" ry="5" fill="rgba(255,255,255,.08)" transform="rotate(-20,121,97)"/>
-  <!-- milk powder dots -->
-  <circle cx="50" cy="98" r="2.8" fill="white" opacity=".75"/>
-  <circle cx="62" cy="90" r="2.2" fill="white" opacity=".6"/>
-  <circle cx="73" cy="100" r="2" fill="white" opacity=".55"/>
-  <circle cx="55" cy="110" r="1.8" fill="white" opacity=".5"/>
-  <circle cx="120" cy="96" r="2.8" fill="white" opacity=".75"/>
-  <circle cx="135" cy="91" r="2.2" fill="white" opacity=".6"/>
-  <circle cx="145" cy="102" r="2" fill="white" opacity=".55"/>
-  <circle cx="90" cy="72" r="2.5" fill="white" opacity=".7"/>
-  <circle cx="103" cy="68" r="2" fill="white" opacity=".55"/>
-  <circle cx="110" cy="78" r="2.5" fill="white" opacity=".65"/>
-  <!-- crumbs -->
-  <ellipse cx="78" cy="135" rx="5" ry="2" fill="#3d2314" opacity=".35"/>
-  <ellipse cx="115" cy="138" rx="4" ry="1.5" fill="#3d2314" opacity=".3"/>
-  <ellipse cx="95" cy="140" rx="6" ry="2" fill="#3d2314" opacity=".25"/>
-</svg>`
-  },
-  {
-    id: 2, name: 'Thai Tea', price: 4000,
-    desc: 'Teh Thailand creamy manis, es batu segar, cocok melepas dahaga.',
-    svg: `<svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <clipPath id="gc"><path d="M62 25 L72 188 Q100 200 128 188 L138 25 Z"/></clipPath>
-    <linearGradient id="tg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#b84d08"/><stop offset="50%" stop-color="#e07030"/><stop offset="100%" stop-color="#b84d08"/></linearGradient>
-    <linearGradient id="cg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f0e4d0"/><stop offset="50%" stop-color="#fdf6ec"/><stop offset="100%" stop-color="#f0e4d0"/></linearGradient>
-    <linearGradient id="gg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="rgba(255,255,255,.35)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></linearGradient>
-  </defs>
-  <!-- shadow -->
-  <ellipse cx="100" cy="200" rx="42" ry="8" fill="rgba(44,36,32,.1)"/>
-  <!-- tea fill -->
-  <path d="M62 25 L72 188 Q100 200 128 188 L138 25 Z" fill="url(#tg)"/>
-  <!-- contents clipped -->
-  <g clip-path="url(#gc)">
-    <!-- cream layer -->
-    <path d="M63 52 Q100 64 137 52 L138 34 Q100 44 62 34 Z" fill="url(#cg)" opacity=".95"/>
-    <path d="M63 58 Q100 70 137 58 L137 55 Q100 67 63 55 Z" fill="rgba(255,248,235,.5)"/>
-    <!-- ice cube 1 -->
-    <rect x="68" y="100" width="24" height="20" rx="4" fill="rgba(200,235,255,.72)" stroke="rgba(160,210,255,.6)" stroke-width="1.2"/>
-    <rect x="68" y="102" width="24" height="7" fill="rgba(230,248,255,.45)"/>
-    <!-- ice cube 2 -->
-    <rect x="98" y="95" width="26" height="22" rx="4" fill="rgba(200,235,255,.72)" stroke="rgba(160,210,255,.6)" stroke-width="1.2"/>
-    <rect x="98" y="97" width="26" height="8" fill="rgba(230,248,255,.45)"/>
-    <!-- ice cube 3 -->
-    <rect x="74" y="132" width="22" height="18" rx="4" fill="rgba(200,235,255,.65)" stroke="rgba(160,210,255,.5)" stroke-width="1.2"/>
-    <!-- ice cube 4 -->
-    <rect x="100" y="128" width="24" height="20" rx="4" fill="rgba(200,235,255,.65)" stroke="rgba(160,210,255,.5)" stroke-width="1.2"/>
-    <!-- condensation -->
-    <circle cx="70" cy="158" r="2.5" fill="rgba(255,255,255,.28)"/>
-    <circle cx="70" cy="167" r="2" fill="rgba(255,255,255,.22)"/>
-    <circle cx="132" cy="148" r="2.5" fill="rgba(255,255,255,.28)"/>
-  </g>
-  <!-- glass outline -->
-  <path d="M62 25 L72 188 Q100 200 128 188 L138 25 Z" fill="none" stroke="rgba(44,36,32,.14)" stroke-width="2.5"/>
-  <!-- shine -->
-  <path d="M67 30 L76 175" stroke="url(#gg)" stroke-width="8" stroke-linecap="round"/>
-  <!-- rim -->
-  <ellipse cx="100" cy="25" rx="38" ry="8" fill="#d8ccba" stroke="rgba(44,36,32,.1)" stroke-width="1"/>
-  <!-- straw -->
-  <rect x="113" y="6" width="7" height="155" rx="3.5" fill="#e85d04" opacity=".88"/>
-  <rect x="114" y="6" width="2.5" height="155" rx="1.5" fill="rgba(255,185,145,.5)"/>
-</svg>`
-  }
-];
+            <!-- Plate shadow -->
+            <ellipse cx="130" cy="172" rx="88" ry="11" fill="#3b2a1f" opacity="0.15"/>
 
-const qtyState = {};
+            <!-- Plate body -->
+            <ellipse cx="130" cy="158" rx="96" ry="22" fill="url(#plateGrad)" filter="url(#plateShadow)"/>
+            <!-- Plate rim highlight -->
+            <ellipse cx="130" cy="152" rx="90" ry="17" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.6"/>
+            <!-- Plate inner -->
+            <ellipse cx="130" cy="154" rx="78" ry="14" fill="#ece7e0"/>
 
-function loadProducts() {
-  const s = localStorage.getItem('products');
-  return s ? JSON.parse(s) : DEFAULT_PRODUCTS;
-}
+            <!-- Ball 3 (back center) -->
+            <g filter="url(#ballShadow)">
+              <circle cx="130" cy="105" r="34" fill="url(#ball3Grad)"/>
+              <!-- highlight -->
+              <ellipse cx="118" cy="90" rx="9" ry="7" fill="#8c6045" opacity="0.45"/>
+              <ellipse cx="116" cy="87" rx="4" ry="3" fill="#c09070" opacity="0.30"/>
+              <!-- subtle texture dots -->
+              <circle cx="138" cy="110" r="1.5" fill="#1a0d06" opacity="0.4"/>
+              <circle cx="125" cy="118" r="1.2" fill="#1a0d06" opacity="0.35"/>
+              <circle cx="142" cy="98" r="1" fill="#1a0d06" opacity="0.3"/>
+            </g>
 
-function renderProducts() {
-  const prods = loadProducts();
-  const grid = document.getElementById('productGrid');
-  grid.innerHTML = '';
-  prods.forEach(p => {
-    qtyState[p.id] = qtyState[p.id] || 1;
-    const el = document.createElement('div');
-    el.className = 'product-card';
-    el.innerHTML = `
-      <div class="product-img">${p.svg ? p.svg : `<div style="font-size:3.5rem">🍫</div>`}</div>
-      <div class="product-info">
-        <div class="product-name">${p.name}</div>
-        <div class="product-desc">${p.desc}</div>
-        <div class="product-price">${fmtRp(p.price)}</div>
-        <div class="qty-control">
-          <button class="qty-btn" onclick="chQty(${p.id},-1)">−</button>
-          <span class="qty-display" id="qty_${p.id}">1</span>
-          <button class="qty-btn" onclick="chQty(${p.id},1)">+</button>
+            <!-- Ball 1 (front left) -->
+            <g filter="url(#ballShadow)">
+              <circle cx="96" cy="126" r="34" fill="url(#ball1Grad)"/>
+              <ellipse cx="83" cy="111" rx="9" ry="7" fill="#8c6045" opacity="0.45"/>
+              <ellipse cx="81" cy="108" rx="4" ry="3" fill="#c09070" opacity="0.28"/>
+              <circle cx="105" cy="131" r="1.5" fill="#1a0d06" opacity="0.4"/>
+              <circle cx="90" cy="139" r="1.2" fill="#1a0d06" opacity="0.35"/>
+            </g>
+
+            <!-- Ball 2 (front right) -->
+            <g filter="url(#ballShadow)">
+              <circle cx="164" cy="126" r="34" fill="url(#ball2Grad)"/>
+              <ellipse cx="151" cy="111" rx="9" ry="7" fill="#8c6045" opacity="0.45"/>
+              <ellipse cx="149" cy="108" rx="4" ry="3" fill="#c09070" opacity="0.28"/>
+              <circle cx="173" cy="131" r="1.5" fill="#1a0d06" opacity="0.4"/>
+              <circle cx="158" cy="139" r="1.2" fill="#1a0d06" opacity="0.35"/>
+            </g>
+
+            <!-- Milk powder sprinkle -->
+            <g opacity="0.75">
+              <circle cx="110" cy="95" r="1.8" fill="#f5f0eb"/>
+              <circle cx="128" cy="88" r="1.4" fill="#f0ece6"/>
+              <circle cx="145" cy="93" r="1.6" fill="#f5f0eb"/>
+              <circle cx="105" cy="107" r="1.2" fill="#ede8e2"/>
+              <circle cx="152" cy="102" r="1.5" fill="#f2ede8"/>
+              <circle cx="136" cy="80" r="1.3" fill="#f5f0eb"/>
+              <circle cx="119" cy="115" r="1.1" fill="#ede8e2"/>
+              <circle cx="165" cy="108" r="1.4" fill="#f5f0eb"/>
+              <circle cx="98" cy="118" r="1.3" fill="#f2ede8"/>
+              <circle cx="142" cy="116" r="1.2" fill="#ede8e2"/>
+              <circle cx="158" cy="88" r="1.0" fill="#f0ece6"/>
+              <circle cx="123" cy="100" r="1.5" fill="#f5f0eb"/>
+              <!-- Fine powder dusting -->
+              <ellipse cx="130" cy="96" rx="24" ry="5" fill="white" opacity="0.06"/>
+            </g>
+
+            <!-- Plate top edge highlight -->
+            <ellipse cx="130" cy="136" rx="86" ry="6" fill="white" opacity="0.08"/>
+          </svg>
         </div>
-        <button class="add-btn" onclick="addToCart(${p.id})">Tambah ke Keranjang</button>
-      </div>`;
-    grid.appendChild(el);
-  });
-}
-
-function chQty(id, d) {
-  qtyState[id] = Math.max(1, (qtyState[id] || 1) + d);
-  document.getElementById('qty_' + id).textContent = qtyState[id];
-}
-
-function addToCart(id) {
-  const prods = loadProducts();
-  const p = prods.find(x => x.id === id);
-  if (!p) return;
-  const qty = qtyState[id] || 1;
-  const ex = cart.find(c => c.id === id);
-  if (ex) ex.qty += qty; else cart.push({ id: p.id, name: p.name, price: p.price, qty });
-  saveCart(); updateCartUI();
-  showToast(`${p.name} ditambahkan! ✨`);
-}
-
-function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); }
-function fmtRp(n) { return 'Rp\u00a0' + Number(n).toLocaleString('id-ID'); }
-
-function updateCartUI() {
-  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const count = cart.reduce((s, i) => s + i.qty, 0);
-  document.getElementById('cartCount').textContent = count;
-  const itemsEl = document.getElementById('cartItems');
-  const footerEl = document.getElementById('cartFooter');
-  if (!cart.length) {
-    itemsEl.innerHTML = '<div class="cart-empty">🛒<br>Keranjang masih kosong</div>';
-    footerEl.style.display = 'none'; return;
-  }
-  footerEl.style.display = 'block';
-  document.getElementById('cartTotalEl').textContent = fmtRp(total);
-  itemsEl.innerHTML = cart.map(item => `
-    <div class="cart-item">
-      <div class="cart-item-info">
-        <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-price">${fmtRp(item.price)} × ${item.qty}</div>
+        <div class="product-info">
+          <div class="product-name">Bola Oreo Susu</div>
+          <div class="product-desc">Tiga bola cokelat lembut bertabur susu bubuk, gurih manis di setiap gigitan.</div>
+          <div class="product-footer">
+            <div class="product-price">Rp7.000</div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="qty-control">
+                <button class="qty-btn" onclick="changeQty(0,-1)">−</button>
+                <span class="qty-display" id="qty-0">1</span>
+                <button class="qty-btn" onclick="changeQty(0,1)">+</button>
+              </div>
+              <button class="btn-addcart" onclick="addToCart(0)">Tambah</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="qty-control" style="gap:.45rem">
-        <button class="qty-btn" onclick="cQty(${item.id},-1)">−</button>
-        <span style="font-weight:600;font-size:.9rem">${item.qty}</span>
-        <button class="qty-btn" onclick="cQty(${item.id},1)">+</button>
+
+      <!-- PRODUCT 2: Thai Tea -->
+      <div class="product-card">
+        <div class="product-image-wrap">
+          <!-- SVG: Thai Tea -->
+          <svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg" width="220" height="170">
+            <defs>
+              <linearGradient id="teaGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#d2691e"/>
+                <stop offset="100%" stop-color="#a0430a"/>
+              </linearGradient>
+              <linearGradient id="creamGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#f5e6c8"/>
+                <stop offset="100%" stop-color="#e8d4a8"/>
+              </linearGradient>
+              <linearGradient id="glassGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
+                <stop offset="30%" stop-color="#ffffff" stop-opacity="0.08"/>
+                <stop offset="70%" stop-color="#ffffff" stop-opacity="0.04"/>
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0.30"/>
+              </linearGradient>
+              <linearGradient id="glassEdge" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0.1"/>
+              </linearGradient>
+              <clipPath id="glassClip">
+                <path d="M88 38 L88 170 Q88 182 100 182 L160 182 Q172 182 172 170 L172 38 Z"/>
+              </clipPath>
+              <filter id="glassShadow">
+                <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#a0430a" flood-opacity="0.18"/>
+              </filter>
+              <filter id="iceShadow">
+                <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity="0.12"/>
+              </filter>
+            </defs>
+
+            <!-- Glass shadow -->
+            <ellipse cx="130" cy="184" rx="44" ry="8" fill="#3b2a1f" opacity="0.13"/>
+
+            <!-- Glass body -->
+            <g filter="url(#glassShadow)">
+              <!-- Glass outline -->
+              <path d="M90 40 L90 168 Q90 180 102 180 L158 180 Q170 180 170 168 L170 40 Z"
+                    fill="rgba(200,180,160,0.12)" stroke="rgba(200,160,120,0.35)" stroke-width="1.5"/>
+
+              <!-- Tea fill -->
+              <path d="M90 80 L90 168 Q90 180 102 180 L158 180 Q170 180 170 168 L170 80 Z"
+                    fill="url(#teaGrad)" clip-path="url(#glassClip)"/>
+
+              <!-- Cream layer -->
+              <path d="M90 73 Q130 63 170 73 L170 85 Q130 79 90 85 Z"
+                    fill="url(#creamGrad)"/>
+              <!-- Cream highlight -->
+              <path d="M96 74 Q130 65 164 74" fill="none" stroke="white" stroke-width="1.2" opacity="0.6"/>
+
+              <!-- Ice cubes -->
+              <g filter="url(#iceShadow)">
+                <!-- Ice 1 -->
+                <rect x="98" y="105" width="26" height="24" rx="4" fill="rgba(220,240,255,0.72)" stroke="rgba(180,220,255,0.8)" stroke-width="0.8"/>
+                <line x1="98" y1="113" x2="124" y2="113" stroke="white" stroke-width="0.6" opacity="0.5"/>
+                <line x1="110" y1="105" x2="110" y2="129" stroke="white" stroke-width="0.6" opacity="0.5"/>
+                <!-- Ice shine -->
+                <rect x="100" y="107" width="6" height="4" rx="1" fill="white" opacity="0.5"/>
+
+                <!-- Ice 2 -->
+                <rect x="136" y="112" width="24" height="22" rx="4" fill="rgba(220,240,255,0.65)" stroke="rgba(180,220,255,0.7)" stroke-width="0.8"/>
+                <line x1="136" y1="120" x2="160" y2="120" stroke="white" stroke-width="0.6" opacity="0.5"/>
+                <line x1="148" y1="112" x2="148" y2="134" stroke="white" stroke-width="0.6" opacity="0.5"/>
+                <rect x="138" y="114" width="5" height="3" rx="1" fill="white" opacity="0.5"/>
+
+                <!-- Ice 3 -->
+                <rect x="106" y="140" width="22" height="20" rx="4" fill="rgba(220,240,255,0.58)" stroke="rgba(180,220,255,0.65)" stroke-width="0.8"/>
+                <rect x="108" y="142" width="5" height="3" rx="1" fill="white" opacity="0.45"/>
+
+                <!-- Ice 4 -->
+                <rect x="140" y="146" width="20" height="20" rx="4" fill="rgba(220,240,255,0.55)" stroke="rgba(180,220,255,0.6)" stroke-width="0.8"/>
+                <rect x="142" y="148" width="4" height="3" rx="1" fill="white" opacity="0.45"/>
+              </g>
+
+              <!-- Glass highlight overlay -->
+              <path d="M90 40 L90 168 Q90 180 102 180 L158 180 Q170 180 170 168 L170 40 Z"
+                    fill="url(#glassGrad)"/>
+              <!-- Left edge shine -->
+              <path d="M90 50 L90 170 Q90 178 98 180 L90 180 Q90 178 90 168 Z"
+                    fill="white" opacity="0.08"/>
+              <!-- Right edge shine -->
+              <path d="M170 50 L170 170 Q170 178 162 180 L170 180 Q170 178 170 168 Z"
+                    fill="white" opacity="0.06"/>
+            </g>
+
+            <!-- Straw -->
+            <rect x="148" y="20" width="7" height="118" rx="3.5" fill="#e06030" opacity="0.9"/>
+            <!-- Straw highlight -->
+            <rect x="149" y="20" width="2.5" height="118" rx="1.25" fill="white" opacity="0.3"/>
+
+            <!-- Glass rim -->
+            <path d="M88 40 Q130 35 172 40" fill="none" stroke="rgba(200,160,120,0.5)" stroke-width="2"/>
+            <path d="M89 39 Q130 34 171 39" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
+
+            <!-- Bottom rim -->
+            <path d="M90 168 Q90 180 102 180 L158 180 Q170 180 170 168" fill="none" stroke="rgba(180,120,60,0.3)" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Thai Tea</div>
+          <div class="product-desc">Teh khas Thailand berbalut krim lembut dan es batu, segar dan menyegarkan.</div>
+          <div class="product-footer">
+            <div class="product-price">Rp4.000</div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="qty-control">
+                <button class="qty-btn" onclick="changeQty(1,-1)">−</button>
+                <span class="qty-display" id="qty-1">1</span>
+                <button class="qty-btn" onclick="changeQty(1,1)">+</button>
+              </div>
+              <button class="btn-addcart" onclick="addToCart(1)">Tambah</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <strong style="min-width:72px;text-align:right;font-size:.88rem">${fmtRp(item.price * item.qty)}</strong>
-    </div>`).join('');
-}
 
-function cQty(id, d) {
-  const item = cart.find(c => c.id === id);
-  if (!item) return;
-  item.qty += d;
-  if (item.qty <= 0) cart = cart.filter(c => c.id !== id);
-  saveCart(); updateCartUI();
-}
+      <!-- PRODUCT 3: Bundle MinBite -->
+      <div class="product-card" style="position:relative;">
+        <div style="position:absolute;top:14px;left:14px;z-index:2;background:var(--accent);color:#fff;font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:100px;letter-spacing:0.04em;">BUNDLING</div>
+        <div class="product-image-wrap">
+          <!-- SVG: Bundle — Bola Oreo (left) + Thai Tea glass (right) -->
+          <svg viewBox="0 0 270 200" xmlns="http://www.w3.org/2000/svg" width="230" height="175">
+            <defs>
+              <!-- Plate -->
+              <radialGradient id="bpg" cx="50%" cy="25%" r="65%">
+                <stop offset="0%" stop-color="#f5f2ee"/>
+                <stop offset="100%" stop-color="#ddd5cb"/>
+              </radialGradient>
+              <!-- Oreo balls -->
+              <radialGradient id="bb1" cx="33%" cy="26%" r="65%">
+                <stop offset="0%" stop-color="#704832"/>
+                <stop offset="45%" stop-color="#3e2918"/>
+                <stop offset="100%" stop-color="#20110a"/>
+              </radialGradient>
+              <radialGradient id="bb2" cx="33%" cy="26%" r="65%">
+                <stop offset="0%" stop-color="#5e4028"/>
+                <stop offset="45%" stop-color="#2e1e10"/>
+                <stop offset="100%" stop-color="#180c05"/>
+              </radialGradient>
+              <radialGradient id="bb3" cx="33%" cy="26%" r="65%">
+                <stop offset="0%" stop-color="#6a4630"/>
+                <stop offset="40%" stop-color="#3a2414"/>
+                <stop offset="100%" stop-color="#1c0e06"/>
+              </radialGradient>
+              <!-- Tea -->
+              <linearGradient id="btg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#d4720c"/>
+                <stop offset="100%" stop-color="#963a06"/>
+              </linearGradient>
+              <!-- Cream -->
+              <linearGradient id="bcg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#f8edd8"/>
+                <stop offset="100%" stop-color="#ecd9b4"/>
+              </linearGradient>
+              <!-- Glass left-edge shine -->
+              <linearGradient id="bsg" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.50"/>
+                <stop offset="20%"  stop-color="#ffffff" stop-opacity="0.07"/>
+                <stop offset="80%"  stop-color="#ffffff" stop-opacity="0.03"/>
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0.22"/>
+              </linearGradient>
+              <!-- Clip glass -->
+              <clipPath id="bgc">
+                <path d="M163 32 L163 160 Q163 172 173 172 L221 172 Q231 172 231 160 L231 32 Z"/>
+              </clipPath>
+              <!-- Shadows -->
+              <filter id="bfb" x="-30%" y="-20%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1a0a04" flood-opacity="0.35"/>
+              </filter>
+              <filter id="bfg" x="-20%" y="-20%" width="140%" height="160%">
+                <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#a04008" flood-opacity="0.18"/>
+              </filter>
+            </defs>
 
-function openCart() {
-  document.getElementById('cartOverlay').classList.add('open');
-  document.getElementById('cartDrawer').classList.add('open');
-}
-function closeCart() {
-  document.getElementById('cartOverlay').classList.remove('open');
-  document.getElementById('cartDrawer').classList.remove('open');
-}
+            <!-- ══ LEFT: BOLA OREO SUSU ══ -->
+            <!-- Plate shadow -->
+            <ellipse cx="70" cy="176" rx="64" ry="9" fill="#1a0a04" opacity="0.10"/>
+            <!-- Plate -->
+            <ellipse cx="70" cy="168" rx="65" ry="15" fill="url(#bpg)"/>
+            <ellipse cx="70" cy="163" rx="55" ry="11" fill="#eae5df"/>
 
-function openCheckout() {
-  if (!cart.length) { showToast('Keranjang masih kosong!'); return; }
-  closeCart();
-  renderSummary();
-  document.getElementById('checkoutOverlay').classList.add('open');
-}
-function closeCheckout() {
-  document.getElementById('checkoutOverlay').classList.remove('open');
-  appliedPromo = null;
-  document.getElementById('promoInput').value = '';
-  document.getElementById('promoFb').textContent = '';
-}
+            <!-- Ball back-center -->
+            <g filter="url(#bfb)">
+              <circle cx="70" cy="118" r="29" fill="url(#bb3)"/>
+              <ellipse cx="59"  cy="105" rx="7.5" ry="6" fill="#8c6045" opacity="0.42"/>
+              <ellipse cx="57"  cy="103" rx="3.5" ry="2.5" fill="#c8a080" opacity="0.26"/>
+              <circle cx="79" cy="123" r="1.3" fill="#f5f0eb" opacity="0.65"/>
+              <circle cx="65" cy="130" r="1"   fill="#f5f0eb" opacity="0.55"/>
+            </g>
+            <!-- Ball front-left -->
+            <g filter="url(#bfb)">
+              <circle cx="44" cy="140" r="29" fill="url(#bb1)"/>
+              <ellipse cx="33"  cy="127" rx="7.5" ry="6" fill="#8c6045" opacity="0.42"/>
+              <ellipse cx="31"  cy="125" rx="3.5" ry="2.5" fill="#c8a080" opacity="0.26"/>
+              <circle cx="54" cy="145" r="1.3" fill="#f5f0eb" opacity="0.65"/>
+              <circle cx="40" cy="153" r="1"   fill="#f5f0eb" opacity="0.55"/>
+            </g>
+            <!-- Ball front-right -->
+            <g filter="url(#bfb)">
+              <circle cx="96" cy="140" r="29" fill="url(#bb2)"/>
+              <ellipse cx="85"  cy="127" rx="7.5" ry="6" fill="#8c6045" opacity="0.42"/>
+              <ellipse cx="83"  cy="125" rx="3.5" ry="2.5" fill="#c8a080" opacity="0.26"/>
+              <circle cx="106" cy="145" r="1.3" fill="#f5f0eb" opacity="0.65"/>
+              <circle cx="92"  cy="153" r="1"   fill="#f5f0eb" opacity="0.55"/>
+            </g>
+            <!-- Susu powder -->
+            <g opacity="0.72">
+              <circle cx="52" cy="108" r="1.6" fill="#f5f0eb"/>
+              <circle cx="70" cy="102" r="1.4" fill="#f0ece6"/>
+              <circle cx="88" cy="108" r="1.5" fill="#f5f0eb"/>
+              <circle cx="59" cy="118" r="1.1" fill="#ede8e2"/>
+              <circle cx="80" cy="116" r="1.2" fill="#f2ede8"/>
+            </g>
 
-function applyPromo() {
-  const code = document.getElementById('promoInput').value.trim().toUpperCase();
-  const promos = JSON.parse(localStorage.getItem('promos') || '[]');
-  const promo = promos.find(p => p.code === code);
-  const fb = document.getElementById('promoFb');
-  if (!promo) {
-    fb.textContent = '❌ Kode promo tidak valid.'; fb.style.color = '#c0392b'; appliedPromo = null;
-  } else {
-    appliedPromo = promo; fb.textContent = `✅ Promo "${code}" berhasil diterapkan!`; fb.style.color = '#2a7a4b';
-  }
-  renderSummary();
-}
+            <!-- ══ CENTER + SIGN ══ -->
+            <rect x="125" y="96" width="22" height="6" rx="3" fill="#c8956c" opacity="0.60"/>
+            <rect x="133" y="88" width="6"  height="22" rx="3" fill="#c8956c" opacity="0.60"/>
 
-function calcDiscount(sub) {
-  if (!appliedPromo) return 0;
-  if (appliedPromo.type === 'flat') return Math.min(Number(appliedPromo.value), sub);
-  if (appliedPromo.type === 'percent') return Math.round(sub * Number(appliedPromo.value) / 100);
-  return 0;
-}
+            <!-- ══ RIGHT: THAI TEA ══ -->
+            <!-- Glass drop shadow -->
+            <ellipse cx="197" cy="175" rx="36" ry="8" fill="#a04008" opacity="0.11"/>
 
-function renderSummary() {
-  const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const disc = calcDiscount(sub);
-  const total = sub - disc;
-  let html = cart.map(i => `<div class="os-item"><span>${i.name} × ${i.qty}</span><span>${fmtRp(i.price * i.qty)}</span></div>`).join('');
-  html += `<hr class="os-divider"><div class="os-item"><span>Subtotal</span><span>${fmtRp(sub)}</span></div>`;
-  if (disc > 0) html += `<div class="os-item os-discount"><span>Diskon (${appliedPromo.code})</span><span>−${fmtRp(disc)}</span></div>`;
-  html += `<div class="os-item os-total"><span>Total</span><span>${fmtRp(total)}</span></div>`;
-  document.getElementById('orderSummary').innerHTML = html;
-}
+            <g filter="url(#bfg)">
+              <!-- Glass outline / body -->
+              <path d="M165 32 L165 160 Q165 172 175 172 L219 172 Q229 172 229 160 L229 32 Z"
+                    fill="rgba(210,185,155,0.10)" stroke="rgba(200,145,90,0.30)" stroke-width="1.3"/>
 
-function submitOrder() {
-  const name = document.getElementById('f_name').value.trim();
-  const kelas = document.getElementById('f_kelas').value;
-  const jurusan = document.getElementById('f_jurusan').value;
-  const wa = document.getElementById('f_wa').value.trim();
-  const pickup = document.getElementById('f_pickup').value;
-  if (!name) { showToast('Nama lengkap wajib diisi!'); return; }
-  if (!/^08\d{7,12}$/.test(wa)) { showToast('Format WA: 08xxxxxxxxxx'); return; }
-  if (!cart.length) { showToast('Keranjang kosong!'); return; }
+              <!-- Tea liquid -->
+              <path d="M165 74 L165 160 Q165 172 175 172 L219 172 Q229 172 229 160 L229 74 Z"
+                    fill="url(#btg)" clip-path="url(#bgc)"/>
 
-  const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const disc = calcDiscount(sub);
-  const total = sub - disc;
-  const id = 'MB-' + Date.now().toString(36).toUpperCase();
+              <!-- Cream layer -->
+              <path d="M165 66 Q197 54 229 66 L229 80 Q197 71 165 80 Z" fill="url(#bcg)"/>
+              <path d="M167 67 Q197 56 227 67"
+                    fill="none" stroke="white" stroke-width="1.2" opacity="0.45"/>
 
-  const order = {
-    id, timestamp: Date.now(), status: 'MENUNGGU',
-    customer: { name, kelas, jurusan, wa, pickup },
-    items: [...cart], subtotal: sub, discount: disc,
-    promoCode: appliedPromo ? appliedPromo.code : null, total
-  };
+              <!-- Ice cube 1 -->
+              <rect x="171" y="96"  width="22" height="20" rx="4.5"
+                    fill="rgba(215,238,255,0.72)" stroke="rgba(175,220,255,0.80)" stroke-width="0.9"/>
+              <rect x="172" y="97"  width="7"  height="5"  rx="1.5" fill="white" opacity="0.50"/>
+              <line x1="171" y1="106" x2="193" y2="106" stroke="white" stroke-width="0.7" opacity="0.35"/>
 
-  const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-  orders.push(order);
-  localStorage.setItem('orders', JSON.stringify(orders));
-  cart = []; saveCart(); updateCartUI(); closeCheckout();
+              <!-- Ice cube 2 -->
+              <rect x="199" y="104" width="20" height="19" rx="4.5"
+                    fill="rgba(215,238,255,0.65)" stroke="rgba(175,220,255,0.72)" stroke-width="0.9"/>
+              <rect x="200" y="105" width="6"  height="4"  rx="1.5" fill="white" opacity="0.45"/>
 
-  window.open(`https://wa.me/${WA}?text=${encodeURIComponent(buildMsg(order))}`, '_blank');
-  showToast('Pesanan Dibuat! 🎉');
-  document.getElementById('popupBtn').href = `return.html?id=${id}`;
-  document.getElementById('popupOverlay').classList.add('open');
-}
+              <!-- Ice cube 3 -->
+              <rect x="175" y="130" width="19" height="17" rx="4.5"
+                    fill="rgba(215,238,255,0.58)" stroke="rgba(175,220,255,0.65)" stroke-width="0.8"/>
+              <rect x="176" y="131" width="5"  height="3"  rx="1.5" fill="white" opacity="0.40"/>
 
-function buildMsg(o) {
-  let m = `⚠️ Menu saat ini hanya tersedia 2: Bola Oreo Susu (Rp7.000) & Thai Tea (Rp4.000).\n\n`;
-  m += `📦 *PESANAN MINBITE*\nID: ${o.id}\nNama: ${o.customer.name}\nKelas: ${o.customer.kelas} ${o.customer.jurusan}\nWA: ${o.customer.wa}\nWaktu Ambil: ${o.customer.pickup}\n\n*Item:*\n`;
-  o.items.forEach(i => { m += `- ${i.name} × ${i.qty} = ${fmtRp(i.price * i.qty)}\n`; });
-  m += `\nSubtotal: ${fmtRp(o.subtotal)}`;
-  if (o.discount > 0) m += `\nDiskon (${o.promoCode}): −${fmtRp(o.discount)}`;
-  m += `\n*Total: ${fmtRp(o.total)}*`;
-  return m;
-}
+              <!-- Ice cube 4 -->
+              <rect x="200" y="136" width="18" height="17" rx="4.5"
+                    fill="rgba(215,238,255,0.52)" stroke="rgba(175,220,255,0.58)" stroke-width="0.8"/>
 
-function showToast(msg) {
-  const t = document.createElement('div');
-  t.className = 'toast'; t.textContent = msg;
-  document.getElementById('toastContainer').appendChild(t);
-  setTimeout(() => t.remove(), 3100);
-}
+              <!-- Glass shine overlay -->
+              <path d="M165 32 L165 160 Q165 172 175 172 L219 172 Q229 172 229 160 L229 32 Z"
+                    fill="url(#bsg)"/>
+            </g>
 
-renderProducts();
-updateCartUI();
-</script>
+            <!-- Straw -->
+            <rect x="218" y="14" width="7"   height="110" rx="3.5" fill="#e06030" opacity="0.92"/>
+            <rect x="219" y="14" width="2.5" height="110" rx="1.2" fill="white"   opacity="0.30"/>
+
+            <!-- Glass top rim -->
+            <path d="M165 32 Q197 26 229 32"
+                  fill="none" stroke="rgba(255,255,255,0.38)" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Bundle MinBite</div>
+          <div class="product-desc">1 Bola Oreo Susu + 1 Thai Tea — hemat <strong style="color:var(--accent)">Rp1.000</strong> dari harga satuan!</div>
+          <div class="product-footer">
+            <div class="product-price">Rp10.000</div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="qty-control">
+                <button class="qty-btn" onclick="changeQty(2,-1)">−</button>
+                <span class="qty-display" id="qty-2">1</span>
+                <button class="qty-btn" onclick="changeQty(2,1)">+</button>
+              </div>
+              <button class="btn-addcart" onclick="addToCart(2)">Tambah</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ CART DRAWER ══ -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeCart()"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="drawer-header">
+      <div class="drawer-title">Keranjang</div>
+      <button class="btn-close" onclick="closeCart()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="drawer-footer" id="cartFooter" style="display:none">
+      <div class="cart-summary">
+        <span class="cart-summary-label">Total</span>
+        <span class="cart-total-amount" id="cartTotal">Rp0</span>
+      </div>
+      <button class="btn-checkout" onclick="openCheckout()">Lanjut ke Pembayaran</button>
+    </div>
+  </div>
+
+  <!-- ══ CHECKOUT MODAL ══ -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">Detail Pesanan</div>
+          <div class="modal-sub">Isi data diri untuk melanjutkan</div>
+        </div>
+        <button class="btn-close" onclick="closeCheckout()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nama Lengkap</label>
+            <input class="form-input" type="text" id="fNama" placeholder="Nama kamu"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kelas</label>
+            <input class="form-input" type="text" id="fKelas" placeholder="cth. XI"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Jurusan</label>
+            <input class="form-input" type="text" id="fJurusan" placeholder="cth. IPA"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">No. WhatsApp</label>
+            <input class="form-input" type="tel" id="fWA" placeholder="08xxxx"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Waktu Ambil</label>
+          <input class="form-input" type="text" id="fWaktu" placeholder="cth. Istirahat 1 (09:30)"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Kode Promo</label>
+          <div class="promo-row">
+            <input class="form-input" type="text" id="fPromo" placeholder="Masukkan kode..." oninput="this.value=this.value.toUpperCase()"/>
+            <button class="btn-promo" onclick="applyPromo()">Pakai</button>
+          </div>
+          <div class="promo-status" id="promoStatus"></div>
+        </div>
+
+        <!-- Order Review -->
+        <div class="order-review" id="orderReview"></div>
+
+        <button class="btn-submit" id="btnSubmit" onclick="submitOrder()">Pesan Sekarang</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PESANAN SAYA MODAL ══ -->
+  <div class="modal-overlay" id="pesananModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">Pesanan Saya</div>
+          <div class="modal-sub">Cek status pesananmu</div>
+        </div>
+        <button class="btn-close" onclick="closePesanan()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Nomor WhatsApp</label>
+          <div class="promo-row">
+            <input class="form-input" type="tel" id="fSearchWA" placeholder="08xxxx"/>
+            <button class="btn-promo" onclick="fetchOrders()">Cari</button>
+          </div>
+        </div>
+        <div id="orderListResult"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SUCCESS POPUP ══ -->
+  <div class="popup-overlay" id="successPopup">
+    <div class="popup-card">
+      <div class="popup-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="popup-title">Pesanan Masuk!</div>
+      <div class="popup-text">
+        Pesananmu sudah kami terima. Jangan lupa kembali ke website untuk melihat <strong>status pesananmu</strong> ya!
+      </div>
+      <button class="btn-popup-main" id="btnReturnPage">Lihat Status Pesanan</button>
+    </div>
+  </div>
+
+  <!-- ══ TOAST ══ -->
+  <div id="toast-container"></div>
+
+  <script>
+    // ── STATE ──
+    const PRODUCTS = [
+      { id: 'bola-oreo', name: 'Bola Oreo Susu', price: 7000, thumb: 'oreo' },
+      { id: 'thai-tea', name: 'Thai Tea', price: 4000, thumb: 'thai' },
+      { id: 'bundle', name: 'Bundle MinBite', price: 10000, thumb: 'bundle',
+        bundleDesc: '1 Bola Oreo Susu + 1 Thai Tea' }
+    ];
+
+    // Built-in promo codes (hardcoded, cannot be deleted)
+    const BUILTIN_PROMOS = {
+      'HEMAT1K': { type: 'fixed', amount: 1000, label: 'Hemat Rp1.000' }
+    };
+
+    let cart = [];
+    let productQtys = [1, 1, 1];
+    let promoDiscount = 0; // in Rp (fixed amount)
+    let currentOrderId = null;
+
+    // ── THEME ──
+    (function initTheme() {
+      const saved = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+      updateThemeIcon(saved);
+    })();
+
+    function toggleTheme() {
+      const cur = document.documentElement.getAttribute('data-theme');
+      const next = cur === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeIcon(next);
+    }
+
+    function updateThemeIcon(t) {
+      document.getElementById('iconSun').style.display = t === 'dark' ? 'block' : 'none';
+      document.getElementById('iconMoon').style.display = t === 'light' ? 'block' : 'none';
+    }
+
+    // ── QTY ──
+    function changeQty(idx, delta) {
+      productQtys[idx] = Math.max(1, productQtys[idx] + delta);
+      document.getElementById('qty-' + idx).textContent = productQtys[idx];
+    }
+
+    // ── CART ──
+    function addToCart(idx) {
+      const p = PRODUCTS[idx];
+      const qty = productQtys[idx];
+      const existing = cart.find(c => c.id === p.id);
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        cart.push({ ...p, qty });
+      }
+      updateCartUI();
+      showToast(p.name + ' ditambahkan ke keranjang');
+      openCart();
+    }
+
+    function updateCartUI() {
+      const container = document.getElementById('cartItems');
+      const badge = document.getElementById('cartBadge');
+      const footer = document.getElementById('cartFooter');
+      const totalEl = document.getElementById('cartTotal');
+
+      const totalQty = cart.reduce((s, c) => s + c.qty, 0);
+      badge.textContent = totalQty;
+      badge.classList.toggle('show', totalQty > 0);
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="cart-empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+            <p>Keranjangmu masih kosong</p>
+          </div>`;
+        footer.style.display = 'none';
+        return;
+      }
+
+      container.innerHTML = cart.map((item, i) => `
+        <div class="cart-item">
+          <div class="cart-item-thumb">${getThumb(item.thumb)}</div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">${fmt(item.price)} / pcs</div>
+          </div>
+          <div class="cart-item-controls">
+            <button class="cart-qty-btn" onclick="cartChangeQty(${i},-1)">−</button>
+            <span class="cart-qty-num">${item.qty}</span>
+            <button class="cart-qty-btn" onclick="cartChangeQty(${i},1)">+</button>
+          </div>
+        </div>
+      `).join('');
+
+      const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
+      totalEl.textContent = fmt(total);
+      footer.style.display = 'block';
+    }
+
+    function cartChangeQty(idx, delta) {
+      cart[idx].qty += delta;
+      if (cart[idx].qty <= 0) cart.splice(idx, 1);
+      updateCartUI();
+    }
+
+    function getThumb(type) {
+      if (type === 'oreo') return `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="40" r="22" fill="#3b2a1f"/>
+        <ellipse cx="33" cy="32" rx="6" ry="5" fill="#6b4c34" opacity="0.5"/>
+        <ellipse cx="32" cy="31" rx="3" ry="2" fill="#c09070" opacity="0.28"/>
+        <circle cx="37" cy="28" r="1.2" fill="#f5f0eb"/>
+        <circle cx="44" cy="25" r="1" fill="#f5f0eb"/>
+        <circle cx="50" cy="30" r="1.1" fill="#f5f0eb"/>
+      </svg>`;
+      if (type === 'bundle') return `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="26" cy="45" r="16" fill="#3b2a1f"/>
+        <ellipse cx="20" cy="38" rx="5" ry="4" fill="#6b4c34" opacity="0.5"/>
+        <circle cx="24" cy="36" r="1" fill="#f5f0eb"/>
+        <rect x="44" y="14" width="18" height="48" rx="6" fill="rgba(200,180,160,0.18)" stroke="rgba(200,160,120,0.4)" stroke-width="1.2"/>
+        <rect x="44" y="34" width="18" height="28" fill="#d2691e" clip-path="url(#tbc)"/>
+        <clipPath id="tbc"><rect x="44" y="14" width="18" height="48" rx="6"/></clipPath>
+        <rect x="44" y="27" width="18" height="10" fill="#f5e6c8" clip-path="url(#tbc)"/>
+        <rect x="57" y="12" width="4" height="28" rx="2" fill="#e06030"/>
+        <text x="38" y="52" font-family="Arial" font-size="10" font-weight="bold" fill="#c8956c">+</text>
+      </svg>`;
+      return `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <rect x="26" y="14" width="28" height="52" rx="8" fill="rgba(200,180,160,0.2)" stroke="rgba(200,160,120,0.4)" stroke-width="1.5"/>
+        <rect x="26" y="32" width="28" height="34" rx="0" fill="#d2691e" clip-path="url(#c1)"/>
+        <clipPath id="c1"><rect x="26" y="14" width="28" height="52" rx="8"/></clipPath>
+        <rect x="26" y="27" width="28" height="10" fill="#f5e6c8"/>
+        <rect x="46" y="12" width="6" height="36" rx="3" fill="#e06030"/>
+      </svg>`;
+    }
+
+    function openCart() {
+      document.getElementById('drawerOverlay').classList.add('open');
+      document.getElementById('cartDrawer').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCart() {
+      document.getElementById('drawerOverlay').classList.remove('open');
+      document.getElementById('cartDrawer').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // ── CHECKOUT ──
+    function openCheckout() {
+      if (cart.length === 0) { showToast('Keranjangmu masih kosong'); return; }
+      closeCart();
+      promoDiscount = 0;
+      document.getElementById('promoStatus').textContent = '';
+      document.getElementById('fPromo').value = '';
+      renderOrderReview();
+      document.getElementById('checkoutModal').classList.add('open');
+    }
+
+    function closeCheckout() {
+      document.getElementById('checkoutModal').classList.remove('open');
+    }
+
+    function renderOrderReview() {
+      const subtotal = cart.reduce((s, c) => s + c.price * c.qty, 0);
+      const discAmt = Math.min(promoDiscount, subtotal); // promoDiscount is already in Rp
+      const total = subtotal - discAmt;
+
+      let html = `<div class="order-review-title">Ringkasan Pesanan</div>`;
+      cart.forEach(item => {
+        html += `<div class="order-review-item"><span>${item.name} x${item.qty}</span><span>${fmt(item.price * item.qty)}</span></div>`;
+      });
+      if (discAmt > 0) {
+        html += `<hr class="order-review-divider"/>
+          <div class="order-review-discount"><span>Diskon Promo</span><span>- ${fmt(discAmt)}</span></div>`;
+      }
+      html += `<hr class="order-review-divider"/>
+        <div class="order-review-total"><span>Total</span><span>${fmt(total)}</span></div>`;
+      document.getElementById('orderReview').innerHTML = html;
+    }
+
+    function applyPromo() {
+      const code = document.getElementById('fPromo').value.trim().toUpperCase();
+      const statusEl = document.getElementById('promoStatus');
+      if (!code) { statusEl.textContent = ''; return; }
+
+      const subtotal = cart.reduce((s, c) => s + c.price * c.qty, 0);
+
+      // Check built-in promos first
+      if (BUILTIN_PROMOS[code]) {
+        const promo = BUILTIN_PROMOS[code];
+        promoDiscount = promo.type === 'fixed'
+          ? Math.min(promo.amount, subtotal)
+          : Math.round(subtotal * promo.value);
+        statusEl.className = 'promo-status promo-ok';
+        statusEl.textContent = '🎉 Promo berhasil! ' + promo.label;
+        renderOrderReview();
+        return;
+      }
+
+      // Check localStorage promos (from admin panel)
+      let promos = {};
+      try { promos = JSON.parse(localStorage.getItem('promos') || '{}'); } catch (e) {}
+
+      if (promos[code] !== undefined) {
+        const p = promos[code];
+        if (typeof p === 'number') {
+          promoDiscount = Math.round(subtotal * p);
+        } else if (p && p.type === 'fixed') {
+          promoDiscount = Math.min(p.amount, subtotal);
+        } else if (p && p.type === 'percent') {
+          promoDiscount = Math.round(subtotal * p.value);
+        }
+        statusEl.className = 'promo-status promo-ok';
+        statusEl.textContent = '🎉 Promo berhasil! Hemat ' + fmt(promoDiscount);
+      } else {
+        promoDiscount = 0;
+        statusEl.className = 'promo-status promo-err';
+        statusEl.textContent = 'Kode promo tidak valid atau tidak ditemukan';
+      }
+      renderOrderReview();
+    }
+
+    function generateOrderId() {
+      const ts = Date.now().toString(36).toUpperCase();
+      const rnd = Math.random().toString(36).substr(2, 4).toUpperCase();
+      return 'MB-' + ts + '-' + rnd;
+    }
+
+    async function submitOrder() {
+      const nama = document.getElementById('fNama').value.trim();
+      const kelas = document.getElementById('fKelas').value.trim();
+      const jurusan = document.getElementById('fJurusan').value.trim();
+      const noWA = document.getElementById('fWA').value.trim();
+      const waktu = document.getElementById('fWaktu').value.trim();
+
+      if (!nama || !kelas || !jurusan || !noWA || !waktu) {
+        showToast('Mohon lengkapi semua data');
+        return;
+      }
+
+      const btn = document.getElementById('btnSubmit');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>';
+
+      const subtotal = cart.reduce((s, c) => s + c.price * c.qty, 0);
+      const discAmt = Math.min(promoDiscount, subtotal); // promoDiscount already in Rp
+      const total = subtotal - discAmt;
+      const orderId = generateOrderId();
+      currentOrderId = orderId;
+
+      const orderData = {
+        id: orderId,
+        name: nama,
+        kelas,
+        jurusan,
+        phone: noWA,
+        items: cart.map(c => ({ name: c.name, qty: c.qty, price: c.price })),
+        subtotal,
+        discount: discAmt,
+        total,
+        pickup: waktu,
+        status: 'MENUNGGU',
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      try {
+        await db.collection('orders').doc(orderId).set(orderData);
+
+        // Send WhatsApp
+        const itemsText = cart.map(c => `${c.name} x${c.qty} = ${fmt(c.price * c.qty)}`).join('%0A');
+        const waMsg = encodeURIComponent(
+          `Halo MinBite! Saya ingin memesan.\n\n` +
+          `ID Pesanan: ${orderId}\n` +
+          `Nama: ${nama}\n` +
+          `Kelas: ${kelas} - ${jurusan}\n` +
+          `No WA: ${noWA}\n` +
+          `Waktu Ambil: ${waktu}\n\n` +
+          `Pesanan:\n` +
+          cart.map(c => `- ${c.name} x${c.qty} = ${fmt(c.price * c.qty)}`).join('\n') +
+          (discAmt > 0 ? `\nDiskon: -${fmt(discAmt)}` : '') +
+          `\nTotal: ${fmt(total)}\n\n` +
+          `⚠️ Menu saat ini hanya tersedia 2: Bola Oreo Susu & Thai Tea\n\nMohon konfirmasinya, terima kasih!`
+        );
+
+        window.open('https://wa.me/6285694458024?text=' + waMsg, '_blank');
+
+        // Clear cart
+        cart = [];
+        updateCartUI();
+        closeCheckout();
+
+        // Show popup
+        document.getElementById('btnReturnPage').onclick = function() {
+          window.location.href = 'return.html?id=' + currentOrderId;
+        };
+        document.getElementById('successPopup').classList.add('open');
+
+      } catch (err) {
+        showToast('Gagal menyimpan pesanan. Coba lagi.');
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = 'Pesan Sekarang';
+      }
+    }
+
+    // ── PESANAN SAYA ──
+    function openPesanan() {
+      document.getElementById('pesananModal').classList.add('open');
+    }
+
+    function closePesanan() {
+      document.getElementById('pesananModal').classList.remove('open');
+    }
+
+    async function fetchOrders() {
+      const wa = document.getElementById('fSearchWA').value.trim();
+      if (!wa) { showToast('Masukkan nomor WhatsApp'); return; }
+
+      const resultEl = document.getElementById('orderListResult');
+      resultEl.innerHTML = '<p style="color:var(--text3);font-size:0.85rem;text-align:center;padding:16px 0">Mencari pesanan...</p>';
+
+      try {
+        // Catatan: query tanpa orderBy agar tidak perlu composite index di Firestore
+        const snap = await db.collection('orders').where('phone', '==', wa).limit(20).get();
+        if (snap.empty) {
+          resultEl.innerHTML = '<p style="color:var(--text3);font-size:0.85rem;text-align:center;padding:16px 0;font-style:italic">Tidak ada pesanan ditemukan.</p>';
+          return;
+        }
+
+        // Sort client-side: pesanan terbaru di atas
+        const docs = [];
+        snap.forEach(doc => docs.push(doc.data()));
+        docs.sort((a, b) => {
+          const ta = a.timestamp?.toMillis?.() || 0;
+          const tb = b.timestamp?.toMillis?.() || 0;
+          return tb - ta;
+        });
+
+        let html = '';
+        docs.forEach(d => {
+          const statusClass = 'status-' + (d.status || 'menunggu').toLowerCase();
+          html += `
+            <div class="order-list-item">
+              <div class="order-list-id">${d.id}</div>
+              <div style="margin-bottom:6px;">
+                ${d.items ? d.items.map(it => `<span style="font-size:0.82rem;color:var(--text2)">${it.name} x${it.qty}</span>`).join(', ') : ''}
+              </div>
+              <div class="order-list-row">
+                <span class="order-list-status ${statusClass}">${d.status || 'MENUNGGU'}</span>
+                <span class="order-list-total">${fmt(d.total || 0)}</span>
+              </div>
+              <div style="margin-top:8px;">
+                <a href="return.html?id=${d.id}" style="font-size:0.75rem;color:var(--accent);text-decoration:none;font-weight:600;">Lihat Detail &rarr;</a>
+              </div>
+            </div>`;
+        });
+        resultEl.innerHTML = html;
+      } catch (err) {
+        resultEl.innerHTML = '<p style="color:#e74c3c;font-size:0.85rem;text-align:center;padding:16px 0">Gagal mengambil data. Coba lagi.</p>';
+        console.error(err);
+      }
+    }
+
+    // ── TOAST ──
+    function showToast(msg) {
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      el.className = 'toast';
+      el.textContent = msg;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 2800);
+    }
+
+    // ── UTILS ──
+    function fmt(n) {
+      return 'Rp' + n.toLocaleString('id-ID');
+    }
+
+    // ── INIT ──
+    updateCartUI();
+
+    // Close modals on overlay click
+    document.getElementById('checkoutModal').addEventListener('click', function(e) {
+      if (e.target === this) closeCheckout();
+    });
+    document.getElementById('pesananModal').addEventListener('click', function(e) {
+      if (e.target === this) closePesanan();
+    });
+
+    // Update review when modal opens
+    const checkoutModal = document.getElementById('checkoutModal');
+    const observer = new MutationObserver(function() {
+      if (checkoutModal.classList.contains('open')) renderOrderReview();
+    });
+    observer.observe(checkoutModal, { attributes: true, attributeFilter: ['class'] });
+  </script>
 </body>
-</html>
+  </html>
