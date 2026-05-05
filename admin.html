@@ -530,9 +530,15 @@ function isBazarDay(){
 /* FETCH */
 async function fetchOrders(silent){
   try{
-    var snap=await db.collection('orders').orderBy('timestamp','desc').limit(100).get();
+    var snap=await db.collection('orders').limit(100).get();
     var fetched=[];
     snap.forEach(function(doc){fetched.push(Object.assign({_docId:doc.id},doc.data()));});
+    // Sort client-side: pesanan terbaru di atas (tidak perlu Composite Index)
+    fetched.sort(function(a,b){
+      var ta=a.timestamp?(a.timestamp.toMillis?a.timestamp.toMillis():(a.timestamp.seconds||0)*1000):0;
+      var tb=b.timestamp?(b.timestamp.toMillis?b.timestamp.toMillis():(b.timestamp.seconds||0)*1000):0;
+      return tb-ta;
+    });
     fetched.forEach(function(o){
       if(!knownOrderIds.has(o._docId)){
         if(knownOrderIds.size>0) showToast('Pesanan baru: '+(o.id||o._docId));
@@ -542,7 +548,12 @@ async function fetchOrders(silent){
     allOrders=fetched; updateStats(); renderOrders();
     if(!silent) resetCountdown();
     autoDeleteExpiredOrders(fetched);
-  }catch(err){console.error(err); if(!silent) showToast('Gagal mengambil data');}
+  }catch(err){
+    console.error(err);
+    var list=document.getElementById('ordersList');
+    if(list&&!silent) list.innerHTML='<div class="empty-state"><div class="empty-icon">⚠️</div><p>Gagal mengambil data pesanan. Periksa koneksi internet.</p></div>';
+    if(!silent) showToast('Gagal mengambil data');
+  }
 }
 
 /* REFRESH */
@@ -856,4 +867,4 @@ function getItemIconSVG(name){
 }
 </script>
 </body>
-        </html>
+  </html>
