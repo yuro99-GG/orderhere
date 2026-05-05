@@ -1915,7 +1915,7 @@
 
         // Show popup
         document.getElementById('btnReturnPage').onclick = function() {
-          window.location.href = 'return.html?id=' + currentOrderId;
+          window.location.href = 'order.html?id=' + currentOrderId;
         };
         document.getElementById('successPopup').classList.add('open');
 
@@ -1975,7 +1975,7 @@
                 <span class="order-list-total">${fmt(d.total || 0)}</span>
               </div>
               <div style="margin-top:8px;">
-                <a href="return.html?id=${d.id}" style="font-size:0.75rem;color:var(--accent);text-decoration:none;font-weight:600;">Lihat Detail &rarr;</a>
+                <a href="order.html?id=${d.id}" style="font-size:0.75rem;color:var(--accent);text-decoration:none;font-weight:600;">Lihat Detail &rarr;</a>
               </div>
             </div>`;
         });
