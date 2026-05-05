@@ -6,7 +6,7 @@
   <title>MinBite — Jajanan Sekolah</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -14,17 +14,14 @@
     var db;
     try {
       var firebaseConfig = {
-        apiKey: "AIzaSyA_G_Qdk2Zbo_oR4f6BB5tOtDoNrV7yy00",
-        authDomain: "minbite-web.firebaseapp.com",
-        projectId: "minbite-web",
-        storageBucket: "minbite-web.firebasestorage.app",
-        messagingSenderId: "680757323494",
-        appId: "1:680757323494:web:15123e98c19198057a3d27",
-        measurementId: "G-D0L88Y6S8N"
+        apiKey: "AIzaSyDX70_NVuPtnUvxwALxn5fSnjj2H8pgSu0",
+        authDomain: "planning-with-ai-d8ea1.firebaseapp.com",
+        projectId: "planning-with-ai-d8ea1",
+        storageBucket: "planning-with-ai-d8ea1.firebasestorage.app",
+        messagingSenderId: "975523910853",
+        appId: "1:975523910853:web:af7350de88ce5d9e668cac"
       };
-      if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-      }
+      if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
       db = firebase.firestore();
     } catch (e) {
       console.error("Firebase gagal diinisialisasi:", e);
@@ -36,51 +33,56 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #faf8f5;
-      --bg2: #f3efe9;
-      --bg3: #ede8e0;
-      --surface: #ffffff;
-      --accent: #c8956c;
-      --accent-dark: #a8734d;
-      --accent-light: #f0ddd0;
-      --text: #2c2018;
-      --text2: #6b5744;
-      --text3: #9c8575;
-      --border: #e8e0d8;
-      --shadow: rgba(44, 32, 24, 0.08);
-      --shadow-md: rgba(44, 32, 24, 0.14);
-      --shadow-lg: rgba(44, 32, 24, 0.20);
-      --toast-bg: #2c2018;
-      --toast-text: #faf8f5;
-      --radius: 18px;
-      --radius-sm: 10px;
-      --radius-lg: 28px;
-      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --bg:           #faf7f3;
+      --bg2:          #f2ede5;
+      --bg3:          #e8e1d7;
+      --surface:      #ffffff;
+      --accent:       #c9845a;
+      --accent-dark:  #a8643c;
+      --accent-light: #faeae0;
+      --accent-glow:  rgba(201, 132, 90, 0.18);
+      --text:         #1e160e;
+      --text2:        #614838;
+      --text3:        #9c816c;
+      --border:       #e6ddd3;
+      --shadow-sm:    0 1px 4px rgba(44,24,12,0.07);
+      --shadow:       0 4px 16px rgba(44,24,12,0.10);
+      --shadow-md:    0 8px 28px rgba(44,24,12,0.14);
+      --shadow-lg:    0 16px 48px rgba(44,24,12,0.18);
+      --toast-bg:     #1e160e;
+      --toast-text:   #faf7f3;
+      --radius-sm:    10px;
+      --radius:       16px;
+      --radius-lg:    24px;
+      --radius-xl:    32px;
+      --transition:   0.22s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     [data-theme="dark"] {
-      --bg: #1a1410;
-      --bg2: #221c16;
-      --bg3: #2a221a;
-      --surface: #2e251c;
-      --accent: #d4a07a;
-      --accent-dark: #c8956c;
-      --accent-light: #3d2e20;
-      --text: #f0e8df;
-      --text2: #c4a98a;
-      --text3: #8a7060;
-      --border: #3a2e24;
-      --shadow: rgba(0, 0, 0, 0.25);
-      --shadow-md: rgba(0, 0, 0, 0.35);
-      --shadow-lg: rgba(0, 0, 0, 0.50);
-      --toast-bg: #f0e8df;
-      --toast-text: #1a1410;
+      --bg:           #181210;
+      --bg2:          #201810;
+      --bg3:          #2a1e16;
+      --surface:      #261e18;
+      --accent:       #d4956a;
+      --accent-dark:  #c9845a;
+      --accent-light: #3a2418;
+      --accent-glow:  rgba(212, 149, 106, 0.15);
+      --text:         #f2e8de;
+      --text2:        #c4a080;
+      --text3:        #8a6a54;
+      --border:       #382c22;
+      --shadow-sm:    0 1px 4px rgba(0,0,0,0.20);
+      --shadow:       0 4px 16px rgba(0,0,0,0.28);
+      --shadow-md:    0 8px 28px rgba(0,0,0,0.36);
+      --shadow-lg:    0 16px 48px rgba(0,0,0,0.48);
+      --toast-bg:     #f2e8de;
+      --toast-text:   #181210;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
@@ -88,22 +90,25 @@
       overflow-x: hidden;
     }
 
-    /* ── HEADER ── */
+    /* ══ HEADER ══ */
     header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: var(--bg);
+      background: rgba(250,247,243,0.88);
       border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    [data-theme="dark"] header {
+      background: rgba(24,18,16,0.88);
     }
 
     .header-inner {
-      max-width: 960px;
+      max-width: 980px;
       margin: 0 auto;
-      padding: 0 20px;
-      height: 64px;
+      padding: 0 22px;
+      height: 62px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -112,30 +117,42 @@
 
     .logo {
       font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
+      font-size: 1.55rem;
       font-weight: 700;
       color: var(--accent);
       letter-spacing: -0.02em;
       text-decoration: none;
-      flex-shrink: 0;
     }
+    .logo-dot { color: var(--text); font-style: italic; font-weight: 400; font-size: 0.82em; }
 
-    .logo span {
-      color: var(--text);
-      font-weight: 400;
-      font-style: italic;
-      font-size: 0.85em;
-    }
+    .header-actions { display: flex; align-items: center; gap: 8px; }
 
-    .header-actions {
+    .btn-pill {
+      padding: 7px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      background: var(--surface);
+      color: var(--text2);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
+    }
+    .btn-pill:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: var(--shadow);
+      transform: translateY(-1px);
     }
 
     .btn-icon {
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border: 1.5px solid var(--border);
       border-radius: 50%;
       background: var(--surface);
@@ -147,22 +164,18 @@
       transition: all var(--transition);
       position: relative;
     }
-
     .btn-icon:hover {
       border-color: var(--accent);
       color: var(--accent);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px var(--shadow-md);
+      box-shadow: var(--shadow);
     }
-
-    .btn-icon svg { width: 18px; height: 18px; }
+    .btn-icon svg { width: 17px; height: 17px; }
 
     .cart-badge {
       position: absolute;
-      top: -4px;
-      right: -4px;
-      width: 18px;
-      height: 18px;
+      top: -5px; right: -5px;
+      width: 19px; height: 19px;
       background: var(--accent);
       color: white;
       border-radius: 50%;
@@ -173,260 +186,254 @@
       justify-content: center;
       opacity: 0;
       transform: scale(0);
-      transition: all var(--transition);
+      transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+      border: 2px solid var(--bg);
     }
-
     .cart-badge.show { opacity: 1; transform: scale(1); }
 
-    .btn-pesanan {
-      padding: 8px 16px;
-      border: 1.5px solid var(--border);
-      border-radius: 100px;
-      background: var(--surface);
-      color: var(--text2);
-      font-family: 'Inter', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all var(--transition);
-      white-space: nowrap;
-    }
-
-    .btn-pesanan:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      box-shadow: 0 4px 12px var(--shadow-md);
-    }
-
-    /* ── HERO ── */
+    /* ══ HERO ══ */
     .hero {
-      max-width: 960px;
+      max-width: 980px;
       margin: 0 auto;
-      padding: 56px 20px 24px;
+      padding: 60px 22px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       text-align: center;
     }
 
-    .hero-tag {
-      display: inline-block;
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       padding: 5px 14px;
       background: var(--accent-light);
       color: var(--accent);
       border-radius: 100px;
-      font-size: 0.72rem;
+      font-size: 0.71rem;
       font-weight: 600;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.09em;
       text-transform: uppercase;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(201,132,90,0.25);
     }
+    .hero-chip::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 1.8s ease infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.7)} }
 
     .hero h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-size: clamp(2.1rem, 5.5vw, 3.4rem);
       font-weight: 700;
-      line-height: 1.15;
+      line-height: 1.12;
       color: var(--text);
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
     }
+    .hero h1 em { font-style: italic; color: var(--accent); }
 
-    .hero h1 em {
-      font-style: italic;
-      color: var(--accent);
-    }
-
-    .hero p {
+    .hero-sub {
       font-size: 0.95rem;
       color: var(--text3);
-      max-width: 400px;
-      margin: 0 auto;
-      line-height: 1.7;
+      max-width: 380px;
+      line-height: 1.75;
+      margin-bottom: 0;
     }
 
-    /* ── PRODUCTS ── */
+    .hero-divider {
+      width: 40px; height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin-top: 22px;
+      opacity: 0.5;
+    }
+
+    /* ══ PRODUCTS SECTION ══ */
     .products-section {
-      max-width: 960px;
+      max-width: 980px;
       margin: 0 auto;
-      padding: 32px 20px 80px;
+      padding: 32px 22px 90px;
     }
 
     .section-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .section-label-text {
       font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: 600;
       color: var(--text);
-      margin-bottom: 24px;
+    }
+    .section-label-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
     }
 
     .products-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 22px;
     }
 
+    /* ══ PRODUCT CARD ══ */
     .product-card {
       background: var(--surface);
       border-radius: var(--radius-lg);
       border: 1px solid var(--border);
       overflow: hidden;
-      box-shadow: 0 2px 16px var(--shadow);
-      transition: box-shadow var(--transition), transform var(--transition);
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+      position: relative;
     }
-
     .product-card:hover {
-      box-shadow: 0 8px 32px var(--shadow-md);
-      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+      border-color: rgba(201,132,90,0.3);
     }
 
     .product-image-wrap {
-      background: var(--bg2);
-      padding: 32px 24px 24px;
+      background: linear-gradient(160deg, var(--bg2) 0%, var(--bg3) 100%);
+      padding: 32px 24px 22px;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 220px;
+      min-height: 210px;
       position: relative;
       overflow: hidden;
     }
-
-    .product-image-wrap::after {
+    .product-image-wrap::before {
       content: '';
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 40px;
-      background: linear-gradient(to top, var(--surface), transparent);
+      inset: 0;
+      background: radial-gradient(circle at 30% 20%, rgba(201,132,90,0.08) 0%, transparent 65%);
     }
 
-    .product-info {
-      padding: 20px 22px 22px;
-    }
+    .product-info { padding: 20px 22px 22px; }
 
     .product-name {
       font-family: 'Playfair Display', serif;
       font-size: 1.15rem;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text);
-      margin-bottom: 4px;
+      margin-bottom: 5px;
+      letter-spacing: -0.01em;
     }
 
     .product-desc {
       font-size: 0.8rem;
       color: var(--text3);
-      margin-bottom: 16px;
-      line-height: 1.6;
+      margin-bottom: 18px;
+      line-height: 1.65;
     }
 
     .product-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
     }
 
     .product-price {
-      font-size: 1.1rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
       font-weight: 700;
       color: var(--accent);
-      font-family: 'Playfair Display', serif;
     }
+
+    .product-controls { display: flex; align-items: center; gap: 8px; }
 
     .qty-control {
       display: flex;
       align-items: center;
-      gap: 0;
       border: 1.5px solid var(--border);
       border-radius: 100px;
       overflow: hidden;
+      background: var(--bg);
     }
-
     .qty-btn {
-      width: 32px;
-      height: 32px;
-      background: none;
-      border: none;
+      width: 30px; height: 30px;
+      background: none; border: none;
       color: var(--text2);
-      font-size: 1.1rem;
+      font-size: 1.05rem;
+      font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all var(--transition);
-      font-weight: 600;
     }
-
-    .qty-btn:hover { background: var(--bg2); color: var(--accent); }
-
+    .qty-btn:hover { background: var(--accent-light); color: var(--accent); }
     .qty-display {
-      min-width: 32px;
+      min-width: 30px;
       text-align: center;
       font-size: 0.88rem;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text);
-      padding: 0 4px;
     }
 
     .btn-addcart {
-      padding: 9px 18px;
+      padding: 8px 18px;
       background: var(--accent);
       color: white;
       border: none;
       border-radius: 100px;
-      font-family: 'Inter', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
       transition: all var(--transition);
       white-space: nowrap;
     }
-
     .btn-addcart:hover {
       background: var(--accent-dark);
       transform: translateY(-1px);
-      box-shadow: 0 4px 16px rgba(200, 149, 108, 0.4);
+      box-shadow: 0 4px 14px rgba(201,132,90,0.38);
     }
-
     .btn-addcart:active { transform: scale(0.97); }
 
-    /* ── CART DRAWER ── */
+    /* ══ CART DRAWER ══ */
     .drawer-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.35);
-      backdrop-filter: blur(3px);
+      position: fixed; inset: 0;
+      background: rgba(10,6,4,0.4);
+      backdrop-filter: blur(4px);
       z-index: 200;
       opacity: 0;
       pointer-events: none;
-      transition: opacity var(--transition);
+      transition: opacity 0.3s ease;
     }
-
     .drawer-overlay.open { opacity: 1; pointer-events: all; }
 
     .cart-drawer {
       position: fixed;
-      top: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; right: 0; bottom: 0;
       width: min(400px, 100vw);
       background: var(--surface);
       z-index: 201;
       display: flex;
       flex-direction: column;
       transform: translateX(100%);
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: -8px 0 40px var(--shadow-lg);
+      transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -12px 0 50px rgba(10,6,4,0.18);
     }
-
     .cart-drawer.open { transform: translateX(0); }
 
     .drawer-header {
-      padding: 22px 24px 18px;
+      padding: 20px 22px 16px;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-shrink: 0;
     }
-
     .drawer-title {
       font-family: 'Playfair Display', serif;
       font-size: 1.3rem;
@@ -435,8 +442,7 @@
     }
 
     .btn-close {
-      width: 36px;
-      height: 36px;
+      width: 34px; height: 34px;
       border: none;
       background: var(--bg2);
       border-radius: 50%;
@@ -447,15 +453,10 @@
       color: var(--text2);
       transition: all var(--transition);
     }
-
     .btn-close:hover { background: var(--accent-light); color: var(--accent); }
-    .btn-close svg { width: 16px; height: 16px; }
+    .btn-close svg { width: 15px; height: 15px; }
 
-    .cart-items {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px 24px;
-    }
+    .cart-items { flex: 1; overflow-y: auto; padding: 12px 22px; }
 
     .cart-empty {
       display: flex;
@@ -466,31 +467,24 @@
       color: var(--text3);
       gap: 12px;
     }
-
-    .cart-empty svg { width: 64px; height: 64px; opacity: 0.3; }
-
-    .cart-empty p {
-      font-size: 0.9rem;
-      font-style: italic;
-    }
+    .cart-empty svg { width: 56px; height: 56px; opacity: 0.25; }
+    .cart-empty p { font-size: 0.88rem; font-style: italic; }
 
     .cart-item {
       display: flex;
       align-items: center;
-      gap: 14px;
-      padding: 14px 0;
+      gap: 12px;
+      padding: 13px 0;
       border-bottom: 1px solid var(--border);
-      animation: slideIn 0.25s ease;
+      animation: slideIn 0.22s ease;
     }
-
     @keyframes slideIn {
-      from { opacity: 0; transform: translateX(16px); }
-      to { opacity: 1; transform: translateX(0); }
+      from { opacity: 0; transform: translateX(14px); }
+      to   { opacity: 1; transform: translateX(0); }
     }
 
     .cart-item-thumb {
-      width: 56px;
-      height: 56px;
+      width: 52px; height: 52px;
       background: var(--bg2);
       border-radius: var(--radius-sm);
       flex-shrink: 0;
@@ -498,82 +492,58 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      border: 1px solid var(--border);
     }
-
-    .cart-item-thumb svg {
-      width: 52px;
-      height: 52px;
-    }
+    .cart-item-thumb svg { width: 48px; height: 48px; }
 
     .cart-item-info { flex: 1; }
-
     .cart-item-name {
-      font-size: 0.88rem;
+      font-size: 0.87rem;
       font-weight: 600;
       color: var(--text);
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
-
-    .cart-item-price {
-      font-size: 0.8rem;
-      color: var(--accent);
-      font-weight: 600;
-    }
+    .cart-item-price { font-size: 0.78rem; color: var(--accent); font-weight: 600; }
 
     .cart-item-controls {
-      display: flex;
-      align-items: center;
-      gap: 0;
+      display: flex; align-items: center;
       border: 1.5px solid var(--border);
       border-radius: 100px;
+      overflow: hidden;
     }
-
     .cart-qty-btn {
-      width: 28px;
-      height: 28px;
-      background: none;
-      border: none;
-      color: var(--text2);
-      font-size: 1rem;
+      width: 26px; height: 26px;
+      background: none; border: none;
+      color: var(--text2); font-size: 0.95rem;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-weight: 700;
       transition: all var(--transition);
     }
-
-    .cart-qty-btn:hover { color: var(--accent); }
-
+    .cart-qty-btn:hover { color: var(--accent); background: var(--accent-light); }
     .cart-qty-num {
-      min-width: 24px;
+      min-width: 22px;
       text-align: center;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 700;
       color: var(--text);
     }
 
     .drawer-footer {
-      padding: 20px 24px;
+      padding: 18px 22px 22px;
       border-top: 1px solid var(--border);
       flex-shrink: 0;
     }
-
     .cart-summary {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: baseline;
       margin-bottom: 16px;
     }
-
-    .cart-summary-label {
-      font-size: 0.9rem;
-      color: var(--text3);
-    }
-
+    .cart-summary-label { font-size: 0.85rem; color: var(--text3); }
     .cart-total-amount {
       font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       font-weight: 700;
       color: var(--accent);
     }
@@ -585,25 +555,23 @@
       color: white;
       border: none;
       border-radius: var(--radius-sm);
-      font-family: 'Inter', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: 0.95rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       transition: all var(--transition);
-      letter-spacing: 0.02em;
+      letter-spacing: 0.01em;
     }
-
     .btn-checkout:hover {
       background: var(--accent-dark);
-      box-shadow: 0 6px 20px rgba(200, 149, 108, 0.4);
+      box-shadow: 0 6px 20px rgba(201,132,90,0.38);
     }
 
-    /* ── MODAL ── */
+    /* ══ MODAL ══ */
     .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(4px);
+      position: fixed; inset: 0;
+      background: rgba(10,6,4,0.45);
+      backdrop-filter: blur(5px);
       z-index: 300;
       display: flex;
       align-items: center;
@@ -611,65 +579,49 @@
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity var(--transition);
+      transition: opacity 0.25s ease;
     }
-
-    .modal-overlay.open {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
 
     .modal {
       background: var(--surface);
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       width: 100%;
       max-width: 480px;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: 0 20px 60px var(--shadow-lg);
-      transform: translateY(20px) scale(0.97);
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 24px 64px rgba(10,6,4,0.25);
+      transform: translateY(22px) scale(0.97);
+      transition: transform 0.28s cubic-bezier(0.34,1.4,0.64,1);
     }
-
-    .modal-overlay.open .modal {
-      transform: translateY(0) scale(1);
-    }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
 
     .modal-header {
-      padding: 26px 28px 0;
+      padding: 28px 28px 0;
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 12px;
     }
-
     .modal-title {
       font-family: 'Playfair Display', serif;
       font-size: 1.4rem;
       font-weight: 700;
       color: var(--text);
     }
-
-    .modal-sub {
-      font-size: 0.8rem;
-      color: var(--text3);
-      margin-top: 2px;
-    }
-
+    .modal-sub { font-size: 0.78rem; color: var(--text3); margin-top: 3px; }
     .modal-body { padding: 22px 28px 28px; }
 
-    .form-group { margin-bottom: 16px; }
-
+    .form-group { margin-bottom: 14px; }
     .form-label {
       display: block;
-      font-size: 0.78rem;
+      font-size: 0.73rem;
       font-weight: 600;
       color: var(--text2);
       margin-bottom: 6px;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.07em;
     }
-
     .form-input {
       width: 100%;
       padding: 11px 14px;
@@ -677,87 +629,69 @@
       border: 1.5px solid var(--border);
       border-radius: var(--radius-sm);
       color: var(--text);
-      font-family: 'Inter', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: 0.9rem;
       transition: all var(--transition);
       outline: none;
     }
-
     .form-input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-light);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+      background: var(--surface);
     }
-
     .form-input::placeholder { color: var(--text3); }
 
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-    .promo-row {
-      display: flex;
-      gap: 10px;
-    }
-
+    .promo-row { display: flex; gap: 10px; }
     .promo-row .form-input { flex: 1; }
 
     .btn-promo {
-      padding: 11px 18px;
+      padding: 11px 16px;
       background: var(--bg2);
       border: 1.5px solid var(--border);
       border-radius: var(--radius-sm);
       color: var(--text2);
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
       transition: all var(--transition);
-      font-family: 'Inter', sans-serif;
+      font-family: 'DM Sans', sans-serif;
     }
-
     .btn-promo:hover { border-color: var(--accent); color: var(--accent); }
 
-    .promo-status {
-      font-size: 0.78rem;
-      margin-top: 6px;
-      min-height: 18px;
-    }
-
-    .promo-ok { color: #3d9970; }
-    .promo-err { color: #e74c3c; }
+    .promo-status { font-size: 0.76rem; margin-top: 6px; min-height: 17px; }
+    .promo-ok  { color: #2a7a4a; }
+    .promo-err { color: #c0392b; }
 
     .order-review {
       background: var(--bg);
       border-radius: var(--radius-sm);
-      padding: 14px;
+      padding: 14px 16px;
       margin-bottom: 20px;
+      border: 1px solid var(--border);
     }
-
     .order-review-title {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
       color: var(--text3);
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.07em;
       margin-bottom: 10px;
     }
-
     .order-review-item {
       display: flex;
       justify-content: space-between;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       color: var(--text2);
       margin-bottom: 4px;
     }
-
     .order-review-divider {
       border: none;
       border-top: 1px dashed var(--border);
       margin: 10px 0;
     }
-
     .order-review-total {
       display: flex;
       justify-content: space-between;
@@ -765,12 +699,11 @@
       font-size: 0.95rem;
       color: var(--text);
     }
-
     .order-review-discount {
       display: flex;
       justify-content: space-between;
       font-size: 0.82rem;
-      color: #3d9970;
+      color: #2a7a4a;
       margin-bottom: 4px;
     }
 
@@ -781,42 +714,23 @@
       color: white;
       border: none;
       border-radius: var(--radius-sm);
-      font-family: 'Inter', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
       transition: all var(--transition);
-      position: relative;
-      overflow: hidden;
     }
-
-    .btn-submit::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(255,255,255,0.1);
-      opacity: 0;
-      transition: opacity 0.15s;
-    }
-
-    .btn-submit:hover::after { opacity: 1; }
-
     .btn-submit:hover {
       background: var(--accent-dark);
-      box-shadow: 0 6px 24px rgba(200, 149, 108, 0.45);
+      box-shadow: 0 6px 24px rgba(201,132,90,0.40);
     }
+    .btn-submit:disabled { opacity: 0.65; cursor: not-allowed; }
 
-    .btn-submit:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-
-    /* ── POPUP ── */
+    /* ══ SUCCESS POPUP ══ */
     .popup-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(6px);
+      position: fixed; inset: 0;
+      background: rgba(10,6,4,0.55);
+      backdrop-filter: blur(8px);
       z-index: 400;
       display: flex;
       align-items: center;
@@ -824,53 +738,48 @@
       padding: 20px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity var(--transition);
+      transition: opacity 0.28s ease;
     }
-
     .popup-overlay.open { opacity: 1; pointer-events: all; }
 
     .popup-card {
       background: var(--surface);
-      border-radius: var(--radius-lg);
-      padding: 36px 32px;
-      max-width: 380px;
+      border-radius: var(--radius-xl);
+      padding: 38px 34px;
+      max-width: 360px;
       width: 100%;
       text-align: center;
-      box-shadow: 0 24px 60px var(--shadow-lg);
-      transform: scale(0.9);
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 28px 70px rgba(10,6,4,0.22);
+      transform: scale(0.88);
+      transition: transform 0.32s cubic-bezier(0.34,1.56,0.64,1);
     }
-
     .popup-overlay.open .popup-card { transform: scale(1); }
 
     .popup-icon {
-      width: 72px;
-      height: 72px;
+      width: 68px; height: 68px;
       background: var(--accent-light);
       border-radius: 50%;
-      margin: 0 auto 20px;
+      margin: 0 auto 22px;
       display: flex;
       align-items: center;
       justify-content: center;
+      border: 2px solid rgba(201,132,90,0.2);
     }
-
-    .popup-icon svg { width: 36px; height: 36px; color: var(--accent); }
+    .popup-icon svg { width: 32px; height: 32px; color: var(--accent); }
 
     .popup-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       font-weight: 700;
       color: var(--text);
       margin-bottom: 10px;
     }
-
     .popup-text {
-      font-size: 0.88rem;
+      font-size: 0.87rem;
       color: var(--text3);
-      line-height: 1.7;
-      margin-bottom: 24px;
+      line-height: 1.75;
+      margin-bottom: 26px;
     }
-
     .popup-text strong { color: var(--accent); font-style: italic; }
 
     .btn-popup-main {
@@ -880,48 +789,63 @@
       color: white;
       border: none;
       border-radius: var(--radius-sm);
-      font-family: 'Inter', sans-serif;
+      font-family: 'DM Sans', sans-serif;
       font-size: 0.9rem;
       font-weight: 700;
       cursor: pointer;
       transition: all var(--transition);
       margin-bottom: 10px;
     }
-
     .btn-popup-main:hover { background: var(--accent-dark); }
 
-    /* ── PESANAN MODAL ── */
+    .btn-popup-sec {
+      width: 100%;
+      padding: 11px;
+      background: none;
+      color: var(--text3);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .btn-popup-sec:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ══ PESANAN MODAL ══ */
     .order-list-item {
       background: var(--bg);
       border-radius: var(--radius-sm);
       padding: 14px 16px;
       margin-bottom: 10px;
       border: 1px solid var(--border);
+      transition: border-color var(--transition);
     }
+    .order-list-item:hover { border-color: var(--accent); }
 
     .order-list-id {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       color: var(--text3);
       text-transform: uppercase;
-      letter-spacing: 0.07em;
-      margin-bottom: 4px;
+      letter-spacing: 0.08em;
+      margin-bottom: 5px;
     }
 
     .order-list-status {
       display: inline-block;
       padding: 3px 10px;
       border-radius: 100px;
-      font-size: 0.72rem;
+      font-size: 0.71rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-
-    .status-menunggu { background: #fff3cd; color: #856404; }
-    .status-diproses { background: #cfe2ff; color: #084298; }
-    .status-siap { background: #d1e7dd; color: #0a3622; }
-    .status-selesai { background: var(--bg3); color: var(--text3); }
+    .status-menunggu  { background: #fff8e6; color: #856404; }
+    .status-diproses  { background: #e8f0fe; color: #1a47a0; }
+    .status-siap      { background: #e6f9ef; color: #0a3622; }
+    .status-selesai   { background: var(--bg3); color: var(--text3); }
 
     .order-list-row {
       display: flex;
@@ -929,14 +853,13 @@
       align-items: center;
       margin-top: 8px;
     }
-
     .order-list-total {
       font-weight: 700;
       font-size: 0.95rem;
       color: var(--accent);
     }
 
-    /* ── TOAST ── */
+    /* ══ TOAST ══ */
     #toast-container {
       position: fixed;
       bottom: 24px;
@@ -946,77 +869,54 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       pointer-events: none;
     }
-
     .toast {
       background: var(--toast-bg);
       color: var(--toast-text);
-      padding: 12px 22px;
+      padding: 11px 22px;
       border-radius: 100px;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       font-weight: 500;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.4s forwards;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.22);
+      animation: toastIn 0.28s ease, toastOut 0.28s ease 2.4s forwards;
       white-space: nowrap;
     }
+    @keyframes toastIn  { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes toastOut { from { opacity:1; } to { opacity:0; transform:translateY(-8px); } }
 
-    @keyframes toastIn {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes toastOut {
-      from { opacity: 1; transform: translateY(0); }
-      to { opacity: 0; transform: translateY(-8px); }
-    }
-
-    /* ── LOADING SPINNER ── */
+    /* ══ SPINNER ══ */
     .spinner {
-      width: 18px;
-      height: 18px;
+      width: 17px; height: 17px;
       border: 2px solid rgba(255,255,255,0.3);
       border-top-color: white;
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
       display: inline-block;
     }
-
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── SCROLLBAR ── */
+    /* ══ SCROLLBAR ══ */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 
-    /* ── DECORATION ── */
-    .texture-line {
-      height: 3px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      opacity: 0.2;
-      margin: 0 auto;
-      max-width: 200px;
-      border-radius: 2px;
-      margin-top: 8px;
-    }
-
-    /* ── MOBILE ── */
+    /* ══ MOBILE ══ */
     @media (max-width: 560px) {
-      .header-inner { padding: 0 14px; }
-      .hero { padding: 36px 14px 16px; }
-      .products-section { padding: 24px 14px 70px; }
-      .products-grid { grid-template-columns: 1fr; gap: 16px; }
+      .header-inner { padding: 0 16px; }
+      .btn-pill.desktop-only { display: none; }
+      .hero { padding: 40px 16px 20px; }
+      .products-section { padding: 24px 16px 72px; }
+      .products-grid { grid-template-columns: 1fr; gap: 14px; }
       .form-row { grid-template-columns: 1fr; }
-      .modal-header { padding: 20px 20px 0; }
-      .modal-body { padding: 18px 20px 20px; }
-      .popup-card { padding: 28px 22px; }
-      .btn-pesanan { display: none; }
+      .modal-header { padding: 22px 20px 0; }
+      .modal-body { padding: 18px 20px 22px; }
+      .popup-card { padding: 30px 22px; }
     }
-
     @media (max-width: 400px) {
       .logo { font-size: 1.3rem; }
-      .hero h1 { font-size: 1.7rem; }
+      .hero h1 { font-size: 1.85rem; }
     }
   </style>
 </head>
@@ -1025,9 +925,12 @@
   <!-- ══ HEADER ══ -->
   <header>
     <div class="header-inner">
-      <a class="logo" href="#">MinBite</a>
+      <a class="logo" href="#">MinBite<span class="logo-dot"> ·</span></a>
       <div class="header-actions">
-        <button class="btn-pesanan" id="btnPesanan" onclick="openPesanan()">Pesanan Saya</button>
+        <button class="btn-pill desktop-only" id="btnPesanan" onclick="openPesanan()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Pesanan Saya
+        </button>
         <button class="btn-icon" id="btnTheme" onclick="toggleTheme()" title="Toggle dark mode">
           <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
           <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -1042,21 +945,23 @@
 
   <!-- ══ HERO ══ -->
   <section class="hero">
-    <span class="hero-tag">Jajanan Sekolah</span>
+    <span class="hero-chip">Jajanan Sekolah</span>
     <h1>Cemilan <em>enak</em>,<br>harga ramah</h1>
-    <p>Pesan sekarang, ambil saat istirahat. Segarkan harimu dengan pilihan terbaik MinBite.</p>
-    <div class="texture-line"></div>
+    <p class="hero-sub">Pesan sekarang, ambil saat istirahat. Segarkan harimu dengan pilihan terbaik MinBite.</p>
+    <div class="hero-divider"></div>
   </section>
 
   <!-- ══ PRODUCTS ══ -->
   <section class="products-section">
-    <div class="section-label">Menu Hari Ini</div>
+    <div class="section-label">
+      <span class="section-label-text">Menu Hari Ini</span>
+      <div class="section-label-line"></div>
+    </div>
     <div class="products-grid" id="productsGrid">
 
       <!-- PRODUCT 1: Bola Oreo Susu -->
       <div class="product-card">
         <div class="product-image-wrap">
-          <!-- SVG: Bola Oreo Susu -->
           <svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg" width="220" height="170">
             <defs>
               <radialGradient id="plateGrad" cx="50%" cy="30%" r="60%">
@@ -1084,34 +989,19 @@
               <filter id="ballShadow">
                 <feDropShadow dx="1" dy="3" stdDeviation="3" flood-color="#1a0d05" flood-opacity="0.35"/>
               </filter>
-              <clipPath id="plateClip">
-                <ellipse cx="130" cy="155" rx="95" ry="22"/>
-              </clipPath>
             </defs>
-
-            <!-- Plate shadow -->
             <ellipse cx="130" cy="172" rx="88" ry="11" fill="#3b2a1f" opacity="0.15"/>
-
-            <!-- Plate body -->
             <ellipse cx="130" cy="158" rx="96" ry="22" fill="url(#plateGrad)" filter="url(#plateShadow)"/>
-            <!-- Plate rim highlight -->
             <ellipse cx="130" cy="152" rx="90" ry="17" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.6"/>
-            <!-- Plate inner -->
             <ellipse cx="130" cy="154" rx="78" ry="14" fill="#ece7e0"/>
-
-            <!-- Ball 3 (back center) -->
             <g filter="url(#ballShadow)">
               <circle cx="130" cy="105" r="34" fill="url(#ball3Grad)"/>
-              <!-- highlight -->
               <ellipse cx="118" cy="90" rx="9" ry="7" fill="#8c6045" opacity="0.45"/>
               <ellipse cx="116" cy="87" rx="4" ry="3" fill="#c09070" opacity="0.30"/>
-              <!-- subtle texture dots -->
               <circle cx="138" cy="110" r="1.5" fill="#1a0d06" opacity="0.4"/>
               <circle cx="125" cy="118" r="1.2" fill="#1a0d06" opacity="0.35"/>
               <circle cx="142" cy="98" r="1" fill="#1a0d06" opacity="0.3"/>
             </g>
-
-            <!-- Ball 1 (front left) -->
             <g filter="url(#ballShadow)">
               <circle cx="96" cy="126" r="34" fill="url(#ball1Grad)"/>
               <ellipse cx="83" cy="111" rx="9" ry="7" fill="#8c6045" opacity="0.45"/>
@@ -1119,8 +1009,6 @@
               <circle cx="105" cy="131" r="1.5" fill="#1a0d06" opacity="0.4"/>
               <circle cx="90" cy="139" r="1.2" fill="#1a0d06" opacity="0.35"/>
             </g>
-
-            <!-- Ball 2 (front right) -->
             <g filter="url(#ballShadow)">
               <circle cx="164" cy="126" r="34" fill="url(#ball2Grad)"/>
               <ellipse cx="151" cy="111" rx="9" ry="7" fill="#8c6045" opacity="0.45"/>
@@ -1128,8 +1016,6 @@
               <circle cx="173" cy="131" r="1.5" fill="#1a0d06" opacity="0.4"/>
               <circle cx="158" cy="139" r="1.2" fill="#1a0d06" opacity="0.35"/>
             </g>
-
-            <!-- Milk powder sprinkle -->
             <g opacity="0.75">
               <circle cx="110" cy="95" r="1.8" fill="#f5f0eb"/>
               <circle cx="128" cy="88" r="1.4" fill="#f0ece6"/>
@@ -1143,11 +1029,8 @@
               <circle cx="142" cy="116" r="1.2" fill="#ede8e2"/>
               <circle cx="158" cy="88" r="1.0" fill="#f0ece6"/>
               <circle cx="123" cy="100" r="1.5" fill="#f5f0eb"/>
-              <!-- Fine powder dusting -->
               <ellipse cx="130" cy="96" rx="24" ry="5" fill="white" opacity="0.06"/>
             </g>
-
-            <!-- Plate top edge highlight -->
             <ellipse cx="130" cy="136" rx="86" ry="6" fill="white" opacity="0.08"/>
           </svg>
         </div>
@@ -1156,7 +1039,7 @@
           <div class="product-desc">Tiga bola cokelat lembut bertabur susu bubuk, gurih manis di setiap gigitan.</div>
           <div class="product-footer">
             <div class="product-price">Rp7.000</div>
-            <div style="display:flex;align-items:center;gap:10px;">
+            <div class="product-controls">
               <div class="qty-control">
                 <button class="qty-btn" onclick="changeQty(0,-1)">−</button>
                 <span class="qty-display" id="qty-0">1</span>
@@ -1171,7 +1054,6 @@
       <!-- PRODUCT 2: Thai Tea -->
       <div class="product-card">
         <div class="product-image-wrap">
-          <!-- SVG: Thai Tea -->
           <svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg" width="220" height="170">
             <defs>
               <linearGradient id="teaGrad" x1="0" y1="0" x2="0" y2="1">
@@ -1188,10 +1070,6 @@
                 <stop offset="70%" stop-color="#ffffff" stop-opacity="0.04"/>
                 <stop offset="100%" stop-color="#ffffff" stop-opacity="0.30"/>
               </linearGradient>
-              <linearGradient id="glassEdge" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6"/>
-                <stop offset="100%" stop-color="#ffffff" stop-opacity="0.1"/>
-              </linearGradient>
               <clipPath id="glassClip">
                 <path d="M88 38 L88 170 Q88 182 100 182 L160 182 Q172 182 172 170 L172 38 Z"/>
               </clipPath>
@@ -1199,260 +1077,44 @@
                 <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#a0430a" flood-opacity="0.18"/>
               </filter>
               <filter id="iceShadow">
-                <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity="0.12"/>
+                <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#2060a0" flood-opacity="0.15"/>
               </filter>
             </defs>
-
-            <!-- Glass shadow -->
-            <ellipse cx="130" cy="184" rx="44" ry="8" fill="#3b2a1f" opacity="0.13"/>
-
-            <!-- Glass body -->
+            <ellipse cx="130" cy="186" rx="46" ry="8" fill="#a0430a" opacity="0.12"/>
             <g filter="url(#glassShadow)">
-              <!-- Glass outline -->
-              <path d="M90 40 L90 168 Q90 180 102 180 L158 180 Q170 180 170 168 L170 40 Z"
-                    fill="rgba(200,180,160,0.12)" stroke="rgba(200,160,120,0.35)" stroke-width="1.5"/>
-
-              <!-- Tea fill -->
-              <path d="M90 80 L90 168 Q90 180 102 180 L158 180 Q170 180 170 168 L170 80 Z"
-                    fill="url(#teaGrad)" clip-path="url(#glassClip)"/>
-
-              <!-- Cream layer -->
-              <path d="M90 73 Q130 63 170 73 L170 85 Q130 79 90 85 Z"
-                    fill="url(#creamGrad)"/>
-              <!-- Cream highlight -->
-              <path d="M96 74 Q130 65 164 74" fill="none" stroke="white" stroke-width="1.2" opacity="0.6"/>
-
-              <!-- Ice cubes -->
-              <g filter="url(#iceShadow)">
-                <!-- Ice 1 -->
-                <rect x="98" y="105" width="26" height="24" rx="4" fill="rgba(220,240,255,0.72)" stroke="rgba(180,220,255,0.8)" stroke-width="0.8"/>
-                <line x1="98" y1="113" x2="124" y2="113" stroke="white" stroke-width="0.6" opacity="0.5"/>
-                <line x1="110" y1="105" x2="110" y2="129" stroke="white" stroke-width="0.6" opacity="0.5"/>
-                <!-- Ice shine -->
-                <rect x="100" y="107" width="6" height="4" rx="1" fill="white" opacity="0.5"/>
-
-                <!-- Ice 2 -->
-                <rect x="136" y="112" width="24" height="22" rx="4" fill="rgba(220,240,255,0.65)" stroke="rgba(180,220,255,0.7)" stroke-width="0.8"/>
-                <line x1="136" y1="120" x2="160" y2="120" stroke="white" stroke-width="0.6" opacity="0.5"/>
-                <line x1="148" y1="112" x2="148" y2="134" stroke="white" stroke-width="0.6" opacity="0.5"/>
-                <rect x="138" y="114" width="5" height="3" rx="1" fill="white" opacity="0.5"/>
-
-                <!-- Ice 3 -->
-                <rect x="106" y="140" width="22" height="20" rx="4" fill="rgba(220,240,255,0.58)" stroke="rgba(180,220,255,0.65)" stroke-width="0.8"/>
-                <rect x="108" y="142" width="5" height="3" rx="1" fill="white" opacity="0.45"/>
-
-                <!-- Ice 4 -->
-                <rect x="140" y="146" width="20" height="20" rx="4" fill="rgba(220,240,255,0.55)" stroke="rgba(180,220,255,0.6)" stroke-width="0.8"/>
-                <rect x="142" y="148" width="4" height="3" rx="1" fill="white" opacity="0.45"/>
+              <path d="M88 38 L88 170 Q88 182 100 182 L160 182 Q172 182 172 170 L172 38 Z" fill="rgba(200,180,160,0.18)" stroke="rgba(200,160,120,0.40)" stroke-width="1.5"/>
+              <rect x="88" y="130" width="84" height="52" fill="url(#teaGrad)" clip-path="url(#glassClip)"/>
+              <rect x="88" y="100" width="84" height="36" fill="url(#creamGrad)" clip-path="url(#glassClip)"/>
+              <rect x="88" y="90" width="84" height="16" fill="rgba(245,230,200,0.6)" clip-path="url(#glassClip)"/>
+              <rect x="88" y="38" width="84" height="56" fill="rgba(200,220,255,0.28)" clip-path="url(#glassClip)"/>
+              <g filter="url(#iceShadow)" clip-path="url(#glassClip)">
+                <rect x="95" y="45" width="22" height="18" rx="4" fill="rgba(220,235,255,0.82)" stroke="rgba(180,210,240,0.6)" stroke-width="1"/>
+                <rect x="122" y="52" width="20" height="16" rx="3" fill="rgba(215,230,255,0.78)" stroke="rgba(180,210,240,0.5)" stroke-width="1"/>
+                <rect x="147" y="44" width="18" height="20" rx="4" fill="rgba(225,238,255,0.80)" stroke="rgba(180,210,240,0.55)" stroke-width="1"/>
+                <rect x="100" y="66" width="16" height="14" rx="3" fill="rgba(210,228,255,0.70)" stroke="rgba(180,210,240,0.45)" stroke-width="1"/>
+                <rect x="138" y="62" width="20" height="16" rx="3" fill="rgba(220,234,255,0.75)" stroke="rgba(180,210,240,0.50)" stroke-width="1"/>
               </g>
-
-              <!-- Glass highlight overlay -->
-              <path d="M90 40 L90 168 Q90 180 102 180 L158 180 Q170 180 170 168 L170 40 Z"
-                    fill="url(#glassGrad)"/>
-              <!-- Left edge shine -->
-              <path d="M90 50 L90 170 Q90 178 98 180 L90 180 Q90 178 90 168 Z"
-                    fill="white" opacity="0.08"/>
-              <!-- Right edge shine -->
-              <path d="M170 50 L170 170 Q170 178 162 180 L170 180 Q170 178 170 168 Z"
-                    fill="white" opacity="0.06"/>
+              <rect x="88" y="38" width="84" height="144" fill="url(#glassGrad)" clip-path="url(#glassClip)"/>
             </g>
-
-            <!-- Straw -->
-            <rect x="148" y="20" width="7" height="118" rx="3.5" fill="#e06030" opacity="0.9"/>
-            <!-- Straw highlight -->
-            <rect x="149" y="20" width="2.5" height="118" rx="1.25" fill="white" opacity="0.3"/>
-
-            <!-- Glass rim -->
-            <path d="M88 40 Q130 35 172 40" fill="none" stroke="rgba(200,160,120,0.5)" stroke-width="2"/>
-            <path d="M89 39 Q130 34 171 39" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
-
-            <!-- Bottom rim -->
-            <path d="M90 168 Q90 180 102 180 L158 180 Q170 180 170 168" fill="none" stroke="rgba(180,120,60,0.3)" stroke-width="1.5"/>
+            <path d="M88 38 L172 38" stroke="rgba(200,160,120,0.5)" stroke-width="2" stroke-linecap="round"/>
+            <rect x="88" y="28" width="84" height="14" rx="7" fill="rgba(180,140,100,0.25)" stroke="rgba(200,160,120,0.45)" stroke-width="1.5"/>
+            <rect x="160" y="14" width="7" height="46" rx="3.5" fill="#e06030"/>
+            <rect x="161.5" y="14" width="2.5" height="46" rx="1.25" fill="white" opacity="0.3"/>
+            <circle cx="163.5" cy="14" r="3.5" fill="#d05020"/>
           </svg>
         </div>
         <div class="product-info">
           <div class="product-name">Thai Tea</div>
-          <div class="product-desc">Teh khas Thailand berbalut krim lembut dan es batu, segar dan menyegarkan.</div>
+          <div class="product-desc">Teh thailand segar dengan krim lembut, manis legit bikin nagih.</div>
           <div class="product-footer">
             <div class="product-price">Rp4.000</div>
-            <div style="display:flex;align-items:center;gap:10px;">
+            <div class="product-controls">
               <div class="qty-control">
                 <button class="qty-btn" onclick="changeQty(1,-1)">−</button>
                 <span class="qty-display" id="qty-1">1</span>
                 <button class="qty-btn" onclick="changeQty(1,1)">+</button>
               </div>
               <button class="btn-addcart" onclick="addToCart(1)">Tambah</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- PRODUCT 3: Bundle MinBite -->
-      <div class="product-card" style="position:relative;">
-        <div style="position:absolute;top:14px;left:14px;z-index:2;background:var(--accent);color:#fff;font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:100px;letter-spacing:0.04em;">BUNDLING</div>
-        <div class="product-image-wrap">
-          <!-- SVG: Bundle — Bola Oreo (left) + Thai Tea glass (right) -->
-          <svg viewBox="0 0 270 200" xmlns="http://www.w3.org/2000/svg" width="230" height="175">
-            <defs>
-              <!-- Plate -->
-              <radialGradient id="bpg" cx="50%" cy="25%" r="65%">
-                <stop offset="0%" stop-color="#f5f2ee"/>
-                <stop offset="100%" stop-color="#ddd5cb"/>
-              </radialGradient>
-              <!-- Oreo balls -->
-              <radialGradient id="bb1" cx="33%" cy="26%" r="65%">
-                <stop offset="0%" stop-color="#704832"/>
-                <stop offset="45%" stop-color="#3e2918"/>
-                <stop offset="100%" stop-color="#20110a"/>
-              </radialGradient>
-              <radialGradient id="bb2" cx="33%" cy="26%" r="65%">
-                <stop offset="0%" stop-color="#5e4028"/>
-                <stop offset="45%" stop-color="#2e1e10"/>
-                <stop offset="100%" stop-color="#180c05"/>
-              </radialGradient>
-              <radialGradient id="bb3" cx="33%" cy="26%" r="65%">
-                <stop offset="0%" stop-color="#6a4630"/>
-                <stop offset="40%" stop-color="#3a2414"/>
-                <stop offset="100%" stop-color="#1c0e06"/>
-              </radialGradient>
-              <!-- Tea -->
-              <linearGradient id="btg" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#d4720c"/>
-                <stop offset="100%" stop-color="#963a06"/>
-              </linearGradient>
-              <!-- Cream -->
-              <linearGradient id="bcg" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#f8edd8"/>
-                <stop offset="100%" stop-color="#ecd9b4"/>
-              </linearGradient>
-              <!-- Glass left-edge shine -->
-              <linearGradient id="bsg" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.50"/>
-                <stop offset="20%"  stop-color="#ffffff" stop-opacity="0.07"/>
-                <stop offset="80%"  stop-color="#ffffff" stop-opacity="0.03"/>
-                <stop offset="100%" stop-color="#ffffff" stop-opacity="0.22"/>
-              </linearGradient>
-              <!-- Clip glass -->
-              <clipPath id="bgc">
-                <path d="M163 32 L163 160 Q163 172 173 172 L221 172 Q231 172 231 160 L231 32 Z"/>
-              </clipPath>
-              <!-- Shadows -->
-              <filter id="bfb" x="-30%" y="-20%" width="160%" height="160%">
-                <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1a0a04" flood-opacity="0.35"/>
-              </filter>
-              <filter id="bfg" x="-20%" y="-20%" width="140%" height="160%">
-                <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#a04008" flood-opacity="0.18"/>
-              </filter>
-            </defs>
-
-            <!-- ══ LEFT: BOLA OREO SUSU ══ -->
-            <!-- Plate shadow -->
-            <ellipse cx="70" cy="176" rx="64" ry="9" fill="#1a0a04" opacity="0.10"/>
-            <!-- Plate -->
-            <ellipse cx="70" cy="168" rx="65" ry="15" fill="url(#bpg)"/>
-            <ellipse cx="70" cy="163" rx="55" ry="11" fill="#eae5df"/>
-
-            <!-- Ball back-center -->
-            <g filter="url(#bfb)">
-              <circle cx="70" cy="118" r="29" fill="url(#bb3)"/>
-              <ellipse cx="59"  cy="105" rx="7.5" ry="6" fill="#8c6045" opacity="0.42"/>
-              <ellipse cx="57"  cy="103" rx="3.5" ry="2.5" fill="#c8a080" opacity="0.26"/>
-              <circle cx="79" cy="123" r="1.3" fill="#f5f0eb" opacity="0.65"/>
-              <circle cx="65" cy="130" r="1"   fill="#f5f0eb" opacity="0.55"/>
-            </g>
-            <!-- Ball front-left -->
-            <g filter="url(#bfb)">
-              <circle cx="44" cy="140" r="29" fill="url(#bb1)"/>
-              <ellipse cx="33"  cy="127" rx="7.5" ry="6" fill="#8c6045" opacity="0.42"/>
-              <ellipse cx="31"  cy="125" rx="3.5" ry="2.5" fill="#c8a080" opacity="0.26"/>
-              <circle cx="54" cy="145" r="1.3" fill="#f5f0eb" opacity="0.65"/>
-              <circle cx="40" cy="153" r="1"   fill="#f5f0eb" opacity="0.55"/>
-            </g>
-            <!-- Ball front-right -->
-            <g filter="url(#bfb)">
-              <circle cx="96" cy="140" r="29" fill="url(#bb2)"/>
-              <ellipse cx="85"  cy="127" rx="7.5" ry="6" fill="#8c6045" opacity="0.42"/>
-              <ellipse cx="83"  cy="125" rx="3.5" ry="2.5" fill="#c8a080" opacity="0.26"/>
-              <circle cx="106" cy="145" r="1.3" fill="#f5f0eb" opacity="0.65"/>
-              <circle cx="92"  cy="153" r="1"   fill="#f5f0eb" opacity="0.55"/>
-            </g>
-            <!-- Susu powder -->
-            <g opacity="0.72">
-              <circle cx="52" cy="108" r="1.6" fill="#f5f0eb"/>
-              <circle cx="70" cy="102" r="1.4" fill="#f0ece6"/>
-              <circle cx="88" cy="108" r="1.5" fill="#f5f0eb"/>
-              <circle cx="59" cy="118" r="1.1" fill="#ede8e2"/>
-              <circle cx="80" cy="116" r="1.2" fill="#f2ede8"/>
-            </g>
-
-            <!-- ══ CENTER + SIGN ══ -->
-            <rect x="125" y="96" width="22" height="6" rx="3" fill="#c8956c" opacity="0.60"/>
-            <rect x="133" y="88" width="6"  height="22" rx="3" fill="#c8956c" opacity="0.60"/>
-
-            <!-- ══ RIGHT: THAI TEA ══ -->
-            <!-- Glass drop shadow -->
-            <ellipse cx="197" cy="175" rx="36" ry="8" fill="#a04008" opacity="0.11"/>
-
-            <g filter="url(#bfg)">
-              <!-- Glass outline / body -->
-              <path d="M165 32 L165 160 Q165 172 175 172 L219 172 Q229 172 229 160 L229 32 Z"
-                    fill="rgba(210,185,155,0.10)" stroke="rgba(200,145,90,0.30)" stroke-width="1.3"/>
-
-              <!-- Tea liquid -->
-              <path d="M165 74 L165 160 Q165 172 175 172 L219 172 Q229 172 229 160 L229 74 Z"
-                    fill="url(#btg)" clip-path="url(#bgc)"/>
-
-              <!-- Cream layer -->
-              <path d="M165 66 Q197 54 229 66 L229 80 Q197 71 165 80 Z" fill="url(#bcg)"/>
-              <path d="M167 67 Q197 56 227 67"
-                    fill="none" stroke="white" stroke-width="1.2" opacity="0.45"/>
-
-              <!-- Ice cube 1 -->
-              <rect x="171" y="96"  width="22" height="20" rx="4.5"
-                    fill="rgba(215,238,255,0.72)" stroke="rgba(175,220,255,0.80)" stroke-width="0.9"/>
-              <rect x="172" y="97"  width="7"  height="5"  rx="1.5" fill="white" opacity="0.50"/>
-              <line x1="171" y1="106" x2="193" y2="106" stroke="white" stroke-width="0.7" opacity="0.35"/>
-
-              <!-- Ice cube 2 -->
-              <rect x="199" y="104" width="20" height="19" rx="4.5"
-                    fill="rgba(215,238,255,0.65)" stroke="rgba(175,220,255,0.72)" stroke-width="0.9"/>
-              <rect x="200" y="105" width="6"  height="4"  rx="1.5" fill="white" opacity="0.45"/>
-
-              <!-- Ice cube 3 -->
-              <rect x="175" y="130" width="19" height="17" rx="4.5"
-                    fill="rgba(215,238,255,0.58)" stroke="rgba(175,220,255,0.65)" stroke-width="0.8"/>
-              <rect x="176" y="131" width="5"  height="3"  rx="1.5" fill="white" opacity="0.40"/>
-
-              <!-- Ice cube 4 -->
-              <rect x="200" y="136" width="18" height="17" rx="4.5"
-                    fill="rgba(215,238,255,0.52)" stroke="rgba(175,220,255,0.58)" stroke-width="0.8"/>
-
-              <!-- Glass shine overlay -->
-              <path d="M165 32 L165 160 Q165 172 175 172 L219 172 Q229 172 229 160 L229 32 Z"
-                    fill="url(#bsg)"/>
-            </g>
-
-            <!-- Straw -->
-            <rect x="218" y="14" width="7"   height="110" rx="3.5" fill="#e06030" opacity="0.92"/>
-            <rect x="219" y="14" width="2.5" height="110" rx="1.2" fill="white"   opacity="0.30"/>
-
-            <!-- Glass top rim -->
-            <path d="M165 32 Q197 26 229 32"
-                  fill="none" stroke="rgba(255,255,255,0.38)" stroke-width="1.5"/>
-          </svg>
-        </div>
-        <div class="product-info">
-          <div class="product-name">Bundle MinBite</div>
-          <div class="product-desc">1 Bola Oreo Susu + 1 Thai Tea — hemat <strong style="color:var(--accent)">Rp1.000</strong> dari harga satuan!</div>
-          <div class="product-footer">
-            <div class="product-price">Rp10.000</div>
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div class="qty-control">
-                <button class="qty-btn" onclick="changeQty(2,-1)">−</button>
-                <span class="qty-display" id="qty-2">1</span>
-                <button class="qty-btn" onclick="changeQty(2,1)">+</button>
-              </div>
-              <button class="btn-addcart" onclick="addToCart(2)">Tambah</button>
             </div>
           </div>
         </div>
@@ -1470,13 +1132,18 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
-    <div class="cart-items" id="cartItems"></div>
-    <div class="drawer-footer" id="cartFooter" style="display:none">
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <p>Keranjangmu masih kosong</p>
+      </div>
+    </div>
+    <div class="drawer-footer">
       <div class="cart-summary">
         <span class="cart-summary-label">Total</span>
         <span class="cart-total-amount" id="cartTotal">Rp0</span>
       </div>
-      <button class="btn-checkout" onclick="openCheckout()">Lanjut ke Pembayaran</button>
+      <button class="btn-checkout" onclick="openCheckout()">Lanjut Checkout</button>
     </div>
   </div>
 
@@ -1485,62 +1152,57 @@
     <div class="modal">
       <div class="modal-header">
         <div>
-          <div class="modal-title">Detail Pesanan</div>
-          <div class="modal-sub">Isi data diri untuk melanjutkan</div>
+          <div class="modal-title">Checkout</div>
+          <div class="modal-sub">Isi data kamu untuk melanjutkan</div>
         </div>
         <button class="btn-close" onclick="closeCheckout()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
       <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Nama Lengkap</label>
+          <input class="form-input" id="fNama" type="text" placeholder="cth. Budi Santoso" autocomplete="off"/>
+        </div>
         <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Nama Lengkap</label>
-            <input class="form-input" type="text" id="fNama" placeholder="Nama kamu"/>
-          </div>
           <div class="form-group">
             <label class="form-label">Kelas</label>
-            <input class="form-input" type="text" id="fKelas" placeholder="cth. XI"/>
+            <input class="form-input" id="fKelas" type="text" placeholder="cth. XI-1" autocomplete="off"/>
           </div>
-        </div>
-        <div class="form-row">
           <div class="form-group">
             <label class="form-label">Jurusan</label>
-            <input class="form-input" type="text" id="fJurusan" placeholder="cth. IPA"/>
-          </div>
-          <div class="form-group">
-            <label class="form-label">No. WhatsApp</label>
-            <input class="form-input" type="tel" id="fWA" placeholder="08xxxx"/>
+            <input class="form-input" id="fJurusan" type="text" placeholder="cth. RPL" autocomplete="off"/>
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Waktu Ambil <span style="color:var(--text3);font-weight:400;text-transform:none;font-size:0.72rem">(min. 12:00)</span></label>
-          <input class="form-input" type="time" id="fWaktu" min="12:00" value="12:00"/>
+          <label class="form-label">Nomor WhatsApp</label>
+          <input class="form-input" id="fWA" type="tel" placeholder="cth. 08123456789" autocomplete="off"/>
         </div>
         <div class="form-group">
-          <label class="form-label">Kode Promo</label>
+          <label class="form-label">Waktu Ambil (min. 12:00)</label>
+          <input class="form-input" id="fWaktu" type="time" min="12:00"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Kode Promo (opsional)</label>
           <div class="promo-row">
-            <input class="form-input" type="text" id="fPromo" placeholder="Masukkan kode..." oninput="this.value=this.value.toUpperCase()"/>
+            <input class="form-input" id="fPromo" type="text" placeholder="Masukkan kode" autocomplete="off" style="text-transform:uppercase"/>
             <button class="btn-promo" onclick="applyPromo()">Pakai</button>
           </div>
           <div class="promo-status" id="promoStatus"></div>
         </div>
-
-        <!-- Order Review -->
         <div class="order-review" id="orderReview"></div>
-
         <button class="btn-submit" id="btnSubmit" onclick="submitOrder()">Pesan Sekarang</button>
       </div>
     </div>
   </div>
 
-  <!-- ══ PESANAN SAYA MODAL ══ -->
+  <!-- ══ PESANAN MODAL ══ -->
   <div class="modal-overlay" id="pesananModal">
     <div class="modal">
       <div class="modal-header">
         <div>
           <div class="modal-title">Pesanan Saya</div>
-          <div class="modal-sub">Cek status pesananmu</div>
+          <div class="modal-sub">Cari berdasarkan nomor WhatsApp</div>
         </div>
         <button class="btn-close" onclick="closePesanan()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -1550,7 +1212,7 @@
         <div class="form-group">
           <label class="form-label">Nomor WhatsApp</label>
           <div class="promo-row">
-            <input class="form-input" type="tel" id="fSearchWA" placeholder="08xxxx"/>
+            <input class="form-input" id="fSearchWA" type="tel" placeholder="Nomor WA yang kamu gunakan"/>
             <button class="btn-promo" onclick="fetchOrders()">Cari</button>
           </div>
         </div>
@@ -1563,235 +1225,135 @@
   <div class="popup-overlay" id="successPopup">
     <div class="popup-card">
       <div class="popup-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
-      <div class="popup-title">Pesanan Masuk!</div>
+      <div class="popup-title">Pesanan Terkirim!</div>
       <div class="popup-text">
-        Pesananmu sudah kami terima. Jangan lupa kembali ke website untuk melihat <strong>status pesananmu</strong> ya!
+        Pesananmu sudah masuk ya 🎉<br>
+        Kamu akan diarahkan ke <strong>WhatsApp</strong> untuk konfirmasi. Simpan ID pesananmu!
       </div>
       <button class="btn-popup-main" id="btnReturnPage">Lihat Status Pesanan</button>
+      <button class="btn-popup-sec" onclick="document.getElementById('successPopup').classList.remove('open')">Tutup</button>
     </div>
   </div>
 
-  <!-- ══ TOAST ══ -->
   <div id="toast-container"></div>
 
   <script>
-    // ── STATE ──
-    const PRODUCTS = [
-      { id: 'bola-oreo', name: 'Bola Oreo Susu', price: 7000, thumb: 'oreo' },
-      { id: 'thai-tea', name: 'Thai Tea', price: 4000, thumb: 'thai' },
-      { id: 'bundle', name: 'Bundle MinBite', price: 10000, thumb: 'bundle',
-        bundleDesc: '1 Bola Oreo Susu + 1 Thai Tea' }
+    // ── MENU DATA ──
+    const MENU = [
+      { name: 'Bola Oreo Susu', price: 7000, icon: 'oreo' },
+      { name: 'Thai Tea',       price: 4000, icon: 'thai' }
     ];
 
-    // Built-in promo codes (hardcoded, cannot be deleted)
-    const BUILTIN_PROMOS = {
-      'HEMAT1K': { type: 'fixed', amount: 1000, label: 'Hemat Rp1.000' }
-    };
-
     let cart = [];
-    let productQtys = [1, 1, 1];
-    let promoDiscount = 0; // in Rp (fixed amount)
-    let currentOrderId = null;
-
-    // ── THEME ──
-    (function initTheme() {
-      const saved = localStorage.getItem('theme') || 'light';
-      document.documentElement.setAttribute('data-theme', saved);
-      updateThemeIcon(saved);
-    })();
-
-    function toggleTheme() {
-      const cur = document.documentElement.getAttribute('data-theme');
-      const next = cur === 'light' ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-      updateThemeIcon(next);
-    }
-
-    function updateThemeIcon(t) {
-      document.getElementById('iconSun').style.display = t === 'dark' ? 'block' : 'none';
-      document.getElementById('iconMoon').style.display = t === 'light' ? 'block' : 'none';
-    }
+    let promoDiscount = 0;
+    let currentOrderId = '';
 
     // ── QTY ──
+    const qtyMap = { 0: 1, 1: 1 };
     function changeQty(idx, delta) {
-      productQtys[idx] = Math.max(1, productQtys[idx] + delta);
-      document.getElementById('qty-' + idx).textContent = productQtys[idx];
+      qtyMap[idx] = Math.max(1, (qtyMap[idx] || 1) + delta);
+      document.getElementById('qty-' + idx).textContent = qtyMap[idx];
     }
 
     // ── CART ──
     function addToCart(idx) {
-      const p = PRODUCTS[idx];
-      const qty = productQtys[idx];
-      const existing = cart.find(c => c.id === p.id);
+      const item = MENU[idx];
+      const qty  = qtyMap[idx] || 1;
+      const existing = cart.find(c => c.name === item.name);
       if (existing) {
         existing.qty += qty;
       } else {
-        cart.push({ ...p, qty });
+        cart.push({ name: item.name, price: item.price, qty, icon: item.icon });
       }
+      qtyMap[idx] = 1;
+      document.getElementById('qty-' + idx).textContent = 1;
       updateCartUI();
-      showToast(p.name + ' ditambahkan ke keranjang');
-      openCart();
+      showToast(item.name + ' ditambahkan ke keranjang');
     }
 
     function updateCartUI() {
-      const container = document.getElementById('cartItems');
-      const badge = document.getElementById('cartBadge');
-      const footer = document.getElementById('cartFooter');
-      const totalEl = document.getElementById('cartTotal');
-
+      const badge   = document.getElementById('cartBadge');
+      const items   = document.getElementById('cartItems');
+      const total   = document.getElementById('cartTotal');
       const totalQty = cart.reduce((s, c) => s + c.qty, 0);
+      const totalAmt = cart.reduce((s, c) => s + c.price * c.qty, 0);
+
       badge.textContent = totalQty;
       badge.classList.toggle('show', totalQty > 0);
+      total.textContent = fmt(totalAmt);
 
       if (cart.length === 0) {
-        container.innerHTML = `
-          <div class="cart-empty">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-              <line x1="3" y1="6" x2="21" y2="6"/>
-              <path d="M16 10a4 4 0 0 1-8 0"/>
-            </svg>
-            <p>Keranjangmu masih kosong</p>
-          </div>`;
-        footer.style.display = 'none';
+        items.innerHTML = `<div class="cart-empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <p>Keranjangmu masih kosong</p></div>`;
         return;
       }
 
-      container.innerHTML = cart.map((item, i) => `
+      items.innerHTML = cart.map((c, i) => `
         <div class="cart-item">
-          <div class="cart-item-thumb">${getThumb(item.thumb)}</div>
+          <div class="cart-item-thumb">${getItemSVG(c.icon)}</div>
           <div class="cart-item-info">
-            <div class="cart-item-name">${item.name}</div>
-            <div class="cart-item-price">${fmt(item.price)} / pcs</div>
+            <div class="cart-item-name">${c.name}</div>
+            <div class="cart-item-price">${fmt(c.price * c.qty)}</div>
           </div>
           <div class="cart-item-controls">
-            <button class="cart-qty-btn" onclick="cartChangeQty(${i},-1)">−</button>
-            <span class="cart-qty-num">${item.qty}</span>
-            <button class="cart-qty-btn" onclick="cartChangeQty(${i},1)">+</button>
+            <button class="cart-qty-btn" onclick="cartChange(${i},-1)">−</button>
+            <span class="cart-qty-num">${c.qty}</span>
+            <button class="cart-qty-btn" onclick="cartChange(${i},1)">+</button>
           </div>
-        </div>
-      `).join('');
-
-      const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
-      totalEl.textContent = fmt(total);
-      footer.style.display = 'block';
+        </div>`).join('');
     }
 
-    function cartChangeQty(idx, delta) {
-      cart[idx].qty += delta;
-      if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    function cartChange(i, delta) {
+      cart[i].qty = Math.max(0, cart[i].qty + delta);
+      if (cart[i].qty === 0) cart.splice(i, 1);
       updateCartUI();
     }
 
-    function getThumb(type) {
-      if (type === 'oreo') return `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="40" cy="40" r="22" fill="#3b2a1f"/>
-        <ellipse cx="33" cy="32" rx="6" ry="5" fill="#6b4c34" opacity="0.5"/>
-        <ellipse cx="32" cy="31" rx="3" ry="2" fill="#c09070" opacity="0.28"/>
-        <circle cx="37" cy="28" r="1.2" fill="#f5f0eb"/>
-        <circle cx="44" cy="25" r="1" fill="#f5f0eb"/>
-        <circle cx="50" cy="30" r="1.1" fill="#f5f0eb"/>
-      </svg>`;
-      if (type === 'bundle') return `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="26" cy="45" r="16" fill="#3b2a1f"/>
-        <ellipse cx="20" cy="38" rx="5" ry="4" fill="#6b4c34" opacity="0.5"/>
-        <circle cx="24" cy="36" r="1" fill="#f5f0eb"/>
-        <rect x="44" y="14" width="18" height="48" rx="6" fill="rgba(200,180,160,0.18)" stroke="rgba(200,160,120,0.4)" stroke-width="1.2"/>
-        <rect x="44" y="34" width="18" height="28" fill="#d2691e" clip-path="url(#tbc)"/>
-        <clipPath id="tbc"><rect x="44" y="14" width="18" height="48" rx="6"/></clipPath>
-        <rect x="44" y="27" width="18" height="10" fill="#f5e6c8" clip-path="url(#tbc)"/>
-        <rect x="57" y="12" width="4" height="28" rx="2" fill="#e06030"/>
-        <text x="38" y="52" font-family="Arial" font-size="10" font-weight="bold" fill="#c8956c">+</text>
-      </svg>`;
-      return `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-        <rect x="26" y="14" width="28" height="52" rx="8" fill="rgba(200,180,160,0.2)" stroke="rgba(200,160,120,0.4)" stroke-width="1.5"/>
-        <rect x="26" y="32" width="28" height="34" rx="0" fill="#d2691e" clip-path="url(#c1)"/>
-        <clipPath id="c1"><rect x="26" y="14" width="28" height="52" rx="8"/></clipPath>
-        <rect x="26" y="27" width="28" height="10" fill="#f5e6c8"/>
-        <rect x="46" y="12" width="6" height="36" rx="3" fill="#e06030"/>
-      </svg>`;
-    }
-
-    function openCart() {
-      document.getElementById('drawerOverlay').classList.add('open');
-      document.getElementById('cartDrawer').classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeCart() {
-      document.getElementById('drawerOverlay').classList.remove('open');
-      document.getElementById('cartDrawer').classList.remove('open');
-      document.body.style.overflow = '';
-    }
+    function openCart()  { document.getElementById('cartDrawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); }
+    function closeCart() { document.getElementById('cartDrawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
 
     // ── CHECKOUT ──
     function openCheckout() {
-      if (cart.length === 0) { showToast('Keranjangmu masih kosong'); return; }
+      if (cart.length === 0) { showToast('Keranjang masih kosong'); return; }
       closeCart();
-      promoDiscount = 0;
-      document.getElementById('promoStatus').textContent = '';
-      document.getElementById('fPromo').value = '';
       renderOrderReview();
       document.getElementById('checkoutModal').classList.add('open');
     }
-
-    function closeCheckout() {
-      document.getElementById('checkoutModal').classList.remove('open');
-    }
+    function closeCheckout() { document.getElementById('checkoutModal').classList.remove('open'); }
 
     function renderOrderReview() {
       const subtotal = cart.reduce((s, c) => s + c.price * c.qty, 0);
-      const discAmt = Math.min(promoDiscount, subtotal); // promoDiscount is already in Rp
-      const total = subtotal - discAmt;
-
+      const disc     = Math.min(promoDiscount, subtotal);
+      const total    = subtotal - disc;
       let html = `<div class="order-review-title">Ringkasan Pesanan</div>`;
-      cart.forEach(item => {
-        html += `<div class="order-review-item"><span>${item.name} x${item.qty}</span><span>${fmt(item.price * item.qty)}</span></div>`;
+      cart.forEach(c => {
+        html += `<div class="order-review-item"><span>${c.name} ×${c.qty}</span><span>${fmt(c.price * c.qty)}</span></div>`;
       });
-      if (discAmt > 0) {
-        html += `<hr class="order-review-divider"/>
-          <div class="order-review-discount"><span>Diskon Promo</span><span>- ${fmt(discAmt)}</span></div>`;
+      html += `<hr class="order-review-divider">`;
+      if (disc > 0) {
+        html += `<div class="order-review-discount"><span>Diskon Promo</span><span>- ${fmt(disc)}</span></div>`;
       }
-      html += `<hr class="order-review-divider"/>
-        <div class="order-review-total"><span>Total</span><span>${fmt(total)}</span></div>`;
+      html += `<div class="order-review-total"><span>Total</span><span>${fmt(total)}</span></div>`;
       document.getElementById('orderReview').innerHTML = html;
     }
 
     function applyPromo() {
       const code = document.getElementById('fPromo').value.trim().toUpperCase();
       const statusEl = document.getElementById('promoStatus');
-      if (!code) { statusEl.textContent = ''; return; }
-
       const subtotal = cart.reduce((s, c) => s + c.price * c.qty, 0);
+      if (!code) { promoDiscount = 0; statusEl.textContent = ''; renderOrderReview(); return; }
 
-      // Check built-in promos first
-      if (BUILTIN_PROMOS[code]) {
-        const promo = BUILTIN_PROMOS[code];
-        promoDiscount = promo.type === 'fixed'
-          ? Math.min(promo.amount, subtotal)
-          : Math.round(subtotal * promo.value);
-        statusEl.className = 'promo-status promo-ok';
-        statusEl.textContent = '🎉 Promo berhasil! ' + promo.label;
-        renderOrderReview();
-        return;
-      }
-
-      // Check localStorage promos (from admin panel)
       let promos = {};
       try { promos = JSON.parse(localStorage.getItem('promos') || '{}'); } catch (e) {}
 
       if (promos[code] !== undefined) {
         const p = promos[code];
-        if (typeof p === 'number') {
-          promoDiscount = Math.round(subtotal * p);
-        } else if (p && p.type === 'fixed') {
-          promoDiscount = Math.min(p.amount, subtotal);
-        } else if (p && p.type === 'percent') {
-          promoDiscount = Math.round(subtotal * p.value);
-        }
+        if (typeof p === 'number')        promoDiscount = Math.round(subtotal * p);
+        else if (p && p.type === 'fixed') promoDiscount = Math.min(p.amount, subtotal);
+        else if (p && p.type === 'percent') promoDiscount = Math.round(subtotal * p.value);
         statusEl.className = 'promo-status promo-ok';
         statusEl.textContent = '🎉 Promo berhasil! Hemat ' + fmt(promoDiscount);
       } else {
@@ -1803,7 +1365,7 @@
     }
 
     function generateOrderId() {
-      const ts = Date.now().toString(36).toUpperCase();
+      const ts  = Date.now().toString(36).toUpperCase();
       const rnd = Math.random().toString(36).substr(2, 4).toUpperCase();
       return 'MB-' + ts + '-' + rnd;
     }
@@ -1811,54 +1373,45 @@
     function highlightError(id, msg) {
       const el = document.getElementById(id);
       el.style.borderColor = '#e74c3c';
-      el.style.boxShadow = '0 0 0 3px rgba(231,76,60,0.15)';
+      el.style.boxShadow   = '0 0 0 3px rgba(231,76,60,0.15)';
       el.addEventListener('input', function fix() {
         el.style.borderColor = '';
-        el.style.boxShadow = '';
+        el.style.boxShadow   = '';
         el.removeEventListener('input', fix);
       }, { once: true });
       showToast(msg);
     }
 
     async function submitOrder() {
-      const nama   = document.getElementById('fNama').value.trim();
-      const kelas  = document.getElementById('fKelas').value.trim();
-      const jurusan= document.getElementById('fJurusan').value.trim();
-      const noWA   = document.getElementById('fWA').value.trim();
-      const waktu  = document.getElementById('fWaktu').value.trim();
+      const nama    = document.getElementById('fNama').value.trim();
+      const kelas   = document.getElementById('fKelas').value.trim();
+      const jurusan = document.getElementById('fJurusan').value.trim();
+      const noWA    = document.getElementById('fWA').value.trim();
+      const waktu   = document.getElementById('fWaktu').value.trim();
 
-      // ── VALIDASI NAMA ──
       if (!nama) { highlightError('fNama', 'Nama tidak boleh kosong'); return; }
       if (nama.length < 3) { highlightError('fNama', 'Nama terlalu pendek (min. 3 huruf)'); return; }
       if (!/^[a-zA-Z\s'-]+$/.test(nama)) { highlightError('fNama', 'Nama hanya boleh berisi huruf'); return; }
-      // Cegah nama asal-asalan (semua karakter sama atau terlalu repetitif)
-      if (/^(.)\1+$/.test(nama.replace(/\s/g,''))) { highlightError('fNama', 'Masukkan nama lengkap yang valid'); return; }
+      if (/^(.)\1+$/.test(nama.replace(/\s/g, ''))) { highlightError('fNama', 'Masukkan nama lengkap yang valid'); return; }
 
-      // ── VALIDASI KELAS ──
       if (!kelas) { highlightError('fKelas', 'Kelas tidak boleh kosong'); return; }
       if (kelas.length < 2) { highlightError('fKelas', 'Format kelas tidak valid (cth. XI-1)'); return; }
 
-      // ── VALIDASI JURUSAN ──
       if (!jurusan) { highlightError('fJurusan', 'Jurusan tidak boleh kosong'); return; }
       if (jurusan.length < 2) { highlightError('fJurusan', 'Jurusan terlalu pendek'); return; }
 
-      // ── VALIDASI NO. WHATSAPP ──
       if (!noWA) { highlightError('fWA', 'Nomor WhatsApp tidak boleh kosong'); return; }
       const waCleaned = noWA.replace(/[\s\-().]/g, '');
-      const waRegex = /^(08|\+628|628)\d{8,11}$/;
-      if (!waRegex.test(waCleaned)) {
+      if (!/^(08|\+628|628)\d{8,11}$/.test(waCleaned)) {
         highlightError('fWA', 'No. WA tidak valid — gunakan format 08xxxx (10-13 digit)');
         return;
       }
-      // Cegah nomor palsu: semua digit sama atau sekuensial
       const digits = waCleaned.replace(/\D/g, '');
       if (/^(\d)\1{7,}/.test(digits.slice(2))) { highlightError('fWA', 'No. WA tidak valid'); return; }
 
-      // ── VALIDASI WAKTU AMBIL ──
       if (!waktu) { highlightError('fWaktu', 'Waktu ambil tidak boleh kosong'); return; }
       const [jam, menit] = waktu.split(':').map(Number);
-      const totalMenit = jam * 60 + menit;
-      if (totalMenit < 12 * 60) {
+      if (jam * 60 + menit < 12 * 60) {
         highlightError('fWaktu', 'Waktu pengambilan minimal jam 12:00');
         return;
       }
@@ -1867,23 +1420,17 @@
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner"></span>';
 
-      const subtotal = cart.reduce((s, c) => s + c.price * c.qty, 0);
-      const discAmt = Math.min(promoDiscount, subtotal); // promoDiscount already in Rp
-      const total = subtotal - discAmt;
-      const orderId = generateOrderId();
-      currentOrderId = orderId;
+      const subtotal  = cart.reduce((s, c) => s + c.price * c.qty, 0);
+      const discAmt   = Math.min(promoDiscount, subtotal);
+      const total     = subtotal - discAmt;
+      const orderId   = generateOrderId();
+      currentOrderId  = orderId;
 
       const orderData = {
-        id: orderId,
-        name: nama,
-        kelas,
-        jurusan,
+        id: orderId, name: nama, kelas, jurusan,
         phone: noWA,
         items: cart.map(c => ({ name: c.name, qty: c.qty, price: c.price })),
-        subtotal,
-        discount: discAmt,
-        total,
-        pickup: waktu,
+        subtotal, discount: discAmt, total, pickup: waktu,
         status: 'MENUNGGU',
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       };
@@ -1891,8 +1438,6 @@
       try {
         await db.collection('orders').doc(orderId).set(orderData);
 
-        // Send WhatsApp
-        const itemsText = cart.map(c => `${c.name} x${c.qty} = ${fmt(c.price * c.qty)}`).join('%0A');
         const waMsg = encodeURIComponent(
           `Halo MinBite! Saya ingin memesan.\n\n` +
           `ID Pesanan: ${orderId}\n` +
@@ -1906,16 +1451,13 @@
           `\nTotal: ${fmt(total)}\n\n` +
           `⚠️ Menu saat ini hanya tersedia 2: Bola Oreo Susu & Thai Tea\n\nMohon konfirmasinya, terima kasih!`
         );
-
         window.open('https://wa.me/6285694458024?text=' + waMsg, '_blank');
 
-        // Clear cart
         cart = [];
         updateCartUI();
         closeCheckout();
 
-        // Show popup
-        document.getElementById('btnReturnPage').onclick = function() {
+        document.getElementById('btnReturnPage').onclick = function () {
           window.location.href = 'order.html?id=' + currentOrderId;
         };
         document.getElementById('successPopup').classList.add('open');
@@ -1930,13 +1472,8 @@
     }
 
     // ── PESANAN SAYA ──
-    function openPesanan() {
-      document.getElementById('pesananModal').classList.add('open');
-    }
-
-    function closePesanan() {
-      document.getElementById('pesananModal').classList.remove('open');
-    }
+    function openPesanan()  { document.getElementById('pesananModal').classList.add('open'); }
+    function closePesanan() { document.getElementById('pesananModal').classList.remove('open'); }
 
     async function fetchOrders() {
       const wa = document.getElementById('fSearchWA').value.trim();
@@ -1946,14 +1483,12 @@
       resultEl.innerHTML = '<p style="color:var(--text3);font-size:0.85rem;text-align:center;padding:16px 0">Mencari pesanan...</p>';
 
       try {
-        // Catatan: query tanpa orderBy agar tidak perlu composite index di Firestore
         const snap = await db.collection('orders').where('phone', '==', wa).limit(20).get();
         if (snap.empty) {
           resultEl.innerHTML = '<p style="color:var(--text3);font-size:0.85rem;text-align:center;padding:16px 0;font-style:italic">Tidak ada pesanan ditemukan.</p>';
           return;
         }
 
-        // Sort client-side: pesanan terbaru di atas
         const docs = [];
         snap.forEach(doc => docs.push(doc.data()));
         docs.sort((a, b) => {
@@ -1964,7 +1499,7 @@
 
         let html = '';
         docs.forEach(d => {
-          const statusClass = 'status-' + (d.status || 'menunggu').toLowerCase();
+          const statusClass = 'status-' + (d.status || 'menunggu').toLowerCase().replace(/\s+/g, '');
           html += `
             <div class="order-list-item">
               <div class="order-list-id">${d.id}</div>
@@ -1987,38 +1522,77 @@
       }
     }
 
+    // ── DARK MODE ──
+    function toggleTheme() {
+      const html  = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('iconSun').style.display  = isDark ? 'none'  : 'block';
+      document.getElementById('iconMoon').style.display = isDark ? 'block' : 'none';
+      localStorage.setItem('minbite-theme', isDark ? 'light' : 'dark');
+    }
+
+    (function () {
+      const saved = localStorage.getItem('minbite-theme');
+      if (saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('iconSun').style.display  = 'block';
+        document.getElementById('iconMoon').style.display = 'none';
+      }
+    })();
+
     // ── TOAST ──
     function showToast(msg) {
-      const container = document.getElementById('toast-container');
+      const c  = document.getElementById('toast-container');
       const el = document.createElement('div');
-      el.className = 'toast';
+      el.className   = 'toast';
       el.textContent = msg;
-      container.appendChild(el);
-      setTimeout(() => el.remove(), 2800);
+      c.appendChild(el);
+      setTimeout(() => el.remove(), 2900);
     }
 
     // ── UTILS ──
-    function fmt(n) {
-      return 'Rp' + n.toLocaleString('id-ID');
+    function fmt(n) { return 'Rp' + n.toLocaleString('id-ID'); }
+
+    function getItemSVG(icon) {
+      if (icon === 'oreo') return `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <defs><radialGradient id="ci1" cx="35%" cy="28%" r="65%"><stop offset="0%" stop-color="#6b4c34"/><stop offset="45%" stop-color="#3b2a1f"/><stop offset="100%" stop-color="#22140a"/></radialGradient></defs>
+        <circle cx="40" cy="40" r="22" fill="url(#ci1)"/>
+        <ellipse cx="33" cy="32" rx="6" ry="5" fill="#8c6045" opacity="0.45"/>
+        <ellipse cx="31" cy="30" rx="3" ry="2" fill="#c09070" opacity="0.28"/>
+        <circle cx="37" cy="28" r="1.4" fill="#f5f0eb"/>
+        <circle cx="45" cy="26" r="1" fill="#f5f0eb"/>
+        <circle cx="50" cy="32" r="1.2" fill="#f5f0eb"/>
+      </svg>`;
+      if (icon === 'thai') return `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="ct1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d2691e"/><stop offset="100%" stop-color="#a0430a"/></linearGradient>
+        <clipPath id="cc1"><rect x="24" y="14" width="32" height="52" rx="8"/></clipPath></defs>
+        <rect x="24" y="14" width="32" height="52" rx="8" fill="rgba(200,180,160,0.18)" stroke="rgba(200,160,120,0.4)" stroke-width="1.5"/>
+        <rect x="24" y="36" width="32" height="30" fill="url(#ct1)" clip-path="url(#cc1)"/>
+        <rect x="24" y="28" width="32" height="12" fill="#f5e6c8" clip-path="url(#cc1)"/>
+        <rect x="50" y="12" width="5" height="34" rx="2.5" fill="#e06030"/>
+        <rect x="51" y="12" width="1.8" height="34" rx="0.9" fill="white" opacity="0.28"/>
+      </svg>`;
+      return `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="20" width="40" height="40" rx="10" fill="var(--accent-light)" stroke="var(--accent)" stroke-width="1.5"/>
+        <circle cx="40" cy="40" r="8" fill="var(--accent)" opacity="0.5"/></svg>`;
     }
 
     // ── INIT ──
     updateCartUI();
 
-    // Close modals on overlay click
-    document.getElementById('checkoutModal').addEventListener('click', function(e) {
+    document.getElementById('checkoutModal').addEventListener('click', function (e) {
       if (e.target === this) closeCheckout();
     });
-    document.getElementById('pesananModal').addEventListener('click', function(e) {
+    document.getElementById('pesananModal').addEventListener('click', function (e) {
       if (e.target === this) closePesanan();
     });
 
-    // Update review when modal opens
     const checkoutModal = document.getElementById('checkoutModal');
-    const observer = new MutationObserver(function() {
+    const observer = new MutationObserver(function () {
       if (checkoutModal.classList.contains('open')) renderOrderReview();
     });
     observer.observe(checkoutModal, { attributes: true, attributeFilter: ['class'] });
   </script>
 </body>
-          </html>
+</html>
