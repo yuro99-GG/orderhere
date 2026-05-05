@@ -1024,7 +1024,7 @@
   <!-- ══ HEADER ══ -->
   <header>
     <div class="header-inner">
-      <a class="logo" href="#">MinBite</a>
+      <a class="logo" href="#">MinBite <span>by sekolah</span></a>
       <div class="header-actions">
         <button class="btn-pesanan" id="btnPesanan" onclick="openPesanan()">Pesanan Saya</button>
         <button class="btn-icon" id="btnTheme" onclick="toggleTheme()" title="Toggle dark mode">
@@ -1513,8 +1513,8 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Waktu Ambil</label>
-          <input class="form-input" type="text" id="fWaktu" placeholder="cth. Istirahat 1 (09:30)"/>
+          <label class="form-label">Waktu Ambil <span style="color:var(--text3);font-weight:400;text-transform:none;font-size:0.72rem">(min. 12:00)</span></label>
+          <input class="form-input" type="time" id="fWaktu" min="12:00" value="12:00"/>
         </div>
         <div class="form-group">
           <label class="form-label">Kode Promo</label>
@@ -1807,15 +1807,58 @@
       return 'MB-' + ts + '-' + rnd;
     }
 
-    async function submitOrder() {
-      const nama = document.getElementById('fNama').value.trim();
-      const kelas = document.getElementById('fKelas').value.trim();
-      const jurusan = document.getElementById('fJurusan').value.trim();
-      const noWA = document.getElementById('fWA').value.trim();
-      const waktu = document.getElementById('fWaktu').value.trim();
+    function highlightError(id, msg) {
+      const el = document.getElementById(id);
+      el.style.borderColor = '#e74c3c';
+      el.style.boxShadow = '0 0 0 3px rgba(231,76,60,0.15)';
+      el.addEventListener('input', function fix() {
+        el.style.borderColor = '';
+        el.style.boxShadow = '';
+        el.removeEventListener('input', fix);
+      }, { once: true });
+      showToast(msg);
+    }
 
-      if (!nama || !kelas || !jurusan || !noWA || !waktu) {
-        showToast('Mohon lengkapi semua data');
+    async function submitOrder() {
+      const nama   = document.getElementById('fNama').value.trim();
+      const kelas  = document.getElementById('fKelas').value.trim();
+      const jurusan= document.getElementById('fJurusan').value.trim();
+      const noWA   = document.getElementById('fWA').value.trim();
+      const waktu  = document.getElementById('fWaktu').value.trim();
+
+      // ── VALIDASI NAMA ──
+      if (!nama) { highlightError('fNama', 'Nama tidak boleh kosong'); return; }
+      if (nama.length < 3) { highlightError('fNama', 'Nama terlalu pendek (min. 3 huruf)'); return; }
+      if (!/^[a-zA-Z\s'-]+$/.test(nama)) { highlightError('fNama', 'Nama hanya boleh berisi huruf'); return; }
+      // Cegah nama asal-asalan (semua karakter sama atau terlalu repetitif)
+      if (/^(.)\1+$/.test(nama.replace(/\s/g,''))) { highlightError('fNama', 'Masukkan nama lengkap yang valid'); return; }
+
+      // ── VALIDASI KELAS ──
+      if (!kelas) { highlightError('fKelas', 'Kelas tidak boleh kosong'); return; }
+      if (kelas.length < 2) { highlightError('fKelas', 'Format kelas tidak valid (cth. XI-1)'); return; }
+
+      // ── VALIDASI JURUSAN ──
+      if (!jurusan) { highlightError('fJurusan', 'Jurusan tidak boleh kosong'); return; }
+      if (jurusan.length < 2) { highlightError('fJurusan', 'Jurusan terlalu pendek'); return; }
+
+      // ── VALIDASI NO. WHATSAPP ──
+      if (!noWA) { highlightError('fWA', 'Nomor WhatsApp tidak boleh kosong'); return; }
+      const waCleaned = noWA.replace(/[\s\-().]/g, '');
+      const waRegex = /^(08|\+628|628)\d{8,11}$/;
+      if (!waRegex.test(waCleaned)) {
+        highlightError('fWA', 'No. WA tidak valid — gunakan format 08xxxx (10-13 digit)');
+        return;
+      }
+      // Cegah nomor palsu: semua digit sama atau sekuensial
+      const digits = waCleaned.replace(/\D/g, '');
+      if (/^(\d)\1{7,}/.test(digits.slice(2))) { highlightError('fWA', 'No. WA tidak valid'); return; }
+
+      // ── VALIDASI WAKTU AMBIL ──
+      if (!waktu) { highlightError('fWaktu', 'Waktu ambil tidak boleh kosong'); return; }
+      const [jam, menit] = waktu.split(':').map(Number);
+      const totalMenit = jam * 60 + menit;
+      if (totalMenit < 12 * 60) {
+        highlightError('fWaktu', 'Waktu pengambilan minimal jam 12:00');
         return;
       }
 
@@ -1872,7 +1915,7 @@
 
         // Show popup
         document.getElementById('btnReturnPage').onclick = function() {
-          window.location.href = 'order.html?id=' + currentOrderId;
+          window.location.href = 'return.html?id=' + currentOrderId;
         };
         document.getElementById('successPopup').classList.add('open');
 
@@ -1932,7 +1975,7 @@
                 <span class="order-list-total">${fmt(d.total || 0)}</span>
               </div>
               <div style="margin-top:8px;">
-                <a href="order.html?id=${d.id}" style="font-size:0.75rem;color:var(--accent);text-decoration:none;font-weight:600;">Lihat Detail &rarr;</a>
+                <a href="return.html?id=${d.id}" style="font-size:0.75rem;color:var(--accent);text-decoration:none;font-weight:600;">Lihat Detail &rarr;</a>
               </div>
             </div>`;
         });
@@ -1977,4 +2020,4 @@
     observer.observe(checkoutModal, { attributes: true, attributeFilter: ['class'] });
   </script>
 </body>
-  </html>
+</html>
